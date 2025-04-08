@@ -1,4 +1,23 @@
 ﻿Public Class PageLogRight
+    Public Sub Init() Handles Me.Initialized
+        PanLogCard.Inlines.Clear()
+        PanLogCard.Inlines.Add(New Run("实时日志"))
+        PanLogCard.Inlines.Add(New Run(" | "))
+        LabDebug = New Run("0 Debug") With {.Foreground = Application.Current.Resources("ColorBrushDebug")}
+        PanLogCard.Inlines.Add(LabDebug)
+        PanLogCard.Inlines.Add(New Run(" | "))
+        LabInfo = New Run("0 Info") With {.Foreground = Application.Current.Resources(If(IsDarkMode, "ColorBrushInfoDark", "ColorBrushInfo"))}
+        PanLogCard.Inlines.Add(LabInfo)
+        PanLogCard.Inlines.Add(New Run(" | "))
+        LabWarn = New Run("0 Warn") With {.Foreground = Application.Current.Resources("ColorBrushWarn")}
+        PanLogCard.Inlines.Add(LabWarn)
+        PanLogCard.Inlines.Add(New Run(" | "))
+        LabError = New Run("0 Error") With {.Foreground = Application.Current.Resources("ColorBrushError")}
+        PanLogCard.Inlines.Add(LabError)
+        PanLogCard.Inlines.Add(New Run(" | "))
+        LabFatal = New Run("0 Fatal") With {.Foreground = Application.Current.Resources("ColorBrushFatal")}
+        PanLogCard.Inlines.Add(LabFatal)
+    End Sub
     Public Sub Refresh()
         '初始化
         If FrmLogLeft.CurrentLog Is Nothing OrElse FrmLogLeft.CurrentUuid <= 0 OrElse FrmLogLeft.ShownLogs.Count = 0 Then
@@ -13,26 +32,32 @@
         '绑定事件
         AddHandler FrmLogLeft.CurrentLog.LogOutput, AddressOf OnLogOutput
         AddHandler FrmLogLeft.CurrentLog.GameExit, AddressOf OnGameExit
-        '刷新计数器
-        LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
-        LabError.Text = FrmLogLeft.CurrentLog.CountError
-        LabWarn.Text = FrmLogLeft.CurrentLog.CountWarn
-        LabInfo.Text = FrmLogLeft.CurrentLog.CountInfo
-        LabDebug.Text = FrmLogLeft.CurrentLog.CountDebug
+        RefreshLabText()
     End Sub
+
+    Private Sub RefreshLabText()
+        '刷新计数器
+        LabFatal.Text = $"{FrmLogLeft.CurrentLog.CountFatal} Fatal"
+        LabError.Text = $"{FrmLogLeft.CurrentLog.CountError} Error"
+        LabWarn.Text = $"{FrmLogLeft.CurrentLog.CountWarn} Warn"
+        LabInfo.Text = $"{FrmLogLeft.CurrentLog.CountInfo} Info"
+        LabDebug.Text = $"{FrmLogLeft.CurrentLog.CountDebug} Debug"
+    End Sub
+
+    Public LabDebug As Run = Nothing
+    Public LabInfo As Run = Nothing
+    Public LabWarn As Run = Nothing
+    Public LabError As Run = Nothing
+    Public LabFatal As Run = Nothing
+
     Private Sub PageLogRight_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Refresh()
     End Sub
     Private Sub OnLogOutput(sender As Watcher, e As LogOutputEventArgs)
         RunInUi(Sub()
                     If FrmLogLeft.CurrentLog IsNot Nothing Then
-                        Thread.Sleep(1) '让对面 FrmLogLeft 执行完
                         If CheckAutoScroll.Checked Then PanBack.ScrollToBottom()
-                        LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
-                        LabError.Text = FrmLogLeft.CurrentLog.CountError
-                        LabWarn.Text = FrmLogLeft.CurrentLog.CountWarn
-                        LabInfo.Text = FrmLogLeft.CurrentLog.CountInfo
-                        LabDebug.Text = FrmLogLeft.CurrentLog.CountDebug
+                        RefreshLabText()
                     End If
                 End Sub)
     End Sub

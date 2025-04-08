@@ -7,7 +7,7 @@
     <Grid>
         <Grid x:Name="PanAllBack">
 			<!-- TODO(i18n): 文本 @ PageLog 右侧 - 上方卡片标题 -->
-			<local:MyCard Title="实时日志" Margin="16,16,16,120">
+			<local:MyCard Margin="16,16,16,70" x:Name="PanLogCard">
                 <local:MyScrollViewer Margin="12,40,12,20"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
@@ -32,32 +32,9 @@
             </StackPanel>
         </local:MyCard>-->
 
-        <local:MyCard x:Name="CardOperation" Visibility="Visible" Opacity="0" Height="100"
-                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,25,0,10" UseAnimation="False" HasMouseAnimation="True">
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="10" />
-                    <RowDefinition Height="40" />
-                </Grid.RowDefinitions>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="5,0,5,0" Text="FATAL" Foreground="{DynamicResource ResourceKey=ColorBrushFatal}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="5,0,5,0" Text="ERROR" Foreground="{DynamicResource ResourceKey=ColorBrushError}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Margin="5,0,5,0" Text="WARN" Foreground="{DynamicResource ResourceKey=ColorBrushWarn}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3" Margin="5,0,5,0" Text="INFO" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4" Margin="5,0,5,0" Text="DEBUG" Foreground="{DynamicResource ResourceKey=ColorBrushDebug}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LabFatal" Grid.Row="1" Grid.Column="0" Text="0" FontSize="20" Foreground="{DynamicResource ResourceKey=ColorBrushFatal}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LabError" Grid.Row="1" Grid.Column="1" Text="0" FontSize="20" Foreground="{DynamicResource ResourceKey=ColorBrushError}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LabWarn" Grid.Row="1" Grid.Column="2" Text="0" FontSize="20" Foreground="{DynamicResource ResourceKey=ColorBrushWarn}" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LabInfo" Grid.Row="1" Grid.Column="3" Text="0" FontSize="20" />
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LabDebug" Grid.Row="1" Grid.Column="4" Text="0" FontSize="20" Foreground="{DynamicResource ResourceKey=ColorBrushDebug}" />
-            </Grid>
-            <StackPanel x:Name="OperationsContainer" Orientation="Horizontal" Margin="15,65,10,5">
+		<local:MyCard x:Name="CardOperation" Visibility="Visible" Opacity="0"
+					   HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15,0,10" UseAnimation="False" HasMouseAnimation="True">
+			<StackPanel x:Name="OperationsContainer" Orientation="Horizontal" Margin="10,8,10,8" VerticalAlignment="Center">
 				<!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方勾选框 # 自动滚屏 -->
                 <local:MyCheckBox x:Name="CheckAutoScroll" Margin="5,0,5,0" Text="自动滚屏" Checked="True" />
 				<!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方按钮1 # 导出 -->
