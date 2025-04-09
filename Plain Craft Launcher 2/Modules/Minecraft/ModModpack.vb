@@ -115,6 +115,8 @@ Public Module ModModpack
         Dim Encode = Encoding.GetEncoding("GB18030")
         Try
 Retry:
+            '解压失败没有重置解压进度，导致可能超过 100% （#6070）
+            Loader.Progress = 0.02
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之多试试
             DeleteDirectory(InstallTemp)
             ExtractFile(FileAddress, InstallTemp, Encode, ProgressIncrementHandler:=Sub(Delta) Loader.Progress += Delta * LoaderProgressDelta)
