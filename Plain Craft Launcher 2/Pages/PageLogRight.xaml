@@ -2,8 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    mc:Ignorable="d" x:Class="PageLogRight"
-    PanScroll="{Binding ElementName=PanBack}">
+    mc:Ignorable="d" x:Class="PageLogRight">
     <Grid>
         <Grid x:Name="PanAllBack">
 			<!-- TODO(i18n): 文本 @ PageLog 右侧 - 上方卡片标题 -->
@@ -12,14 +11,19 @@
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
                     x:Name="PanBack">
-					    <RichTextBox x:Name="PanLog"
-                         FontSize="14"
-                         FontFamily="Consolas"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Stretch"
-                         BorderThickness="0"
-						 Background="Transparent"
-					     IsReadOnly="True" />
+                        <RichTextBox x:Name="PanLog"
+                                     FontSize="14"
+                                     FontFamily="Consolas"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     IsReadOnly="True"
+                                     VirtualizingPanel.IsVirtualizing="True"
+                                     VirtualizingPanel.VirtualizationMode="Recycling"
+                                     VirtualizingPanel.IsContainerVirtualizable="True"
+                                     VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                                     VirtualizingPanel.ScrollUnit="Pixel"/>
                 </local:MyScrollViewer>
 			</local:MyCard>
         </Grid>
