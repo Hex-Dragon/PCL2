@@ -34,14 +34,17 @@
         {"SystemHighestAlphaVersionReg", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"SystemSetupVersionReg", New SetupEntry(VersionSetup, Source:=SetupSource.Registry)},
         {"SystemSetupVersionIni", New SetupEntry(VersionSetup)},
-        {"SystemHelpVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"SystemDebugMode", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemDebugAnim", New SetupEntry(9, Source:=SetupSource.Registry)},
         {"SystemDebugDelay", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemDebugSkipCopy", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
+        {"SystemSystemUpdateBranch", New SetupEntry(0)},
+        {"SystemSystemServer", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
+        {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
@@ -72,8 +75,12 @@
         {"CacheAuthServerServer", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthServerName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthServerRegister", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthIDToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginLegacyName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginMsJson", New SetupEntry("{}", Source:=SetupSource.Registry, Encoded:=True)}, '{UserName: OAuthToken, ...}
@@ -102,6 +109,7 @@
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
+        {"LaunchArgumentJavaTraversal", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
@@ -111,10 +119,7 @@
         {"LaunchRamCustom", New SetupEntry(15)},
         {"LinkEula", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LinkName", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertLast", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertTime", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertWarn", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"LinkIoiVersion", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
+        {"LinkFirstTimeNetTest", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolHelpChinese", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
@@ -122,7 +127,8 @@
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslateV2", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadClipboard", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
@@ -141,6 +147,7 @@
         {"UiLauncherThemeHide2", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherLogo", New SetupEntry(True)},
         {"UiLauncherEmail", New SetupEntry(False)},
+        {"UiLauncherCEHint", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"UiBackgroundColorful", New SetupEntry(True)},
         {"UiBackgroundOpacity", New SetupEntry(1000)},
         {"UiBackgroundBlur", New SetupEntry(0)},
@@ -148,6 +155,7 @@
         {"UiCustomType", New SetupEntry(0)},
         {"UiCustomPreset", New SetupEntry(0)},
         {"UiCustomNet", New SetupEntry("")},
+        {"UiDarkMode", New SetupEntry(2, Source:=SetupSource.Registry)},
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},
@@ -155,6 +163,7 @@
         {"UiMusicStop", New SetupEntry(False)},
         {"UiMusicStart", New SetupEntry(False)},
         {"UiMusicRandom", New SetupEntry(True)},
+        {"UiMusicSMTC", New SetupEntry(True)},
         {"UiMusicAuto", New SetupEntry(True)},
         {"UiHiddenPageDownload", New SetupEntry(False)},
         {"UiHiddenPageLink", New SetupEntry(False)},
@@ -172,11 +181,14 @@
         {"UiHiddenOtherVote", New SetupEntry(False)},
         {"UiHiddenOtherAbout", New SetupEntry(False)},
         {"UiHiddenOtherTest", New SetupEntry(False)},
+        {"UiAniFPS", New SetupEntry(59, Source:=SetupSource.Registry)},
+        {"UiFont", New SetupEntry("")},
         {"VersionAdvanceJvm", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceGame", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableJlw", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceDisableJLW", New SetupEntry(False, Source:=SetupSource.Version)},
@@ -193,9 +205,7 @@
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
-    }
-
+        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}}
 #Region "基础"
 
     Private Enum SetupSource
@@ -401,8 +411,8 @@
 #If BETA Then
         If Key = "UiLauncherTheme" Then Return "0"
 #End If
-        If Key = "UiHiddenPageLink" Then Return True
-        If Key = "UiHiddenSetupLink" Then Return True
+        If Key = "UiHiddenPageLink" Then Return False
+        If Key = "UiHiddenSetupLink" Then Return False
         Return Nothing
     End Function
 
@@ -621,7 +631,17 @@
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub
-
+    '颜色模式
+    Public Sub UiDarkMode(Value As Integer)
+        If Value = 0 Then
+            IsDarkMode = False
+        ElseIf Value = 1 Then
+            IsDarkMode = True
+        Else
+            IsDarkMode = IsSystemInDarkMode()
+        End If
+        ThemeRefresh()
+    End Sub
     '顶部栏
     Public Sub UiLogoType(Value As Integer)
         Select Case Value
@@ -629,6 +649,7 @@
                 FrmMain.ShapeTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.LabTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.ImageTitleLogo.Visibility = Visibility.Collapsed
+                FrmMain.CELogo.Visibility = Visibility.Collapsed
                 If Not IsNothing(FrmSetupUI) Then
                     FrmSetupUI.CheckLogoLeft.Visibility = Visibility.Visible
                     FrmSetupUI.PanLogoText.Visibility = Visibility.Collapsed
@@ -638,6 +659,7 @@
                 FrmMain.ShapeTitleLogo.Visibility = Visibility.Visible
                 FrmMain.LabTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.ImageTitleLogo.Visibility = Visibility.Collapsed
+                FrmMain.CELogo.Visibility = Visibility.Visible
                 If Not IsNothing(FrmSetupUI) Then
                     FrmSetupUI.CheckLogoLeft.Visibility = Visibility.Collapsed
                     FrmSetupUI.PanLogoText.Visibility = Visibility.Collapsed
@@ -647,6 +669,7 @@
                 FrmMain.ShapeTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.LabTitleLogo.Visibility = Visibility.Visible
                 FrmMain.ImageTitleLogo.Visibility = Visibility.Collapsed
+                FrmMain.CELogo.Visibility = Visibility.Visible
                 If Not IsNothing(FrmSetupUI) Then
                     FrmSetupUI.CheckLogoLeft.Visibility = Visibility.Collapsed
                     FrmSetupUI.PanLogoText.Visibility = Visibility.Visible
@@ -657,6 +680,7 @@
                 FrmMain.ShapeTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.LabTitleLogo.Visibility = Visibility.Collapsed
                 FrmMain.ImageTitleLogo.Visibility = Visibility.Visible
+                FrmMain.CELogo.Visibility = Visibility.Visible
                 If Not IsNothing(FrmSetupUI) Then
                     FrmSetupUI.CheckLogoLeft.Visibility = Visibility.Collapsed
                     FrmSetupUI.PanLogoText.Visibility = Visibility.Collapsed

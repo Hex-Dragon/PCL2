@@ -1,0 +1,97 @@
+name: Release Build
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  build:
+    name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
+    if: ${{ !github.event.release.prerelease && github.event.action == 'edited' }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - configuration: Release
+            architecture: x64
+            os: windows-latest
+
+          - configuration: Release
+            architecture: ARM64
+            os: windows-latest
+
+          - configuration: Beta
+            architecture: x64
+            os: windows-latest
+
+          - configuration: Beta
+            architecture: ARM64
+            os: windows-latest
+
+      fail-fast: false
+
+    env:
+      LANG: en_US.UTF-8
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: ${{ matrix.architecture }}
+
+    - name: Update Help
+      run: |
+        cd ..
+        git clone https://github.com/PCL-Community/PCL2CEHelp -b master --single-branch --depth 1
+        cd PCL2CEHelp
+        rm -Force -r *.*
+        Compress-Archive -Path .\* -DestinationPath .\Help.zip
+        Copy-Item -Path .\Help.zip -Destination "${{ github.workspace }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        cd ..
+        rm -Force -r .\PCL2CEHelp
+        cd ${{ GITHUB.WORKSPACE }}
+
+    - name: Restore NuGet Packages
+      run: nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "packages"
+
+    - name: Replace Secrets and Commit Hash
+      run: |
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const OAuthClientId As String = ""', 'Public Const OAuthClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const CurseForgeAPIKey As String = ""', 'Public Const CurseForgeAPIKey As String = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const LittleSkinClientId As String = ""', 'Public Const LittleSkinClientId As String = "${{ secrets.LITTLESKIN_CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = "native"', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
+        (gc "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml") -replace 'https://github.com/PCL-Community/PCL2-CE', 'https://github.com/PCL-Community/PCL2-CE/tree/${{ github.sha }}' | Out-File "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml"
+
+    - name: Clean previous builds
+      run: Remove-Item -Recurse -Force 'Plain Craft Launcher 2\obj' -ErrorAction SilentlyContinue
+
+    - name: Build
+      run: |
+        chcp 65001
+        $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.architecture }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.configuration }}-${{ matrix.architecture }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+
+    - name: Rename binaries
+      run: |
+        cd "Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}"
+        mv "Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe"
+
+    - name: Upload binary to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

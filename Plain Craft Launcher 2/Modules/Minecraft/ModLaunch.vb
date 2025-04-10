@@ -1,5 +1,4 @@
-﻿Imports System.IO.Compression
-
+Imports System.IO.Compression
 Public Module ModLaunch
 
 #Region "开始"
@@ -25,6 +24,11 @@ Public Module ModLaunch
         ''' 额外的启动参数。
         ''' </summary>
         Public ExtraArgs As New List(Of String)
+        ''' <summary>
+        ''' 是否为 “测试游戏” 按钮启动的游戏。
+        ''' 如果是，则显示游戏实时日志。
+        ''' </summary>
+        Public Test As Boolean = False
     End Class
     ''' <summary>
     ''' 尝试启动 Minecraft。必须在 UI 线程调用。
@@ -504,6 +508,7 @@ NextInner:
     End Sub
 
 #End Region
+
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
@@ -704,18 +709,20 @@ LoginFinish:
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
+        Dim RefreshInfo As JObject = New JObject
+        Dim SelectProfile As JObject = New JObject()
+        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
+        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
+        RefreshInfo.Add(New JProperty("requestUser", True))
+
+
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
-               Data:=New JObject(
-                   New JProperty("selectedProfile", New JObject(
-                       New JProperty("name", Setup.Get($"Cache{Data.Input.Token}Name")),
-                       New JProperty("id", Setup.Get($"Cache{Data.Input.Token}Uuid"))
-                   )),
-                   New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")),
-                   New JProperty("requestUser", True)
-               ).ToString(Newtonsoft.Json.Formatting.None),
+               Data:=RefreshInfo.ToString(0),
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
@@ -1200,6 +1207,12 @@ Retry:
             End If
         End If
 
+        'Cleanroom 检测
+        If McVersionCurrent.Version.HasCleanroom Then
+            '需要至少 Java 21
+            MinVer = If(New Version(1, 21, 0, 0) > MinVer, New Version(1, 21, 0, 0), MinVer)
+        End If
+
         'Fabric 检测
         If McVersionCurrent.Version.HasFabric Then
             If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
@@ -1282,6 +1295,15 @@ Retry:
             End If
 
         End SyncLock
+    End Sub
+    ''' <summary>
+    ''' 指定 Java 使用高性能显卡
+    ''' </summary>
+    ''' <param name="JavawPath"></param>
+    Public Sub ModifyJavaGPUPreferences(JavawPath As String)
+        If Not ReadReg(JavawPath, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
+            WriteReg(JavawPath, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
+        End If
     End Sub
 
 #End Region
@@ -1707,6 +1729,9 @@ NextVersion:
         Dim OptiFineCp As String = Nothing
         For Each Library As McLibToken In LibList
             If Library.IsNatives Then Continue For
+            If Library.Name IsNot Nothing AndAlso Library.Name.Contains("com.cleanroommc:cleanroom") Then 'Cleanroom 的主 Jar 必须放在 ClassPath 第一位
+                CpStrings.Insert(0, Library.LocalPath + ";")
+            End If
             If Library.Name IsNot Nothing AndAlso Library.Name = "optifine:OptiFine" Then
                 OptiFineCp = Library.LocalPath
             Else
@@ -1889,6 +1914,9 @@ NextVersion:
                 Log(exx, "更新 launcher_profiles.json 失败", LogLevel.Feedback)
             End Try
         End Try
+
+        '设置 Java 选项为高性能
+        ModifyJavaGPUPreferences(McLaunchJavaSelected.PathJavaw)
 
         '更新 options.txt
         Dim SetupFileAddress As String = McVersionCurrent.PathIndie & "options.txt"
@@ -2204,7 +2232,6 @@ IgnoreCustomSkin:
         End If
         Loader.Output = GameProcess
         McLaunchProcess = GameProcess
-
         '进程优先级处理
         Try
             GameProcess.PriorityBoostEnabled = True
@@ -2252,8 +2279,16 @@ IgnoreCustomSkin:
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
         '初始化等待
-        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle)
+        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle, CurrentLaunchOptions.Test)
         McLaunchWatcher = Watcher
+
+        '显示实时日志
+        If CurrentLaunchOptions.Test Then
+            If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
+            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
+            FrmLogLeft.Add(Watcher)
+            McLaunchLog("已显示游戏实时日志")
+        End If
 
         '等待
         Do While Watcher.State = Watcher.MinecraftState.Loading
@@ -2317,7 +2352,7 @@ IgnoreCustomSkin:
         End If
         Select Case McLoginLoader.Input.Type
             Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
+                If PageLinkLobby.HiperState = LoadState.Finished Then
                     Raw = Raw.Replace("{login}", "联机离线")
                 Else
                     Raw = Raw.Replace("{login}", "离线")
@@ -2342,3 +2377,4 @@ IgnoreCustomSkin:
 #End Region
 
 End Module
+

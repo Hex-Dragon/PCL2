@@ -164,7 +164,7 @@
 
         '确认实际路径
         Dim Location As String, WorkingDir As String = Path & "PCL"
-        HelpTryExtract()
+        HelpExtract()
         If RelativeUrl.Contains(":\") Then
             '绝对路径
             Location = RelativeUrl

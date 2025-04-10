@@ -60,7 +60,13 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
-            CheckAdvanceDisableJLW.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
+            If IsArm64System Then
+                CheckAdvanceDisableJlw.Checked = True
+                CheckAdvanceDisableJlw.IsEnabled = False
+                CheckAdvanceDisableJlw.ToolTip = "在启动游戏时不使用 Java Wrapper 进行包装。&#xa;由于系统为 ARM64 架构，Java Wrapper 已被强制禁用。"
+            Else
+                CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
+            End If
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -88,6 +94,7 @@
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
@@ -382,6 +389,26 @@ PreFin:
         TextServerAuthServer.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         BtnServerAuthLittle.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         CardServer.TriggerForceResize()
+        '避免微软登录、离线登录和第三方登录：统一通行证出现此提示
+        If Not Type = 4 Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+            ' 如果开头为 http:// 给予警告
+        ElseIf TextServerAuthServer.Text.StartsWithF("https://") AndAlso Setup.Get("ToolDownloadCert") = "False" Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
+        ElseIf TextServerAuthServer.Text.StartsWithF("http://") Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+
+        Else
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
+        End If
     End Sub
 
     '统一通行证

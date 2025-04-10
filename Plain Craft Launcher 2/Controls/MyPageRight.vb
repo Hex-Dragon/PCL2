@@ -130,7 +130,7 @@
         Select Case PageState
             Case PageStates.Empty
                 If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Waiting OrElse PageLoader.State = LoadState.Aborted Then
-                    '如果加载器在进入页面时不启动（例如 HiPer 联机），那么在此时就会有 State = Waiting
+                    '如果加载器在进入页面时不启动（例如联机），那么在此时就会有 State = Waiting
                     PageState = PageStates.ContentEnter
                     TriggerEnterAnimation(PanAlways, If(PanContent, Child))
                 ElseIf PageLoader.State = LoadState.Loading Then

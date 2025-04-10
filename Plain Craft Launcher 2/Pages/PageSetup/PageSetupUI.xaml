@@ -7,7 +7,7 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
             <local:MyCard Margin="0,15" Title="基础" x:Name="CardLauncher">
-                <Grid Margin="25,40,25,17">
+                <Grid Margin="25,40,25,10">
                     <StackPanel>
                         <Grid Margin="0,0,0,6">
                             <Grid.ColumnDefinitions>
@@ -33,7 +33,7 @@
                             <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Name="LabLauncherLight" Visibility="Collapsed" HorizontalAlignment="Left" Text="亮度" Margin="0,10,20,0" />
                             <local:MySlider Grid.Row="2" Grid.Column="4" x:Name="SliderLauncherLight" Tag="UiLauncherLight" Visibility="Collapsed" MaxValue="40" ValueByKey="5" Margin="0,10,0,0" />
                         </Grid>
-                        <Grid x:Name="PanLauncherTheme" Height="90" Margin="0,0,0,7">
+                        <Grid x:Name="PanLauncherTheme" Visibility="Collapsed" Height="90" Margin="0,0,0,7">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Name1" />
                                 <ColumnDefinition />
@@ -70,14 +70,36 @@
                             <TextBlock Grid.Column="4" Grid.Row="2" x:Name="LabLauncherTheme11Click" Background="{StaticResource ColorBrushSemiTransparent}" ToolTipService.Placement="Bottom" />
                             <local:MyRadioBox Grid.Column="5" Grid.Row="2" Text="自定义" x:Name="RadioLauncherTheme14" Tag="UiLauncherTheme/14" IsEnabled="False" ToolTipService.Placement="Bottom" ToolTip="需要解锁五个隐藏主题" ToolTipService.ShowOnDisabled="True" />
                         </Grid>
-                        <local:MyCheckBox Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
+                        <Border Background="{DynamicResource ColorBrushToolTip}" Margin="0,0,0,7" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12">
+                                <TextBlock Text="嗯？你想换主题？那你应该使用官方的快照版，这里不提供换主题服务 Orz" FontSize="13" Margin="0,0,0,0" TextWrapping="Wrap"/>
+                                <local:MyButton Height="35" x:Name="BtnLauncherDonate" MinWidth="140" Text="获取官方快照版" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
+                            </StackPanel>
+                        </Border>
+                        <local:MyCheckBox Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,7" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
+                        <Grid x:Name="PanDarkMode" Height="28" Margin="0,0,0,7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="深浅" Margin="0,0,25,0" />
+                            <local:MyComboBox x:Name="ComboDarkMode" Tag="UiDarkMode" Grid.Column="1">
+                                <local:MyComboBoxItem Content="浅色" IsSelected="True"/>
+                                <local:MyComboBoxItem Content="深色"/>
+                                <local:MyComboBoxItem Content="跟随系统"/>
+                            </local:MyComboBox>
+                        </Grid>
+                        <Grid Height="28" Margin="0,0,0,7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="字体" Margin="0,0,25,0" />
+                            <local:MyComboBox x:Name="ComboUiFont" Grid.Column="1"/>
+                        </Grid>
                     </StackPanel>
-                    <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="如果可以小小赞助一下 PCL，就能解锁主题颜色更换功能啦……&#xa;多亏了大家的支持，PCL 才能在免费、无任何广告的情况下维持数年的更新（磕头）！" FontSize="13" Margin="0,0,0,0" />
-                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="支持 PCL 开发！" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
-                        </StackPanel>
-                    </Border>
                 </Grid>
             </local:MyCard>
             <local:MyCard x:Name="CardBackground" Margin="0,0,0,15" Title="背景图片">
@@ -144,6 +166,8 @@
                         <local:MyCheckBox Text="打开启动器自动开始播放" Margin="0,0,0,5" Height="22" x:Name="CheckMusicAuto" Tag="UiMusicAuto" />
                         <local:MyCheckBox Text="游戏启动后自动开始播放，游戏退出后自动暂停播放" Margin="0,0,0,5" Height="22" x:Name="CheckMusicStart" Tag="UiMusicStart" />
                         <local:MyCheckBox Text="游戏启动后自动暂停播放，游戏退出后自动开始播放" Margin="0,0,0,5" Height="22" x:Name="CheckMusicStop" Tag="UiMusicStop" />
+                        <local:MyCheckBox Text="接入系统媒体传输控制 (SMTC) 控件" Margin="0,0,0,5" Height="22" x:Name="CheckMusicSMTC" Tag="UiMusicSMTC" 
+                                          ToolTip="启用此选项后，可以使用系统控制中心和快捷键等控制 PCL 的媒体播放。&#xa;可以与 Lyricify Lite 或 FluentFlyout 等软件搭配使用。"/>
                     </StackPanel>
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>
@@ -278,14 +302,14 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="主页面" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="下载" x:Name="CheckHiddenPageDownload" Tag="UiHiddenPageDownload" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Visibility="Collapsed" Text="联机" x:Name="CheckHiddenPageLink" Tag="UiHiddenPageLink" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="设置" x:Name="CheckHiddenPageSetup" Tag="UiHiddenPageSetup" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4" Text="更多" x:Name="CheckHiddenPageOther" Tag="UiHiddenPageOther" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="联机" x:Name="CheckHiddenPageLink" Tag="UiHiddenPageLink" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4" Text="设置" x:Name="CheckHiddenPageSetup" Tag="UiHiddenPageSetup" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="5" Text="更多" x:Name="CheckHiddenPageOther" Tag="UiHiddenPageOther" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="设置 子页面" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="游戏" x:Name="CheckHiddenSetupLaunch" Tag="UiHiddenSetupLaunch" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="个性化" x:Name="CheckHiddenSetupUI" Tag="UiHiddenSetupUi" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="启动器" x:Name="CheckHiddenSetupSystem" Tag="UiHiddenSetupSystem" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="联机" x:Name="CheckHiddenSetupLink" Tag="UiHiddenSetupLink" Visibility="Collapsed" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="联机" x:Name="CheckHiddenSetupLink" Tag="UiHiddenSetupLink" />
                         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="更多 子页面" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Text="帮助" x:Name="CheckHiddenOtherHelp" Tag="UiHiddenOtherHelp" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="3" Text="关于与鸣谢" x:Name="CheckHiddenOtherAbout" Tag="UiHiddenOtherAbout" />
