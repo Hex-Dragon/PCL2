@@ -62,7 +62,7 @@
                         Entry.ChineseName = SplitedLine(1)
                         If Entry.ChineseName.Contains("*") Then '处理 *
                             Entry.ChineseName = Entry.ChineseName.Replace("*",
-                            $"({If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Replace("-"," ").Capitalize})"
+                            $"({If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Replace("-"," ").Capitalize})")
                         End If
                     End If
                     _CompDatabase.Add(Entry)
