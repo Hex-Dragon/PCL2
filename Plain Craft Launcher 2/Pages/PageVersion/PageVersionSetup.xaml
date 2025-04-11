@@ -176,7 +176,6 @@
                                         <System:String>"</System:String>
                                         <System:String>“</System:String>
                                         <System:String>”</System:String>
-                                        <System:String>/</System:String>
                                         <System:String>http://</System:String>
                                         <System:String>https://</System:String>
                                     </local:ValidateExcept.Excepts>
