@@ -7,17 +7,21 @@ Public Class PageVersionInstall
     End Sub
 
     Private IsLoad As Boolean = False
+    Private LastVersionName As String = Nothing
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
 
         GetCurrentInfo()
 
-        DlOptiFineListLoader.Start()
-        DlLiteLoaderListLoader.Start()
-        DlFabricListLoader.Start()
-        DlQuiltListLoader.Start()
-        DlNeoForgeListLoader.Start()
-        DlCleanroomListLoader.Start()
+        Dim NeedRefresh = LastVersionName Is Nothing OrElse LastVersionName <> SelectedMinecraftId
+        LastVersionName = SelectedMinecraftId
+
+        DlOptiFineListLoader.Start(IsForceRestart:=NeedRefresh)
+        DlLiteLoaderListLoader.Start(IsForceRestart:=NeedRefresh)
+        DlFabricListLoader.Start(IsForceRestart:=NeedRefresh)
+        DlQuiltListLoader.Start(IsForceRestart:=NeedRefresh)
+        DlNeoForgeListLoader.Start(IsForceRestart:=NeedRefresh)
+        DlCleanroomListLoader.Start(IsForceRestart:=NeedRefresh)
 
         '重载预览
         SelectReload()
