@@ -470,9 +470,9 @@ Install:
 
             Case 2 'CSV
                 Dim ExportContent As New List(Of String)
-                ExportContent.Add("文件名,Mod 中文名称,Mod 版本,Mod 平台工程 ID,Mod 文件大小（字节）,Mod 文件路径")
+                ExportContent.Add("文件名,Mod 名称,Mod 版本,此版本更新时间,Mod ID,Mod 平台工程 ID,Mod 文件大小（字节）,Mod 文件路径")
                 For Each ModEntity In CompResourceListLoader.Output
-                    ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{ModEntity.Comp?.Id},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
+                    ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{ModEntity.CompFile?.ReleaseDate},{ModEntity.ModId},{ModEntity.Comp?.Id},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
                 Next
                 ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.csv")
 
@@ -684,11 +684,11 @@ Install:
         Select Case Method
             Case SortMethod.FileName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return -StrComp(a.FileName, b.FileName)
+                           Return String.Compare(b.FileName, a.FileName, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.ModName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return -StrComp(a.Name, b.Name)
+                           Return String.Compare(b.Name, a.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.TagNums
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer

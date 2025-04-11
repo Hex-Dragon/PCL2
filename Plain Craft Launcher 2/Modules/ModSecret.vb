@@ -460,6 +460,10 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                        End Sub)
     End Sub
     Public Sub UpdateLatestVersionInfo()
+        If RunInUi() Then
+            Hint("暂时无法获取更新信息……", HintType.Critical)
+            Log("[System] 获取更新信息失败：在 UI 线程中运行")
+        End If
         Log("[System] 正在获取版本信息")
         Dim LatestReleaseInfoJson As JObject = Nothing
         Dim Server As String = Nothing
@@ -482,6 +486,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
         LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
         RemoteVersionData = LatestReleaseInfoJson.ToObject(Of SelfUpdateInfo)()
+        Log($"[System] 已获取到更新信息：{LatestReleaseInfoJson.ToString(Newtonsoft.Json.Formatting.None)}")
     End Sub
 
     Public Function GetCurrentUpdateChannelInfo() As SelfUpdateChannelInfo
@@ -515,7 +520,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     Public Sub UpdateStart(VersionStr As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
         Dim DlLink As String = Nothing
-        DlLink = GetUpdateServerSource(VersionStr)
+        DlLink = GetUpdateServerSource()
         Dim DlTargetPath As String = Path + "PCL\Plain Craft Launcher 2.exe"
         RunInNewThread(Sub()
                            Try
@@ -624,8 +629,10 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' <summary>
     ''' 获取更新文件的下载地址。
     ''' </summary>
-    Private Function GetUpdateServerSource() As String
-        Dim LatestVersion As SelfUpdateChannelInfo = RemoteVersionData.latests.slow
+    ''' <param name="RequireStable">是否要求稳定版本的下载地址</param>
+    ''' <returns></returns>
+    Private Function GetUpdateServerSource(Optional RequireStable As Boolean = False) As String
+        Dim LatestVersion As SelfUpdateChannelInfo = If(RequireStable, RemoteVersionData.latests.slow, GetCurrentUpdateChannelInfo())
         Dim DlLink As String = Nothing
         If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
             DlLink = PysioServer + LatestVersion.file
@@ -641,7 +648,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Friend Sub DownloadLatestPCL(Optional LoaderToSyncProgress As LoaderBase = Nothing)
         '注意：如果要自行实现这个功能，请换用另一个文件路径，以免与官方版本冲突
         Dim LatestPCLPath As String = PathTemp & "CE-Latest.exe"
-        NetDownloadByLoader(GetUpdateServerSource(), LatestPCLPath, LoaderToSyncProgress)
+        NetDownloadByLoader(GetUpdateServerSource(True), LatestPCLPath, LoaderToSyncProgress)
     End Sub
 
 #End Region

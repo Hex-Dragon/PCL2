@@ -155,12 +155,13 @@ Public Class PageVersionWorld
         End Try
     End Sub
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
-        OpenExplorer("""" & WorldPath & """")
+        OpenExplorer(WorldPath)
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
-        OpenExplorer("""" & sender.Tag & """")
+        OpenExplorer(sender.Tag)
     End Sub
     Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
+        Hint("正在粘贴存档文件夹，这可能一段时间……")
         Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
         Dim Copied = 0
         For Each i In files
@@ -180,7 +181,7 @@ Public Class PageVersionWorld
                 Continue For
             End Try
         Next
-        Hint("已粘贴 " & Copied & " 个文件夹")
+        If Copied > 0 Then Hint("已粘贴 " & Copied & " 个文件夹", HintType.Finish)
         LoadFileList()
     End Sub
 End Class

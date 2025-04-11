@@ -1,0 +1,56 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [closed, reopened, labeled]
+
+jobs:
+  pr_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto close PR
+        if: |
+          github.event_name == 'pull_request' &&
+          github.event.action == 'labeled' &&
+          contains(
+            '❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划,❌ 第三方,❌ 重复,😂 移交上游',
+            github.event.label.name
+          )
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          curl -s -X PATCH \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER" \
+            -d '{"state":"closed"}'
+
+      - name: Cleanup merged PR
+        if: github.event.action == 'closed' && github.event.pull_request.merged
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          printf '%s\n' '⭕ 等待处理' '🚧 正在处理' '🕑 等待合并' '🕑 等待前置' | while read -r label; do
+            curl -s -X DELETE \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/labels/$(jq -Rr @uri <<<"$label")" || true
+          done
+          curl -s -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/labels" \
+            -d '["👌 完成"]'
+
+      - name: Cleanup reopened PR
+        if: github.event.action == 'reopened'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          printf '%s\n' '❌ 忽略' '❌ 拒绝 / 放弃' '❌ 暂无计划' '❌ 第三方' '❌ 重复' | while read -r label; do
+            curl -s -X DELETE \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/labels/$(jq -Rr @uri <<<"$label")" || true
+          done

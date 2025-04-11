@@ -2,12 +2,12 @@ name: Release Build
 
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   build:
     name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
-    if: ${{ !github.event.release.prerelease }}
+    if: ${{ !github.event.release.prerelease && github.event.action == 'edited' }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -67,6 +67,9 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = "native"', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
         (gc "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml") -replace 'https://github.com/PCL-Community/PCL2-CE', 'https://github.com/PCL-Community/PCL2-CE/tree/${{ github.sha }}' | Out-File "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml"
 
+    - name: Clean previous builds
+      run: Remove-Item -Recurse -Force 'Plain Craft Launcher 2\obj' -ErrorAction SilentlyContinue
+
     - name: Build
       run: |
         chcp 65001
@@ -83,14 +86,12 @@ jobs:
     - name: Rename binaries
       run: |
         cd "Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}"
-        mv "Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.architecture }}.exe"
+        mv "Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe"
 
     - name: Upload binary to Release
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\PCL2_CE_${{ matrix.architecture }}.exe
-        asset_name: PCL2_CE_${{ matrix.architecture }}.exe
-        asset_content_type: application/octet-stream
+        files: |
+          Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

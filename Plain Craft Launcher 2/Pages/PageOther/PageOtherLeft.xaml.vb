@@ -141,14 +141,17 @@
 
     '打开网页
     Public Shared Sub TryFeedback() 'Handles ItemFeedback.Click
-        If Not CanFeedback(True) Then Exit Sub
-        Select Case MyMsgBox("在提交新反馈前，建议先搜索反馈列表，以避免重复提交。" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
-                    "反馈", "提交新反馈", "查看反馈列表", "取消")
-            Case 1
-                Feedback(True, False)
-            Case 2
-                OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
-        End Select
+        RunInNewThread(Sub()
+                           If Not CanFeedback(True) Then Exit Sub
+                           Select Case MyMsgBox("在提交新反馈前，建议先搜索反馈列表，以避免重复提交。" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
+                                       "反馈", "提交新反馈", "查看反馈列表", "取消")
+                               Case 1
+                                   Feedback(True, False)
+                               Case 2
+                                   OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+                           End Select
+                       End Sub)
+
     End Sub
     Public Shared Sub TryVote() 'Handles ItemVote.Click
         If MyMsgBox("是否要打开新功能投票网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
