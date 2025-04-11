@@ -1674,7 +1674,7 @@ OnLoaded:
             Case "Nide"
                 Url = "https://auth.mc-user.com:233/" & If(McVersionCurrent Is Nothing, Setup.Get("CacheNideServer"), Setup.Get("VersionServerNide", Version:=McVersionCurrent)) & "/sessionserver/session/minecraft/profile/"
             Case "Auth"
-                Dim AuthUrl = PageLoginProfile.SelectedProfile("server").ToString()
+                Dim AuthUrl = PageLoginProfile.SelectedProfile.Server
                 Url = AuthUrl.Replace("/authserver", "") & "/sessionserver/session/minecraft/profile/"
             Case Else
                 Throw New ArgumentException("皮肤地址种类无效：" & If(Type, "null"))

@@ -280,12 +280,12 @@
     ''' <summary>
     ''' 确认当前显示的子页面正确，并刷新该页面。
     ''' </summary>
-    Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As String = Nothing)
+    Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As McLoginType = Nothing)
         If IsLogin Then
             Dim TargetLoginPage As PageType
-            If TargetLoginType = "microsoft" Then TargetLoginPage = PageType.Ms
-            If TargetLoginType = "authlib" Then TargetLoginPage = PageType.Auth
-            If TargetLoginType = "offline" Then TargetLoginPage = PageType.Legacy
+            If TargetLoginType = 5 Then TargetLoginPage = PageType.Ms
+            If TargetLoginType = 3 Then TargetLoginPage = PageType.Auth
+            If TargetLoginType = 0 Then TargetLoginPage = PageType.Legacy
             If PageCurrent = TargetLoginPage Then Exit Sub
             PageChange(TargetLoginPage, Anim).Reload(KeepInput)
             Exit Sub
@@ -404,8 +404,8 @@ UnknownType:
         Dim UserName As String = Data.Input(0)
         Dim Uuid As String = Data.Input(1)
         If PageLoginProfileSkin.SelectedProfile IsNot Nothing Then
-            UserName = PageLoginProfileSkin.SelectedProfile("username").ToString
-            Uuid = PageLoginProfileSkin.SelectedProfile("uuid").ToString
+            UserName = PageLoginProfileSkin.SelectedProfile.Username
+            Uuid = PageLoginProfileSkin.SelectedProfile.Uuid
         End If
         If UserName = "" Then
             Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
@@ -572,7 +572,7 @@ Finish:
     Public Shared SkinAuth As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Auth", AddressOf SkinAuthLoad, AddressOf SkinAuthInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinAuthInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {PageLoginProfile.SelectedProfile("username"), PageLoginProfile.SelectedProfile("uuid")}
+        Return New EqualableList(Of String) From {PageLoginProfile.SelectedProfile.Username, PageLoginProfile.SelectedProfile.Uuid}
     End Function
     Private Shared Sub SkinAuthLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤

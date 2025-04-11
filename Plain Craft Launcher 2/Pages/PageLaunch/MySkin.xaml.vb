@@ -1,4 +1,6 @@
-﻿Public Class MySkin
+﻿Imports System.Drawing
+
+Public Class MySkin
 
     '事件
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -115,27 +117,42 @@
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
-            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{PageLoginProfile.SelectedProfile("type")}_{PageLoginProfile.SelectedProfile("username")}_{PageLoginProfile.SelectedProfile("uuid")}.png"
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{PageLoginProfile.SelectedProfile.Type}_{PageLoginProfile.SelectedProfile.Username}_{PageLoginProfile.SelectedProfile.Uuid}.png"
+            If SkinHead Is Nothing Then
+                SkinHead.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)
+            Else
+                SkinHead = New MyBitmap With {.Pic = New Bitmap(56, 56)}
+                Dim SkinHair As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8), 56, 56)}
+                'SkinHair.Save(PathTemp & $"Cache\Skin\Head\hair.png")
+                Dim SkinFace As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)}
+                For i = 0 To 47
+                    For j = 0 To 47
+                        SkinHead.Pic.SetPixel(i + 4, j + 4, SkinFace.Pic.GetPixel(i, j))
+
+                    Next
+                Next
+                For i = 0 To 55
+                    For j = 0 To 55
+                        If SkinHair.Pic.GetPixel(i, j).A = 0 Then Continue For
+                        SkinHead.Pic.SetPixel(i, j, SkinHair.Pic.GetPixel(i, j))
+                    Next
+                Next
+            End If
             WriteFile(CachePath, "")
-            'If SkinHead Is Nothing Then
-            '    SkinHead.Pic = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
-            'Else
-            '    Dim SkinHair As MyBitmap = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
-            '    SkinHead.Save(CachePath)
-            '    For i = 1 To 7
-            '        For j = 1 To 7
-            '            SkinHead.Pic.SetPixel(i + 4, j + 4, Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8).Pic.GetPixel(i, j))
-            '            SkinHead.Pic.SetPixel(i + 4, j + 4, SkinHair.Pic.GetPixel(i, j))
-            '        Next
-            '    Next
-            'End If
-            SkinHead.Pic = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
             SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
             Log(ex, "载入头像失败（" & If(Address, "null") & "," & Loader.Name & "）", LogLevel.Hint)
         End Try
     End Sub
+    Private Function ScaleToSize(Bitmap As Bitmap, Width As Integer, Height As Integer)
+        Dim ScaledBitmap = New Bitmap(Width, Height)
+        Using g = Graphics.FromImage(ScaledBitmap)
+            g.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
+            g.DrawImage(Bitmap, 0, 0, Width, Height)
+        End Using
+        Return ScaledBitmap
+    End Function
     ''' <summary>
     ''' 清空皮肤。
     ''' </summary>

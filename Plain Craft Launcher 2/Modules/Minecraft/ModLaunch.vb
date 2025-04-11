@@ -587,28 +587,28 @@ Relogin:
         If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
         For Each Profile In PageLoginProfile.ProfileList
-            If Profile("type") = "microsoft" AndAlso Profile("username") = Result(1) AndAlso Profile("uuid") = Result(0) Then
+            If Profile.Type = 5 AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
                 MyMsgBox("已经存在该档案，无需再次创建了哦.....", "档案已存在")
                 GoTo SkipLogin
             End If
         Next
         '输出登录结果
         If IsNewProfile Then
-            Dim NewProfile = New JObject From {
-                {"type", "microsoft"},
-                {"uuid", Result(0)},
-                {"username", Result(1)},
-                {"accessToken", AccessToken},
-                {"refreshToken", OAuthRefreshToken},
-                {"expires", 1743779140286},
-                {"desc", ""}
+            Dim NewProfile = New PageLoginProfile.McProfile With {
+                .Type = McLoginType.Ms,
+                .Uuid = Result(0),
+                .Username = Result(1),
+                .AccessToken = AccessToken,
+                .RefreshToken = OAuthRefreshToken,
+                .Expires = 1743779140286,
+                .Desc = ""
             }
             PageLoginProfile.ProfileList.Add(NewProfile)
         Else
             Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-            PageLoginProfile.ProfileList(ProfileIndex)("username") = Result(1)
-            PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = AccessToken
-            PageLoginProfile.ProfileList(ProfileIndex)("refreshToken") = OAuthRefreshToken
+            PageLoginProfile.ProfileList(ProfileIndex).Username = Result(1)
+            PageLoginProfile.ProfileList(ProfileIndex).AccessToken = AccessToken
+            PageLoginProfile.ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
         End If
         PageLoginProfile.WriteProfileJson()
         Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
@@ -629,8 +629,8 @@ SkipLogin:
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
         If IsSkipAuth Then
             Data.Progress = 0.99
-            Data.Output = New McLoginResult With {.AccessToken = PageLoginProfile.SelectedProfile("accessToken"),
-                    .Name = PageLoginProfile.SelectedProfile("username"), .Uuid = PageLoginProfile.SelectedProfile("uuid"),
+            Data.Output = New McLoginResult With {.AccessToken = PageLoginProfile.SelectedProfile.AccessToken,
+                    .Name = PageLoginProfile.SelectedProfile.Username, .Uuid = PageLoginProfile.SelectedProfile.Uuid,
                     .Type = "Microsoft"}
             Exit Sub
         End If
@@ -723,7 +723,7 @@ LoginFinish:
         Data.Progress = 0.1
         With Data.Output
             .Name = Input.UserName
-            .Uuid = PageLoginProfile.SelectedProfile("uuid")
+            .Uuid = PageLoginProfile.SelectedProfile.Uuid
             .Type = "Legacy"
         End With
         '将结果扩展到所有项目中
@@ -766,11 +766,11 @@ LoginFinish:
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         Dim RefreshInfo As New JObject
         Dim SelectProfile As New JObject From {
-            {"name", PageLoginProfile.SelectedProfile("username")},
-            {"id", PageLoginProfile.SelectedProfile("uuid")}
+            {"name", PageLoginProfile.SelectedProfile.Username},
+            {"id", PageLoginProfile.SelectedProfile.Uuid}
         }
         RefreshInfo.Add("selectedProfile", SelectProfile)
-        RefreshInfo.Add(New JProperty("accessToken", PageLoginProfile.SelectedProfile("accessToken")))
+        RefreshInfo.Add(New JProperty("accessToken", PageLoginProfile.SelectedProfile.AccessToken))
         RefreshInfo.Add(New JProperty("requestUser", True))
 
 
@@ -790,8 +790,8 @@ LoginFinish:
         Data.Output.Type = Data.Input.Token
         '保存缓存
         Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-        PageLoginProfile.ProfileList(ProfileIndex)("username") = Data.Output.Name
-        PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = Data.Output.AccessToken
+        PageLoginProfile.ProfileList(ProfileIndex).Username = Data.Output.Name
+        PageLoginProfile.ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
         Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
         Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
         Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
@@ -827,7 +827,7 @@ LoginFinish:
             If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
                 '要求选择档案；优先从缓存读取
                 NeedRefresh = True
-                Dim CacheId As String = PageLoginProfile.SelectedProfile("uuid").ToString
+                Dim CacheId As String = PageLoginProfile.SelectedProfile.Uuid.ToString
                 For Each Profile In LoginJson("availableProfiles")
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
@@ -869,24 +869,24 @@ LoginFinish:
             '保存缓存
             If Data.Input.IsExist Then
                 Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-                PageLoginProfile.ProfileList(ProfileIndex)("username") = Data.Output.Name
-                PageLoginProfile.ProfileList(ProfileIndex)("uuid") = Data.Output.Uuid
-                PageLoginProfile.ProfileList(ProfileIndex)("serverName") = ServerName
-                PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = Data.Output.AccessToken
-                PageLoginProfile.ProfileList(ProfileIndex)("clientToken") = Data.Output.ClientToken
+                PageLoginProfile.ProfileList(ProfileIndex).Username = Data.Output.Name
+                PageLoginProfile.ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
+                PageLoginProfile.ProfileList(ProfileIndex).ServerName = ServerName
+                PageLoginProfile.ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
+                PageLoginProfile.ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
             Else
-                Dim NewProfile As New JObject From {
-                    {"type", "authlib"},
-                    {"uuid", Data.Output.Uuid},
-                    {"username", Data.Output.Name},
-                    {"server", Data.Input.BaseUrl},
-                    {"serverName", ServerName},
-                    {"name", Data.Input.UserName},
-                    {"password", Data.Input.Password},
-                    {"accessToken", Data.Output.AccessToken},
-                    {"clientToken", Data.Output.ClientToken},
-                    {"expires", 1743779140286},
-                    {"desc", ""}
+                Dim NewProfile As New PageLoginProfile.McProfile With {
+                    .Type = McLoginType.Auth,
+                    .Uuid = Data.Output.Uuid,
+                    .Username = Data.Output.Name,
+                    .Server = Data.Input.BaseUrl,
+                    .ServerName = ServerName,
+                    .Name = Data.Input.UserName,
+                    .Password = Data.Input.Password,
+                    .AccessToken = Data.Output.AccessToken,
+                    .ClientToken = Data.Output.ClientToken,
+                    .Expires = 1743779140286,
+                    .Desc = ""
                 }
                 PageLoginProfile.ProfileList.Add(NewProfile)
                 PageLoginProfile.SelectedProfile = NewProfile
@@ -1001,7 +1001,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile("accessToken"), "Ignore"}
+                    Return {PageLoginProfile.SelectedProfile.AccessToken, "Ignore"}
                     Exit Function
                 End If
                 Throw
@@ -1093,7 +1093,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile("accessToken"), "Ignore"}
+                    Return {PageLoginProfile.SelectedProfile.AccessToken, "Ignore"}
                     Exit Function
                 End If
                 Throw
@@ -1187,7 +1187,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile("uuid"), PageLoginProfile.SelectedProfile("username"), "Ignore"}
+                    Return {PageLoginProfile.SelectedProfile.Uuid, PageLoginProfile.SelectedProfile.Username, "Ignore"}
                     Exit Function
                 End If
                 Throw

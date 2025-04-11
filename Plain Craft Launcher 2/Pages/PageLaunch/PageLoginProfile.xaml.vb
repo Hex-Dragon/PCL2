@@ -19,7 +19,7 @@ Class PageLoginProfile
     ''' <summary>
     ''' 当前选定的档案
     ''' </summary>
-    Public Shared SelectedProfile As JObject = Nothing
+    Public Shared SelectedProfile As McProfile = Nothing
     ''' <summary>
     ''' 上次选定的档案
     ''' </summary>
@@ -27,13 +27,43 @@ Class PageLoginProfile
     ''' <summary>
     ''' 档案列表
     ''' </summary>
-    Public Shared ProfileList As New JArray
+    Public Shared ProfileList As New List(Of McProfile)
+
+    Public Class McProfile
+        Public Type As McLoginType
+        Public Uuid As String
+        ''' <summary>
+        ''' 玩家 ID
+        ''' </summary>
+        Public Username As String
+        ''' <summary>
+        ''' 验证服务器地址，用于第三方验证
+        ''' </summary>
+        Public Server As String
+        ''' <summary>
+        ''' 验证服务器名称，来自第三方验证服务器返回的 Metadata
+        ''' </summary>
+        Public ServerName As String
+        Public AccessToken As String
+        Public RefreshToken As String
+        ''' <summary>
+        ''' 登录用户名，用于第三方验证
+        ''' </summary>
+        Public Name As String
+        Public Password As String
+        Public Expires As Int64
+        Public Desc As String
+        Public ClientToken As String
+    End Class
+
+#Region "读写档案列表"
     ''' <summary>
     ''' 刷新档案列表
     ''' </summary>
     Private Sub RefreshProfileList()
         Log("[Profile] 刷新档案列表")
         StackProfile.Children.Clear()
+        ProfileList.Clear()
         Try
             If Not File.Exists(PathAppdataConfig & "Profiles.json") Then
                 File.Create(PathAppdataConfig & "Profiles.json")
@@ -41,15 +71,46 @@ Class PageLoginProfile
             End If
             Dim ProfileJobj As JObject = JObject.Parse(ReadFile(PathAppdataConfig & "Profiles.json"))
             LastUsedProfile = ProfileJobj("lastUsed")
-            ProfileList = ProfileJobj("profiles")
-            For Each Profile In ProfileList
-                If Profile.ToString Is Nothing OrElse Profile.ToString = "" Then '兜底
-                    ProfileList.Remove(Profile)
-                    WriteProfileJson()
-                    Continue For
+            Dim ProfileListJobj As JArray = ProfileJobj("profiles")
+            For Each Profile In ProfileListJobj
+                Dim NewProfile As McProfile = Nothing
+                If Profile("type") = "microsoft" Then
+                    NewProfile = New McProfile With {
+                        .Type = McLoginType.Ms,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("username"),
+                        .AccessToken = Profile("accessToken"),
+                        .RefreshToken = Profile("refreshToken"),
+                        .Expires = Profile("expires"),
+                        .Desc = Profile("desc")
+                    }
+                ElseIf Profile("type") = "authlib" Then
+                    NewProfile = New McProfile With {
+                        .Type = McLoginType.Auth,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("username"),
+                        .AccessToken = Profile("accessToken"),
+                        .RefreshToken = Profile("refreshToken"),
+                        .Expires = Profile("expires"),
+                        .Server = Profile("server"),
+                        .ServerName = Profile("serverName"),
+                        .Name = Profile("name"),
+                        .Password = Profile("password"),
+                        .ClientToken = Profile("clientToken"),
+                        .Desc = Profile("desc")
+                    }
+                Else
+                    NewProfile = New McProfile With {
+                        .Type = McLoginType.Legacy,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("username"),
+                        .Desc = Profile("desc")
+                    }
                 End If
-                StackProfile.Children.Add(ProfileListItem(Profile, AddressOf SelectProfile))
+                ProfileList.Add(NewProfile)
+                StackProfile.Children.Add(ProfileListItem(NewProfile, AddressOf SelectProfile))
             Next
+            Log($"[Profile] 档案刷新完成，获取到 {ProfileList.Count} 个档案")
             If IsFirstLoad Then
                 SelectedProfile = ProfileList(LastUsedProfile)
                 IsFirstLoad = False
@@ -58,58 +119,163 @@ Class PageLoginProfile
             Log(ex, "读取档案列表失败", LogLevel.Feedback)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' 以当前的档案列表写入配置文件
+    ''' </summary>
+    Public Shared Sub WriteProfileJson(Optional ListJson As JArray = Nothing)
+        Try
+            Log("[Profile] 写入档案列表")
+            Dim Json As New JObject
+            If ListJson IsNot Nothing Then
+                Json = New JObject From {
+                {"lastUsed", LastUsedProfile},
+                {"profiles", ListJson}
+            }
+            Else
+                Dim List As New JArray
+                For Each Profile In ProfileList
+                    Dim ProfileJobj As JObject = Nothing
+                    If Profile.Type = 5 Then
+                        ProfileJobj = New JObject From {
+                            {"type", "microsoft"},
+                            {"uuid", Profile.Uuid},
+                            {"username", Profile.Username},
+                            {"accessToken", Profile.AccessToken},
+                            {"refreshToken", Profile.RefreshToken},
+                            {"expires", Profile.Expires},
+                            {"desc", Profile.Desc}
+                        }
+                    ElseIf Profile.Type = 3 Then
+                        ProfileJobj = New JObject From {
+                            {"type", "authlib"},
+                            {"uuid", Profile.Uuid},
+                            {"username", Profile.Username},
+                            {"accessToken", Profile.AccessToken},
+                            {"refreshToken", Profile.RefreshToken},
+                            {"expires", Profile.Expires},
+                            {"server", Profile.Server},
+                            {"serverName", Profile.ServerName},
+                            {"name", Profile.Name},
+                            {"password", Profile.Password},
+                            {"clientToken", Profile.ClientToken},
+                            {"desc", Profile.Desc}
+                        }
+                    Else
+                        ProfileJobj = New JObject From {
+                            {"type", "offline"},
+                            {"uuid", Profile.Uuid},
+                            {"username", Profile.Username},
+                            {"desc", Profile.Desc}
+                        }
+                    End If
+                    List.Add(ProfileJobj)
+                Next
+                Log($"[Profile] 开始写入档案，共 {List.Count} 个")
+                Json = New JObject From {
+                {"lastUsed", LastUsedProfile},
+                {"profiles", List}
+            }
+            End If
+            WriteFile(PathAppdataConfig & "Profiles.json", Json.ToString, False)
+        Catch ex As Exception
+            Log(ex, "写入档案列表失败", LogLevel.Feedback)
+        End Try
+    End Sub
+#End Region
+
+#Region "控件"
     Private Sub SelectProfile(sender As MyListItem, e As EventArgs)
         SelectedProfile = sender.Tag
-        Log($"[Profile] 选定档案: {sender.Tag("username")}, 以 {sender.Tag("type")} 方式验证")
-        Select Case SelectedProfile("type").ToString
-            Case "offline"
+        Log($"[Profile] 选定档案: {sender.Tag.Username}, 以 {sender.Tag.Type} 方式验证")
+        Select Case SelectedProfile.Type
+            Case 0
                 Setup.Set("LoginType", McLoginType.Legacy)
-            Case "microsoft"
+            Case 5
                 Setup.Set("LoginType", McLoginType.Ms)
-            Case "authlib"
+            Case 3
                 Setup.Set("LoginType", McLoginType.Auth)
         End Select
         LastUsedProfile = ProfileList.IndexOf(sender.Tag) '获取当前档案的序号
         IsProfileSelected = True
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
     End Sub
+    Public Function ProfileListItem(Profile As McProfile, OnClick As MyListItem.ClickEventHandler)
+        Dim LogoPath As String = Nothing
+        If File.Exists(PathTemp & $"Cache\Skin\Head\{Profile.Type}_{Profile.Username}_{Profile.Uuid}.png") Then
+            'Log($"[Profile] 档案 {Json("username")} ({Json("type")}) 存在可用头像文件")
+            LogoPath = PathTemp & $"Cache\Skin\Head\{Profile.Type}_{Profile.Username}_{Profile.Uuid}.png"
+        Else
+            LogoPath = Logo.IconButtonUser
+        End If
+        Dim NewItem As New MyListItem With {
+                .Title = Profile.Username,
+                .Info = GetProfileInfo(Profile.Type, Desc:=Profile.Desc, ServerName:=If(Profile.Type = 3, Profile.ServerName, Nothing)),
+                .Type = MyListItem.CheckType.Clickable,
+                .Logo = LogoPath,
+                .Tag = Profile
+        }
+        AddHandler NewItem.Click, OnClick
+        NewItem.ContentHandler = AddressOf ProfileContMenuBuild
+        Return NewItem
+    End Function
+    Private Sub ProfileContMenuBuild(sender As MyListItem, e As EventArgs)
+        Dim BtnChangeRole As New MyIconButton With {.Logo = Logo.IconButtonCard, .ToolTip = "切换角色", .Tag = sender.Tag}
+        ToolTipService.SetPlacement(BtnChangeRole, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnChangeRole, 30)
+        ToolTipService.SetHorizontalOffset(BtnChangeRole, 2)
+        AddHandler BtnChangeRole.Click, AddressOf ChangeRole
+        Dim BtnUUID As New MyIconButton With {.Logo = Logo.IconButtonInfo, .ToolTip = "更改 UUID", .Tag = sender.Tag}
+        ToolTipService.SetPlacement(BtnUUID, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnUUID, 30)
+        ToolTipService.SetHorizontalOffset(BtnUUID, 2)
+        AddHandler BtnUUID.Click, AddressOf EditProfile
+        Dim BtnDelete As New MyIconButton With {.Logo = Logo.IconButtonDelete, .ToolTip = "删除档案", .Tag = sender.Tag}
+        ToolTipService.SetPlacement(BtnDelete, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnDelete, 30)
+        ToolTipService.SetHorizontalOffset(BtnDelete, 2)
+        AddHandler BtnDelete.Click, AddressOf DeleteProfile
+        If sender.Tag.Type = 0 Then
+            sender.Buttons = {BtnUUID, BtnDelete}
+        ElseIf sender.Tag.Type = 3 Then
+            sender.Buttons = {BtnDelete}
+            'sender.Buttons = {BtnChangeRole, BtnDelete}
+        Else
+            sender.Buttons = {BtnDelete}
+        End If
+    End Sub
+
     Private Sub BtnNew_Click(sender As Object, e As EventArgs) Handles BtnNew.Click
         Dim AuthTypeList As New List(Of IMyRadio) From {
-            New MyRadioBox With {.Text = "离线验证", .Tag = "offline"},
-            New MyRadioBox With {.Text = "正版验证", .Tag = "microsoft"},
-            New MyRadioBox With {.Text = "第三方验证", .Tag = "authlib"}
+            New MyRadioBox With {.Text = "离线验证"},
+            New MyRadioBox With {.Text = "正版验证"},
+            New MyRadioBox With {.Text = "第三方验证"}
         }
-        Dim NewProfile As JObject = Nothing
-        Dim SelectedAuthType As String = Nothing '验证类型
+        Dim NewProfile As McProfile = Nothing
         Dim SelectedAuthTypeNum As Integer? = Nothing '验证类型序号
         Dim UserName As String = Nothing '玩家 ID
         Dim UserUuid As String = Nothing 'UUID
-        Dim AuthName As String = Nothing '验证使用的用户名（离线验证为空）
-        Dim AuthPassword As String = Nothing '验证使用的密码（离线验证为空）
         RunInUiWait(Sub() SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消") + 1)
         If SelectedAuthTypeNum Is Nothing Then Exit Sub
         If SelectedAuthTypeNum = 1 Then '离线验证
-            SelectedAuthType = "offline"
             UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="只可以使用英文字母、数字与下划线", Button1:="继续", Button2:="取消")
             If UserName = Nothing Then Exit Sub
             UserUuid = GetPlayerUuid(UserName, False)
-            NewProfile = New JObject From {
-                {"type", SelectedAuthType},
-                {"uuid", UserUuid},
-                {"username", UserName},
-                {"desc", ""}
-            }
+            NewProfile = New McProfile With {
+                .Type = McLoginType.Legacy,
+                .Uuid = UserUuid,
+                .Username = UserName,
+                .Desc = ""}
         End If
         If SelectedAuthTypeNum = 2 Then '正版验证
             IsProfileCreating = True
-            FrmLaunchLeft.RefreshPage(False, True, True, "microsoft")
+            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Ms)
             Exit Sub
         End If
         If SelectedAuthTypeNum = 3 Then '第三方验证
             IsProfileCreating = True
             Dim AuthServer As String = Nothing
-            SelectedAuthType = "authlib"
-            FrmLaunchLeft.RefreshPage(False, True, True, "authlib")
+            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Auth)
             Exit Sub
         End If
         ProfileList.Add(NewProfile)
@@ -117,8 +283,15 @@ Class PageLoginProfile
         Hint("档案新建成功！", HintType.Finish)
         RefreshProfileList()
     End Sub
+#End Region
 
 #Region "离线 UUID 获取"
+    ''' <summary>
+    ''' 获取离线 UUID
+    ''' </summary>
+    ''' <param name="UserName">用户名</param>
+    ''' <param name="IsSplited">返回的 UUID 是否有连字符分割</param>
+    ''' <returns></returns>
     Public Function GetPlayerUuid(UserName As String, Optional IsSplited As Boolean = False) As String
         Dim MD5 As New MD5CryptoServiceProvider
         Dim Hash As Byte() = MD5.ComputeHash(Encoding.UTF8.GetBytes("OfflinePlayer:" + UserName))
@@ -150,50 +323,7 @@ Class PageLoginProfile
     End Function
 #End Region
 
-    Public Function ProfileListItem(Json As JObject, OnClick As MyListItem.ClickEventHandler)
-        Dim LogoPath As String = Nothing
-        If File.Exists(PathTemp & $"Cache\Skin\Head\{Json("type")}_{Json("username")}_{Json("uuid")}.png") Then
-            'Log($"[Profile] 档案 {Json("username")} ({Json("type")}) 存在可用头像文件")
-            LogoPath = PathTemp & $"Cache\Skin\Head\{Json("type")}_{Json("username")}_{Json("uuid")}.png"
-        Else
-            LogoPath = Logo.IconButtonUser
-        End If
-        Dim NewItem As New MyListItem With {
-                .Title = Json("username").ToString,
-                .Info = GetProfileInfo(Json("type").ToString, Desc:=Json("desc").ToString, ServerName:=If(Json("type").ToString = "authlib", Json("serverName").ToString, Nothing)),
-                .Type = MyListItem.CheckType.Clickable,
-                .Logo = LogoPath,
-                .Tag = Json
-        }
-        AddHandler NewItem.Click, OnClick
-        NewItem.ContentHandler = AddressOf ProfileContMenuBuild
-        Return NewItem
-    End Function
-    Private Sub ProfileContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnChangeRole As New MyIconButton With {.Logo = Logo.IconButtonCard, .ToolTip = "切换角色", .Tag = sender.Tag}
-        ToolTipService.SetPlacement(BtnChangeRole, Primitives.PlacementMode.Center)
-        ToolTipService.SetVerticalOffset(BtnChangeRole, 30)
-        ToolTipService.SetHorizontalOffset(BtnChangeRole, 2)
-        AddHandler BtnChangeRole.Click, AddressOf ChangeRole
-        Dim BtnUUID As New MyIconButton With {.Logo = Logo.IconButtonInfo, .ToolTip = "更改 UUID", .Tag = sender.Tag}
-        ToolTipService.SetPlacement(BtnUUID, Primitives.PlacementMode.Center)
-        ToolTipService.SetVerticalOffset(BtnUUID, 30)
-        ToolTipService.SetHorizontalOffset(BtnUUID, 2)
-        AddHandler BtnUUID.Click, AddressOf EditProfile
-        Dim BtnDelete As New MyIconButton With {.Logo = Logo.IconButtonDelete, .ToolTip = "删除档案", .Tag = sender.Tag}
-        ToolTipService.SetPlacement(BtnDelete, Primitives.PlacementMode.Center)
-        ToolTipService.SetVerticalOffset(BtnDelete, 30)
-        ToolTipService.SetHorizontalOffset(BtnDelete, 2)
-        AddHandler BtnDelete.Click, AddressOf DeleteProfile
-        If sender.Tag("type") = "offline" Then
-            sender.Buttons = {BtnUUID, BtnDelete}
-        ElseIf sender.Tag("type") = "authlib" Then
-            sender.Buttons = {BtnDelete}
-            'sender.Buttons = {BtnChangeRole, BtnDelete}
-        Else
-            sender.Buttons = {BtnDelete}
-        End If
-    End Sub
+#Region "档案编辑"
     Private Sub ChangeRole(sender As Object, e As EventArgs)
         If FrmLoginAuthSkin Is Nothing Then FrmLoginAuthSkin = New PageLoginAuthSkin
         FrmLoginAuthSkin.BtnEdit_Click(sender, e)
@@ -238,7 +368,7 @@ Class PageLoginProfile
         Dim ProfileIndex = ProfileList.IndexOf(sender.Tag)
         Dim NewUuid As String = MyMsgBoxInput($"更改档案 {sender.Tag("username")} 的 UUID", DefaultInput:=sender.Tag("uuid"), ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32)}, HintText:="32 位，不包括连字符", Button1:="确定", Button2:="取消")
         If NewUuid = Nothing Then Exit Sub
-        ProfileList(ProfileIndex)("uuid") = NewUuid
+        ProfileList(ProfileIndex).Uuid = NewUuid
         WriteProfileJson()
         Hint("档案信息已保存！", HintType.Finish)
     End Sub
@@ -250,6 +380,9 @@ Class PageLoginProfile
         Hint("档案删除成功！", HintType.Finish)
         RefreshProfileList()
     End Sub
+#End Region
+
+#Region "档案迁移"
     Private Sub MigrateProfile() Handles BtnPort.Click
         Dim Type As Integer = 3
         RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出 PCL 的档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
@@ -258,45 +391,46 @@ Class PageLoginProfile
         If Type = 1 Then
             RunInNewThread(Sub()
                                Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
-                               Dim OutputList As JArray = New JArray
+                               Dim OutputList As New List(Of McProfile)
                                For Each Profile In ImportList
-                                   Dim NewProfile As JObject = Nothing
+                                   Dim NewProfile As McProfile = Nothing
                                    If Profile("type") = "microsoft" Then
-                                       NewProfile = New JObject From {
-                                           {"type", "microsoft"},
-                                           {"uuid", Profile("uuid")},
-                                           {"username", Profile("displayName")},
-                                           {"accessToken", ""},
-                                           {"refreshToken", ""},
-                                           {"expires", 1743779140286},
-                                           {"desc", ""}
-                                       }
+                                       NewProfile = New McProfile With {
+                        .Type = McLoginType.Ms,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("displayName"),
+                        .AccessToken = "",
+                        .RefreshToken = "",
+                        .Expires = 1743779140286,
+                        .Desc = ""
+                    }
                                        OutputList.Add(NewProfile)
                                    ElseIf Profile("type") = "authlibInjector" Then
-                                       NewProfile = New JObject From {
-                                           {"type", "authlib"},
-                                           {"uuid", Profile("uuid")},
-                                           {"username", Profile("displayName")},
-                                           {"server", Profile("serverBaseURL")},
-                                           {"serverName", ""},
-                                           {"name", Profile("username")},
-                                           {"password", ""},
-                                           {"accessToken", ""},
-                                           {"refreshToken", ""},
-                                           {"expires", 1743779140286},
-                                           {"desc", ""}
-                                       }
-                                       Dim Response As String = NetGetCodeByRequestRetry(NewProfile("server").ToString.Replace("/authserver", ""), Encoding.UTF8)
+                                       NewProfile = New McProfile With {
+                        .Type = McLoginType.Auth,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("displayName"),
+                        .AccessToken = "",
+                        .RefreshToken = "",
+                        .Expires = 1743779140286,
+                        .Server = Profile("serverBaseURL"),
+                        .ServerName = "",
+                        .Name = Profile("username"),
+                        .Password = "",
+                        .ClientToken = Profile("clientToken"),
+                        .Desc = ""
+                    }
+                                       Dim Response As String = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8)
                                        Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
-                                       NewProfile("serverName") = ServerName
+                                       NewProfile.ServerName = ServerName
                                        OutputList.Add(NewProfile)
                                    Else
-                                       NewProfile = New JObject From {
-                                           {"type", "offline"},
-                                           {"uuid", Profile("uuid")},
-                                           {"username", Profile("username")},
-                                           {"desc", ""}
-                                       }
+                                       NewProfile = New McProfile With {
+                        .Type = McLoginType.Legacy,
+                        .Uuid = Profile("uuid"),
+                        .Username = Profile("username"),
+                        .Desc = ""
+                    }
                                        OutputList.Add(NewProfile)
                                    End If
                                Next
@@ -313,10 +447,10 @@ Class PageLoginProfile
                                Dim OutputList As JArray = New JArray
                                For Each Profile In ProfileList
                                    Dim NewProfile As JObject = Nothing
-                                   If Profile("type") = "microsoft" Then
+                                   If Profile.Type = 5 Then
                                        NewProfile = New JObject From {
-                                           {"uuid", Profile("uuid")},
-                                           {"displayName", Profile("username")},
+                                           {"uuid", Profile.Uuid},
+                                           {"displayName", Profile.Username},
                                            {"tokenType", "Bearer"},
                                            {"accessToken", ""},
                                            {"refreshToken", ""},
@@ -325,21 +459,21 @@ Class PageLoginProfile
                                            {"type", "microsoft"}
                                        }
                                        OutputList.Add(NewProfile)
-                                   ElseIf Profile("type") = "authlibInjector" Then
+                                   ElseIf Profile.Type = 3 Then
                                        NewProfile = New JObject From {
-                                           {"serverBaseURL", Profile("server")},
+                                           {"serverBaseURL", Profile.Server},
                                            {"clientToken", ""},
-                                           {"displayName", Profile("username")},
+                                           {"displayName", Profile.Username},
                                            {"accessToken", ""},
                                            {"type", "authlibInjector"},
-                                           {"uuid", Profile("uuid")},
-                                           {"username", Profile("name")}
+                                           {"uuid", Profile.Uuid},
+                                           {"username", Profile.Name}
                                        }
                                        OutputList.Add(NewProfile)
                                    Else
                                        NewProfile = New JObject From {
-                                           {"uuid", Profile("uuid")},
-                                           {"username", Profile("username")},
+                                           {"uuid", Profile.Uuid},
+                                           {"username", Profile.Username},
                                            {"type", "offline"}
                                        }
                                        OutputList.Add(NewProfile)
@@ -353,21 +487,8 @@ Class PageLoginProfile
             Hint("档案导出成功，部分档案可能需要重新验证密码！", HintType.Finish)
         End If
     End Sub
-    ''' <summary>
-    ''' 以当前的档案列表写入配置文件
-    ''' </summary>
-    Public Shared Sub WriteProfileJson()
-        Try
-            Log("[Profile] 写入档案列表")
-            Dim Json As New JObject From {
-                {"lastUsed", LastUsedProfile},
-                {"profiles", ProfileList}
-            }
-            WriteFile(PathAppdataConfig & "Profiles.json", Json.ToString, False)
-        Catch ex As Exception
-            Log(ex, "写入档案列表失败", LogLevel.Feedback)
-        End Try
-    End Sub
+#End Region
+
     ''' <summary>
     ''' 获取档案详情信息用于显示
     ''' </summary>
@@ -375,13 +496,15 @@ Class PageLoginProfile
     ''' <param name="ServerName">可选，验证服务器名称</param>
     ''' <param name="Desc">可选，用户自定义描述</param>
     ''' <returns>显示的详情信息</returns>
-    Public Shared Function GetProfileInfo(Type As String, Optional ServerName As String = Nothing, Optional Desc As String = Nothing)
+    Public Shared Function GetProfileInfo(Type As McLoginType, Optional ServerName As String = Nothing, Optional Desc As String = Nothing)
         Dim Info As String = Nothing
-        If Type = "offline" Then Info += "离线验证"
-        If Type = "microsoft" Then Info += "正版验证"
-        If Type = "authlib" Then
+        If Type = 3 Then
             Info += "第三方验证"
             If ServerName IsNot Nothing AndAlso Not ServerName = "" Then Info += $" / {ServerName}"
+        ElseIf Type = 5 Then
+            Info += "正版验证"
+        Else
+            Info += "离线验证"
         End If
         If Desc IsNot Nothing AndAlso Not Desc = "" Then Info += $"，{Desc}"
         Return Info
