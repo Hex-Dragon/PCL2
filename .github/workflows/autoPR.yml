@@ -4,10 +4,20 @@ on:
   pull_request:
     types: [closed, reopened, labeled]
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
 jobs:
   pr_automation:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Auto close PR
         if: |
           github.event_name == 'pull_request' &&
@@ -18,8 +28,7 @@ jobs:
           )
         env:
           GH_TOKEN: ${{ secrets.BOT }}
-          PR_NUMBER: ${{ github.event.number }}
-        run: gh pr close $PR_NUMBER
+        run: gh pr close ${{ github.event.number }}
 
       - name: Cleanup merged PR
         if: github.event.action == 'closed' && github.event.pull_request.merged
@@ -27,12 +36,9 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          # 删除旧标签
           printf '%s\n' '⭕ 等待处理' '🚧 正在处理' '🕑 等待合并' '🕑 等待前置' | while read -r label; do
             gh issue edit $PR_NUMBER --remove-label "$label" || true
           done
-          
-          # 添加完成标签
           gh issue edit $PR_NUMBER --add-label "👌 完成"
 
       - name: Cleanup reopened PR
@@ -41,7 +47,6 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          # 清理拒绝类标签
           printf '%s\n' '❌ 忽略' '❌ 拒绝 / 放弃' '❌ 暂无计划' '❌ 第三方' '❌ 重复' | while read -r label; do
             gh issue edit $PR_NUMBER --remove-label "$label" || true
           done
