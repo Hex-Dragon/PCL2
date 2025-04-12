@@ -32,11 +32,11 @@
         TextName.Text = SelectedProfile.Username
         TextType.Text = GetProfileInfo(SelectedProfile.Type)
     End Sub
-    Public Shared Function GetProfileInfo(Type As String, Optional Desc As String = Nothing)
+    Public Shared Function GetProfileInfo(Type As McLoginType, Optional Desc As String = Nothing)
         Dim Info As String = Nothing
-        If Type = "offline" Then Info += "离线验证"
-        If Type = "microsoft" Then Info += "正版验证"
-        If Type = "authlib" Then
+        If Type = 0 Then Info += "离线验证"
+        If Type = 5 Then Info += "正版验证"
+        If Type = 3 Then
             Info += "第三方验证"
             If Not SelectedProfile.ServerName = "" Then Info += $" / {SelectedProfile.ServerName}"
         End If

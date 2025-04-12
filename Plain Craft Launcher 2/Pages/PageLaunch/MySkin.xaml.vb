@@ -149,6 +149,7 @@ Public Class MySkin
         Dim ScaledBitmap = New Bitmap(Width, Height)
         Using g = Graphics.FromImage(ScaledBitmap)
             g.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
+            g.PixelOffsetMode = Drawing2D.PixelOffsetMode.Half
             g.DrawImage(Bitmap, 0, 0, Width, Height)
         End Using
         Return ScaledBitmap
