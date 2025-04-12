@@ -28,7 +28,9 @@ jobs:
           )
         env:
           GH_TOKEN: ${{ secrets.BOT }}
-        run: gh pr close ${{ github.event.number }}
+        run: 
+           export GH_TOKEN
+           gh pr close ${{ github.event.number }}
 
       - name: Cleanup merged PR
         if: github.event.action == 'closed' && github.event.pull_request.merged
