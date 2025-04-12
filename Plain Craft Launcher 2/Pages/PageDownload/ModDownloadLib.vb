@@ -2164,7 +2164,7 @@ Retry:
                                                                     "https://meta.quiltmc.org/v3/versions/loader/" & MinecraftName & "/" & QuiltVersion & "/profile/json"
                                                                 }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
                                                                 '新建 mods 文件夹
-                                                                Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                                                                Directory.CreateDirectory($"{If(McFolder, McFolder, PathMcFolder)}mods\")
                                                             End Sub) With {.ProgressWeight = 0.5})
         Loaders.Add(New LoaderDownload("下载 Quilt 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
 
@@ -2449,7 +2449,7 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
+        If File.Exists(TempMcFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If
@@ -2463,7 +2463,7 @@ Retry:
         End If
         'Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL)
         If Request.QSL IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
@@ -2509,7 +2509,7 @@ Retry:
             Sub(Task As LoaderTask(Of String, String))
                 Log("[Test] Clr folder: " & CleanroomFolder)
                 Log("[Test] Clr version: " & Request.CleanroomVersion)
-                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
+                InstallMerge(TempMcFolder, TempMcFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
