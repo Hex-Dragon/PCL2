@@ -36,6 +36,7 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
+          export GH_TOKEN
           printf '%s\n' '⭕ 等待处理' '🚧 正在处理' '🕑 等待合并' '🕑 等待前置' | while read -r label; do
             gh issue edit $PR_NUMBER --remove-label "$label" || true
           done
@@ -47,6 +48,7 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
+          export GH_TOKEN
           printf '%s\n' '❌ 忽略' '❌ 拒绝 / 放弃' '❌ 暂无计划' '❌ 第三方' '❌ 重复' | while read -r label; do
             gh issue edit $PR_NUMBER --remove-label "$label" || true
           done
