@@ -169,23 +169,6 @@
                         <local:MyCheckBox Text="接入系统媒体传输控制 (SMTC) 控件" Margin="0,0,0,5" Height="22" x:Name="CheckMusicSMTC" Tag="UiMusicSMTC" 
                                           ToolTip="启用此选项后，可以使用系统控制中心和快捷键等控制 PCL 的媒体播放。&#xa;可以与 Lyricify Lite 或 FluentFlyout 等软件搭配使用。"/>
                     </StackPanel>
-                    <StackPanel Margin="-1,0,0,10">
-                        <local:MyCheckBox Text="自定义文件夹" Margin="0,0,0,5" Height="22" x:Name="CheckMusicCustomFolderSelected" Tag="UiMusicCustomFolderSelected" />
-                        <Grid x:Name="PanMusicCustomFolder">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="路径" Margin="0,0,25,0" />
-                            <local:MyTextBox Grid.Column="1" x:Name="TextMusicCustomFolder" Tag="UiMusicCustomFolder">
-                                <local:MyTextBox.ValidateRules>
-                                    <local:ValidateFolderPath/>
-                                </local:MyTextBox.ValidateRules>
-                            </local:MyTextBox>
-                            <local:MyTextButton x:Name="BtnMusicCustomFolder" Text="选择" Grid.Column="2" VerticalAlignment="Center" Margin="10,0,5,0"/>
-                        </Grid>
-                    </StackPanel>
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
