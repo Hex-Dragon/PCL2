@@ -70,28 +70,33 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
 
     Private _RawCodeCache As String = Nothing
+    Private ReadOnly _cacheLock As New Object()
     ''' <summary>
     ''' 获取原始的设备标识码
     ''' </summary>
     ''' <returns></returns>
     Friend Function SecretGetRawCode() As String
-        Try
-            If _RawCodeCache IsNot Nothing Then Return _RawCodeCache
-            Dim rawCode As String
-            Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
-            For Each obj As ManagementObject In searcher.Get()
-                rawCode = obj("ProcessorId").ToString()
-                Exit For
-            Next
-            Using sha256 As SHA256 = SHA256.Create() ' SHA256 加密
-                Dim hash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
-                rawCode = BitConverter.ToString(hash).Replace("-", "")
-            End Using
-            _RawCodeCache = rawCode
-            Return rawCode
-        Catch ex As Exception
-            Return "b09675a9351cbd1fd568056781fe3966dd936cc9b94e51ab5cf67eeb7e74c075".ToUpper()
-        End Try
+        SyncLock _cacheLock
+            Try
+                If _RawCodeCache IsNot Nothing Then Return _RawCodeCache
+                Dim rawCode As String
+                Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
+                For Each obj As ManagementObject In searcher.Get()
+                    rawCode = obj("ProcessorId")?.ToString()
+                    Exit For
+                Next
+                If String.IsNullOrWhiteSpace(rawCode) Then Throw New Exception("获取 CPU 序列号失败")
+                Using sha256 As SHA256 = SHA256.Create() ' SHA256 加密
+                    Dim hash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
+                    rawCode = BitConverter.ToString(hash).Replace("-", "")
+                End Using
+                _RawCodeCache = rawCode
+                Return rawCode
+            Catch ex As Exception
+                Log(ex, "[System] 获取设备原始标识码失败，使用默认标识码")
+                Return "b09675a9351cbd1fd568056781fe3966dd936cc9b94e51ab5cf67eeb7e74c075".ToUpper()
+            End Try
+        End SyncLock
     End Function
 
     ''' <summary>
