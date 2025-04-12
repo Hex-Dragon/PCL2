@@ -119,20 +119,23 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Function
 
     Private _EncryptKeyCache As String = Nothing
+    Private ReadOnly _cacheEncryptKeyLock As New Object()
     ''' <summary>
     ''' 获取 AES 加密密钥
     ''' </summary>
     ''' <returns></returns>
     Friend Function SecretGetEncryptKey() As String
-        If _EncryptKeyCache IsNot Nothing Then Return _EncryptKeyCache
-        Dim rawCode = SecretGetRawCode()
-        Using SHA512 As SHA512 = SHA512.Create()
-            Dim hash As Byte() = SHA512.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
-            Dim key As String = BitConverter.ToString(hash).Replace("-", "")
-            key = key.Substring(4, 32)
-            _EncryptKeyCache = key
-            Return key
-        End Using
+        SyncLock _cacheEncryptKeyLock
+            If _EncryptKeyCache IsNot Nothing Then Return _EncryptKeyCache
+            Dim rawCode = SecretGetRawCode()
+            Using SHA512 As SHA512 = SHA512.Create()
+                Dim hash As Byte() = SHA512.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
+                Dim key As String = BitConverter.ToString(hash).Replace("-", "")
+                key = key.Substring(4, 32)
+                _EncryptKeyCache = key
+                Return key
+            End Using
+        End SyncLock
     End Function
 
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))
