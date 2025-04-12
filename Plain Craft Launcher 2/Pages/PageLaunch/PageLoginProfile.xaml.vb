@@ -283,9 +283,7 @@ Class PageLoginProfile
             Dim UuidTypeInput = MyMsgBoxSelect(UuidTypeList, "新建档案 - 选择 UUID 类型", "继续", "取消")
             If UuidTypeInput Is Nothing Then Exit Sub
             UuidType = UuidTypeInput
-            If UuidType = Nothing Then
-                Exit Sub
-            ElseIf UuidType = 0 Then
+            If UuidType = 0 Then
                 UserUuid = GetPlayerUuid(UserName, False)
             ElseIf UuidType = 1 Then
                 UserUuid = McLoginLegacyUuid(UserName)
