@@ -11,6 +11,11 @@ Public Module ModLaunch
         ''' </summary>
         Public ServerIp As String = Nothing
         ''' <summary>
+        ''' 指定在启动之后进入的存档名称。
+        ''' 默认值：Nothing。使用版本设置的值。
+        ''' </summary>
+        Public WorldName As String = Nothing
+        ''' <summary>
         ''' 将启动脚本保存到该地址，然后取消启动。这同时会改变启动时的提示等。
         ''' 默认值：Nothing。不保存。
         ''' </summary>
@@ -1387,9 +1392,14 @@ Retry:
         For Each Arg In CurrentLaunchOptions.ExtraArgs
             Arguments += " " & Arg.Trim
         Next
+        '进存档
+        Dim WorldName As String = CurrentLaunchOptions.WorldName
+        If WorldName IsNot Nothing Then
+            Arguments += $" --quickPlaySingleplayer ""{WorldName}"""
+        End If
         '进服
         Dim Server As String = If(String.IsNullOrEmpty(CurrentLaunchOptions.ServerIp), Setup.Get("VersionServerEnter", McVersionCurrent), CurrentLaunchOptions.ServerIp)
-        If Server.Length > 0 Then
+        If WorldName IsNot Nothing AndAlso Server.Length > 0 Then
             If McVersionCurrent.ReleaseTime > New Date(2023, 4, 4) Then
                 'QuickPlay
                 Arguments += $" --quickPlayMultiplayer ""{Server}"""

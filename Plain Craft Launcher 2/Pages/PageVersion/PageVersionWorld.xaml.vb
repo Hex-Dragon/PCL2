@@ -2,8 +2,12 @@
 
 Public Class PageVersionWorld
     Implements IRefreshable
+
+    Private QuickPlayFeature = False
+
     Private Sub RefreshSelf() Implements IRefreshable.Refresh
         Refresh()
+        CheckQuickPlay()
     End Sub
     Public Shared Sub Refresh()
         If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
@@ -22,7 +26,7 @@ Public Class PageVersionWorld
         '非重复加载部分
         If IsLoad Then Exit Sub
         IsLoad = True
-
+        CheckQuickPlay()
     End Sub
 
     Dim FileList As List(Of String) = New List(Of String)
@@ -51,46 +55,81 @@ Public Class PageVersionWorld
         End If
     End Sub
 
+    Private Sub CheckQuickPlay()
+        Dim VersionJson = PageVersionLeft.Version.JsonObject
+        For Each Argument In VersionJson("arguments")("game")
+            If Argument.Type = JTokenType.Object AndAlso JObject.FromObject(Argument).ContainsKey("value") AndAlso Argument("value").ToString().Contains("--quickPlaySingleplayer") Then
+                QuickPlayFeature = True
+                Exit For
+            End If
+        Next
+    End Sub
+
     Private Sub LoadFileList()
         Log("[World] 刷新存档文件")
         FileList.Clear()
         FileList = Directory.EnumerateDirectories(WorldPath).ToList()
         If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个存档文件夹", LogLevel.Debug)
         PanList.Children.Clear()
+        CheckQuickPlay()
+
+        If ModeDebug Then
+            If QuickPlayFeature Then
+                Log("[World] 该版本支持存档快捷启动", LogLevel.Debug)
+            Else
+                Log("[World] 该版本不支持存档快捷启动", LogLevel.Debug)
+            End If
+        End If
+
         For Each i In FileList
             Dim SaveLogo = i + "\icon.png"
             If Not File.Exists(SaveLogo) Then SaveLogo = PathImage & "Icons/NoIcon.png"
-            Dim worldItem As MyListItem = New MyListItem With {
-            .Logo = SaveLogo,
-            .Title = GetFolderNameFromPath(i),
-            .Info = $"创建时间：{ Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}，最后修改时间：{Directory.GetLastWriteTime(i).ToString("yyyy'/'MM'/'dd")}",
-            .Tag = i
+            Dim worldItem As New MyListItem With {
+                .Logo = SaveLogo,
+                .Title = GetFolderNameFromPath(i),
+                .Info = $"创建时间：{ Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}，最后修改时间：{Directory.GetLastWriteTime(i).ToString("yyyy'/'MM'/'dd")}",
+                .Tag = i
             }
-            Dim BtnOpen As MyIconButton = New MyIconButton With {
+            Dim BtnOpen As New MyIconButton With {
                 .Logo = Logo.IconButtonOpen,
                 .ToolTip = "打开",
                 .Tag = i
             }
             AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
-            Dim BtnDelete As MyIconButton = New MyIconButton With {
+            Dim BtnDelete As New MyIconButton With {
                 .Logo = Logo.IconButtonDelete,
                 .ToolTip = "删除",
                 .Tag = i
             }
             AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
-            Dim BtnCopy As MyIconButton = New MyIconButton With {
+            Dim BtnCopy As New MyIconButton With {
                 .Logo = Logo.IconButtonCopy,
                 .ToolTip = "复制",
                 .Tag = i
             }
             AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
-            Dim BtnInfo As MyIconButton = New MyIconButton With {
+            Dim BtnInfo As New MyIconButton With {
                 .Logo = Logo.IconButtonInfo,
                 .ToolTip = "详情",
                 .Tag = i
             }
             AddHandler BtnInfo.Click, AddressOf BtnInfo_Click
-            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo}
+
+            Dim BtnLaunch As New MyIconButton With {
+                    .Logo = Logo.IconPlay,
+                    .ToolTip = "快捷启动",
+                    .Tag = i
+                }
+            AddHandler BtnLaunch.Click, AddressOf BtnQuickPlayWorld_Click
+
+
+
+            If QuickPlayFeature Then
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo, BtnLaunch}
+            Else
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo}
+            End If
+
             PanList.Children.Add(worldItem)
         Next
         RefreshUI()
@@ -141,7 +180,7 @@ Public Class PageVersionWorld
     Private Sub BtnInfo_Click(sender As Object, e As MouseButtonEventArgs)
         Try
             Dim Path As String = GetPathFromSender(sender)
-            Dim infos As List(Of String) = New List(Of String)
+            Dim infos As New List(Of String)
             infos.Add("名称：" & GetFileNameFromPath(Path))
             infos.Add("创建日期：" & Directory.GetCreationTime(Path).ToString("yyyy'/'MM'/'dd"))
             infos.Add("最后一次修改日期：" & Directory.GetLastWriteTime(Path).ToString("yyyy'/'MM'/'dd"))
@@ -183,5 +222,11 @@ Public Class PageVersionWorld
         Next
         If Copied > 0 Then Hint("已粘贴 " & Copied & " 个文件夹", HintType.Finish)
         LoadFileList()
+    End Sub
+    Private Sub BtnQuickPlayWorld_Click(sender As Object, e As MouseButtonEventArgs)
+        Dim WorldName = GetFileNameFromPath(GetPathFromSender(sender))
+        Dim LaunchOptions As New McLaunchOptions With {.WorldName = WorldName}
+        ModLaunch.McLaunchStart(LaunchOptions)
+        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 End Class
