@@ -1,4 +1,4 @@
-﻿Public Class ModSetup
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -158,6 +158,8 @@
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},
+        {"UiMusicCustomFolder", New SetupEntry("")},
+        {"UiMusicCustomFolderSelected", New SetupEntry(False)},
         {"UiMusicVolume", New SetupEntry(500)},
         {"UiMusicStop", New SetupEntry(False)},
         {"UiMusicStart", New SetupEntry(False)},

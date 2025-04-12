@@ -1,5 +1,6 @@
-﻿Imports Windows.Media
+Imports Windows.Media
 Imports Windows.Storage
+Imports Windows.Storage.Streams
 Public Module ModMusic
 
 #Region "播放列表"
@@ -312,12 +313,34 @@ Public Module ModMusic
         If _smtc Is Nothing Then Exit Sub
         Log($"[SMTC] 更新 SMTC 媒体信息，文件路径: {MusicCurrent}")
         Dim Updater = _smtc.DisplayUpdater
+        Dim File = TagLib.File.Create(MusicCurrent)
 
         Updater.AppMediaId = "Plain Craft Launcher 2 CE" '媒体来源信息
         Updater.Type = MediaPlaybackType.Music '指定媒体类型
 
-        Dim sf = Await StorageFile.GetFileFromPathAsync(MusicCurrent)
-        Await Updater.CopyFromFileAsync(MediaPlaybackType.Music, sf) '从文件获取媒体信息
+        Dim Artist As String = File.Tag.FirstPerformer
+        Dim AlbumArtist As String = File.Tag.FirstAlbumArtist
+        Dim AlbumTitle As String = File.Tag.Album
+        Dim Title As String = File.Tag.Title
+        Dim Thumbnail = File.Tag.Pictures.FirstOrDefault()
+
+        If String.IsNullOrEmpty(AlbumArtist) Then
+            AlbumArtist = Artist
+        End If
+
+        Dim MemStream As InMemoryRandomAccessStream = New InMemoryRandomAccessStream()
+        Using Writer As New DataWriter(MemStream)
+            Writer.WriteBytes(Thumbnail.Data.Data)
+            Await Writer.StoreAsync()
+            Writer.DetachStream()
+        End Using
+        Dim ThumbailStream = RandomAccessStreamReference.CreateFromStream(MemStream)
+
+        Updater.MusicProperties.Artist = Artist
+        Updater.MusicProperties.AlbumArtist = AlbumArtist
+        Updater.MusicProperties.AlbumTitle = AlbumTitle
+        Updater.MusicProperties.Title = Title
+        Updater.Thumbnail = ThumbailStream
 
         '生效设置
         Updater.Update()
