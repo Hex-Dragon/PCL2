@@ -1,4 +1,5 @@
 ﻿Imports System.Security.Cryptography
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 
 Class PageLoginProfile
     Private IsReloaded As Boolean = False
@@ -54,6 +55,7 @@ Class PageLoginProfile
         Public Expires As Int64
         Public Desc As String
         Public ClientToken As String
+        Public RawJson As String
     End Class
 
 #Region "读写档案列表"
@@ -82,7 +84,8 @@ Class PageLoginProfile
                         .AccessToken = Profile("accessToken"),
                         .RefreshToken = Profile("refreshToken"),
                         .Expires = Profile("expires"),
-                        .Desc = Profile("desc")
+                        .Desc = Profile("desc"),
+                        .RawJson = Profile("rawJson")
                     }
                 ElseIf Profile("type") = "authlib" Then
                     NewProfile = New McProfile With {
@@ -144,7 +147,8 @@ Class PageLoginProfile
                             {"accessToken", Profile.AccessToken},
                             {"refreshToken", Profile.RefreshToken},
                             {"expires", Profile.Expires},
-                            {"desc", Profile.Desc}
+                            {"desc", Profile.Desc},
+                            {"rawJson", Profile.RawJson}
                         }
                     ElseIf Profile.Type = 3 Then
                         ProfileJobj = New JObject From {
@@ -256,28 +260,44 @@ Class PageLoginProfile
         Dim SelectedAuthTypeNum As Integer? = Nothing '验证类型序号
         Dim UserName As String = Nothing '玩家 ID
         Dim UserUuid As String = Nothing 'UUID
-        RunInUiWait(Sub() SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消") + 1)
+        RunInUiWait(Sub() SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消"))
         If SelectedAuthTypeNum Is Nothing Then Exit Sub
-        If SelectedAuthTypeNum = 1 Then '离线验证
-            UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="只可以使用英文字母、数字与下划线", Button1:="继续", Button2:="取消")
+        If SelectedAuthTypeNum = 1 Then '正版验证
+            IsProfileCreating = True
+            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Ms)
+            Exit Sub
+        ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
+            IsProfileCreating = True
+            Dim AuthServer As String = Nothing
+            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Auth)
+            Exit Sub
+        Else '离线验证
+            UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="3 - 16 位，只可以使用英文字母、数字与下划线", ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(3, 16), New ValidateRegex("([A-z]|[0-9]|_)+")}, Button1:="继续", Button2:="取消")
             If UserName = Nothing Then Exit Sub
-            UserUuid = GetPlayerUuid(UserName, False)
+            Dim UuidTypeList As New List(Of IMyRadio) From {
+                New MyRadioBox With {.Text = "行业规范 UUID（推荐）"},
+                New MyRadioBox With {.Text = "官方版 PCL UUID（若单人存档的部分信息丢失，可尝试此项）"},
+                New MyRadioBox With {.Text = "自定义"}
+            }
+            Dim UuidType As Integer = Nothing
+            Dim UuidTypeInput = MyMsgBoxSelect(UuidTypeList, "新建档案 - 选择 UUID 类型", "继续", "取消")
+            If UuidTypeInput Is Nothing Then Exit Sub
+            UuidType = UuidTypeInput
+            If UuidType = Nothing Then
+                Exit Sub
+            ElseIf UuidType = 0 Then
+                UserUuid = GetPlayerUuid(UserName, False)
+            ElseIf UuidType = 1 Then
+                UserUuid = McLoginLegacyUuid(UserName)
+            Else
+                UserUuid = MyMsgBoxInput("新建档案 - 输入 UUID", HintText:="32 位，不含连字符", ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32), New ValidateRegex("([A-z]|[0-9]){32}", "UUID 只应该包括英文字母和数字！")}, Button1:="继续", Button2:="取消")
+            End If
+            If UserUuid = Nothing Then Exit Sub
             NewProfile = New McProfile With {
                 .Type = McLoginType.Legacy,
                 .Uuid = UserUuid,
                 .Username = UserName,
                 .Desc = ""}
-        End If
-        If SelectedAuthTypeNum = 2 Then '正版验证
-            IsProfileCreating = True
-            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Ms)
-            Exit Sub
-        End If
-        If SelectedAuthTypeNum = 3 Then '第三方验证
-            IsProfileCreating = True
-            Dim AuthServer As String = Nothing
-            FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Auth)
-            Exit Sub
         End If
         ProfileList.Add(NewProfile)
         WriteProfileJson()
@@ -351,9 +371,9 @@ Class PageLoginProfile
                 Dim Data As McLoginServer
                 Data = New McLoginServer(McLoginType.Auth) With {
                     .Token = "Auth",
-                    .BaseUrl = sender.Tag("server"),
-                    .UserName = sender.Tag("name"),
-                    .Password = sender.Tag("password"),
+                    .BaseUrl = sender.Tag.Server,
+                    .UserName = sender.Tag.Name,
+                    .Password = sender.Tag.Password,
                     .Description = "Authlib-Injector",
                     .Type = McLoginType.Auth,
                     .ForceReselectProfile = True
@@ -367,7 +387,23 @@ Class PageLoginProfile
     End Sub
     Private Sub EditProfile(sender As Object, e As EventArgs)
         Dim ProfileIndex = ProfileList.IndexOf(sender.Tag)
-        Dim NewUuid As String = MyMsgBoxInput($"更改档案 {sender.Tag("username")} 的 UUID", DefaultInput:=sender.Tag("uuid"), ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32)}, HintText:="32 位，不包括连字符", Button1:="确定", Button2:="取消")
+        Dim NewUuid As String = Nothing
+        Dim UuidTypeList As New List(Of IMyRadio) From {
+                New MyRadioBox With {.Text = "行业规范 UUID（推荐）"},
+                New MyRadioBox With {.Text = "官方版 PCL UUID（若单人存档的部分信息丢失，可尝试此项）"},
+                New MyRadioBox With {.Text = "自定义"}
+            }
+        Dim UuidType As Integer = Nothing
+        Dim UuidTypeInput = MyMsgBoxSelect(UuidTypeList, "选择 UUID 类型", "继续", "取消")
+        If UuidTypeInput Is Nothing Then Exit Sub
+        UuidType = UuidTypeInput
+        If UuidType = 0 Then
+            NewUuid = GetPlayerUuid(sender.Tag.UserName, False)
+        ElseIf UuidType = 1 Then
+            NewUuid = McLoginLegacyUuid(sender.Tag.UserName)
+        Else
+            NewUuid = MyMsgBoxInput($"更改档案 {sender.Tag.Username} 的 UUID", DefaultInput:=sender.Tag.Uuid, HintText:="32 位，不含连字符", ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32), New ValidateRegex("([A-z]|[0-9]){32}", "UUID 只应该包括英文字母和数字！")}, Button1:="继续", Button2:="取消")
+        End If
         If NewUuid = Nothing Then Exit Sub
         ProfileList(ProfileIndex).Uuid = NewUuid
         WriteProfileJson()
@@ -386,7 +422,7 @@ Class PageLoginProfile
 #Region "档案迁移"
     Private Sub MigrateProfile() Handles BtnPort.Click
         Dim Type As Integer = 3
-        RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出 PCL 的档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
+        RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
         If Type = 3 Then Exit Sub
         Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
         If Type = 1 Then
@@ -403,7 +439,8 @@ Class PageLoginProfile
                         .AccessToken = "",
                         .RefreshToken = "",
                         .Expires = 1743779140286,
-                        .Desc = ""
+                        .Desc = "",
+                        .RawJson = ""
                     }
                                        OutputList.Add(NewProfile)
                                    ElseIf Profile("type") = "authlibInjector" Then

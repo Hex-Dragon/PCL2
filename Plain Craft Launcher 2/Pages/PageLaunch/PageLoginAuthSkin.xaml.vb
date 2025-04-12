@@ -23,8 +23,7 @@ Public Class PageLoginAuthSkin
     ''' 获取当前页面的登录信息。
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginServer
-        Dim Server As String = If(IsNothing(McVersionCurrent), Setup.Get("CacheAuthServerServer"), Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent)) & "/authserver"
-        Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = Setup.Get("CacheAuthUsername"), .Password = Setup.Get("CacheAuthPass"), .Description = "Authlib-Injector", .Type = McLoginType.Auth}
+        Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = PageLoginProfile.SelectedProfile.Server, .UserName = PageLoginProfile.SelectedProfile.Username, .Password = PageLoginProfile.SelectedProfile.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
     End Function
 
     Private Sub PageLoginAuthSkin_MouseEnter(sender As Object, e As MouseEventArgs) Handles PanData.MouseEnter

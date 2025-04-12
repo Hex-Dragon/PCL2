@@ -601,7 +601,8 @@ Relogin:
                 .AccessToken = AccessToken,
                 .RefreshToken = OAuthRefreshToken,
                 .Expires = 1743779140286,
-                .Desc = ""
+                .Desc = "",
+                .RawJson = Result(2)
             }
             PageLoginProfile.ProfileList.Add(NewProfile)
         Else

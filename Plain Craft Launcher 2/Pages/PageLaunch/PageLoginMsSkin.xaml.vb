@@ -20,9 +20,9 @@
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginMs
         If McLoginMsLoader.State = LoadState.Finished Then
-            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsV2OAuthRefresh"), .UserName = Setup.Get("CacheMsV2Name"), .AccessToken = Setup.Get("CacheMsV2Access"), .Uuid = Setup.Get("CacheMsV2Uuid"), .ProfileJson = Setup.Get("CacheMsV2ProfileJson")}
+            Return New McLoginMs With {.OAuthRefreshToken = PageLoginProfile.SelectedProfile.RefreshToken, .UserName = PageLoginProfile.SelectedProfile.Username, .AccessToken = PageLoginProfile.SelectedProfile.AccessToken, .Uuid = PageLoginProfile.SelectedProfile.Uuid, .ProfileJson = PageLoginProfile.SelectedProfile.RawJson}
         Else
-            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsV2OAuthRefresh"), .UserName = Setup.Get("CacheMsV2Name")}
+            Return New McLoginMs With {.OAuthRefreshToken = PageLoginProfile.SelectedProfile.RefreshToken, .UserName = PageLoginProfile.SelectedProfile.Name}
         End If
     End Function
 
