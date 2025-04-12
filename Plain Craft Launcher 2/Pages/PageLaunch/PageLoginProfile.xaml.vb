@@ -112,7 +112,7 @@ Class PageLoginProfile
             Next
             Log($"[Profile] 档案刷新完成，获取到 {ProfileList.Count} 个档案")
             If IsFirstLoad Then
-                SelectedProfile = ProfileList(LastUsedProfile)
+                If Not ProfileList.Count = 0 Then SelectedProfile = ProfileList(LastUsedProfile)
                 IsFirstLoad = False
             End If
         Catch ex As Exception
