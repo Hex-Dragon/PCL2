@@ -43,16 +43,10 @@
         If Desc IsNot Nothing AndAlso Not Desc = "" Then Info += $"，{Desc}"
         Return Info
     End Function
-    Private Sub ChangeProfile(sender As Object, e As EventArgs) Handles BtnSelect.Click
-        '选择档案
-        PageLoginProfile.IsProfileSelected = False
-        PageLoginProfile.SelectedProfile = Nothing
-        PageLoginProfile.LastUsedProfile = Nothing
-        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
-    End Sub
+
 
 #Region "控制与编辑"
-    '显示/隐藏控制
+    '显示 / 隐藏控制
     Private Sub ShowPanel(sender As Object, e As MouseEventArgs) Handles PanData.MouseEnter
         AniStart(AaOpacity(PanButtons, 1 - PanButtons.Opacity, 120), "PageLoginProfileSkin Button")
     End Sub
@@ -60,6 +54,7 @@
         If BtnEdit.ContextMenu.IsOpen OrElse BtnSkin.ContextMenu.IsOpen OrElse PanData.IsMouseOver Then Exit Sub
         AniStart(AaOpacity(PanButtons, -PanButtons.Opacity, 120), "PageLoginProfileSkin Button")
     End Sub
+    '修改皮肤
     Private Sub BtnSkin_Click(sender As Object, e As RoutedEventArgs) Handles BtnSkin.Click
         BtnSkin.ContextMenu.IsOpen = True
     End Sub
@@ -67,6 +62,7 @@
     Private Sub BtnEdit_Click(sender As Object, e As EventArgs) Handles BtnEdit.Click
         BtnEdit.ContextMenu.IsOpen = True
     End Sub
+    '修改密码
     Public Sub BtnEditPassword_Click(sender As Object, e As RoutedEventArgs)
         If SelectedProfile.Type = 5 Then
             OpenWebsite("https://account.live.com/password/Change")
@@ -76,6 +72,16 @@
         Else
             Hint("当前档案不支持修改密码！")
         End If
+    End Sub
+    '选择档案
+    Private Sub ChangeProfile(sender As Object, e As EventArgs) Handles BtnSelect.Click
+        PageLoginProfile.IsProfileSelected = False
+        PageLoginProfile.SelectedProfile = Nothing
+        PageLoginProfile.LastUsedProfile = Nothing
+        RunInUi(Sub()
+                    FrmLaunchLeft.RefreshPage(False, True)
+                    FrmLaunchLeft.BtnLaunch.IsEnabled = False
+                End Sub)
     End Sub
     '修改 ID
     Public Sub BtnEditName_Click(sender As Object, e As RoutedEventArgs)

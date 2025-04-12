@@ -199,6 +199,7 @@ Class PageLoginProfile
         LastUsedProfile = ProfileList.IndexOf(sender.Tag) '获取当前档案的序号
         IsProfileSelected = True
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+        RunInUi(Sub() FrmLaunchLeft.BtnLaunch.IsEnabled = True)
     End Sub
     Public Function ProfileListItem(Profile As McProfile, OnClick As MyListItem.ClickEventHandler)
         Dim LogoPath As String = Nothing
