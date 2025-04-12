@@ -328,19 +328,24 @@ Public Module ModMusic
             AlbumArtist = Artist
         End If
 
-        Dim MemStream As InMemoryRandomAccessStream = New InMemoryRandomAccessStream()
-        Using Writer As New DataWriter(MemStream)
-            Writer.WriteBytes(Thumbnail.Data.Data)
-            Await Writer.StoreAsync()
-            Writer.DetachStream()
-        End Using
-        Dim ThumbailStream = RandomAccessStreamReference.CreateFromStream(MemStream)
-
         Updater.MusicProperties.Artist = Artist
         Updater.MusicProperties.AlbumArtist = AlbumArtist
         Updater.MusicProperties.AlbumTitle = AlbumTitle
         Updater.MusicProperties.Title = Title
-        Updater.Thumbnail = ThumbailStream
+
+        If Thumbnail IsNot Nothing Then
+            Dim MemStream As InMemoryRandomAccessStream = New InMemoryRandomAccessStream()
+            Using Writer As New DataWriter(MemStream)
+                Writer.WriteBytes(Thumbnail.Data.Data)
+                Await Writer.StoreAsync()
+                Writer.DetachStream()
+            End Using
+            Dim ThumbailStream = RandomAccessStreamReference.CreateFromStream(MemStream)
+
+            Updater.Thumbnail = ThumbailStream
+        Else
+            Updater.Thumbnail = Nothing
+        End If
 
         '生效设置
         Updater.Update()
