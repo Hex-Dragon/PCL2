@@ -250,7 +250,12 @@
 
         Public Sub Remove(key As String)
             _ConfigData.Remove(key)
+            Save()
         End Sub
+
+        Public Function Contains(key As String) As Boolean
+            Return _ConfigData.ContainsKey(key)
+        End Function
 
         Public ReadOnly Property RawJObject As JObject
             Get
@@ -395,6 +400,7 @@
                 DeleteIniKey("Setup", Key)
             Case SetupSource.Registry
                 DeleteReg(Key)
+                LocalRegisterData.Remove(Key)
             Case Else 'SetupSource.Version
                 If Version Is Nothing Then Throw New Exception($"重置版本设置 {Key} 时未提供目标版本")
                 DeleteIniKey(Version.Path & "PCL\Setup.ini", Key)
@@ -414,7 +420,7 @@
             Case SetupSource.Normal
                 Return Not HasIniKey("Setup", Key)
             Case SetupSource.Registry
-                Return Not HasReg(Key)
+                Return Not HasReg(Key) AndAlso Not LocalRegisterData.Contains(Key)
             Case Else 'SetupSource.Version
                 If Version Is Nothing Then Throw New Exception($"判断版本设置 {Key} 是否存在时未提供目标版本")
                 Return Not HasIniKey(Version.Path & "PCL\Setup.ini", Key)
@@ -436,6 +442,7 @@
                     If Not String.IsNullOrWhiteSpace(OldSourceData) Then
                         LocalRegisterData.Set(Key, OldSourceData)
                         DeleteReg(Key)
+                        If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                         SourceValue = OldSourceData
                     Else
                         SourceValue = LocalRegisterData.Get(Key)
