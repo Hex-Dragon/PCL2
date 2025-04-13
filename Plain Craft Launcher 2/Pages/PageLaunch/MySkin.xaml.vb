@@ -123,7 +123,6 @@ Public Class MySkin
             Else
                 SkinHead = New MyBitmap With {.Pic = New Bitmap(56, 56)}
                 Dim SkinHair As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8), 56, 56)}
-                'SkinHair.Save(PathTemp & $"Cache\Skin\Head\hair.png")
                 Dim SkinFace As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)}
                 For i = 0 To 47
                     For j = 0 To 47
@@ -138,7 +137,7 @@ Public Class MySkin
                     Next
                 Next
             End If
-            WriteFile(CachePath, "")
+            If Not File.Exists(CachePath) Then File.Create(CachePath)
             SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception

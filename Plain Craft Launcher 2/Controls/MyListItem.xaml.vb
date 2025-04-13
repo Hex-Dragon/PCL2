@@ -295,7 +295,7 @@ Public Class MyListItem
                             .SnapsToDevicePixels = True, .UseLayoutRounding = False,
                             .HorizontalAlignment = HorizontalAlignment.Stretch, .VerticalAlignment = VerticalAlignment.Stretch
                     }
-                    If _Logo.Contains("Skin\Head") Then
+                    If _Logo.Contains(PathTemp & $"Cache\Skin\Head") Then
                         RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.NearestNeighbor)
                     Else
                         RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
