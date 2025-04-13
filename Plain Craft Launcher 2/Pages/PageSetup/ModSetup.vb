@@ -443,9 +443,9 @@
                         If LocalRegisterData.Contains(Key) Then '如果本地配置文件中已经存在该项，则不覆盖
                             OldSourceData = LocalRegisterData.Get(Key)
                         Else
+                            If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                             LocalRegisterData.Set(Key, OldSourceData)
                             DeleteReg(Key)
-                            If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                             SourceValue = OldSourceData
                         End If
                     Else
