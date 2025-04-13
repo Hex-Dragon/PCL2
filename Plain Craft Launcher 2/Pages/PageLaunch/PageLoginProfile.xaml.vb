@@ -1,5 +1,4 @@
 ﻿Imports System.Security.Cryptography
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 
 Class PageLoginProfile
     Private IsReloaded As Boolean = False
@@ -81,25 +80,25 @@ Class PageLoginProfile
                         .Type = McLoginType.Ms,
                         .Uuid = Profile("uuid"),
                         .Username = Profile("username"),
-                        .AccessToken = Profile("accessToken"),
-                        .RefreshToken = Profile("refreshToken"),
+                        .AccessToken = SecretDecrypt(Profile("accessToken")),
+                        .RefreshToken = SecretDecrypt(Profile("refreshToken")),
                         .Expires = Profile("expires"),
                         .Desc = Profile("desc"),
-                        .RawJson = Profile("rawJson")
+                        .RawJson = SecretDecrypt(Profile("rawJson"))
                     }
                 ElseIf Profile("type") = "authlib" Then
                     NewProfile = New McProfile With {
                         .Type = McLoginType.Auth,
                         .Uuid = Profile("uuid"),
                         .Username = Profile("username"),
-                        .AccessToken = Profile("accessToken"),
-                        .RefreshToken = Profile("refreshToken"),
+                        .AccessToken = SecretDecrypt(Profile("accessToken")),
+                        .RefreshToken = SecretDecrypt(Profile("refreshToken")),
                         .Expires = Profile("expires"),
                         .Server = Profile("server"),
                         .ServerName = Profile("serverName"),
-                        .Name = Profile("name"),
-                        .Password = Profile("password"),
-                        .ClientToken = Profile("clientToken"),
+                        .Name = SecretDecrypt(Profile("name")),
+                        .Password = SecretDecrypt(Profile("password")),
+                        .ClientToken = SecretDecrypt(Profile("clientToken")),
                         .Desc = Profile("desc")
                     }
                 Else
@@ -144,25 +143,25 @@ Class PageLoginProfile
                             {"type", "microsoft"},
                             {"uuid", Profile.Uuid},
                             {"username", Profile.Username},
-                            {"accessToken", Profile.AccessToken},
-                            {"refreshToken", Profile.RefreshToken},
+                            {"accessToken", SecretEncrypt(Profile.AccessToken)},
+                            {"refreshToken", SecretEncrypt(Profile.RefreshToken)},
                             {"expires", Profile.Expires},
                             {"desc", Profile.Desc},
-                            {"rawJson", Profile.RawJson}
+                            {"rawJson", SecretEncrypt(Profile.RawJson)}
                         }
                     ElseIf Profile.Type = 3 Then
                         ProfileJobj = New JObject From {
                             {"type", "authlib"},
                             {"uuid", Profile.Uuid},
                             {"username", Profile.Username},
-                            {"accessToken", Profile.AccessToken},
-                            {"refreshToken", Profile.RefreshToken},
+                            {"accessToken", SecretEncrypt(Profile.AccessToken)},
+                            {"refreshToken", SecretEncrypt(Profile.RefreshToken)},
                             {"expires", Profile.Expires},
                             {"server", Profile.Server},
                             {"serverName", Profile.ServerName},
-                            {"name", Profile.Name},
-                            {"password", Profile.Password},
-                            {"clientToken", Profile.ClientToken},
+                            {"name", SecretEncrypt(Profile.Name)},
+                            {"password", SecretEncrypt(Profile.Password)},
+                            {"clientToken", SecretEncrypt(Profile.ClientToken)},
                             {"desc", Profile.Desc}
                         }
                     Else
@@ -424,63 +423,66 @@ Class PageLoginProfile
         If Type = 3 Then Exit Sub
         Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
         If Type = 1 Then
+            Hint("正在导入，请稍后...", HintType.Info)
             RunInNewThread(Sub()
                                Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
                                Dim OutputList As New List(Of McProfile)
+                               Dim ImportNum As Integer = 0
                                For Each Profile In ImportList
                                    Dim NewProfile As McProfile = Nothing
                                    If Profile("type") = "microsoft" Then
                                        NewProfile = New McProfile With {
-                        .Type = McLoginType.Ms,
-                        .Uuid = Profile("uuid"),
-                        .Username = Profile("displayName"),
-                        .AccessToken = "",
-                        .RefreshToken = "",
-                        .Expires = 1743779140286,
-                        .Desc = "",
-                        .RawJson = ""
-                    }
-                                       OutputList.Add(NewProfile)
+                                            .Type = McLoginType.Ms,
+                                            .Uuid = Profile("uuid"),
+                                            .Username = Profile("displayName"),
+                                            .AccessToken = "",
+                                            .RefreshToken = "",
+                                            .Expires = 1743779140286,
+                                            .Desc = "",
+                                            .RawJson = ""
+                                        }
                                    ElseIf Profile("type") = "authlibInjector" Then
                                        NewProfile = New McProfile With {
-                        .Type = McLoginType.Auth,
-                        .Uuid = Profile("uuid"),
-                        .Username = Profile("displayName"),
-                        .AccessToken = "",
-                        .RefreshToken = "",
-                        .Expires = 1743779140286,
-                        .Server = Profile("serverBaseURL"),
-                        .ServerName = "",
-                        .Name = Profile("username"),
-                        .Password = "",
-                        .ClientToken = Profile("clientToken"),
-                        .Desc = ""
-                    }
+                                            .Type = McLoginType.Auth,
+                                            .Uuid = Profile("uuid"),
+                                            .Username = Profile("displayName"),
+                                            .AccessToken = "",
+                                            .RefreshToken = "",
+                                            .Expires = 1743779140286,
+                                            .Server = Profile("serverBaseURL"),
+                                            .ServerName = "",
+                                            .Name = Profile("username"),
+                                            .Password = "",
+                                            .ClientToken = Profile("clientToken"),
+                                            .Desc = ""
+                                        }
                                        Dim Response As String = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8)
                                        Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
                                        NewProfile.ServerName = ServerName
-                                       OutputList.Add(NewProfile)
                                    Else
                                        NewProfile = New McProfile With {
-                        .Type = McLoginType.Legacy,
-                        .Uuid = Profile("uuid"),
-                        .Username = Profile("username"),
-                        .Desc = ""
-                    }
-                                       OutputList.Add(NewProfile)
+                                            .Type = McLoginType.Legacy,
+                                            .Uuid = Profile("uuid"),
+                                            .Username = Profile("username"),
+                                            .Desc = ""
+                                        }
                                    End If
+                                   OutputList.Add(NewProfile)
+                                   ImportNum += 1
                                Next
                                For Each Profile In OutputList
                                    ProfileList.Add(Profile)
                                Next
                                WriteProfileJson()
                                RunInUi(Sub() RefreshProfileList())
+                               Hint($"已导入 {ImportNum} 个档案，部分档案可能需要重新验证密码！", HintType.Finish)
                            End Sub)
-            Hint("档案导入成功，部分档案可能需要重新验证密码！", HintType.Finish)
         Else
+            Hint("正在导出，请稍后...", HintType.Info)
             RunInNewThread(Sub()
                                Dim ExistList As JArray = JArray.Parse(ReadFile(OutsidePath))
                                Dim OutputList As JArray = New JArray
+                               Dim OutputNum As Integer = 0
                                For Each Profile In ProfileList
                                    Dim NewProfile As JObject = Nothing
                                    If Profile.Type = 5 Then
@@ -494,7 +496,6 @@ Class PageLoginProfile
                                            {"userid", ""},
                                            {"type", "microsoft"}
                                        }
-                                       OutputList.Add(NewProfile)
                                    ElseIf Profile.Type = 3 Then
                                        NewProfile = New JObject From {
                                            {"serverBaseURL", Profile.Server},
@@ -505,22 +506,22 @@ Class PageLoginProfile
                                            {"uuid", Profile.Uuid},
                                            {"username", Profile.Name}
                                        }
-                                       OutputList.Add(NewProfile)
                                    Else
                                        NewProfile = New JObject From {
                                            {"uuid", Profile.Uuid},
                                            {"username", Profile.Username},
                                            {"type", "offline"}
                                        }
-                                       OutputList.Add(NewProfile)
                                    End If
+                                   OutputList.Add(NewProfile)
+                                   OutputNum += 1
                                Next
                                For Each Profile In OutputList
                                    ExistList.Add(Profile)
                                Next
                                WriteFile(OutsidePath, ExistList.ToString())
+                               Hint($"已导出 {OutputNum} 个档案，部分档案可能需要重新验证密码！", HintType.Finish)
                            End Sub)
-            Hint("档案导出成功，部分档案可能需要重新验证密码！", HintType.Finish)
         End If
     End Sub
 #End Region

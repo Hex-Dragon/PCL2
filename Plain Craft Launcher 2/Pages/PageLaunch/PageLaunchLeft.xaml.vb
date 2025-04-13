@@ -306,9 +306,11 @@ UnknownType:
                 If PageLoginProfile.SelectedProfile IsNot Nothing Then
                     Type = PageType.ProfileSkin
                     PanTypeOne.Visibility = Visibility.Hidden
+                    BtnLaunch.IsEnabled = True
                 Else
                     Type = PageType.Profile
                     PanTypeOne.Visibility = Visibility.Visible
+                    BtnLaunch.IsEnabled = False
                 End If
                 PanType.Visibility = Visibility.Collapsed
                 PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
