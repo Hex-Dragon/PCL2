@@ -211,47 +211,6 @@ WaitRetry:
 
     '控件模板事件
     Private Sub MyIconButton_Click(sender As Object, e As EventArgs)
-        Select Case Setup.Get("LoginType")
-            Case McLoginType.Ms
-                '微软
-                Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
-                MsJson.Remove(sender.Tag)
-                Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
-                If FrmLoginMs.ComboAccounts.SelectedItem Is sender.Parent Then FrmLoginMs.ComboAccounts.SelectedIndex = 0
-                FrmLoginMs.ComboAccounts.Items.Remove(sender.Parent)
-            Case McLoginType.Legacy
-                '离线
-                Dim Names As New List(Of String)
-                Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
-                Names.Remove(sender.Tag)
-                Setup.Set("LoginLegacyName", Join(Names, "¨"))
-                FrmLoginLegacy.ComboName.ItemsSource = Names
-                FrmLoginLegacy.ComboName.Text = If(Names.Any, Names(0), "")
-            Case Else
-                '第三方
-                Dim Token As String = GetStringFromEnum(Setup.Get("LoginType"))
-                Dim Dict As New Dictionary(Of String, String)
-                Dim Names As New List(Of String)
-                Dim Passs As New List(Of String)
-                If Not Setup.Get("Login" & Token & "Email") = "" Then Names.AddRange(Setup.Get("Login" & Token & "Email").ToString.Split("¨"))
-                If Not Setup.Get("Login" & Token & "Pass") = "" Then Passs.AddRange(Setup.Get("Login" & Token & "Pass").ToString.Split("¨"))
-                For i = 0 To Names.Count - 1
-                    Dict.Add(Names(i), Passs(i))
-                Next
-                Dict.Remove(sender.Tag)
-                Setup.Set("Login" & Token & "Email", Join(Dict.Keys, "¨"))
-                Setup.Set("Login" & Token & "Pass", Join(Dict.Values, "¨"))
-                Select Case Token
-                    Case "Nide"
-                        FrmLoginNide.ComboName.ItemsSource = Dict.Keys
-                        FrmLoginNide.ComboName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
-                        FrmLoginNide.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
-                    Case "Auth"
-                        FrmLoginAuth.TextName.Text = Dict.Keys(0)
-                        FrmLoginAuth.TextName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
-                        FrmLoginAuth.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
-                End Select
-        End Select
     End Sub
 
     Public Shared ShowingTooltips As New List(Of Border)

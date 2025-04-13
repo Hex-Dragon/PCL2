@@ -4,30 +4,13 @@
     ''' 刷新页面显示的所有信息。
     ''' </summary>
     Public Sub Reload(KeepInput As Boolean)
-        '记住密码
-        CheckRemember.Checked = Setup.Get("LoginRemember")
-        If KeepInput AndAlso Not IsFirstLoad Then '避免第一次就以 KeepInput 的方式加载，导致文本框里没东西
-            '保留输入，只刷新下拉框列表
-            Dim Input As String = TextName.Text
-            TextName.Text = If(Setup.Get("LoginAuthEmail") = "", Nothing, Setup.Get("LoginAuthEmail").ToString.Split("¨")(0))
-            TextName.Text = Input
-        Else
-            '不保留输入，刷新列表后自动选择第一项
-            If Setup.Get("LoginAuthEmail") = "" Then
-                TextName.Text = Nothing
-            Else
-                TextName.Text = Setup.Get("LoginAuthEmail").ToString.Split("¨")(0)
-                TextName.Text = Setup.Get("LoginAuthEmail").ToString.BeforeFirst("¨")
-                If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginAuthPass").ToString.BeforeFirst("¨").Trim
-            End If
-        End If
         IsFirstLoad = False
     End Sub
     ''' <summary>
     ''' 获取当前页面的登录信息。
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginServer
-        Dim Server As String = If(IsNothing(McVersionCurrent), Setup.Get("CacheAuthServerServer"), Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent)) & "/authserver"
+        Dim Server As String = PageLoginProfile.SelectedProfile.Server
         If FrmLoginAuth Is Nothing Then
             Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = "", .Password = "", .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         Else
@@ -50,13 +33,10 @@
     '保存输入信息
     Private Sub TextName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextName.TextChanged
         If sender.Text = "" Then TextPass.Password = ""
-        If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")  '迫使其不进行 Validate
+        'If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")  '迫使其不进行 Validate
     End Sub
     Private Sub TextPass_PasswordChanged(sender As Object, e As RoutedEventArgs) Handles TextPass.PasswordChanged
-        If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")
-    End Sub
-    Private Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckRemember.Change
-        If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
+        'If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")
     End Sub
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))

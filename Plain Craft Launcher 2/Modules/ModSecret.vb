@@ -180,6 +180,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 加密字符串。
     ''' </summary>
     Friend Function SecretEncrypt(SourceString As String, Optional Key As String = "") As String
+        If SourceString = "" Then Return ""
         Key = SecretKeyGet(Key)
         Dim btKey As Byte() = Encoding.UTF8.GetBytes(Key)
         Dim btIV As Byte() = Encoding.UTF8.GetBytes("87160295")
@@ -197,6 +198,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 解密字符串。
     ''' </summary>
     Friend Function SecretDecrypt(SourceString As String, Optional Key As String = "") As String
+        If SourceString = "" Then Return ""
         Key = SecretKeyGet(Key)
         Dim btKey As Byte() = Encoding.UTF8.GetBytes(Key)
         Dim btIV As Byte() = Encoding.UTF8.GetBytes("87160295")

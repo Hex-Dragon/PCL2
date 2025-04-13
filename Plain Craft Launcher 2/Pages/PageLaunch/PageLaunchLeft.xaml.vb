@@ -94,8 +94,6 @@
         End Sub, "Version Check", ThreadPriority.AboveNormal)
 
         '改变页面
-        Dim LoginType As McLoginType = Setup.Get("LoginType")
-        If LoginType = McLoginType.Legacy OrElse LoginType = McLoginType.Ms Then CType(FindName("RadioLoginType" & LoginType), MyRadioButton).Checked = True
         RefreshPage(False, False)
 
         AniControlEnabled -= 1
@@ -108,19 +106,15 @@
     ''' </summary>
     Public Sub PageChangeToLaunching()
         '修改登陆方式
-        Select Case Setup.Get("LoginType")
+        Select Case PageLoginProfile.SelectedProfile.Type
             Case McLoginType.Legacy
-                If PageLinkLobby.HiperState = LoadState.Finished Then
-                    LabLaunchingMethod.Text = "联机离线登录"
-                Else
-                    LabLaunchingMethod.Text = "离线登录"
-                End If
+                LabLaunchingMethod.Text = "离线验证"
             Case McLoginType.Ms
-                LabLaunchingMethod.Text = "正版登录"
+                LabLaunchingMethod.Text = "正版验证"
             Case McLoginType.Nide
                 LabLaunchingMethod.Text = "统一通行证"
             Case McLoginType.Auth
-                LabLaunchingMethod.Text = "Authlib-Injector"
+                LabLaunchingMethod.Text = "第三方验证" & If(Not PageLoginProfile.SelectedProfile.ServerName = "", " / " & PageLoginProfile.SelectedProfile.ServerName, "")
         End Select
         '初始化页面
         LabLaunchingName.Text = McVersionCurrent.Name
@@ -381,8 +375,8 @@ UnknownType:
         '刷新页面
         If PageCurrent = Type Then Exit Sub
         PageChange(Type, Anim).Reload(KeepInput)
-        Dim Control As MyRadioButton = FindName("RadioLoginType" & Setup.Get("LoginType"))
-        If Control IsNot Nothing Then Control.Checked = True
+        'Dim Control As MyRadioButton = FindName("RadioLoginType" & Setup.Get("LoginType"))
+        'If Control IsNot Nothing Then Control.Checked = True
     End Sub
     Private Sub RadioLoginType_Change(sender As Object, raiseByMouse As Boolean) Handles RadioLoginType0.Check, RadioLoginType5.Check
         If raiseByMouse Then RefreshPage(True, True)

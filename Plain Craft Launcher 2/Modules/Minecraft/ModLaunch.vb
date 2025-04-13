@@ -243,7 +243,7 @@ NextInner:
         End Sub, "Donate")
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+        If Not Setup.Get("HintBuy") AndAlso PageLoginProfile.SelectedProfile.Type <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -257,7 +257,7 @@ NextInner:
                             End If
                     End Select
                 End Sub, "Buy Minecraft")
-            ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
+            ElseIf PageLoginProfile.SelectedProfile.Type = McLoginType.Legacy Then
                 Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
@@ -396,21 +396,9 @@ NextInner:
     ''' </summary>
     Public Function McLoginName() As String
         '根据当前登录方式优先返回
-        Select Case Setup.Get("LoginType")
-            Case McLoginType.Ms
-                If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
-            Case McLoginType.Legacy
-                If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
-            Case McLoginType.Nide
-                If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
-            Case McLoginType.Auth
-                If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
-        End Select
+        If PageLoginProfile.SelectedProfile.Username <> "" Then Return PageLoginProfile.SelectedProfile.Username
         '查找所有可能的项
-        If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
         If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
-        If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
-        If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
         Return Nothing
     End Function
     ''' <summary>
@@ -418,9 +406,9 @@ NextInner:
     ''' </summary>
     Public Function McLoginAble() As String
         Return PageLoginProfileSkin.IsVaild()
-        Select Case Setup.Get("LoginType")
+        Select Case PageLoginProfile.SelectedProfile.Type
             Case McLoginType.Ms
-                If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
+                If PageLoginProfile.SelectedProfile.RefreshToken = "" Then
                     Return FrmLoginMs.IsVaild()
                 Else
                     Return ""
@@ -434,7 +422,7 @@ NextInner:
                     Return ""
                 End If
             Case McLoginType.Auth
-                If Setup.Get("CacheAuthAccess") = "" Then
+                If PageLoginProfile.SelectedProfile.AccessToken = "" Then
                     Return FrmLoginAuth.IsVaild()
                 Else
                     Return ""
@@ -465,34 +453,31 @@ NextInner:
     Public McLoginLoader As New LoaderTask(Of McLoginData, McLoginResult)("登录", AddressOf McLoginStart, AddressOf McLoginInput, ThreadPriority.BelowNormal) With {.ReloadTimeout = 1, .ProgressWeight = 15, .Block = False}
     Public Function McLoginInput() As McLoginData
         Dim LoginData As McLoginData = Nothing
-        Dim LoginType As McLoginType = Setup.Get("LoginType")
+        Dim LoginType As McLoginType = PageLoginProfile.SelectedProfile.Type
         Try
-            If Setup.Get("VersionServerLogin", McVersionCurrent) = 5 Then
-                LoginData = PageLoginProfileSkin.GetLoginData()
-            Else
-                Select Case LoginType
-                    Case McLoginType.Legacy
-                        LoginData = PageLoginLegacy.GetLoginData()
-                    Case McLoginType.Ms
-                        If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
-                            LoginData = PageLoginMs.GetLoginData()
-                        Else
-                            LoginData = PageLoginMsSkin.GetLoginData()
-                        End If
-                    Case McLoginType.Nide
-                        If Setup.Get("CacheNideAccess") = "" Then
-                            LoginData = PageLoginNide.GetLoginData()
-                        Else
-                            LoginData = PageLoginNideSkin.GetLoginData()
-                        End If
-                    Case McLoginType.Auth
-                        If Setup.Get("CacheAuthAccess") = "" Then
-                            LoginData = PageLoginAuth.GetLoginData()
-                        Else
-                            LoginData = PageLoginAuthSkin.GetLoginData()
-                        End If
-                End Select
-            End If
+            LoginData = PageLoginProfileSkin.GetLoginData()
+            'Select Case LoginType
+            '    Case McLoginType.Legacy
+            '        LoginData = PageLoginLegacy.GetLoginData()
+            '    Case McLoginType.Ms
+            '        If PageLoginProfile.SelectedProfile.RefreshToken = "" Then
+            '            LoginData = PageLoginMs.GetLoginData()
+            '        Else
+            '            LoginData = PageLoginMsSkin.GetLoginData()
+            '        End If
+            '    Case McLoginType.Nide
+            '        If Setup.Get("CacheNideAccess") = "" Then
+            '            LoginData = PageLoginNide.GetLoginData()
+            '        Else
+            '            LoginData = PageLoginNideSkin.GetLoginData()
+            '        End If
+            '    Case McLoginType.Auth
+            '        If Setup.Get("CacheAuthAccess") = "" Then
+            'LoginData = PageLoginAuth.GetLoginData()
+            '        Else
+            'LoginData = PageLoginAuthSkin.GetLoginData()
+            '        End If
+            'End Select
         Catch ex As Exception
             Log(ex, "获取登录输入信息失败（" & GetStringFromEnum(LoginType) & "）", LogLevel.Feedback)
         End Try
@@ -612,15 +597,6 @@ Relogin:
             PageLoginProfile.ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
         End If
         PageLoginProfile.WriteProfileJson()
-        Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
-        Setup.Set("CacheMsV2Access", AccessToken)
-        Setup.Set("CacheMsV2Uuid", Result(0))
-        Setup.Set("CacheMsV2Name", Result(1))
-        Setup.Set("CacheMsV2ProfileJson", Result(2))
-        Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
-        MsJson.Remove(Input.UserName) '如果更改了玩家名……
-        MsJson(Result(1)) = OAuthRefreshToken
-        Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '结束
         McLoginMsRefreshTime = GetTimeTick()
@@ -828,7 +804,7 @@ LoginFinish:
             If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
                 '要求选择档案；优先从缓存读取
                 NeedRefresh = True
-                Dim CacheId As String = PageLoginProfile.SelectedProfile.Uuid.ToString
+                Dim CacheId As String = If(PageLoginProfile.SelectedProfile IsNot Nothing, PageLoginProfile.SelectedProfile.Uuid, "")
                 For Each Profile In LoginJson("availableProfiles")
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString

@@ -50,11 +50,6 @@
 
     '退出登录
     Private Sub BtnExit_Click() Handles BtnExit.Click
-        Setup.Set("CacheMsV2OAuthRefresh", "")
-        Setup.Set("CacheMsV2Access", "")
-        Setup.Set("CacheMsV2ProfileJson", "")
-        Setup.Set("CacheMsV2Uuid", "")
-        Setup.Set("CacheMsV2Name", "")
         McLoginMsLoader.Abort()
         FrmLaunchLeft.RefreshPage(False, True)
     End Sub
