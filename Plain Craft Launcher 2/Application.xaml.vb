@@ -126,7 +126,7 @@ WaitRetry:
             If Is32BitSystem Then
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
             End If
-            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 Then
+            If Not Val(Microsoft.Win32.Registry.GetValue("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full", "Release", "528049").ToString.AfterFirst("(").BeforeFirst(")")) >= 533320 Then
                 MyMsgBox($"PCL CE 不再支持你当前使用的系统，部分功能将无法使用。{vbCrLf}PCL CE 要求系统版本至少为 Windows 10 20H2 且安装有 .NET Framework 4.8.1。{vbCrLf}非常建议升级到最新版本的 Windows 10 或 Windows 11！", "环境警告", "我知道了", IsWarn:=True)
             End If
             '设置初始化
