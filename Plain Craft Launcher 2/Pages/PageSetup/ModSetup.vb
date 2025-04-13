@@ -1,4 +1,4 @@
-﻿Public Class ModSetup
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
