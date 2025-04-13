@@ -440,10 +440,14 @@
                 Case SetupSource.Registry
                     Dim OldSourceData = ReadReg(Key)
                     If Not String.IsNullOrWhiteSpace(OldSourceData) Then
-                        LocalRegisterData.Set(Key, OldSourceData)
-                        DeleteReg(Key)
-                        If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
-                        SourceValue = OldSourceData
+                        If LocalRegisterData.Contains(Key) Then '如果本地配置文件中已经存在该项，则不覆盖
+                            OldSourceData = LocalRegisterData.Get(Key)
+                        Else
+                            LocalRegisterData.Set(Key, OldSourceData)
+                            DeleteReg(Key)
+                            If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
+                            SourceValue = OldSourceData
+                        End If
                     Else
                         SourceValue = LocalRegisterData.Get(Key)
                     End If
