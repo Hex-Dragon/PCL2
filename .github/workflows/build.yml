@@ -52,7 +52,7 @@ jobs:
     - name: Set Describe
       shell: bash
       run: |
-          $describe = $(git describe --tags --always)
+          describe=`git describe --tags --always`
           echo "describe=$describe" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
