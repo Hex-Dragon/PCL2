@@ -332,7 +332,7 @@
             Next
             Setup.Set("LaunchFolders", If(Not Folders.Any(), "", Join(Folders.ToArray, "|")))
         End If
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             '删除文件夹
             Try

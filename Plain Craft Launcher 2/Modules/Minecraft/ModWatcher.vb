@@ -88,7 +88,7 @@
             AddHandler GameProcess.ErrorDataReceived, AddressOf LogReceived
 
             '初始化时钟
-            RunInNewThread(
+            RunInNewTask(
             Sub()
                 Try
                     Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse State = MinecraftState.Canceled OrElse Loader.State = LoadState.Aborted
@@ -277,7 +277,7 @@
                     IsWindowFinished = True
                     '最大化
                     If Setup.Get("LaunchArgumentWindowType") = 4 Then
-                        RunInNewThread(
+                        RunInNewTask(
                         Sub()
                             Try
                                 '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
@@ -350,7 +350,7 @@
             WatcherLog("Minecraft 已崩溃，将在 2 秒后开始崩溃分析")
             Hint("检测到 Minecraft 出现错误，错误分析已开始……")
             FeedbackInfo()
-            RunInNewThread(
+            RunInNewTask(
             Sub()
                 Try
                     Thread.Sleep(2000)

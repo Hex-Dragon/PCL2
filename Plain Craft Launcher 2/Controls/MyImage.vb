@@ -120,7 +120,7 @@
             ActualSource = TempPath
             If (Date.Now - TempFile.LastWriteTime) < FileCacheExpiredTime Then Exit Sub '无需刷新缓存
         End If
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Dim TempDownloadingPath As String = Nothing
             Try

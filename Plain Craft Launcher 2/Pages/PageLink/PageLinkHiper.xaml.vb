@@ -21,7 +21,7 @@
         If IsLoad Then Exit Sub
         IsLoad = True
         '启动监视线程
-        If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
+        If Not IsWatcherStarted Then RunInNewTask(AddressOf WatcherThread, "Hiper Watcher")
         '读取索引码
         Try
             Dim Time As String = Setup.Get("LinkHiperCertTime")

@@ -158,7 +158,7 @@ Public Class FormMain
         End If
         Dim Content As String = "· " & Join(ContentList, vbCrLf & "· ")
         '输出更新日志
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://afdian.com/a/LTCat?tab=feed")
@@ -296,7 +296,7 @@ Public Class FormMain
         AniStart()
         TimerMainStart()
         '加载池
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
@@ -315,7 +315,7 @@ Public Class FormMain
                 DlClientListMojangLoader.Start(1)
                 RunCountSub()
                 ServerLoader.Start(1)
-                RunInNewThread(AddressOf TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
+                RunInNewTask(AddressOf TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
             Catch ex As Exception
                 Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
             End Try
@@ -448,7 +448,7 @@ Public Class FormMain
         If SendWarning AndAlso HasDownloadingTask() Then
             If MyMsgBox("还有下载任务尚未完成，是否确定退出？", "提示", "确定", "取消") = 1 Then
                 '强行结束下载任务
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Log("[System] 正在强行停止任务")
                     For Each Task As LoaderBase In LoaderTaskbar.ToList()
@@ -721,7 +721,7 @@ Public Class FormMain
         End Try
     End Sub
     Private Sub FileDrag(FilePathList As IEnumerable(Of String))
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Dim FilePath As String = FilePathList.First
             Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Any, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)

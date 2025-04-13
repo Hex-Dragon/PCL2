@@ -68,7 +68,7 @@
         ComboAccounts.IsEnabled = False
         BtnLogin.IsEnabled = False
         BtnLogin.Text = "0%"
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 McLoginMsLoader.Start(GetLoginData(), IsForceRestart:=True)

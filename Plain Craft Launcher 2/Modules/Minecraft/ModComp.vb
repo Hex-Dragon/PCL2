@@ -1,4 +1,6 @@
-﻿Public Module ModComp
+﻿Imports System.Threading.Tasks
+
+Public Module ModComp
 
     Public Enum CompType
         ''' <summary>
@@ -959,9 +961,10 @@ Retry:
 
 #Region "从 CurseForge 和 Modrinth 获取结果列表，存储于 RawResults"
 
-        Dim CurseForgeThread As Thread = Nothing
-        Dim ModrinthThread As Thread = Nothing
+        Dim CurseForgeThread As Task = Nothing
+        Dim ModrinthThread As Task = Nothing
         Dim ResultsLock As New Object
+        Dim TokenSource As New CancellationTokenSource
 
         Try
 
@@ -969,7 +972,7 @@ Retry:
             Dim CurseForgeUrl As String = Task.Input.GetCurseForgeAddress()
             Dim CurseForgeFailed As Boolean = False
             If CurseForgeUrl IsNot Nothing Then
-                CurseForgeThread = RunInNewThread(
+                CurseForgeThread = RunInNewTask(
                 Sub()
                     Try
                         '获取工程列表
@@ -993,14 +996,14 @@ Retry:
                         [Error] = ex
                         CurseForgeFailed = True
                     End Try
-                End Sub, "CurseForge Project Request")
+                End Sub, "CurseForge Project Request", , TokenSource.Token)
             End If
 
             '启动 Modrinth 线程
             Dim ModrinthUrl As String = Task.Input.GetModrinthAddress()
             Dim ModrinthFailed As Boolean = False
             If ModrinthUrl IsNot Nothing Then
-                ModrinthThread = RunInNewThread(
+                ModrinthThread = RunInNewTask(
                 Sub()
                     Try
                         Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
@@ -1026,13 +1029,13 @@ Retry:
                         [Error] = ex
                         ModrinthFailed = True
                     End Try
-                End Sub, "Modrinth Project Request")
+                End Sub, "Modrinth Project Request", , TokenSource.Token)
             End If
 
             '等待线程结束
-            If CurseForgeThread IsNot Nothing Then CurseForgeThread.Join()
+            If CurseForgeThread IsNot Nothing Then CurseForgeThread.Wait()
             If Task.IsAborted Then Exit Sub '会自动触发 Finally
-            If ModrinthThread IsNot Nothing Then ModrinthThread.Join()
+            If ModrinthThread IsNot Nothing Then ModrinthThread.Wait()
             If Task.IsAborted Then Exit Sub
 
             '确保存在结果
@@ -1061,8 +1064,7 @@ Retry:
             End If
 
         Finally
-            If CurseForgeThread IsNot Nothing Then CurseForgeThread.Interrupt()
-            If ModrinthThread IsNot Nothing Then ModrinthThread.Interrupt()
+            TokenSource.Cancel()
         End Try
 
 #End Region

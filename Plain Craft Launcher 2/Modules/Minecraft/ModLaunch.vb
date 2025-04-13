@@ -186,7 +186,7 @@ NextInner:
     Private Sub McLaunchMemoryOptimize(Loader As LoaderTask(Of Integer, Integer))
         McLaunchLog("内存优化开始")
         Dim Finished As Boolean = False
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             PageOtherTest.MemoryOptimize(False)
             Finished = True
@@ -239,7 +239,7 @@ NextInner:
         If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
            Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Select Case Setup.Get("SystemLaunchCount")
                         Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
@@ -1038,7 +1038,7 @@ Retry:
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 7 步汇报 404")
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Select Case MyMsgBox("请先创建 Minecraft 玩家档案，然后再重新登录。", "登录失败", "创建档案", "取消")
                         Case 1

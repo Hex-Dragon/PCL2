@@ -1641,7 +1641,7 @@ Retry:
     Public Sub McDownloadForgeRecommendedRefresh()
         If IsForgeRecommendedRefreshed Then Exit Sub
         IsForgeRecommendedRefreshed = True
-        RunInNewThread(Sub()
+        RunInNewTask(Sub()
                            Try
                                Log("[Download] 刷新 Forge 推荐版本缓存开始")
                                Dim Result As String = NetGetCodeByLoader("https://bmclapi2.bangbang93.com/forge/promos")

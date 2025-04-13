@@ -212,7 +212,7 @@
         If Address Is Nothing Then Return
         Log("[Music] 播放开始：" & Address)
         MusicCurrent = Address
-        RunInNewThread(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
+        RunInNewTask(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
     End Sub
 
     '播放与暂停

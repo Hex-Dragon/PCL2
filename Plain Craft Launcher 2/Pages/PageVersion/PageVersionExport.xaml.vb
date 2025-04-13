@@ -557,7 +557,7 @@ Public Class PageVersionExport
             Dim EndedThreadCount As Integer = 0, FailedExceptions As New List(Of Exception)
 
             '从 Modrinth 获取信息
-            RunInNewThread(
+            RunInNewTask(
             Sub()
                 Try
                     Dim ModrinthHashes = Loader.Input.Select(Function(m) m.ModrinthHash)
@@ -581,7 +581,7 @@ Public Class PageVersionExport
             End Sub, "Modrinth - " & LoaderName)
 
             '从 CurseForge 获取信息
-            RunInNewThread(
+            RunInNewTask(
             Sub()
                 Try
                     If ModrinthUploadMode Then Return 'Modrinth 上传模式下，不能从 CurseForge 获取信息

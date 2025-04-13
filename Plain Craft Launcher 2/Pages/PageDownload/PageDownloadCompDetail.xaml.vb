@@ -286,7 +286,7 @@
     Public Shared CachedFolder As String = Nothing '仅在本次缓存的下载文件夹
     Public Sub Save_Click(sender As Object, e As EventArgs)
         Dim File As CompFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))

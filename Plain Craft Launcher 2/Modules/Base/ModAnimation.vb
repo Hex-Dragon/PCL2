@@ -772,7 +772,7 @@ Public Module ModAnimation
         AniFPSTimer = AniLastTick
         AniRunning = True '标记动画执行开始
 
-        RunInNewThread(Sub()
+        RunInNewTask(Sub()
                            Try
                                Log("[Animation] 动画线程开始")
                                Do While True

@@ -941,7 +941,7 @@ Finished:
         Dim EndedThreadCount As Integer = 0, IsFailed As Boolean = False
         Dim MainThread As Thread = Thread.CurrentThread
         '从 Modrinth 获取信息
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 '步骤 1：获取 Hash 与对应的工程 ID
@@ -1006,7 +1006,7 @@ Finished:
             End Try
         End Sub, "Mod List Detail Loader Modrinth")
         '从 CurseForge 获取信息
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 '步骤 1：获取 Hash 与对应的工程 ID

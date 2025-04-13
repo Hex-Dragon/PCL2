@@ -943,7 +943,7 @@ NextFile:
         End If
     End Sub
     Public Sub TimerMainStart()
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 Do While True
@@ -955,7 +955,7 @@ NextFile:
             End Try
         End Sub, "Timer Main")
         If Not IsAprilEnabled Then Exit Sub
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 Dim LastTime = My.Computer.Clock.TickCount

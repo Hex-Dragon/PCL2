@@ -1595,7 +1595,7 @@ NextElement:
             End SyncLock
             State = LoadState.Loading
             '开始执行
-            RunInNewThread(
+            RunInNewTask(
             Sub()
                 Try
                     '输入检测
@@ -1641,14 +1641,14 @@ NextElement:
                         If FilesInThread.Count = FilesPerThread Then
                             Dim FilesToRun As New List(Of NetFile)
                             FilesToRun.AddRange(FilesInThread)
-                            RunInNewThread(Sub() StartCopy(FilesToRun, FoldersFinal), "NetTask FileCopy " & Uuid)
+                            RunInNewTask(Sub() StartCopy(FilesToRun, FoldersFinal), "NetTask FileCopy " & Uuid)
                             FilesInThread.Clear()
                         End If
                     Next
                     If FilesInThread.Any Then
                         Dim FilesToRun As New List(Of NetFile)
                         FilesToRun.AddRange(FilesInThread)
-                        RunInNewThread(Sub() StartCopy(FilesToRun, FoldersFinal), "NetTask FileCopy " & Uuid)
+                        RunInNewTask(Sub() StartCopy(FilesToRun, FoldersFinal), "NetTask FileCopy " & Uuid)
                         FilesInThread.Clear()
                     End If
                 Catch ex As Exception
@@ -1939,9 +1939,9 @@ Retry:
                     Log(ex, $"下载管理启动线程 {Id} 出错", LogLevel.Assert)
                 End Try
             End Sub
-            RunInNewThread(Sub() ThreadStarter(0), "NetManager ThreadStarter 0")
-            RunInNewThread(Sub() ThreadStarter(1), "NetManager ThreadStarter 1")
-            RunInNewThread(
+            RunInNewTask(Sub() ThreadStarter(0), "NetManager ThreadStarter 0")
+            RunInNewTask(Sub() ThreadStarter(1), "NetManager ThreadStarter 1")
+            RunInNewTask(
             Sub()
                 Try
                     Dim LastLoopTime As Long

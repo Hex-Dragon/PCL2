@@ -339,7 +339,7 @@
                         State = LoadState.Failed
                     End Try
                 End Sub) With {.Name = Name, .Priority = ThreadPriority}
-            LastRunningThread.Start() '不能使用 RunInNewThread，否则在函数返回前线程就会运行完，导致误判 IsAborted
+            LastRunningThread.Start() '不能使用 RunInNewTask，否则在函数返回前线程就会运行完，导致误判 IsAborted
         End Sub
         Public Overrides Sub Abort()
             If State <> LoadState.Loading Then Exit Sub

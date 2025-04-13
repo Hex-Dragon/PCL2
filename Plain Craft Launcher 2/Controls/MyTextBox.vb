@@ -114,7 +114,7 @@
             If IsLoaded AndAlso labWrong IsNot Nothing Then
                 ChangeValidateResult(IsValidated, True)
             Else
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Thread.Sleep(30)
                     RunInUi(Sub() ChangeValidateResult(IsValidated, False))
@@ -126,7 +126,7 @@
             If IsLoaded AndAlso labWrong IsNot Nothing Then
                 labWrong.Text = ValidateResult
             Else
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Dim IsFinished As Boolean = False
                     Do Until IsFinished

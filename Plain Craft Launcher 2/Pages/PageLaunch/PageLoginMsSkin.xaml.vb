@@ -85,7 +85,7 @@
         Hint("正在更改皮肤……")
         IsChanging = True
         '开始实际获取
-        RunInNewThread(
+        RunInNewTask(
         Async Sub()
             Try
 Retry:

@@ -681,7 +681,7 @@ Install:
                 Log($"[Mod] 已从正在进行 Mod 更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
                 '清理缓存
-                RunInNewThread(
+                RunInNewTask(
                 Sub()
                     Try
                         For Each TempFile In FileCopyList.Keys

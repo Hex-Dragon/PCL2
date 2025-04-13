@@ -28,7 +28,7 @@
     ''' 刷新自定义主页。
     ''' </summary>
     Private Sub Refresh() Handles Me.Loaded
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
                 SyncLock RefreshLock

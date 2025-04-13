@@ -218,7 +218,7 @@
         Hint("正在获取披风列表，请稍候……")
         IsChanging = True
         '开始实际获取
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Try
 Retry:

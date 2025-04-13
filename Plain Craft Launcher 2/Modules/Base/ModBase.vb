@@ -5,6 +5,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Threading.Tasks
 Imports System.Xaml
 Imports Newtonsoft.Json
 
@@ -2401,19 +2402,21 @@ NextElement:
     ''' <summary>
     ''' 在新的工作线程中执行代码。
     ''' </summary>
-    Public Function RunInNewThread(Action As Action, Optional Name As String = Nothing, Optional Priority As ThreadPriority = ThreadPriority.Normal) As Thread
-        Dim th As New Thread(
+    Public Function RunInNewTask(Action As Action, Optional Name As String = Nothing, Optional Priority As ThreadPriority = ThreadPriority.Normal, Optional Token As CancellationToken? = Nothing) As Task
+        If Token Is Nothing Then Token = CancellationToken.None
+        ' If Priority <> ThreadPriority.Normal Then Throw New Exception("Task 没有优先级，不准用")
+        Dim task As New Task(
         Sub()
             Try
                 Action()
             Catch ex As ThreadInterruptedException
-                Log(Name & "：线程已中止")
+                Log(Name & "：Task 已中止")
             Catch ex As Exception
-                Log(ex, Name & "：线程执行失败", LogLevel.Feedback)
+                Log(ex, Name & "：Task 执行失败", LogLevel.Feedback)
             End Try
-        End Sub) With {.Name = If(Name, "Runtime New Invoke " & GetUuid() & "#"), .Priority = Priority}
-        th.Start()
-        Return th
+        End Sub, Token)
+        task.Start()
+        Return task
     End Function
     ''' <summary>
     ''' 确保在 UI 线程中执行代码。
@@ -2457,7 +2460,7 @@ NextElement:
     ''' </summary>
     Public Sub RunInThread(Action As Action)
         If RunInUi() Then
-            RunInNewThread(Action, "Runtime Invoke " & GetUuid() & "#")
+            RunInNewTask(Action, "Runtime Invoke " & GetUuid() & "#")
         Else
             Action()
         End If
@@ -2851,7 +2854,7 @@ Retry:
     Private LogList As New StringBuilder
     Private LogWritter As StreamWriter
     Public Sub LogStart()
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             Dim IsInitSuccess As Boolean = True
             Try

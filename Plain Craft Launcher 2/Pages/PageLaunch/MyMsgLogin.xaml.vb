@@ -92,7 +92,7 @@
         Btn1.EventData = Website
         Btn2.EventData = UserCode
         '启动工作线程
-        RunInNewThread(AddressOf WorkThread, "MyMsgLogin")
+        RunInNewTask(AddressOf WorkThread, "MyMsgLogin")
     End Sub
 
     Private Sub WorkThread()

@@ -19,7 +19,7 @@
         RefreshButtonsUI()
 
         '加载版本
-        RunInNewThread(
+        RunInNewTask(
         Sub()
             '自动整合包安装：准备
             Dim PackInstallPath As String = Nothing
