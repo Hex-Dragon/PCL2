@@ -93,5 +93,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }}-${{ matrix.architecture }}
+        name: ${{ matrix.configuration }}-${{ matrix.architecture }}-${{ env.describe }}
         path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
