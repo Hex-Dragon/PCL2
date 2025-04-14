@@ -757,6 +757,7 @@
     Private Sub OptiFine_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnOptiFineClear.MouseLeftButtonUp
         SelectedOptiFine = Nothing
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         CardOptiFine.IsSwaped = True
         e.Handled = True
         Forge_Loaded()
@@ -1026,7 +1027,9 @@
     Private Sub Fabric_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricClear.MouseLeftButtonUp
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
+        AutoSelectedFabricApi = False
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         CardFabric.IsSwaped = True
         e.Handled = True
         SelectReload()
