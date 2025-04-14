@@ -247,7 +247,7 @@
     <s:String x:Key="LangSetHomePageRefresh">ホームページを更新</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">指導文書を生成する</s:String>
     <s:String x:Key="LangSetHomePageSeeDoc">チュートリアルを参照</s:String>
-    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！</s:String>
+    <s:String x:Key="LangSetHomePageCustomWarn">見知らぬ人が提供するホームページを使用する前に、必ず注意してください。悪意のあるホームページは損害を引き起こす可能性があります！</s:String>
     <s:String x:Key="LangSetHomePageDownload">ダウンロードリンク</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">ホームページプリセット</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">トリビア</s:String>
@@ -422,9 +422,9 @@
     <s:String x:Key="LangDownloadPCLProvided">PCL 特別提供ダウンロード</s:String>
     <s:String x:Key="LangDownloadChangelog">更新履歴</s:String>
     <s:String x:Key="LangDownloadSaveAs">名前を付けて保存</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">リリース日：</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">{0} に投稿しました。</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Forge 互換性なし</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">推奨 Forge バージョン：</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">Forge バージョン対応：{0}</s:String>
     <s:String x:Key="LangDownloadShowAll">全てのバージョンを表示</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">インストーラーを保存</s:String>
     <s:String x:Key="LangDownloadAll">全てのバージョン</s:String>
@@ -463,30 +463,29 @@
     <s:String x:Key="LangDownloadInstallStart">インストールを開始</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">バージョン名</s:String>
     <s:String x:Key="LangDownloadInstallBack">戻る</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">バージョンリストの取得中</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">読み込み中……</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">Minecraft 項目をクリックすると、ゲームの主バージョン選択ページに戻れます！</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">クリックして選択</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">追加可能です。</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Forge と互換性がありません</s:String>
-    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">特定のバージョンのForgeにのみ対応しています。</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Fabric と互換性がありません</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">OptiFine と互換性がありません</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Fabric が必要です</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">OptiFine が必要です</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">OptiFine と Fabric が必要です</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">またはそれ以上のバージョン</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailableVersion">利用可能なバージョンがありません</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">利用できません。</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">バージョンリストの取得に失敗しました：未知のエラー、状態は</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">バージョンリストの取得に失敗しました：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">このバージョンは自動インストールに対応していません</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">バージョン隔離のヒント</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">まだバージョン隔離を有効にしていません。これにより、複数の MC が同じ Mod フォルダを共有することになります。
-そのため、MC バージョンを切り替えると、現在のバージョンに合わない Mod を読み込もうとして MC がクラッシュします。
-PCL では、ダウンロードを開始する前に、設定 → バージョン隔離 でバージョン隔離オプションを有効にすることを推奨しています！</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">バージョン分離が有効になっていません。この状態では、複数のバージョンが同じModフォルダを共有するため、現在のバージョンに対応しないModが読み込まれ、ゲームがクラッシュする可能性があります。
+ダウンロードを開始する前に、設定 → 起動オプション → バージョン分離でバージョン分離を有効にすることをお勧めします！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">ダウンロードをキャンセル</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">NeoForge と互換性がありません</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">古いバージョンの Fabric と互換性がありません。OptiFabric Origins を手動でダウンロードしてください。</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">リフレッシュ</s:String>
-    <s:String x:Key="LangDownloadPageLeftAutoInstall">自動インストール</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">ゲームのダウンロード</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 手動インストールパッケージ</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">手動インストールパッケージ機能では OptiFine、Forge などのコンポーネントの JAR インストールファイルをダウンロードできますが、自動インストールはできません。
 自動インストールページでまず MC バージョンを選択し、その後 OptiFine、Forge などのコンポーネントを選択することで、PCL が自動的にインストールを行います。</s:String>
@@ -494,7 +493,7 @@ PCL では、ダウンロードを開始する前に、設定 → バージョ�
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">自動インストールに戻る</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">手動インストールパッケージのダウンロードを続ける</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">手動インストールパッケージ</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">リソース</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">コミュニティリソース</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpack</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
@@ -634,8 +633,8 @@ PCL では、ダウンロードを開始する前に、設定 → バージョ�
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年カペ</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">MC Experience Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office Cape</s:String>
-    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">「ホーム」ケープ</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">「インベージョン」ケープ</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">カペなし</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">バージョン選択</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">バージョン設定</s:String>
@@ -705,7 +704,7 @@ PCL では、ダウンロードを開始する前に、設定 → バージョ�
     <s:String x:Key="LangPageLoginMsAddAccountFail">正規版ログインの認証に失敗しました。[設定 → ランチャー] で [SSL 証明書の検証] をオフにしてから再度お試しください。
 
 元のエラーメッセージ：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">ログインをキャンセルしました！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正規版ログインの検証に失敗しました。[設定 → その他] で [正規版ログイン時にSSL証明書を検証する] を無効にしてから、再度お試しください。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">読み込み中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">スキンとマント</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">スキンを変更</s:String>
@@ -771,7 +770,7 @@ PCL では、ダウンロードを開始する前に、設定 → バージョ�
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群の皆さん</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">内群の皆さんに感謝します、ここまで PCL と私を支えてくれて、応援してくれて！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">スポンサー</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">ここに 2025 年 1 月の上級スポンサーの皆さんを紹介します！PCL と偉大なガチョウガチョウ事業へのサポートに感謝します！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">2025年3月の上級スポンサーの皆様です！PCLと偉大なる「先延ばし」プロジェクトへのご支援、誠にありがとうございます！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">アンロックコード生成</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">作者をサポート</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">識別コードをコピー</s:String>
@@ -815,13 +814,15 @@ MINECRAFT の公式製品ではありません。MOJANG または MICROSOFT の�
  · {date}、{time}：現在のシステム時間
  · {version}：ゲームに対応するオリジナルバージョン番号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">カスタム情報</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">この情報はゲームのメインインターフェイスの左下と F3 デバッグページの左上に表示されます</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">バージョン隔離</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
-若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">この情報は、ゲームのメイン画面の左下隅と、F3デバッグ画面の左上隅に表示されます。
+
+空白のままにした場合、グローバル設定の値に従います。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">デフォルトのバージョン分離</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">新しいバージョンをインストールする際、これに基づいて自動的に新バージョンの分離オプションが設定されます。
+既存のバージョンの分離ポリシーを調整したい場合は、そのバージョンの設定に移動してください。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">閉じる</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">全てのバージョンが同一のアーカイブを使用し、セーブデータ、Mod、リソースパックなどが共通です。
-複数のModをインストールしたバージョンがある場合、Modの衝突が発生する可能性があります。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">すべてのバージョンが同じアーカイブを使用し、セーブデータ、Mod、リソースパックなどが共有されます。
+複数のModがインストールされたバージョンが存在する場合、Modの競合が発生する可能性があります。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">Modをインストールできるバージョンを隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">Modをインストールできるバージョン（Forge、Fabricなど）は互いに独立してModの衝突を避ける一方、他のバージョン（オリジナルなど）は隔離されません。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">非公式バージョンを隔離</s:String>
@@ -864,11 +865,11 @@ PCLを--memoryパラメータ付きで起動すると、静かにメモリ最適
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">使用済みメモリ</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">ゲームに割り当て</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高度な起動オプション</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVMパラメータ先頭</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">バージョン個別設定で、さらに詳細な起動オプションを見つけることができます。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM パラメータヘッダー</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Minecraft起動時に使用する追加のJVMパラメータです。自信がない場合は変更しないでください。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVMパラメータ末尾</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM パラメータフッター</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">このテキストボックスに入力した内容は、起動パラメータの末尾に直接追加されます。
 例えば、--demoと入力すると、デモモードでゲームが起動します。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">起動前に実行するコマンド</s:String>
@@ -898,13 +899,12 @@ PCLを--memoryパラメータ付きで起動すると、静かにメモリ最適
 コマンド実行時は、コマンドラインの現在のディレクトリは.minecraftフォルダです。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">コマンド実行完了まで待機してから起動を続行</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">Java互換性警告を無視</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：特定のバージョンの警告を設定で無効にするのが強くお勧めです。ここで全てのバージョンの警告を無効にしないでください！
-設定で手動で互換性のないJavaを選択した場合、互換性警告ウィンドウを自動的にスキップし、手動選択したJavaを使用します。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">現在のバージョンと互換性のないJavaを手動で選択した場合、互換性警告のポップアップを自動的にスキップし、手動で選択したJavaを強制的に使用します。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">ファイル検証を無効にする</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：特定のバージョンの検証を設定で無効にするのが強くお勧めです。ここで全てのバージョンの検証を無効にしないでください！
-assetsを一切変更せず、libraries、サードパーティログインライブラリ、およびバージョンのメインJARファイルが変更されていないかを検証しません。
-ファイルを変更していない場合は、このオプションをチェックしないでください。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">assetsを完全に変更せず、libraries、サードパーティログインライブラリ、およびバージョン用のメインjarファイルが変更されたかどうかを検証しません。
+
+関連ファイルを変更していない場合、このオプションをチェックしないでください。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">Java Launch Wrapperを無効にする</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
 如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
