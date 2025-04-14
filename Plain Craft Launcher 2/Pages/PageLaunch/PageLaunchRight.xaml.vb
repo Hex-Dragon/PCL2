@@ -4,6 +4,7 @@
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
+        PanHomepageLoadError.Visibility = Visibility.Collapsed
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
         '快照版提示
 #If BETA Then
@@ -176,11 +177,11 @@ Download:
             '要求刷新
             Refresh()
         Catch ex As Exception
-            If Setup.Get("CacheSavedPageVersion") = "" Then
-                Log(ex, $"联网下载自定义主页失败（{Address}）", LogLevel.Msgbox)
-            Else
-                Log(ex, $"联网下载自定义主页失败（{Address}）")
-            End If
+            Log(ex, $"联网下载自定义主页失败（{Address}）")
+            RunInUi(Sub()
+                        LabHint3.Text = GetExceptionSummary(ex)
+                        PanHomepageLoadError.Visibility = Visibility.Visible
+                    End Sub)
         End Try
     End Sub
 
@@ -252,6 +253,13 @@ Refresh:
     End Sub
     Private LoadedContentHash As Integer = -1
     Private LoadContentLock As New Object
+
+    Private Sub BtnRefreshHomepage_Click(sender As Object, e As EventArgs) Handles BtnRefreshHomepage.Click
+        RunInUi(Sub()
+                    PanHomepageLoadError.Visibility = Visibility.Collapsed
+                End Sub)
+        ForceRefresh()
+    End Sub
 
 #End Region
 
