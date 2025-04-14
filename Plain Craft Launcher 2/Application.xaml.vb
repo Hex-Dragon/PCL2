@@ -120,13 +120,12 @@ WaitRetry:
             Log($"[Start] 系统编码：{Encoding.Default.HeaderName} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测异常环境
-            If Path.Contains(IO.Path.GetTempPath()) OrElse 
-            Path.Contains("AppData\Local\Temp\") OrElse 
+            If Path.Contains(IO.Path.GetTempPath()) OrElse
             Path.ContainsF("WeChat") OrElse 
             Path.ContainsF("Tencent") OrElse 
             Path.ContainsF("Documents") OrElse 
             Path.ContainsF("cache") OrElse
-            Path.ContainsF("_temp") Then
+            Path.ContainsF("temp") Then
                 MyMsgBox("在当前环境下运行可能会导致丢失游戏存档或设置，部分功能也可能无法使用！", "环境警告", "我知道了", IsWarn:=True)
             End If
             If Is32BitSystem Then
