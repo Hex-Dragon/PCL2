@@ -217,42 +217,39 @@ Download:
     ''' 必须在 UI 线程调用。
     ''' </summary>
     Private Sub LoadContent(Content As String)
-        SyncLock LoadContentLock
-            '如果加载目标内容一致则不加载
-            Dim Hash = Content.GetHashCode()
-            If Hash = LoadedContentHash Then Exit Sub
-            LoadedContentHash = Hash
-            '实际加载内容
-            PanCustom.Children.Clear()
-            If String.IsNullOrWhiteSpace(Content) Then
-                Log($"[Page] 实例化：清空自定义主页 UI，来源为空")
-                Return
-            End If
-            Try
-                Content = HelpArgumentReplace(Content)
-                If Content.Contains("xmlns") Then Content = Content.RegexReplace("xmlns[^""']*(""|')[^""']*(""|')", "").Replace("xmlns", "") '禁止声明命名空间
-                Content = "<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:sys=""clr-namespace:System;assembly=mscorlib"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:local=""clr-namespace:PCL;assembly=Plain Craft Launcher 2"">" & Content & "</StackPanel>"
-                Log($"[Page] 实例化：加载自定义主页 UI 开始，最终内容长度：{Content.Count}")
-                PanCustom.Children.Add(GetObjectFromXML(Content))
-            Catch ex As UnauthorizedAccessException
-                Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
-                If MyMsgBox(ex.Message, "加载自定义主页失败", "重试", "取消") = 1 Then
-                    GoTo Refresh '防止 SyncLock 死锁
-                End If
-            Catch ex As Exception
-                Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
-                If MyMsgBox($"自定义主页内容编写有误，请根据下列错误信息进行检查：{vbCrLf}{GetExceptionSummary(ex)}", "加载自定义主页失败", "重试", "取消") = 1 Then
-                    GoTo Refresh '防止 SyncLock 死锁
-                End If
-            End Try
-            Log($"[Page] 实例化：加载自定义主页 UI 完成")
-        End SyncLock
+        '如果加载目标内容一致则不加载
+        Dim Hash = Content.GetHashCode()
+        If Hash = LoadedContentHash Then Exit Sub
+        LoadedContentHash = Hash
+        '实际加载内容
+        PanCustom.Children.Clear()
+        If String.IsNullOrWhiteSpace(Content) Then
+            Log($"[Page] 实例化：清空自定义主页 UI，来源为空")
+            Return
+        End If
+        Try
+            Content = HelpArgumentReplace(Content)
+            If Content.Contains("xmlns") Then Content = Content.RegexReplace("xmlns[^""']*(""|')[^""']*(""|')", "").Replace("xmlns", "") '禁止声明命名空间
+            Content = "<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:sys=""clr-namespace:System;assembly=mscorlib"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:local=""clr-namespace:PCL;assembly=Plain Craft Launcher 2"">" & Content & "</StackPanel>"
+            Log($"[Page] 实例化：加载自定义主页 UI 开始，最终内容长度：{Content.Count}")
+            PanCustom.Children.Add(GetObjectFromXML(Content))
+        Catch ex As UnauthorizedAccessException
+            Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
+            RunInUi(Sub()
+                        LabHint3.Text = ex.Message
+                        PanHomepageLoadError.Visibility = Visibility.Visible
+                    End Sub)
+        Catch ex As Exception
+            Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
+            RunInUi(Sub()
+                        LabHint3.Text = $"自定义主页内容编写有误，请根据下列错误信息进行检查：{vbCrLf}{GetExceptionSummary(ex)}"
+                        PanHomepageLoadError.Visibility = Visibility.Visible
+                    End Sub)
+        End Try
+        Log($"[Page] 实例化：加载自定义主页 UI 完成")
         Return
-Refresh:
-        ForceRefresh()
     End Sub
     Private LoadedContentHash As Integer = -1
-    Private LoadContentLock As New Object
 
     Private Sub BtnRefreshHomepage_Click(sender As Object, e As EventArgs) Handles BtnRefreshHomepage.Click
         RunInUi(Sub()
