@@ -252,8 +252,8 @@ Download:
     Private Sub BtnRefreshHomepage_Click(sender As Object, e As EventArgs) Handles BtnRefreshHomepage.Click
         RunInUi(Sub()
                     PanHomepageLoadError.Visibility = Visibility.Collapsed
+                    ForceRefresh()
                 End Sub)
-        ForceRefresh()
     End Sub
 
 #End Region
