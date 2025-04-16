@@ -165,7 +165,7 @@
             NewFolder.ContainsF("cache") OrElse
             NewFolder.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) OrElse
             NewFolder.ContainsF("temp") Then
-                Select Case MyMsgBox($"在此处建立版本文件夹可能会导致清理系统垃圾时丢失游戏存档，部分功能也可能无法使用！{vbCrLf}强烈建议更换目录后再添加", "环境警告", "继续添加","取消添加", IsWarn:=True)
+                Select Case MyMsgBox($"在此处建立版本文件夹可能会导致清理系统垃圾时丢失游戏存档或游戏崩溃！{vbCrLf}强烈建议更换目录后再添加。", "环境警告", "继续添加","取消添加", IsWarn:=True)
                 Case 0
 
                 Case 1
