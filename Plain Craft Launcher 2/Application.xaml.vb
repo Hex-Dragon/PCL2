@@ -125,6 +125,7 @@ WaitRetry:
             Path.ContainsF("Tencent") OrElse 
             Path.ContainsF("Documents") OrElse 
             Path.ContainsF("cache") OrElse
+            Path.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) OrElse
             Path.ContainsF("temp") Then
                 MyMsgBox("在当前环境下运行可能会导致丢失游戏存档或设置，部分功能也可能无法使用！", "环境警告", "我知道了", IsWarn:=True)
             End If
