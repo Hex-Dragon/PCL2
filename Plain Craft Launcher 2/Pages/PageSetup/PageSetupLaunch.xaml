@@ -7,6 +7,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,25,25,10">
+            <local:MyHint x:Name="HintLegacySkinChange" Margin="0,0,0,10" IsWarn="False" Text="请前往下面的“离线皮肤”选项卡进行离线皮肤修改。" />
             <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="启动选项">
                 <StackPanel Margin="25,40,25,15">
                     <Grid>

@@ -1,6 +1,7 @@
 ﻿Public Class PageSetupLaunch
 
     Private IsLoad As Boolean = False
+    Public Shared ShowHintLegacySkinChange As Boolean = False
 
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
 
@@ -12,6 +13,12 @@
         Else
             BtnSwitch.Visibility = Visibility.Visible
         End If
+        If ShowHintLegacySkinChange Then
+            HintLegacySkinChange.Visibility = Visibility.Visible
+        Else
+            HintLegacySkinChange.Visibility = Visibility.Collapsed
+        End If
+        ShowHintLegacySkinChange = False
 
         '非重复加载部分
         If IsLoad Then Exit Sub

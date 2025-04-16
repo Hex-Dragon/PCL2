@@ -69,6 +69,7 @@ Public Class PageLoginLegacy
         If (Setup.Get("UiHiddenPageSetup") OrElse Setup.Get("UiHiddenSetupLaunch")) AndAlso Not PageSetupUI.HiddenForceShow Then
             Hint("启动设置已被禁用！", HintType.Critical)
         Else
+            PageSetupLaunch.ShowHintLegacySkinChange = True
             FrmMain.PageChange(FormMain.PageType.Setup, FormMain.PageSubType.SetupLaunch) '切换到皮肤设置页面
         End If
     End Sub
