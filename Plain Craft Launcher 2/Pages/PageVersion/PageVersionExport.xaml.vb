@@ -161,7 +161,8 @@ Public Class PageVersionExport
         Catch ex As Exception
             If TypeOf(ex) Is DirectoryNotFoundException Then
                 Log(ex,"刷新导出整合包选项失败",LogLevel.Msgbox)
-                Return False
+                FrmMain.PageChange(FrmMain.PageType.Launch,0)
+                Return
             End If
             Log(ex,"刷新导出整合包选项失败",LogLevel.Feedback)
         End Try
