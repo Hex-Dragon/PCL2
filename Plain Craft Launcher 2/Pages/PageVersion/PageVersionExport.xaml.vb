@@ -101,6 +101,7 @@ Public Class PageVersionExport
                 End Try
             End Function
             Dim PathInfo As New DirectoryInfo(PageVersionLeft.Version.PathIndie)
+            If Not PathInfo.Exist Then Throw New Exception("无效的版本文件夹")
             AllEntries.AddRange(PathInfo.EnumerateFiles().Select(Function(f) f.Name))
             For Each SubFolder In PathInfo.EnumerateDirectories().Where(IsValidDirectory)
                 AllEntries.Add($"{SubFolder.Name}\")
@@ -159,12 +160,12 @@ Public Class PageVersionExport
                 End If
             Next
         Catch ex As Exception
-            If TypeOf(ex) Is DirectoryNotFoundException Then
+            If TypeOf(ex) Is DirectoryNotFoundException OrElse ex.Message.Contains("无效") Then
                 Log(ex,"刷新导出整合包选项失败",LogLevel.Msgbox)
-                FrmMain.PageChange(FrmMain.PageType.Launch,0)
-                Return
+            Else
+                Log(ex,"刷新导出整合包选项失败",LogLevel.Feedback)
             End If
-            Log(ex,"刷新导出整合包选项失败",LogLevel.Feedback)
+            FrmMain.PageChange(FrmMain.PageType.Launch,0)
         End Try
     End Sub
 
