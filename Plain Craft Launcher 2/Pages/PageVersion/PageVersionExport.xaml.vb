@@ -164,6 +164,7 @@ Public Class PageVersionExport
                 FrmMain.PageChange(FormMain.PageType.Launch,0)
             End If
             Log(ex,"刷新整合包选项失败",If(NeedFeedback,LogLevel.Feedback,LogLevel.Msgbox))
+        End Try
     End Sub
 
 
