@@ -84,9 +84,6 @@ Public Class PageVersionExport
 
 #Region "选项"
 
-    ''' <summary>
-    ''' 重新确认是否应该显示每个选项，并将 ExportOption 同步到 UI。
-    ''' </summary>
     Private Sub RefreshAllOptionsUI()
         Try
             '预先归纳所有至多二级的文件/文件夹
@@ -158,15 +155,17 @@ Public Class PageVersionExport
                     CheckBox.Checked = TargetOption.DefaultChecked AndAlso Pass
                 End If
             Next
+        Catch ex As ThreadInterruptedException
+            Throw ex
         Catch ex As Exception
+            Dim NeedFeedback As Boolean = True
             If TypeOf(ex) Is DirectoryNotFoundException Then
-                Log(ex,"刷新导出整合包选项失败",LogLevel.Msgbox)
-            Else
-                Log(ex,"刷新导出整合包选项失败",LogLevel.Feedback)
+                NeedFeedback = False
+                FrmMain.PageChange(FormMain.PageType.Launch,0)
             End If
-            FrmMain.PageChange(FrmMain.PageType.Launch,0)
-        End Try
+            Log(ex,"刷新整合包选项失败",If(NeedFeedback,LogLevel.Feedback,LogLevel.Msgbox))
     End Sub
+
 
     ''' <summary>
     ''' 对文本行进行标准化处理，以便使用 Like 进行匹配。
