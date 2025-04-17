@@ -70,7 +70,10 @@
                             <TextBlock Grid.Column="4" Grid.Row="2" x:Name="LabLauncherTheme11Click" Background="{StaticResource ColorBrushSemiTransparent}" ToolTipService.Placement="Bottom" />
                             <local:MyRadioBox Grid.Column="5" Grid.Row="2" Text="自定义" x:Name="RadioLauncherTheme14" Tag="UiLauncherTheme/14" IsEnabled="False" ToolTipService.Placement="Bottom" ToolTip="需要解锁五个隐藏主题" ToolTipService.ShowOnDisabled="True" />
                         </Grid>
-                        <local:MyCheckBox Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
+                        <WrapPanel>
+                            <local:MyCheckBox Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
+                            <local:MyCheckBox Text="锁定 PCL 窗口大小" Margin="16,0,0,1" Height="22" x:Name="CheckLockWindowSize" Tag="UiLockWindowSize" />
+                        </WrapPanel>
                     </StackPanel>
                     <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

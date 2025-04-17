@@ -18,74 +18,76 @@
                 <TranslateTransform x:Name="TransformPos" X="0" Y="60" />
             </TransformGroup>
         </Grid.RenderTransform>
-        <Rectangle x:Name="ResizerT" Stroke="{x:Null}" StrokeThickness="0.0001" Height="8" VerticalAlignment="Top" Margin="13,0" Cursor="SizeNS">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#21000000" Offset="1" />
-                    <GradientStop Color="#11000000" Offset="0.7" />
-                    <GradientStop Color="#00000000" Offset="0" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerB" Stroke="{x:Null}" StrokeThickness="0.0001" Height="8" VerticalAlignment="Bottom" Margin="13,0" Cursor="SizeNS">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#21000000" Offset="0" />
-                    <GradientStop Color="#11000000" Offset="0.3" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerR" HorizontalAlignment="Right" Margin="0,13" Stroke="{x:Null}" StrokeThickness="0.0001" Width="8" Cursor="SizeWE">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                    <GradientStop Color="#21000000" Offset="0" />
-                    <GradientStop Color="#11000000" Offset="0.3" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerL" HorizontalAlignment="Left" Stroke="{x:Null}" Width="8" Margin="0,13" StrokeThickness="0.0001" Cursor="SizeWE">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                    <GradientStop Color="#21000000" Offset="1" />
-                    <GradientStop Color="#11000000" Offset="0.7" />
-                    <GradientStop Color="#00000000" Offset="0" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerLT" HorizontalAlignment="Left" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Top" Height="13" Cursor="SizeNWSE">
-            <Rectangle.Fill>
-                <RadialGradientBrush Center="1,1" GradientOrigin="1,1" RadiusX="1" RadiusY="1">
-                    <GradientStop Color="#21000000" Offset="0.2" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </RadialGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerLB" HorizontalAlignment="Left" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Bottom" Height="13" Cursor="SizeNESW">
-            <Rectangle.Fill>
-                <RadialGradientBrush Center="1,0" GradientOrigin="1,0" RadiusX="1" RadiusY="1">
-                    <GradientStop Color="#21000000" Offset="0.2" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </RadialGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerRB" HorizontalAlignment="Right" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Bottom" Height="13" Cursor="SizeNWSE">
-            <Rectangle.Fill>
-                <RadialGradientBrush Center="0,0" GradientOrigin="0,0" RadiusX="1" RadiusY="1">
-                    <GradientStop Color="#21000000" Offset="0.2" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </RadialGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle x:Name="ResizerRT" HorizontalAlignment="Right" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Top" Height="13" Cursor="SizeNESW">
-            <Rectangle.Fill>
-                <RadialGradientBrush Center="0,1" GradientOrigin="0,1" RadiusX="1" RadiusY="1">
-                    <GradientStop Color="#21000000" Offset="0.2" />
-                    <GradientStop Color="#00000000" Offset="1" />
-                </RadialGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+        <Grid x:Name="PanResizer">
+            <Rectangle x:Name="ResizerT" Stroke="{x:Null}" StrokeThickness="0.0001" Height="8" VerticalAlignment="Top" Margin="13,0" Cursor="SizeNS">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#21000000" Offset="1" />
+                        <GradientStop Color="#11000000" Offset="0.7" />
+                        <GradientStop Color="#00000000" Offset="0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerB" Stroke="{x:Null}" StrokeThickness="0.0001" Height="8" VerticalAlignment="Bottom" Margin="13,0" Cursor="SizeNS">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#21000000" Offset="0" />
+                        <GradientStop Color="#11000000" Offset="0.3" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerR" HorizontalAlignment="Right" Margin="0,13" Stroke="{x:Null}" StrokeThickness="0.0001" Width="8" Cursor="SizeWE">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="#21000000" Offset="0" />
+                        <GradientStop Color="#11000000" Offset="0.3" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerL" HorizontalAlignment="Left" Stroke="{x:Null}" Width="8" Margin="0,13" StrokeThickness="0.0001" Cursor="SizeWE">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="#21000000" Offset="1" />
+                        <GradientStop Color="#11000000" Offset="0.7" />
+                        <GradientStop Color="#00000000" Offset="0" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerLT" HorizontalAlignment="Left" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Top" Height="13" Cursor="SizeNWSE">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="1,1" GradientOrigin="1,1" RadiusX="1" RadiusY="1">
+                        <GradientStop Color="#21000000" Offset="0.2" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerLB" HorizontalAlignment="Left" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Bottom" Height="13" Cursor="SizeNESW">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="1,0" GradientOrigin="1,0" RadiusX="1" RadiusY="1">
+                        <GradientStop Color="#21000000" Offset="0.2" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerRB" HorizontalAlignment="Right" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Bottom" Height="13" Cursor="SizeNWSE">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0,0" GradientOrigin="0,0" RadiusX="1" RadiusY="1">
+                        <GradientStop Color="#21000000" Offset="0.2" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="ResizerRT" HorizontalAlignment="Right" Stroke="{x:Null}" Width="13" StrokeThickness="0.0001" VerticalAlignment="Top" Height="13" Cursor="SizeNESW">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0,1" GradientOrigin="0,1" RadiusX="1" RadiusY="1">
+                        <GradientStop Color="#21000000" Offset="0.2" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Grid>
         <Border Margin="8" x:Name="BorderForm">
             <Border.Clip>
                 <RectangleGeometry x:Name="RectForm" RadiusX="6" RadiusY="6" />

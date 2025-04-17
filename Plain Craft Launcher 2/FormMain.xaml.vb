@@ -235,6 +235,7 @@ Public Class FormMain
         Setup.Load("UiBackgroundBlur")
         Setup.Load("UiLogoType")
         Setup.Load("UiHiddenPageDownload")
+        Setup.Load("UiLockWindowSize")
         PageSetupUI.BackgroundRefresh(False, True)
         MusicRefreshPlay(False, True)
         '扩展按钮

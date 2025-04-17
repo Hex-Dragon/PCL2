@@ -140,6 +140,7 @@
         {"UiLauncherThemeHide", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherThemeHide2", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherLogo", New SetupEntry(True)},
+        {"UiLockWindowSize", New SetupEntry(False)},
         {"UiLauncherEmail", New SetupEntry(False)},
         {"UiBackgroundColorful", New SetupEntry(True)},
         {"UiBackgroundOpacity", New SetupEntry(1000)},
@@ -498,6 +499,9 @@
         ThemeRefresh(Value)
     End Sub
 #End If
+    Public Sub UiLockWindowSize(Value As Boolean)
+        FrmMain.PanResizer.IsHitTestVisible = Not Value
+    End Sub
     Public Sub UiBackgroundColorful(Value As Boolean)
         ThemeRefresh()
     End Sub
