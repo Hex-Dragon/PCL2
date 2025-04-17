@@ -231,9 +231,6 @@ Download:
             Content = "<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:sys=""clr-namespace:System;assembly=mscorlib"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:local=""clr-namespace:PCL;assembly=Plain Craft Launcher 2"">" & Content & "</StackPanel>"
             Log($"[Page] 实例化：加载自定义主页 UI 开始，最终内容长度：{Content.Count}")
             PanCustom.Children.Add(GetObjectFromXML(Content))
-        Catch ex As UnauthorizedAccessException
-            Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
-            ShowPanHomepageLoadError(ex)
         Catch ex As Exception
             Log(ex, "加载失败的自定义主页内容：" & vbCrLf & Content)
             ShowPanHomepageLoadError(ex)
