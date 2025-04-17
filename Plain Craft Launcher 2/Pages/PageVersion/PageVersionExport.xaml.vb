@@ -83,7 +83,9 @@ Public Class PageVersionExport
 #End Region
 
 #Region "选项"
-
+    ''' <summary>
+    ''' 重新确认是否应该显示每个选项，并将 ExportOption 同步到 UI。
+    ''' </summary>
     Private Sub RefreshAllOptionsUI()
         Try
             '预先归纳所有至多二级的文件/文件夹
