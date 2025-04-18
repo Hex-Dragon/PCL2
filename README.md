@@ -20,7 +20,7 @@
 
 [提交问题](https://github.com/PCL-Community/PCL2-CE/issues/new/choose) |
 [贡献指南](https://github.com/PCL-Community/PCL2-CE/blob/dev/CONTRIBUTING.md) |
-[更新日志](https://github.com/PCL-Community/PCL2-CE/blob/dev/CHANGELOG.md)
+[更新日志](https://github.com/PCL-Community/PCL2-CE/blob/dev/CHANGELOG.md) | 
 
 </div>
 
@@ -28,6 +28,8 @@
 代码会在主线发布更新时与主线同步一次，但来自社区的功能会保持自己的更新节奏。<br />
 同时需注意，社区版的版本号与主线并非严格对应关系。<br />
 欢迎大家来用用看！
+
+加入社区版 1 群：1028074835
 
 ### ✨ 隐藏提示
 
