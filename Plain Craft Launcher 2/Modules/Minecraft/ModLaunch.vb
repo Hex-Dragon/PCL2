@@ -1556,6 +1556,11 @@ NextVersion:
     Private Function McLaunchArgumentsGameOld(Version As McVersion) As String
         Dim DataList As New List(Of String)
 
+        '添加 RetroWrapper 相关参数
+        If McLaunchNeedsRetroWrapper() Then
+            DataList.Add("--tweakClass com.zero.retrowrapper.RetroTweaker")
+        End If
+
         '本地化 Minecraft 启动信息
         Dim BasicString As String = Version.JsonObject("minecraftArguments").ToString
         If Not BasicString.Contains("--height") Then BasicString += " --height ${resolution_height} --width ${resolution_width}"
