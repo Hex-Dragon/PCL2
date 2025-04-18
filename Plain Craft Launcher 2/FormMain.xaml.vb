@@ -106,6 +106,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 366 Then '2.10.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "迁移配置文件，不再使用注册表，使用 AES 加密部分信息"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "改进了 SMTC 获取信息的方式"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "尝试改进了实时日志的性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 修改版本界面可能会因不支持的 Mod 加载器报错"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 版本修改的加载器选择可能不正确"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "部分字体标题栏 CE 显示不完整"))
+        End If
         If LastVersion < 365 Then '2.10.5 365
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持导出资源列表信息"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了深色模式下部分 UI 表现错误的问题"))
