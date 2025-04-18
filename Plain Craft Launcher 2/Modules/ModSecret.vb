@@ -13,6 +13,42 @@ Friend Module ModSecret
     'CurseForge API Key
     Public Const CurseForgeAPIKey As String = ""
 
+
+
+' Token: 0x060004FB RID: 1275 RVA: 0x0002FD34 File Offset: 0x0002DF34
+	Friend Function SecretGetUniqueAddress() As String
+			Dim text As String
+			Try
+				If ModBase._HelperStrategy < 1L Then
+					text = "0000-0000-0000-0000"
+				Else
+					Dim text2 As String
+					Try
+						text2 = MyWpfExtension.SetStub().Registry.GetValue(String.Format("HKEY_LOCAL_MACHINE\SYSTEM\Har{0}wareConfig", "D".ToLower()), "LastConfig", "Unknown").ToString().ToUpper().Trim(New Char() { "{"c, "}"c })
+					Catch ex As Exception
+						ModBase.Log(ex, "获取主板标识码失败", ModBase.LogLevel.Debug, "出现错误")
+						text2 = "Unknown"
+					End Try
+					Dim text3 As String
+					Try
+						text3 = Conversions.ToString(ModBase.adapterStrategy.[Get]("Identify", Nothing))
+					Catch ex2 As Exception
+						text3 = ""
+					End Try
+					If text3.Length < 3 Then
+						text3 = Conversions.ToString(ModBase.GetTimeTick()) + Conversions.ToString(MyWpfExtension.SetStub().Info.AvailablePhysicalMemory)
+						ModBase.adapterStrategy.[Set]("Identify", text3, False, Nothing)
+					End If
+					Dim text4 As String = ModBase.StrFill(ModBase.GetHash(text2 + text3).ToString("X"), "7", 16)
+					text = String.Format("{0}-{1}-{2}-{3}", New Object() { Strings.Mid(text4, 5, 4), Strings.Mid(text4, 13, 4), Strings.Mid(text4, 1, 4), Strings.Mid(text4, 9, 4) })
+				End If
+			Catch ex3 As Exception
+				ModBase.Log(ex3, "PCL 无法获取设备标识码，这可能会导致部分设置无法正常存储。" & vbCrLf & vbCrLf & "详细的错误信息", ModBase.LogLevel.Feedback, "获取标识码失败")
+				text = "0000-0000-0000-0000"
+			End Try
+			Return text
+		End Function
+	
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
         Thread.CurrentThread.Priority = ThreadPriority.Highest
