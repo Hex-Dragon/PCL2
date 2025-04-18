@@ -30,14 +30,16 @@
                             <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
                             <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
                             <local:MyComboBoxItem Content="草方块" Tag="pack://application:,,,/images/Blocks/Grass.png" />
-                            <local:MyComboBoxItem Content="草径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
+                            <local:MyComboBoxItem Content="土径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
                             <local:MyComboBoxItem Content="铁砧" Tag="pack://application:,,,/images/Blocks/Anvil.png" />
                             <local:MyComboBoxItem Content="红石块" Tag="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
                             <local:MyComboBoxItem Content="红石灯（开）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOn.png" />
                             <local:MyComboBoxItem Content="红石灯（关）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOff.png" />
                             <local:MyComboBoxItem Content="鸡蛋" Tag="pack://application:,,,/images/Blocks/Egg.png" />
                             <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
+                            <local:MyComboBoxItem Content="方格（Quilt）" Tag="pack://application:,,,/images/Blocks/Quilt.png" />
                             <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
+                            <local:MyComboBoxItem Content="Cleanroom" Tag="pack://application:,,,/images/Blocks/Cleanroom.png" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="分类" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Column="1" Grid.Row="2" x:Name="ComboDisplayType">
@@ -77,16 +79,13 @@
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="高级管理" x:Name="PanManage">
                 <StackPanel Margin="25,40,25,15">
-                    <Grid Margin="0,2,0,7" Height="35">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnManageScript" Text="导出启动脚本" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton x:Name="BtnManageCheck" Text="补全文件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" ToolTip="校验版本依赖文件是否完整，并重新下载 Assets 索引与缺失、校验失败的文件。&#xa;若游戏缺失音效，请尝试此项。" />
-                        <local:MyButton x:Name="BtnManageDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" ColorType="Red" />
-                    </Grid>
+                    <WrapPanel Margin="0,-5,-20,7">
+                        <local:MyButton x:Name="BtnManageScript" Text="导出启动脚本" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Height="35"/>
+                        <local:MyButton x:Name="BtnManageTest" Text="测试游戏" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="1" Height="35"/>
+                        <local:MyButton x:Name="BtnManageCheck" Text="补全文件" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="2" ToolTip="校验版本依赖文件是否完整，并重新下载 Assets 索引与缺失、校验失败的文件。&#xa;若游戏缺失音效，请尝试此项。" Height="35"/>
+                        <local:MyButton x:Name="BtnManageRestore" Text="重置" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="3" ToolTip="重新从互联网获取此版本的安装信息，并执行自动安装。&#xa;你的存档、Mod、资源包等信息不会丢失。&#xa;若游戏因 Libraries 等资源缺失无法启动，请尝试此项。" Height="35"/>
+                        <local:MyButton x:Name="BtnManageDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="4" ColorType="Red" Height="35"/>
+                    </WrapPanel>
                 </StackPanel>
             </local:MyCard>
         </StackPanel>

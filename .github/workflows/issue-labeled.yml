@@ -1,0 +1,56 @@
+name: Issue Labeled
+run-name: \#${{ github.event.issue.number }} ${{ github.event.issue.title }}
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  close-as-completed:
+    if: github.actor != 'PCL-Community-Bot' && github.event.label.name == '👌 完成'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close as completed
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: '${{ secrets.BOT }}'
+          close-reason: 'completed'
+
+      - name: Remove labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'remove-labels'
+          token: '${{ secrets.BOT }}'
+          labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置,❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划'
+
+  close-as-not-planned:
+    if: github.actor != 'PCL-Community-Bot' && (github.event.label.name == '❌ 忽略' || github.event.label.name == '❌ 拒绝 / 放弃' || github.event.label.name == '❌ 暂无计划' || github.event.label.name == '❌ 第三方' || github.event.label.name == '😂 移交上游')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close as not planned
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          token: '${{ secrets.BOT }}'
+          close-reason: 'not_planned'
+      
+      - name: Remove labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'remove-labels'
+          token: '${{ secrets.BOT }}'
+          labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置'
+
+  report-to-upstream:
+    if: github.event.label.name == '😂 移交上游'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report to upstream
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: '${{ secrets.BOT }}'
+          body: |
+            @${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。
+            感谢您的反馈。

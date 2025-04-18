@@ -1,9 +1,10 @@
-﻿Imports System.Globalization
+Imports System.Globalization
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Threading.Tasks
 Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
@@ -12,25 +13,26 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.13" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.13." & VersionBranchCode '标准格式的四段式版本号
-    Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
-#If BETA Then
-    Public Const VersionCode As Integer = 347 'Release
-#Else
-    Public Const VersionCode As Integer = 348 'Snapshot
-#End If
+    Public Const VersionBaseName As String = "2.10.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.5." & VersionCodeString '标准格式的四段式版本号
+    Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
+    Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
+    Public Const UpstreamVersion As String = "2.9.2" '上游版本
+    Public Const VersionCode As Integer = 365 '内部版本号
+    Public Const VersionCodeString As String = "365" '内部版本号的字符串形式
     '自动生成的版本信息
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "Snapshot"
+    Public Const VersionBranchName As String = "Slow Ring"
     Public Const VersionBranchCode As String = "0"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "Release"
+    Public Const VersionBranchName As String = "Fast Ring"
     Public Const VersionBranchCode As String = "50"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #Else
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #End If
 
     ''' <summary>
@@ -77,6 +79,10 @@ Public Module ModBase
     ''' 是否为 32 位系统。
     ''' </summary>
     Public Is32BitSystem As Boolean = Not Environment.Is64BitOperatingSystem
+    ''' <summary>
+    ''' 是否为 ARM64 架构。
+    ''' </summary>
+    Public IsArm64System As Boolean = Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64
     ''' <summary>
     ''' 是否使用 GBK 编码。
     ''' </summary>
@@ -180,6 +186,10 @@ Public Module ModBase
         ''' </summary>
         Public Const IconButtonServer As String = "M224 160a64 64 0 0 0-64 64v576a64 64 0 0 0 64 64h576a64 64 0 0 0 64-64V224a64 64 0 0 0-64-64H224z m0 384h576v256H224v-256z m192 96v64h320v-64H416z m-128 0v64h64v-64H288zM224 224h576v256H224V224z m192 96v64h320v-64H416z m-128 0v64h64v-64H288z"
         ''' <summary>
+        ''' 图标按钮，复制
+        ''' </summary>
+        Public Const IconButtonCopy As String = "M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
+        ''' <summary>
         ''' 图标，音符，1x
         ''' </summary>
         Public Const IconMusic As String = "M348.293565 716.53287V254.797913c0-41.672348 28.004174-78.358261 68.919652-90.37913L815.994435 40.826435c62.775652-18.610087 125.907478 26.579478 125.907478 89.933913v539.158261c8.013913 42.25113-8.94887 89.177043-47.014956 127.109565a232.848696 232.848696 0 0 1-170.785392 65.758609c-61.885217-2.938435-111.081739-33.435826-129.113043-80.050087-18.031304-46.614261-2.137043-102.177391 41.672348-145.853218a232.848696 232.848696 0 0 1 170.785391-65.80313c21.014261 1.024 40.514783 5.164522 57.878261 12.065391V233.338435c0-12.109913-10.551652-20.034783-20.569044-20.034783a24.620522 24.620522 0 0 0-5.787826 0.934957L439.785739 338.18713a19.545043 19.545043 0 0 0-14.825739 19.144348v438.984348H423.846957c11.53113 43.987478-5.164522 94.208-45.412174 134.322087a232.848696 232.848696 0 0 1-170.785392 65.758609c-61.885217-2.938435-111.081739-33.435826-129.113043-80.050087-18.031304-46.614261-2.137043-102.177391 41.672348-145.853218a232.848696 232.848696 0 0 1 170.785391-65.80313c20.791652 1.024 40.069565 5.075478 57.299478 11.842783z"
@@ -187,6 +197,18 @@ Public Module ModBase
         ''' 图标，播放，0.8x
         ''' </summary>
         Public Const IconPlay As String = "M803.904 463.936a55.168 55.168 0 0 1 0 96.128l-463.616 264.448C302.848 845.888 256 819.136 256 776.448V247.616c0-42.752 46.848-69.44 84.288-48.064l463.616 264.384z"
+        ''' <summary>
+        ''' 图标，创建，0.9x
+        ''' </summary>
+        Public Const IconButtonCreate As String = "M103.331925 384.978025l25.805736 0L129.137661 161.847132c0-18.313088 14.905478-33.718963 33.718963-33.718963l0.969071 0 253.006318 0c10.82044 0 20.218484 4.797259 26.500561 12.257162l117.579929 126.753869 297.819966 0c18.297738 0 33.736359 15.179724 33.736359 33.977859l0 0.952698 0 82.909292 25.547863 0c18.538215 0 34.187637 15.179724 34.187637 33.977859 0 2.163269-0.469698 3.617387-0.469698 5.539156l-54.437843 432.971086c-1.210571 10.382465-7.007601 19.056008-14.968923 24.352641-6.249331 5.765307-14.680351 9.624195-23.595394 9.624195l-0.969071 0-694.906773 0c-9.155521 0-17.344017-3.858888-23.626094-9.155521-8.67252-5.765307-14.453177-14.939247-15.389502-25.758664L69.597613 423.040922c-2.165316-18.313088 10.868535-35.414581 29.665647-38.062897L103.331925 384.978025 103.331925 384.978025zM196.576609 384.978025 196.576609 384.978025l627.938546 0 0-49.625234L546.461371 335.352791l0 0c-9.400091 0-18.329461-4.117784-25.048489-11.110035L402.363486 196.067514 196.576609 196.067514 196.576609 384.978025 196.576609 384.978025zM879.469767 452.916347 879.469767 452.916347l-20.267603 0-0.469698 0-0.969071 0-694.906773 0-0.984421 0-20.218484 0 45.781696 366.728382 646.218888 0L879.469767 452.916347 879.469767 452.916347z"
+        ''' <summary>
+        ''' 图标，分享，1x
+        ''' </summary>
+        Public Const IconButtonShare As String = "M768.704 703.616c-35.648 0-67.904 14.72-91.136 38.304l-309.152-171.712c9.056-17.568 14.688-37.184 14.688-58.272 0-12.576-2.368-24.48-5.76-35.936l304.608-189.152c22.688 20.416 52.384 33.184 85.216 33.184 70.592 0 128-57.408 128-128s-57.408-128-128-128-128 57.408-128 128c0 14.56 2.976 28.352 7.456 41.408l-301.824 187.392c-23.136-22.784-54.784-36.928-89.728-36.928-70.592 0-128 57.408-128 128 0 70.592 57.408 128 128 128 25.664 0 49.504-7.744 69.568-20.8l321.216 178.4c-3.04 10.944-5.184 22.208-5.184 34.08 0 70.592 57.408 128 128 128s128-57.408 128-128S839.328 703.616 768.704 703.616zM767.2 128.032c35.296 0 64 28.704 64 64s-28.704 64-64 64-64-28.704-64-64S731.904 128.032 767.2 128.032zM191.136 511.936c0-35.296 28.704-64 64-64s64 28.704 64 64c0 35.296-28.704 64-64 64S191.136 547.232 191.136 511.936zM768.704 895.616c-35.296 0-64-28.704-64-64s28.704-64 64-64 64 28.704 64 64S804 895.616 768.704 895.616z"
+        ''' <summary>
+        ''' 图标，添加，1x
+        ''' </summary>
+        Public Const IconButtonAdd As String = "M512.277 954.412c-118.89 0-230.659-46.078-314.73-129.73S67.12 629.666 67.12 511.222s46.327-229.744 130.398-313.427 195.82-129.73 314.73-129.73 230.659 46.078 314.72 129.73S957.397 392.81 957.397 511.183 911.078 740.96 826.97 824.642s-195.8 129.77-314.692 129.77z m0-822.784c-101.972 0-197.809 39.494-269.865 111.222s-111.7 166.997-111.7 268.373 39.653 196.695 111.67 268.335S410.246 890.78 512.248 890.78s197.809-39.484 269.865-111.222 111.7-166.998 111.67-268.374c-0.03-101.375-39.654-196.665-111.67-268.303S614.22 131.628 512.277 131.628z m222.585 347.8H544.073V288.64c-0.76-17.561-15.613-31.18-33.173-30.419-16.495 0.714-29.704 13.924-30.419 30.419v190.787H289.703c-17.56 0.761-31.179 15.614-30.419 33.174 0.715 16.494 13.924 29.703 30.42 30.418H480.48v190.788c0.761 17.56 15.614 31.179 33.174 30.419 16.494-0.715 29.703-13.925 30.418-30.42V543.02h190.788c17.56 0.762 32.413-12.857 33.173-30.418 0.762-17.561-12.858-32.414-30.419-33.174a31.683 31.683 0 0 0-2.753 0z"
     End Class
 
 #End Region
@@ -420,7 +442,7 @@ Public Module ModBase
     ''' <summary>
     ''' 执行返回值。
     ''' </summary>
-    Public Enum Result
+    Public Enum ProcessReturnValues
         ''' <summary>
         ''' 执行成功，或进程被中断。
         ''' </summary>
@@ -432,19 +454,23 @@ Public Module ModBase
         ''' <summary>
         ''' 执行失败。
         ''' </summary>
-        Fail
+        Fail = 1
         ''' <summary>
         ''' 执行时出现未经处理的异常。
         ''' </summary>
-        Exception
+        Exception = 2
         ''' <summary>
         ''' 执行超时。
         ''' </summary>
-        Timeout
+        Timeout = 3
         ''' <summary>
         ''' 取消执行。可能是由于不满足执行的前置条件。
         ''' </summary>
-        Cancel
+        Cancel = 4
+        ''' <summary>
+        ''' 任务成功完成。
+        ''' </summary>
+        TaskDone = 5
     End Enum
 
     ''' <summary>
@@ -573,7 +599,10 @@ Public Module ModBase
 
 #Region "文件"
 
-    '注册表
+    '=============================
+    '  注册表
+    '=============================
+
     ''' <summary>
     ''' 重命名一个注册表子键。不可用于包含子键的子键。
     ''' </summary>
@@ -591,13 +620,13 @@ Public Module ModBase
         parentKey.DeleteSubKeyTree(subKeyName, False)
     End Sub
     ''' <summary>
-    ''' 读取程序所属注册表。
+    ''' 读取注册表，默认为程序所属。
     ''' </summary>
-    Public Function ReadReg(Key As String, Optional DefaultValue As String = "") As String
+    Public Function ReadReg(Key As String, Optional DefaultValue As String = "", Optional Path As String = "") As String
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
             If softKey Is Nothing Then
                 ReadReg = DefaultValue '不存在则返回默认值
             Else
@@ -612,23 +641,44 @@ Public Module ModBase
         End Try
     End Function
     ''' <summary>
-    ''' 写入程序所属注册表。
+    ''' 写入注册表，默认为程序所属。
     ''' </summary>
-    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False)
+    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False, Optional Path As String = "", Optional ThrowException As Boolean = False)
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
-            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & RegFolder) '如果不存在就创建  
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
+            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & If(Path = "", RegFolder, Path)) '如果不存在就创建  
             softKey.SetValue(Key, Value)
         Catch ex As Exception
-            Log(ex, "写入注册表出错：" & Key, If(ShowException, LogLevel.Hint, LogLevel.Developer))
-            If ShowException Then Throw '如果显示错误就丢一个
+            Log(ex, "写入注册表出错：" & Key, If(ThrowException, LogLevel.Hint, LogLevel.Developer))
+            If ThrowException Then Throw
+        End Try
+    End Sub
+    ''' <summary>
+    ''' 是否存在某个注册表键。
+    ''' </summary>
+    Public Function HasReg(Key As String) As Boolean
+        Return ReadReg(Key, Nothing) IsNot Nothing
+    End Function
+    ''' <summary>
+    ''' 删除注册表键。
+    ''' </summary>
+    Public Sub DeleteReg(Key As String, Optional ThrowException As Boolean = False)
+        Try
+            Dim SubKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser.OpenSubKey("Software\" & RegFolder, True)
+            SubKey?.DeleteValue(Key)
+        Catch ex As Exception
+            Log(ex, "删除注册表出错：" & Key, If(ThrowException, LogLevel.Hint, LogLevel.Developer))
+            If ThrowException Then Throw
         End Try
     End Sub
 
-    'Ini 文件
-    Private ReadOnly IniCache As New Dictionary(Of String, Dictionary(Of String, String))
+    '=============================
+    '  ini
+    '=============================
+
+    Private ReadOnly IniCache As New SafeDictionary(Of String, SafeDictionary(Of String, String))
     ''' <summary>
     ''' 清除某 ini 文件的运行时缓存。
     ''' </summary>
@@ -642,7 +692,7 @@ Public Module ModBase
     ''' 在文件不存在或读取失败时返回 Nothing。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
-    Private Function IniGetContent(FileName As String) As Dictionary(Of String, String)
+    Private Function IniGetContent(FileName As String) As SafeDictionary(Of String, String)
         Try
             '还原文件路径
             If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
@@ -650,7 +700,7 @@ Public Module ModBase
             If IniCache.ContainsKey(FileName) Then Return IniCache(FileName)
             '读取文件
             If Not File.Exists(FileName) Then Return Nothing
-            Dim Ini As New Dictionary(Of String, String)
+            Dim Ini As New SafeDictionary(Of String, String)
             For Each Line In ReadFile(FileName).Split(vbCrLf.ToArray(), StringSplitOptions.RemoveEmptyEntries)
                 Dim Index As Integer = Line.IndexOfF(":")
                 If Index > 0 Then Ini(Line.Substring(0, Index)) = Line.Substring(Index + 1) '可能会有重复键，见 #3616
@@ -674,7 +724,21 @@ Public Module ModBase
         Return Content(Key)
     End Function
     ''' <summary>
+    ''' 判断 ini 文件中是否包含某个键。这可能会使用到缓存。
+    ''' </summary>
+    Public Function HasIniKey(FileName As String, Key As String) As Boolean
+        Dim Content = IniGetContent(FileName)
+        Return Content IsNot Nothing AndAlso Content.ContainsKey(Key)
+    End Function
+    ''' <summary>
+    ''' 从 ini 文件中移除某个键。这会更新缓存。
+    ''' </summary>
+    Public Sub DeleteIniKey(FileName As String, Key As String)
+        WriteIni(FileName, Key, Nothing)
+    End Sub
+    ''' <summary>
     ''' 写入 ini 文件，这会更新缓存。
+    ''' 若 Value 为 Nothing，则删除该键。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
     ''' <param name="Key">键。</param>
@@ -683,28 +747,38 @@ Public Module ModBase
     Public Sub WriteIni(FileName As String, Key As String, Value As String)
         Try
             '预处理
-            Key = Key.Replace(vbCr, "").Replace(vbLf, "").Replace(":", "")
-            Value = Value.Replace(vbCr, "").Replace(vbLf, "") '允许 Value 中包含冒号
-            '获取目前文件
-            Dim Content As Dictionary(Of String, String) = IniGetContent(FileName)
-            If Content Is Nothing Then Content = New Dictionary(Of String, String)
-            If Content.ContainsKey(Key) AndAlso Content(Key) = Value Then Exit Sub '如果值一样就不处理
-            '更新缓存
-            Content(Key) = Value
-            '写入文件
-            Dim FileContent As New StringBuilder
-            For Each Pair In Content
-                FileContent.Append(Pair.Key)
-                FileContent.Append(":")
-                FileContent.Append(Pair.Value)
-                FileContent.Append(vbCrLf)
-            Next
-            If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
-            WriteFile(FileName, FileContent.ToString)
+            If Key.Contains(":") Then Throw New Exception($"尝试写入 ini 文件 {FileName} 的键名中包含了冒号：{Key}")
+            Key = Key.Replace(vbCr, "").Replace(vbLf, "")
+            Value = Value?.Replace(vbCr, "").Replace(vbLf, "")
+            '防止争用
+            SyncLock WriteIniLock
+                '获取目前文件
+                Dim Content As SafeDictionary(Of String, String) = IniGetContent(FileName)
+                If Content Is Nothing Then Content = New SafeDictionary(Of String, String)
+                '更新值
+                If Value Is Nothing Then
+                    If Not Content.ContainsKey(Key) Then Return '无需处理
+                    Content.Remove(Key)
+                Else
+                    If Content.ContainsKey(Key) AndAlso Content(Key) = Value Then Return '无需处理
+                    Content(Key) = Value
+                End If
+                '写入文件
+                Dim FileContent As New StringBuilder
+                For Each Pair In Content
+                    FileContent.Append(Pair.Key)
+                    FileContent.Append(":")
+                    FileContent.Append(Pair.Value)
+                    FileContent.Append(vbCrLf)
+                Next
+                If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
+                WriteFile(FileName, FileContent.ToString)
+            End SyncLock
         Catch ex As Exception
             Log(ex, $"写入文件失败（{FileName} → {Key}:{Value}）", LogLevel.Hint)
         End Try
     End Sub
+    Private WriteIniLock As New Object
 
     '路径处理
     ''' <summary>
@@ -833,21 +907,21 @@ Public Module ModBase
     ''' <param name="Text">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
     Public Sub WriteFile(FilePath As String, Text As String, Optional Append As Boolean = False, Optional Encoding As Encoding = Nothing)
-        '还原文件路径
+        '处理相对路径
         If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
         '确保目录存在
         Directory.CreateDirectory(GetPathFromFullPath(FilePath))
         '写入文件
-        If File.Exists(FilePath) Then
-            '如果文件存在，刷新目前文件
-            Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
+        If Append Then
+            '追加目前文件
+            Using writer As New StreamWriter(FilePath, True, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
                 writer.Write(Text)
                 writer.Flush()
                 writer.Close()
             End Using
         Else
-            '如果文件不存在，则新建并写入
-            File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
+            '直接写入字节
+            File.WriteAllBytes(FilePath, If(Encoding Is Nothing, New UTF8Encoding(False).GetBytes(Text), Encoding.GetBytes(Text)))
         End If
     End Sub
     ''' <summary>
@@ -858,7 +932,7 @@ Public Module ModBase
     ''' <param name="Content">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
     Public Sub WriteFile(FilePath As String, Content As Byte(), Optional Append As Boolean = False)
-        '还原文件路径
+        '处理相对路径
         If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
         '确保目录存在
         Directory.CreateDirectory(GetPathFromFullPath(FilePath))
@@ -957,17 +1031,17 @@ Public Module ModBase
     ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
     ''' <param name="Title">弹窗的标题。</param>
     ''' <param name="FileName">默认的文件名。</param>
-    Public Function SelectAs(Title As String, FileName As String, Optional FileFilter As String = Nothing, Optional DefaultDir As String = Nothing) As String
+    Public Function SelectSaveFile(Title As String, FileName As String, Optional FileFilter As String = Nothing, Optional InitialDirectory As String = Nothing) As String
         Using fileDialog As New Forms.SaveFileDialog
             fileDialog.AddExtension = True
             fileDialog.AutoUpgradeEnabled = True
             fileDialog.Title = Title
             fileDialog.FileName = FileName
             If FileFilter IsNot Nothing Then fileDialog.Filter = FileFilter
-            If DefaultDir IsNot Nothing Then fileDialog.InitialDirectory = DefaultDir
+            If Not String.IsNullOrEmpty(InitialDirectory) AndAlso Directory.Exists(InitialDirectory) Then fileDialog.InitialDirectory = InitialDirectory
             fileDialog.ShowDialog()
-            SelectAs = If(fileDialog.FileName.Contains(":\"), fileDialog.FileName, "")
-            Log("[UI] 选择文件返回：" & SelectAs)
+            SelectSaveFile = If(fileDialog.FileName.Contains(":\"), fileDialog.FileName, "")
+            Log("[UI] 选择文件返回：" & SelectSaveFile)
         End Using
     End Function
     ''' <summary>
@@ -975,7 +1049,7 @@ Public Module ModBase
     ''' </summary>
     ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
     ''' <param name="Title">弹窗的标题。</param>
-    Public Function SelectFile(FileFilter As String, Title As String) As String
+    Public Function SelectFile(FileFilter As String, Title As String, Optional InitialDirectory As String = Nothing) As String
         Using fileDialog As New Forms.OpenFileDialog
             fileDialog.AddExtension = True
             fileDialog.AutoUpgradeEnabled = True
@@ -984,6 +1058,7 @@ Public Module ModBase
             fileDialog.Multiselect = False
             fileDialog.Title = Title
             fileDialog.ValidateNames = True
+            If Not String.IsNullOrEmpty(InitialDirectory) AndAlso Directory.Exists(InitialDirectory) Then fileDialog.InitialDirectory = InitialDirectory
             fileDialog.ShowDialog()
             Log("[UI] 选择单个文件返回：" & fileDialog.FileName)
             Return fileDialog.FileName
@@ -1080,6 +1155,37 @@ Re:
         End Try
     End Function
     ''' <summary>
+    ''' 获取文件 SHA512，若失败则返回空字符串。
+    ''' </summary>
+    Public Function GetFileSHA512(FilePath As String) As String
+        Dim Retry As Boolean = False
+Re:
+        Try
+            ''检测该文件是否在下载中，若在下载则放弃检测
+            'If IgnoreOnDownloading AndAlso NetManage.Files.ContainsKey(FilePath) AndAlso NetManage.Files(FilePath).State <= NetState.Merge Then Return ""
+            '获取 SHA512
+            Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+            Dim sha512 As SHA512 = New SHA512CryptoServiceProvider()
+            Dim retval As Byte() = sha512.ComputeHash(file)
+            file.Close()
+            Dim Result As New StringBuilder()
+            For i As Integer = 0 To retval.Length - 1
+                Result.Append(retval(i).ToString("x2"))
+            Next
+            Return Result.ToString
+        Catch ex As Exception
+            If Retry OrElse TypeOf ex Is FileNotFoundException Then
+                Log(ex, "获取文件 SHA512 失败：" & FilePath)
+                Return ""
+            Else
+                Retry = True
+                Log(ex, "获取文件 SHA512 可重试失败：" & FilePath, LogLevel.Normal)
+                Thread.Sleep(RandomInteger(200, 500))
+                GoTo Re
+            End If
+        End Try
+    End Function
+    ''' <summary>
     ''' 获取文件 SHA256，若失败则返回空字符串。
     ''' </summary>
     Public Function GetFileSHA256(FilePath As String) As String
@@ -1090,8 +1196,8 @@ Re:
             'If IgnoreOnDownloading AndAlso NetManage.Files.ContainsKey(FilePath) AndAlso NetManage.Files(FilePath).State <= NetState.Merge Then Return ""
             '获取 SHA256
             Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-            Dim sha1 As SHA256 = New SHA256CryptoServiceProvider()
-            Dim retval As Byte() = sha1.ComputeHash(file)
+            Dim sha256 As SHA256 = New SHA256CryptoServiceProvider()
+            Dim retval As Byte() = sha256.ComputeHash(file)
             file.Close()
             Dim Result As New StringBuilder()
             For i As Integer = 0 To retval.Length - 1
@@ -1140,7 +1246,7 @@ Re:
         End Try
     End Function
     ''' <summary>
-    ''' 获取流 SHA1，若失败则返回空字符串。
+    ''' 获取流的 SHA1，若失败则返回空字符串。
     ''' </summary>
     Public Function GetAuthSHA1(Stream As Stream) As String
         Try
@@ -1195,8 +1301,14 @@ Re:
                 Dim Info As New FileInfo(LocalPath)
                 If Not Info.Exists Then Return "文件不存在：" & LocalPath
                 Dim FileSize As Long = Info.Length
-                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then Return "文件大小应为 " & ActualSize & " B，实际为 " & FileSize & " B"
-                If MinSize >= 0 AndAlso MinSize > FileSize Then Return "文件大小应大于 " & MinSize & " B，实际为 " & FileSize & " B"
+                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then
+                    Return $"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "")
+                End If
+                If MinSize >= 0 AndAlso MinSize > FileSize Then
+                    Return $"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "")
+                End If
                 If Not String.IsNullOrEmpty(Hash) Then
                     If Hash.Length < 35 Then 'MD5
                         If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath)
@@ -1212,7 +1324,7 @@ Re:
                     Try
                         GetJson(Content)
                     Catch ex As Exception
-                        Throw New Exception("不是有效的 json 文件", ex)
+                        Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
                 Return Nothing
@@ -1224,7 +1336,7 @@ Re:
     End Class
 
     ''' <summary>
-    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 jar 以 zip 方式解压。
+    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 Jar 以 zip 方式解压。
     ''' 会尝试创建，但不会清空目标文件夹。
     ''' </summary>
     Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing,
@@ -1332,10 +1444,21 @@ RetryDir:
     ''' 遍历文件夹中的所有文件。
     ''' </summary>
     Public Function EnumerateFiles(Directory As String) As IEnumerable(Of FileInfo)
-        Dim Info As New DirectoryInfo(Directory)
+        Dim Info As New DirectoryInfo(ShortenPath(Directory))
         If Not Info.Exists Then Return New List(Of FileInfo)
         Return Info.EnumerateFiles("*", SearchOption.AllDirectories)
     End Function
+
+    ''' <summary>
+    ''' 若路径长度大于指定值，则将长路径转换为短路径。
+    ''' </summary>
+    Public Function ShortenPath(LongPath As String, Optional ShortenThreshold As Integer = 247) As String
+        If LongPath.Length <= ShortenThreshold Then Return LongPath
+        Dim ShortPath As New StringBuilder(260)
+        GetShortPathName(LongPath, ShortPath, 260)
+        Return ShortPath.ToString
+    End Function
+    Private Declare Function GetShortPathName Lib "kernel32" Alias "GetShortPathNameA" (ByVal lpszLongPath As String, ByVal lpszShortPath As StringBuilder, ByVal cchBuffer As Integer) As Integer
 
 #End Region
 
@@ -1346,8 +1469,8 @@ RetryDir:
     ''' <summary>
     ''' 提取 Exception 的具体描述与堆栈。
     ''' </summary>
-    ''' <param name="ShowAllTrace">是否必须显示所有堆栈。通常用于判定堆栈信息。</param>
-    Public Function GetExceptionDetail(Ex As Exception, Optional ShowAllTrace As Boolean = False) As String
+    ''' <param name="ShowAllStacks">是否必须显示所有堆栈。通常用于判定堆栈信息。</param>
+    Public Function GetExceptionDetail(Ex As Exception, Optional ShowAllStacks As Boolean = False) As String
         If Ex Is Nothing Then Return "无可用错误信息！"
 
         '获取最底层的异常
@@ -1358,24 +1481,25 @@ RetryDir:
 
         '获取各级错误的描述与堆栈信息
         Dim DescList As New List(Of String)
-        Dim StackList As New List(Of String)
+        Dim IsInner As Boolean = False
         Do Until Ex Is Nothing
-            DescList.Add(Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, vbCrLf))
+            DescList.Add(If(IsInner, "→ ", "") & Ex.Message.Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, vbCrLf))
             If Ex.StackTrace IsNot Nothing Then
-                For Each St As String In Ex.StackTrace.Split(vbCrLf)
-                    If ShowAllTrace OrElse St.ToLower.Contains("pcl") Then StackList.Add(St.Replace(vbCr, String.Empty).Replace(vbLf, String.Empty))
+                For Each Stack As String In Ex.StackTrace.Split(vbCrLf.ToCharArray, StringSplitOptions.RemoveEmptyEntries)
+                    If ShowAllStacks OrElse Stack.ContainsF("pcl", True) Then
+                        DescList.Add(Stack.Replace(vbCr, String.Empty).Replace(vbLf, String.Empty))
+                    End If
                 Next
             End If
+            If Ex.GetType.FullName <> "System.Exception" Then DescList.Add("   错误类型：" & Ex.GetType.FullName)
             Ex = Ex.InnerException
+            IsInner = True
         Loop
-        DescList = DescList.Distinct.ToList
-        Dim Desc As String = Join(DescList, vbCrLf & "→ ")
-        Dim Stack As String = If(StackList.Any, vbCrLf & Join(StackList, vbCrLf), "")
 
         '常见错误（记得同时修改下面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.8 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
@@ -1383,20 +1507,17 @@ RetryDir:
         ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
             CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
-                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) DescList.Any(Function(l) l.Contains(s))) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is PlatformNotSupportedException Then
+            CommonReason = "你当前的 Windows 版本过低，无法运行当前版本的 PCL。请升级到 Windows 10 或更高版本后再试。"
         End If
-
-        '获取错误类型
-        Dim TypeDesc As String = If(InnerEx.GetType.FullName = "System.Exception", "", vbCrLf & "错误类型：" & InnerEx.GetType.FullName)
 
         '构造输出信息
         If CommonReason Is Nothing Then
-            Return Desc & Stack & TypeDesc
+            Return DescList.Join(vbCrLf)
         Else
-            Dim Result As String = CommonReason & vbCrLf & DescList.First & vbCrLf & "————————————" & vbCrLf
-            DescList(0) = "详细错误信息："
-            Return Result & Join(DescList, vbCrLf & "→ ") & Stack & TypeDesc
+            Return CommonReason & vbCrLf & vbCrLf & "————————————" & vbCrLf & "详细错误信息：" & vbCrLf & DescList.Join(vbCrLf)
         End If
     End Function
     ''' <summary>
@@ -1423,7 +1544,7 @@ RetryDir:
         '常见错误（记得同时修改上面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.8 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
@@ -1433,6 +1554,8 @@ RetryDir:
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is PlatformNotSupportedException Then
+            CommonReason = "你当前的 Windows 版本过低，无法运行当前版本的 PCL。请升级到 Windows 10 或更高版本后再试。"
         End If
 
         '构造输出信息
@@ -1440,7 +1563,7 @@ RetryDir:
             Return CommonReason & "详细错误：" & DescList.First
         Else
             DescList.Reverse() '让最深层错误在最左边
-            Return Join(DescList, " → ")
+            Return Join(DescList, " ← ")
         End If
     End Function
 
@@ -1718,12 +1841,27 @@ RetryDir:
             Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").
             Replace("""", "&quot;").Replace(vbCrLf, "&#xa;")
     End Function
+    ''' <summary>
+    ''' 为字符串进行 Like 关键字转义。
+    ''' </summary>
+    Public Function EscapeLikePattern(input As String) As String
+        Dim sb As New StringBuilder()
+        For Each c As Char In input
+            Select Case c
+                Case "["c, "]"c, "*"c, "?"c, "#"c
+                    sb.Append("["c).Append(c).Append("]"c)
+                Case Else
+                    sb.Append(c)
+            End Select
+        Next
+        Return sb.ToString()
+    End Function
 
     '正则
     ''' <summary>
     ''' 搜索字符串中的所有正则匹配项。
     ''' </summary>
-    Public Function RegexSearch(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As List(Of String)
+    <Extension> Public Function RegexSearch(str As String, regex As String, Optional options As RegexOptions = RegexOptions.None) As List(Of String)
         Try
             RegexSearch = New List(Of String)
             Dim RegexSearchRes = New Regex(regex, options).Matches(str)
@@ -1739,7 +1877,7 @@ RetryDir:
     ''' <summary>
     ''' 获取字符串中的第一个正则匹配项，若无匹配则返回 Nothing。
     ''' </summary>
-    Public Function RegexSeek(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
+    <Extension> Public Function RegexSeek(str As String, regex As String, Optional options As RegexOptions = RegexOptions.None) As String
         Try
             Dim Result = RegularExpressions.Regex.Match(str, regex, options).Value
             Return If(Result = "", Nothing, Result)
@@ -1751,7 +1889,7 @@ RetryDir:
     ''' <summary>
     ''' 检查字符串是否匹配某正则模式。
     ''' </summary>
-    Public Function RegexCheck(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As Boolean
+    <Extension> Public Function RegexCheck(str As String, regex As String, Optional options As RegexOptions = RegexOptions.None) As Boolean
         Try
             Return RegularExpressions.Regex.IsMatch(str, regex, options)
         Catch ex As Exception
@@ -1762,14 +1900,14 @@ RetryDir:
     ''' <summary>
     ''' 进行正则替换，会抛出错误。
     ''' </summary>
-    Public Function RegexReplace(Input As String, Replacement As String, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
-        Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
+    <Extension> Public Function RegexReplace(AllContents As String, SearchRegex As String, ReplaceTo As String, Optional options As RegexOptions = RegexOptions.None) As String
+        Return Regex.Replace(AllContents, SearchRegex, ReplaceTo, options)
     End Function
     ''' <summary>
     ''' 对每个正则匹配分别进行替换，会抛出错误。
     ''' </summary>
-    Public Function RegexReplaceEach(Input As String, Replacement As MatchEvaluator, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
-        Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
+    <Extension> Public Function RegexReplaceEach(AllContents As String, SearchRegex As String, ReplaceTo As MatchEvaluator, Optional options As RegexOptions = RegexOptions.None) As String
+        Return Regex.Replace(AllContents, SearchRegex, ReplaceTo, options)
     End Function
 
 #End Region
@@ -1868,7 +2006,7 @@ RetryDir:
                 Function(Source) Source.Key.Replace(" ", "").ContainsF(QueryPart, True)))
         Next
         '按照相似度进行排序
-        Entries = Sort(Entries,
+        Entries = Entries.Sort(
         Function(Left, Right) As Boolean
             If Left.AbsoluteRight Xor Right.AbsoluteRight Then
                 Return Left.AbsoluteRight
@@ -1924,6 +2062,122 @@ RetryDir:
             SyncLock SyncRoot
                 Return Items.ToList.GetEnumerator()
             End SyncLock
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' 线程安全的，可以直接使用 For Each 的字典。
+    ''' 在使用 For Each 循环时，字典的结果可能并非最新，但不会抛出异常。
+    ''' </summary>
+    Public Class SafeDictionary(Of TKey, TValue)
+        Implements IDictionary(Of TKey, TValue)
+        Implements IEnumerable(Of KeyValuePair(Of TKey, TValue))
+
+        Private ReadOnly SyncRoot As New Object
+        Private ReadOnly _Dictionary As New Dictionary(Of TKey, TValue)
+
+        '构造函数
+        Public Sub New()
+        End Sub
+        Public Sub New(data As IEnumerable(Of KeyValuePair(Of TKey, TValue)))
+            For Each DataItem In data
+                _Dictionary.Add(DataItem.Key, DataItem.Value)
+            Next
+        End Sub
+
+        '线程安全的方法实现
+        Public Sub Add(key As TKey, value As TValue) Implements IDictionary(Of TKey, TValue).Add
+            SyncLock SyncRoot
+                _Dictionary.Add(key, value)
+            End SyncLock
+        End Sub
+        Public Function ContainsKey(key As TKey) As Boolean Implements IDictionary(Of TKey, TValue).ContainsKey
+            SyncLock SyncRoot
+                Return _Dictionary.ContainsKey(key)
+            End SyncLock
+        End Function
+        Public ReadOnly Property Keys As ICollection(Of TKey) Implements IDictionary(Of TKey, TValue).Keys
+            Get
+                SyncLock SyncRoot
+                    Return New List(Of TKey)(_Dictionary.Keys)
+                End SyncLock
+            End Get
+        End Property
+        Public Function Remove(key As TKey) As Boolean Implements IDictionary(Of TKey, TValue).Remove
+            SyncLock SyncRoot
+                Return _Dictionary.Remove(key)
+            End SyncLock
+        End Function
+        Public Function TryGetValue(key As TKey, ByRef value As TValue) As Boolean Implements IDictionary(Of TKey, TValue).TryGetValue
+            SyncLock SyncRoot
+                Return _Dictionary.TryGetValue(key, value)
+            End SyncLock
+        End Function
+        Public ReadOnly Property Values As ICollection(Of TValue) Implements IDictionary(Of TKey, TValue).Values
+            Get
+                SyncLock SyncRoot
+                    Return New List(Of TValue)(_Dictionary.Values)
+                End SyncLock
+            End Get
+        End Property
+        Default Public Property Item(key As TKey) As TValue Implements IDictionary(Of TKey, TValue).Item
+            Get
+                SyncLock SyncRoot
+                    Return _Dictionary(key)
+                End SyncLock
+            End Get
+            Set(value As TValue)
+                SyncLock SyncRoot
+                    _Dictionary(key) = value
+                End SyncLock
+            End Set
+        End Property
+        Public Sub Add(item As KeyValuePair(Of TKey, TValue)) Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Add
+            SyncLock SyncRoot
+                _Dictionary.Add(item.Key, item.Value)
+            End SyncLock
+        End Sub
+        Public Sub Clear() Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Clear
+            SyncLock SyncRoot
+                _Dictionary.Clear()
+            End SyncLock
+        End Sub
+        Public Function Contains(item As KeyValuePair(Of TKey, TValue)) As Boolean Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Contains
+            SyncLock SyncRoot
+                Return DirectCast(_Dictionary, IDictionary(Of TKey, TValue)).Contains(item)
+            End SyncLock
+        End Function
+        Public Sub CopyTo(array() As KeyValuePair(Of TKey, TValue), arrayIndex As Integer) Implements ICollection(Of KeyValuePair(Of TKey, TValue)).CopyTo
+            SyncLock SyncRoot
+                DirectCast(_Dictionary, IDictionary(Of TKey, TValue)).CopyTo(array, arrayIndex)
+            End SyncLock
+        End Sub
+        Public ReadOnly Property Count As Integer Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Count
+            Get
+                SyncLock SyncRoot
+                    Return _Dictionary.Count
+                End SyncLock
+            End Get
+        End Property
+        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of KeyValuePair(Of TKey, TValue)).IsReadOnly
+            Get
+                Return False
+            End Get
+        End Property
+        Public Function Remove(item As KeyValuePair(Of TKey, TValue)) As Boolean Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Remove
+            SyncLock SyncRoot
+                Return DirectCast(_Dictionary, IDictionary(Of TKey, TValue)).Remove(item)
+            End SyncLock
+        End Function
+
+        '枚举器
+        Public Function GetEnumerator() As IEnumerator(Of KeyValuePair(Of TKey, TValue)) Implements IEnumerable(Of KeyValuePair(Of TKey, TValue)).GetEnumerator
+            SyncLock SyncRoot
+                Return New List(Of KeyValuePair(Of TKey, TValue))(_Dictionary).GetEnumerator()
+            End SyncLock
+        End Function
+        Private Function GetEnumeratorGeneral() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return GetEnumerator()
         End Function
     End Class
 
@@ -2010,7 +2264,7 @@ RetryDir:
     ''' <summary>
     ''' 数组去重。
     ''' </summary>
-    <Extension> Public Function Distinct(Of T)(Arr As ICollection(Of T), IsEqual As CompareThreadStart(Of T)) As List(Of T)
+    <Extension> Public Function Distinct(Of T)(Arr As ICollection(Of T), IsEqual As ComparisonBoolean(Of T)) As List(Of T)
         Dim ResultArray As New List(Of T)
         For i = 0 To Arr.Count - 1
             For ii = i + 1 To Arr.Count - 1
@@ -2130,6 +2384,7 @@ NextElement:
     ''' <param name="FileName">文件名。可以为“notepad”等缩写。</param>
     ''' <param name="Arguments">运行参数。</param>
     Public Sub ShellOnly(FileName As String, Optional Arguments As String = "")
+        FileName = ShortenPath(FileName)
         Using Program As New Process
             Program.StartInfo.Arguments = Arguments
             Program.StartInfo.FileName = FileName
@@ -2143,7 +2398,7 @@ NextElement:
     ''' <param name="FileName">文件名。可以为“notepad”等缩写。</param>
     ''' <param name="Arguments">运行参数。</param>
     ''' <param name="Timeout">等待该程序结束的最长时间（毫秒）。超时会返回 Result.Timeout。</param>
-    Public Function ShellAndGetExitCode(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000) As Result
+    Public Function ShellAndGetExitCode(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000) As ProcessReturnValues
         Try
             Using Program As New Process
                 Program.StartInfo.Arguments = Arguments
@@ -2153,12 +2408,12 @@ NextElement:
                 If Program.WaitForExit(Timeout) Then
                     Return Program.ExitCode
                 Else
-                    Return Result.Timeout
+                    Return ProcessReturnValues.Timeout
                 End If
             End Using
         Catch ex As Exception
             Log(ex, "执行命令失败：" & FileName, LogLevel.Msgbox)
-            Return Result.Fail
+            Return ProcessReturnValues.Fail
         End Try
     End Function
     ''' <summary>
@@ -2169,28 +2424,41 @@ NextElement:
     ''' <param name="Timeout">等待该程序结束的最长时间（毫秒）。超时会抛出错误。</param>
     Public Function ShellAndGetOutput(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000, Optional WorkingDirectory As String = Nothing) As String
         Dim Info = New ProcessStartInfo With {
-            .Arguments = Arguments,
-            .FileName = FileName,
-            .UseShellExecute = False,
-            .CreateNoWindow = True,
-            .RedirectStandardError = True,
-            .RedirectStandardOutput = True,
-            .WorkingDirectory = If(WorkingDirectory, Path.TrimEnd("\"c))
+        .FileName = FileName,
+        .Arguments = Arguments,
+        .UseShellExecute = False,
+        .CreateNoWindow = True,
+        .RedirectStandardOutput = True,
+        .RedirectStandardError = True
         }
-        If WorkingDirectory IsNot Nothing Then
-            If Info.EnvironmentVariables.ContainsKey("appdata") Then
-                Info.EnvironmentVariables("appdata") = WorkingDirectory
-            Else
-                Info.EnvironmentVariables.Add("appdata", WorkingDirectory)
-            End If
+
+        ' 设置工作目录（如果提供）
+        If Not String.IsNullOrEmpty(WorkingDirectory) Then
+            Info.WorkingDirectory = WorkingDirectory.TrimEnd("\")
         End If
+
         Log("[System] 执行外部命令并等待返回结果：" & FileName & " " & Arguments)
+
         Using Program As New Process() With {.StartInfo = Info}
             Program.Start()
-            Dim Result As String = Program.StandardOutput.ReadToEnd & Program.StandardError.ReadToEnd
-            Program.WaitForExit(Timeout)
-            If Not Program.HasExited Then Program.Kill()
-            Return Result
+
+            ' 异步读取输出和错误流
+            Dim outputTask = Program.StandardOutput.ReadToEndAsync()
+            Dim errorTask = Program.StandardError.ReadToEndAsync()
+
+            ' 等待进程退出或超时
+            If Program.WaitForExit(Timeout) Then
+                ' 确保异步读取完成
+                Task.WaitAll(outputTask, errorTask)
+            Else
+                ' 超时后终止进程
+                Program.Kill()
+                ' 仍然尝试获取已输出的内容
+                Task.WaitAll(outputTask, errorTask)
+            End If
+
+            ' 合并结果并返回
+            Return outputTask.Result & errorTask.Result
         End Using
     End Function
 
@@ -2260,22 +2528,69 @@ NextElement:
     End Sub
 
     ''' <summary>
-    ''' 按照既定的函数进行选择排序。
+    ''' 使用优化的归并排序算法进行稳定排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
-        Dim NewList As New List(Of T)
-        While List.Any
-            Dim Highest = List(0)
-            For i = 1 To List.Count - 1
-                If SortRule(List(i), Highest) Then Highest = List(i)
-            Next
-            List.Remove(Highest)
-            NewList.Add(Highest)
-        End While
-        Return NewList
+    <Extension>
+    Public Function Sort(Of T)(List As IList(Of T), SortRule As ComparisonBoolean(Of T)) As List(Of T)
+        ' 创建原列表的副本以避免修改原始列表
+        Dim tempList As New List(Of T)(List)
+        If tempList.Count <= 1 Then Return tempList
+
+        ' 使用归并排序核心算法
+        MergeSort_Sort(tempList, 0, tempList.Count - 1, SortRule)
+        Return tempList
     End Function
-    Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
+
+    Private Sub MergeSort_Sort(Of T)(ByRef array As List(Of T), left As Integer, right As Integer, comparator As ComparisonBoolean(Of T))
+        If left >= right Then Return
+
+        Dim mid As Integer = (left + right) \ 2
+        MergeSort_Sort(array, left, mid, comparator)
+        MergeSort_Sort(array, mid + 1, right, comparator)
+        MergeSort_Merge(array, left, mid, right, comparator)
+    End Sub
+
+    Private Sub MergeSort_Merge(Of T)(ByRef array As List(Of T), left As Integer, mid As Integer, right As Integer, comparator As ComparisonBoolean(Of T))
+        Dim leftArray As New List(Of T)
+        Dim rightArray As New List(Of T)
+
+        For i As Integer = left To mid
+            leftArray.Add(array(i))
+        Next
+
+        For j As Integer = mid + 1 To right
+            rightArray.Add(array(j))
+        Next
+
+        Dim leftPtr = 0, rightPtr = 0, current = left
+
+        While leftPtr < leftArray.Count AndAlso rightPtr < rightArray.Count
+            ' 保持稳定性的关键比较逻辑：当相等时优先取左数组元素
+            If comparator(leftArray(leftPtr), rightArray(rightPtr)) Then
+                array(current) = leftArray(leftPtr)
+                leftPtr += 1
+            Else
+                array(current) = rightArray(rightPtr)
+                rightPtr += 1
+            End If
+            current += 1
+        End While
+
+        While leftPtr < leftArray.Count
+            array(current) = leftArray(leftPtr)
+            leftPtr += 1
+            current += 1
+        End While
+
+        While rightPtr < rightArray.Count
+            array(current) = rightArray(rightPtr)
+            rightPtr += 1
+            current += 1
+        End While
+    End Sub
+
+    Public Delegate Function ComparisonBoolean(Of T)(Left As T, Right As T) As Boolean
 
     ''' <summary>
     ''' 返回列表的浅表副本。
@@ -2283,6 +2598,27 @@ NextElement:
     <Extension> Public Function Clone(Of T)(list As IList(Of T)) As IList(Of T)
         Return New List(Of T)(list)
     End Function
+
+    ''' <summary>
+    ''' 尝试从字典中获取某项，如果该项不存在，则返回默认值。
+    ''' </summary>
+    <Extension> Public Function GetOrDefault(Of TKey, TValue)(Dict As Dictionary(Of TKey, TValue), Key As TKey, Optional DefaultValue As TValue = Nothing) As TValue
+        If Dict.ContainsKey(Key) Then
+            Return Dict(Key)
+        Else
+            Return DefaultValue
+        End If
+    End Function
+    ''' <summary>
+    ''' 将某项添加到以列表作为值的字典中。
+    ''' </summary>
+    <Extension> Public Sub AddToList(Of TKey, TValue)(Dict As Dictionary(Of TKey, List(Of TValue)), Key As TKey, Value As TValue)
+        If Dict.ContainsKey(Key) Then
+            Dict(Key).Add(Value)
+        Else
+            Dict.Add(Key, New List(Of TValue) From {Value})
+        End If
+    End Sub
 
     ''' <summary>
     ''' 获取程序启动参数。
@@ -2333,11 +2669,18 @@ NextElement:
         End Try
     End Sub
     ''' <summary>
-    ''' 打开 explorer。注意参数中的路径要尽量加上双引号！
+    ''' 打开 explorer。
+    ''' 若不以 \ 结尾，则将视作文件路径，打开并选中此文件。
     ''' </summary>
-    Public Sub OpenExplorer(Argument As String)
+    Public Sub OpenExplorer(Location As String)
         Try
-            ShellOnly("explorer.exe", Argument)
+            Location = ShortenPath(Location.Replace("/", "\").Trim(" "c, """"c))
+            Log("[System] 正在打开资源管理器：" & Location)
+            If Location.EndsWith("\") Then
+                ShellOnly(Location)
+            Else
+                ShellOnly("explorer", $"/select,""{Location}""")
+            End If
         Catch ex As Exception
             Log(ex, "打开资源管理器失败，请尝试关闭安全软件（如 360 安全卫士）", LogLevel.Msgbox)
         End Try
@@ -2371,6 +2714,60 @@ Retry:
     End Sub
 
     ''' <summary>
+    ''' 从剪切板粘贴文件或文件夹
+    ''' </summary>
+    ''' <param name="dest">目标文件夹</param>
+    ''' <param name="copyFile">是否粘贴文件</param>
+    ''' <param name="copyDir">是否粘贴文件夹</param>
+    ''' <returns>总共粘贴的数量</returns>
+    Public Function PasteFileFromClipboard(dest As String, Optional copyFile As Boolean = True, Optional copyDir As Boolean = True) As Integer
+        Log("[System] 从剪贴板粘贴文件到：" & dest)
+        Try
+            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
+            If files.Count.Equals(0) Then
+                Log("[System] 剪贴板内无文件可粘贴")
+                Return 0
+            End If
+            Dim CopiedFiles = 0
+            Dim CopiedFolders = 0
+            For Each i In files
+                If copyFile AndAlso File.Exists(i) Then '文件
+                    Try
+                        Dim thisDest = dest & GetFileNameFromPath(i)
+                        If File.Exists(thisDest) Then
+                            Log("[System] 已存在同名文件：" & thisDest)
+                        Else
+                            File.Copy(i, thisDest)
+                            CopiedFiles += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[System] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+                If copyDir AndAlso Directory.Exists(i) Then '文件夹
+                    Try
+                        Dim thisDest = dest & GetFolderNameFromPath(i)
+                        If Directory.Exists(thisDest) Then
+                            Log("[System] 已存在同名文件夹：" & thisDest)
+                        Else
+                            CopyDirectory(i, thisDest)
+                            CopiedFolders += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[System] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+            Next
+            Hint("[System] 已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
+        Catch ex As Exception
+            Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
+        End Try
+        Return 0
+    End Function
+
+    ''' <summary>
     ''' 以 Byte() 形式获取程序中的资源。
     ''' </summary>
     Public Function GetResources(ResourceName As String) As Byte()
@@ -2382,6 +2779,20 @@ Retry:
 #End Region
 
 #Region "UI"
+
+    Public Sub SetLaunchFont(Optional FontName As String = Nothing)
+        Try
+            Dim TargetFont As FontFamily
+            If FontName Is Nothing Then
+                TargetFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
+            Else
+                TargetFont = New FontFamily($"{FontName}, Segoe UI, Microsoft YaHei UI")
+            End If
+            Application.Current.Resources("LaunchFontFamily") = TargetFont
+        Catch ex As Exception
+            Log(ex, "设置字体失败", LogLevel.Hint)
+        End Try
+    End Sub
 
     '边距改变
     ''' <summary>
@@ -2554,6 +2965,28 @@ Retry:
         Return Control.DesiredSize.Width > Control.ActualWidth
     End Function
 
+    ''' <summary>
+    ''' 获取系统是否是深色模式。
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function IsSystemInDarkMode() As Boolean
+        Dim RegistryKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
+        If RegistryKey Is Nothing Then Return False
+        Dim Value As Object = RegistryKey.GetValue("AppsUseLightTheme")
+        Return Value IsNot Nothing AndAlso Value.ToString = "0"
+    End Function
+
+    ''' <summary>
+    ''' 获取文本在被渲染后的宽度。
+    ''' </summary>
+    Public Function MeasureStringWidth(text As String, Optional fontSize As Double = 14, Optional fontFamily As FontFamily = Nothing) As Double
+        If fontFamily Is Nothing Then fontFamily = New FontFamily("微软雅黑")
+        Dim formattedText = New FormattedText(
+            text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, New Typeface(fontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
+            fontSize, Brushes.Black, New NumberSubstitution(), TextFormattingMode.Display, New DpiScale(1, 1).PixelsPerDip)
+        Return formattedText.Width
+    End Function
+
 #End Region
 
 #Region "Debug"
@@ -2599,12 +3032,12 @@ Retry:
             Dim IsInitSuccess As Boolean = True
             Try
                 For i = 4 To 1 Step -1
-                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
-                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                    If File.Exists(Path & "PCL\Log-CE" & i & ".log") Then
+                        If File.Exists(Path & "PCL\Log-CE" & (i + 1) & ".log") Then File.Delete(Path & "PCL\Log-CE" & (i + 1) & ".log")
+                        CopyFile(Path & "PCL\Log-CE" & i & ".log", Path & "PCL\Log-CE" & (i + 1) & ".log")
                     End If
                 Next
-                File.Create(Path & "PCL\Log1.txt").Dispose()
+                File.Create(Path & "PCL\Log-CE1.log").Dispose()
             Catch ex As IOException
                 IsInitSuccess = False
                 Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
@@ -2614,7 +3047,7 @@ Retry:
                 Log(ex, "日志初始化失败", LogLevel.Hint)
             End Try
             Try
-                LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
+                LogWritter = New StreamWriter(Path & "PCL\Log-CE1.log", True) With {.AutoFlush = True}
             Catch ex As Exception
                 LogWritter = Nothing
                 Log(ex, "日志写入失败", LogLevel.Hint)
@@ -2672,7 +3105,7 @@ Retry:
         If IsProgramEnded OrElse Level = LogLevel.Normal Then Exit Sub
 
         '去除前缀
-        Text = RegexReplace(Text, "", "\[[^\]]+?\] ")
+        Text = Text.RegexReplace("\[[^\]]+?\] ", "")
 
         '输出提示
         Select Case Level
@@ -2706,9 +3139,9 @@ Retry:
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
                     Log("[System] PCL 已崩溃：" & vbCrLf & Text)
-                    FormMain.EndProgramForce(Result.Exception)
+                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
                 Else
-                    FormMain.EndProgramForce(Result.Fail)
+                    FormMain.EndProgramForce(ProcessReturnValues.Fail)
                 End If
         End Select
 
@@ -2775,25 +3208,31 @@ Retry:
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
                     Log("[System] PCL 已崩溃：" & vbCrLf & ExFull)
-                    FormMain.EndProgramForce(Result.Exception)
+                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
                 Else
-                    FormMain.EndProgramForce(Result.Fail)
+                    FormMain.EndProgramForce(ProcessReturnValues.Fail)
                 End If
         End Select
 
     End Sub
+    Public Function Base64Decode(Text As String) As String
 
+        Dim decodedBytes As Byte() = Convert.FromBase64String(Text)
+        Return System.Text.Encoding.UTF8.GetString(decodedBytes)
+
+    End Function
     '反馈
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
         FeedbackInfo()
-        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
-            OpenExplorer("""" & Path & "PCL\""")
+        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log-CE(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
+            OpenExplorer(Path & "PCL\Log-CE1.txt")
         End If
-        OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+        OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
-        If False.Equals(PageSetupSystem.IsLauncherNewest) Then
+        Dim LatestVersion = GetCurrentUpdateChannelInfo()
+        If LatestVersion.code > VersionCode Then
             If ShowHint Then
                 If MyMsgBox($"你的 PCL 不是最新版，因此无法提交反馈。{vbCrLf}请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈", "更新", "取消") = 1 Then
                     UpdateCheckByButton()
@@ -2865,3 +3304,87 @@ Retry:
 #End Region
 
 End Module
+
+#Region "WPF"
+
+''' <summary>
+''' 对数据绑定进行加法运算，使用参数决定加数。
+''' </summary>
+Public Class AdditionConverter
+    Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return 0
+        Dim before As Double
+        If Not Double.TryParse(value.ToString(), before) Then Return 0
+        Dim scale As Double = 1
+        If parameter IsNot Nothing Then Double.TryParse(parameter.ToString(), scale)
+        Return before + scale
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return Binding.DoNothing
+        Dim before As Double
+        If Not Double.TryParse(value.ToString(), before) Then Return Binding.DoNothing
+        Dim scale As Double = 1
+        If parameter IsNot Nothing Then Double.TryParse(parameter.ToString(), scale)
+        If scale = 0 Then Return Binding.DoNothing
+        Return before - scale
+    End Function
+End Class
+
+''' <summary>
+''' 对数据绑定进行乘法运算，使用参数决定乘数。
+''' </summary>
+Public Class MultiplicationConverter
+    Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return 0
+        Dim before As Double
+        If Not Double.TryParse(value.ToString(), before) Then Return 0
+        Dim scale As Double = 1
+        If parameter IsNot Nothing Then Double.TryParse(parameter.ToString(), scale)
+        Return before * scale
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return Binding.DoNothing
+        Dim before As Double
+        If Not Double.TryParse(value.ToString(), before) Then Return Binding.DoNothing
+        Dim scale As Double = 1
+        If parameter IsNot Nothing Then Double.TryParse(parameter.ToString(), scale)
+        If scale = 0 Then Return Binding.DoNothing
+        Return before / scale
+    End Function
+End Class
+
+''' <summary>
+''' 将取反的 Boolean 绑定到 Visibility。
+''' </summary>
+Public Class InverseBooleanToVisibilityConverter
+    Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return Visibility.Visible
+        Dim boolValue As Boolean
+        Return If(Boolean.TryParse(value.ToString(), boolValue), If(boolValue, Visibility.Collapsed, Visibility.Visible), Visibility.Visible)
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return False
+        Return If(TypeOf value Is Visibility, value <> Visibility.Visible, False)
+    End Function
+End Class
+
+''' <summary>
+''' 将 Boolean 取反。
+''' </summary>
+Public Class InverseBooleanConverter
+    Implements IValueConverter
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
+        If value Is Nothing Then Return False
+        Dim boolValue As Boolean
+        Return If(Boolean.TryParse(value.ToString(), boolValue), Not boolValue, False)
+    End Function
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
+        If value Is Nothing Then Return False
+        Return If(Boolean.TryParse(value.ToString(), value), Not value, False)
+    End Function
+End Class
+
+#End Region

@@ -20,7 +20,7 @@
                     Hint("正在开启中，请稍候……")
                     OpenWebsite(Data(0))
 
-                Case "打开文件", "打开帮助"
+                Case "打开文件", "打开帮助", "执行命令"
                     RunInThread(
                     Sub()
                         Try
@@ -29,15 +29,25 @@
                             Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
                             Log($"[Control] 打开类自定义事件实际路径：{Location}，工作目录：{WorkingDir}")
                             '执行
-                            If Type = "打开文件" Then
+                            If Type = "打开帮助" Then
+                                PageOtherHelp.EnterHelpPage(Location)
+                            Else
+                                If Not Setup.Get("HintCustomCommand") Then
+                                    Select Case MyMsgBox(
+                                    "即将执行：" & Location & If(Data.Length >= 2, " " & Data(1), "") & vbCrLf &
+                                    "请在确认该操作没有安全隐患后继续。", "执行确认", "继续", "继续且今后不再要求确认", "取消")
+                                        Case 2
+                                            Setup.Set("HintCustomCommand", True)
+                                        Case 3
+                                            Exit Sub
+                                    End Select
+                                End If
                                 Dim Info As New ProcessStartInfo With {
                                     .Arguments = If(Data.Length >= 2, Data(1), ""),
                                     .FileName = Location,
-                                    .WorkingDirectory = WorkingDir
+                                    .WorkingDirectory = ShortenPath(WorkingDir)
                                 }
                                 Process.Start(Info)
-                            Else '打开帮助
-                                PageOtherHelp.EnterHelpPage(Location)
                             End If
                         Catch ex As Exception
                             Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
@@ -136,12 +146,11 @@
                                     " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
             End Try
             '下载文件
-            Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
-            Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
-            Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
+            Dim LocalTemp As String = RequestTaskTempFolder() & RawFileName
+            Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp)
             Try
-                NetDownload(RelativeUrl, LocalTemp1)
-                NetDownload(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))
+                NetDownloadByClient(RelativeUrl, LocalTemp)
+                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp.Replace(".json", ".xaml"))
             Catch ex As Exception
                 Throw New Exception("下载指定的文件失败！" & vbCrLf &
                                     "注意，联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &
@@ -149,13 +158,13 @@
                                     " - https://www.baidu.com/test.json（填写这个路径）" & vbCrLf &
                                     " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
             End Try
-            RelativeUrl = LocalTemp1
+            RelativeUrl = LocalTemp
         End If
         RelativeUrl = RelativeUrl.Replace("/", "\").ToLower.TrimStart("\")
 
         '确认实际路径
         Dim Location As String, WorkingDir As String = Path & "PCL"
-        HelpTryExtract()
+        HelpExtract()
         If RelativeUrl.Contains(":\") Then
             '绝对路径
             Location = RelativeUrl
@@ -174,7 +183,7 @@
             Location = PathTemp & "Help\" & RelativeUrl
             WorkingDir = PathTemp & "Help\"
             Log("[Control] 自定义事件中由相对 PCL 自带帮助文件夹的路径" & EventType & "：" & Location)
-        ElseIf EventType = "打开文件" Then
+        ElseIf EventType = "打开文件" OrElse EventType = "执行命令" Then
             '直接使用原有路径启动程序
             Location = RelativeUrl
             Log("[Control] 自定义事件中直接" & EventType & "：" & Location)

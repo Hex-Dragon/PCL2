@@ -1,14 +1,13 @@
-﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4499F2D2-18EF-4238-B1F0-7BD547AFF925}</ProjectGuid>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>WinExe</OutputType>
     <RootNamespace>PCL</RootNamespace>
     <AssemblyName>Plain Craft Launcher 2</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile>
@@ -82,7 +81,7 @@
     <ApplicationIcon>Images\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>CE7A815CD81401B559C8649A3EEA43B75ECB8FC5</ManifestCertificateThumbprint>
@@ -99,7 +98,7 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -110,7 +109,7 @@
     <DefineConstants>SNAPSHOT</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BETA|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -128,7 +127,7 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseUpdate|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
@@ -139,36 +138,122 @@
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>RELEASE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|ARM64'">
+    <OutputPath>bin\ARM64\Snapshot\</OutputPath>
+    <DefineConstants>SNAPSHOT</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|ARM64'">
+    <OutputPath>bin\ARM64\BETA\</OutputPath>
+    <DefineConstants>BETA</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|ARM64'">
+    <OutputPath>bin\ARM64\ReleaseUpdate\</OutputPath>
+    <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>RELEASE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|x64'">
+    <OutputPath>bin\x64\Snapshot\</OutputPath>
+    <DefineConstants>SNAPSHOT</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|x64'">
+    <OutputPath>bin\x64\BETA\</OutputPath>
+    <DefineConstants>BETA</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|x64'">
+    <OutputPath>bin\x64\ReleaseUpdate\</OutputPath>
+    <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Imazen.WebP, Version=10.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\Imazen.WebP.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NAudio, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\Ookii.Dialogs.Wpf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System" />
+    <Reference Include="mscorlib" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -186,21 +271,21 @@
     <Compile Include="Controls\MyComboBox.vb" />
     <Compile Include="Controls\MyComboBoxItem.vb" />
     <Compile Include="Controls\MyCard.vb" />
+    <Compile Include="Controls\MyExtraTextButton.xaml.vb">
+      <DependentUpon>MyExtraTextButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyImage.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
       <DependentUpon>MyIconTextButton.xaml</DependentUpon>
     </Compile>
-
-
-
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
-    <Compile Include="Modules\Minecraft\ModMod.vb" />
+    <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
-    <Compile Include="Modules\Minecraft\MyLocalModItem.xaml.vb">
-      <DependentUpon>MyLocalModItem.xaml</DependentUpon>
+    <Compile Include="Modules\Minecraft\MyLocalCompItem.xaml.vb">
+      <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
@@ -228,6 +313,7 @@
     <Compile Include="Controls\MyTextButton.vb" />
     <Compile Include="GlobalSuppressions.vb" />
     <Compile Include="Modules\Minecraft\ModCrash.vb" />
+    <Compile Include="Modules\ModLink.vb" />
     <Compile Include="Modules\ModMusic.vb" />
     <Compile Include="Modules\ModDevelop.vb" />
     <Compile Include="Modules\Minecraft\ModWatcher.vb" />
@@ -238,6 +324,18 @@
     <Compile Include="Pages\PageDownload\ModDownloadLib.vb" />
     <Compile Include="Modules\Minecraft\MyCompItem.xaml.vb">
       <DependentUpon>MyCompItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadCleanroom.xaml.vb">
+      <DependentUpon>PageDownloadCleanroom.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadResourcePack.xaml.vb">
+      <DependentUpon>PageDownloadResourcePack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
+      <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadCompFavorites.xaml.vb">
+      <DependentUpon>PageDownloadCompFavorites.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadMod.xaml.vb">
       <DependentUpon>PageDownloadMod.xaml</DependentUpon>
@@ -256,6 +354,9 @@
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadPack.xaml.vb">
       <DependentUpon>PageDownloadPack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadShader.xaml.vb">
+      <DependentUpon>PageDownloadShader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageLaunch\MyMsgLogin.xaml.vb">
       <DependentUpon>MyMsgLogin.xaml</DependentUpon>
@@ -278,26 +379,53 @@
     <Compile Include="Pages\PageLink\PageLinkFeedback.xaml.vb">
       <DependentUpon>PageLinkFeedback.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLink\PageLinkHiper.xaml.vb">
-      <DependentUpon>PageLinkHiper.xaml</DependentUpon>
+    <Compile Include="Pages\PageLink\PageLinkIoi.xaml.vb">
+      <DependentUpon>PageLinkIoi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLink\PageLinkNetStatus.xaml.vb">
+      <DependentUpon>PageLinkNetStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLink\PageLinkLobby.xaml.vb">
+      <DependentUpon>PageLinkLobby.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLogLeft.xaml.vb">
+      <DependentUpon>PageLogLeft.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageOther\PageOtherVote.xaml.vb">
+      <DependentUpon>PageOtherVote.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageOther\PageOtherHelpDetail.xaml.vb">
       <DependentUpon>PageOtherHelpDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLink\PageLinkIoi.xaml.vb">
-      <DependentUpon>PageLinkIoi.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageLink\PageLinkLeft.xaml.vb">
       <DependentUpon>PageLinkLeft.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
+      <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLogRight.xaml.vb">
+      <DependentUpon>PageLogRight.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionInstall.xaml.vb">
+      <DependentUpon>PageVersionInstall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionExport.xaml.vb">
+      <DependentUpon>PageVersionExport.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionMod.xaml.vb">
-      <DependentUpon>PageVersionMod.xaml</DependentUpon>
+    <Compile Include="Pages\PageVersion\PageVersionCompResource.xaml.vb">
+      <DependentUpon>PageVersionCompResource.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionModDisabled.xaml.vb">
       <DependentUpon>PageVersionModDisabled.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionWorld.xaml.vb">
+      <DependentUpon>PageVersionWorld.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionScreenshot.xaml.vb">
+      <DependentUpon>PageVersionScreenshot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionOverall.xaml.vb">
       <DependentUpon>PageVersionOverall.xaml</DependentUpon>
@@ -382,6 +510,10 @@
     <Compile Include="Pages\PageSpeedRight.xaml.vb">
       <DependentUpon>PageSpeedRight.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\MyExtraTextButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\MyExtraButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -479,12 +611,27 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-
-    <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
+    <Page Include="Modules\Minecraft\MyLocalCompItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Modules\Minecraft\MyCompItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadCleanroom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadResourcePack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadQuilt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadCompFavorites.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -511,6 +658,10 @@
     <Page Include="Pages\PageDownload\PageDownloadPack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadShader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageLaunch\MyMsgLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -545,7 +696,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\PageLink\PageLinkHiper.xaml">
+    <Page Include="Pages\PageLink\PageLinkIoi.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLink\PageLinkNetStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLink\PageLinkLobby.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLogLeft.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PageOther\PageOtherVote.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -553,13 +720,33 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageLink\PageLinkIoi.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\PageLink\PageLinkLeft.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLogRight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionInstall.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionWorld.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionScreenshot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageOther\PageOtherFeedback.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionExport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Language\en_US.xaml">
       <SubType>Designer</SubType>
@@ -665,7 +852,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageVersion\PageVersionMod.xaml">
+    <Page Include="Pages\PageVersion\PageVersionCompResource.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -689,6 +876,7 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.IO" />
     <Import Include="System.Linq" />
+    <Import Include="System.Net" />
     <Import Include="System.Text" />
     <Import Include="System.Threading" />
     <Import Include="System.Xml.Linq" />
@@ -737,13 +925,13 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.8.1 %28x86 和 x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -757,14 +945,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Font.ttf" />
-    <None Include="Resources\Help.zip" />
-    <None Include="Resources\NAudio.dll" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\LTCat.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\Anvil.png" />
@@ -807,16 +990,6 @@
     <Resource Include="Images\Themes\10.png" />
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="NAudio">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
     <PublishFile Include="Newtonsoft.Json">
       <Visible>False</Visible>
       <Group>
@@ -844,9 +1017,6 @@
     <Resource Include="Images\Themes\13.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Ookii.Dialogs.Wpf.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Themes\42.png" />
   </ItemGroup>
   <ItemGroup>
@@ -863,6 +1033,7 @@
     <Resource Include="Images\Heads\Logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Help.zip" />
     <None Include="Resources\transformer.jar" />
   </ItemGroup>
   <ItemGroup>
@@ -914,7 +1085,7 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-
+    <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
@@ -923,8 +1094,67 @@
     <Resource Include="Images\Heads\z0z0r4.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Imazen.WebP.dll" />
     <None Include="Resources\libwebp64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody">
+      <Version>6.0.0</Version>
+      <IncludeAssets>runtime; compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Fody">
+      <Version>6.9.2</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Imazen.WebP">
+      <Version>10.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts">
+      <Version>10.0.19041.2</Version>
+    </PackageReference>
+    <PackageReference Include="IPNetwork2">
+      <Version>3.1.743</Version>
+    </PackageReference>
+    <PackageReference Include="Makaretu.Nat">
+      <Version>0.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Win32.Registry">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="NAudio">
+      <Version>2.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Ookii.Dialogs.Wpf">
+      <Version>5.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Open.NAT">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="STUN">
+      <Version>0.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Security.AccessControl">
+      <Version>6.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="TagLibSharp">
+      <Version>2.3.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\Cleanroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\PCL-Community.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Logo-CE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Pysio.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

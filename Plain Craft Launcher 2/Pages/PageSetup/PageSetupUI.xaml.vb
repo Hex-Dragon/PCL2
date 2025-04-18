@@ -1,4 +1,4 @@
-﻿Public Class PageSetupUI
+Public Class PageSetupUI
 
     Public Shadows IsLoaded As Boolean = False
 
@@ -35,15 +35,14 @@
 
         SliderLoad()
 
-#If BETA Then
         PanLauncherHide.Visibility = Visibility.Visible
-#End If
 
         '设置解锁
-        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
-        RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
-        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
+
+        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
+        RadioLauncherTheme8.ToolTip = "社区版不包含主题功能，请使用官方快照版"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
+        RadioLauncherTheme9.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -59,6 +58,33 @@
             If Setup.Get("UiLauncherTheme") <= 14 Then CType(FindName("RadioLauncherTheme" & Setup.Get("UiLauncherTheme")), MyRadioBox).Checked = True
             CheckLauncherLogo.Checked = Setup.Get("UiLauncherLogo")
             CheckLauncherEmail.Checked = Setup.Get("UiLauncherEmail")
+            ComboDarkMode.SelectedIndex = Setup.Get("UiDarkMode")
+            ComboUiFont.Items.Clear()
+            ComboUiFont.Items.Add(New MyComboBoxItem With {
+                .Content = New TextBlock With {
+                                  .Text = "默认",
+                                  .FontFamily = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI"),
+                                  .IsHitTestVisible = False,
+                                  .HorizontalAlignment = HorizontalAlignment.Left
+                                  },
+                .Tag = ""
+            })
+            For Each Font In Fonts.SystemFontFamilies
+                ComboUiFont.Items.Add(New MyComboBoxItem With {
+                    .Content = New TextBlock With {
+                                      .Text = Font.Source,
+                                      .FontFamily = New FontFamily(Font.Source),
+                                      .IsHitTestVisible = False,
+                                      .HorizontalAlignment = HorizontalAlignment.Left
+                                      },
+                    .Tag = Font.Source
+                })
+            Next
+            If String.IsNullOrWhiteSpace(Setup.Get("UiFont")) Then
+                ComboUiFont.SelectedIndex = 0
+            Else
+                ComboUiFont.SelectedIndex = ComboUiFont.Items.IndexOf(ComboUiFont.Items.Cast(Of MyComboBoxItem).Where(Function(x) x.Tag = Setup.Get("UiFont")).FirstOrDefault)
+            End If
 
             '背景图片
             SliderBackgroundOpacity.Value = Setup.Get("UiBackgroundOpacity")
@@ -80,6 +106,7 @@
             CheckMusicAuto.Checked = Setup.Get("UiMusicAuto")
             CheckMusicStop.Checked = Setup.Get("UiMusicStop")
             CheckMusicStart.Checked = Setup.Get("UiMusicStart")
+            CheckMusicSMTC.Checked = Setup.Get("UiMusicSMTC")
             SliderMusicVolume.Value = Setup.Get("UiMusicVolume")
             MusicRefreshUI()
 
@@ -133,6 +160,8 @@
             Setup.Reset("UiBackgroundOpacity")
             Setup.Reset("UiBackgroundBlur")
             Setup.Reset("UiBackgroundSuit")
+            Setup.Reset("UiDarkMode")
+            Setup.Reset("UiFont")
             Setup.Reset("UiLogoType")
             Setup.Reset("UiLogoText")
             Setup.Reset("UiLogoLeft")
@@ -140,6 +169,7 @@
             Setup.Reset("UiMusicStop")
             Setup.Reset("UiMusicStart")
             Setup.Reset("UiMusicRandom")
+            Setup.Reset("UiMusicSMTC")
             Setup.Reset("UiMusicAuto")
             Setup.Reset("UiCustomType")
             Setup.Reset("UiCustomPreset")
@@ -174,10 +204,10 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderBackgroundOpacity.Change, SliderBackgroundBlur.Change, SliderLauncherOpacity.Change, SliderMusicVolume.Change, SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDarkMode.SelectionChanged, ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change, CheckMusicSMTC.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLogoText.ValidatedTextChanged, TextCustomNet.ValidatedTextChanged
@@ -187,9 +217,21 @@
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)))
     End Sub
 
+    Private Sub ComboFontChange(sender As MyComboBox, e As Object) Handles ComboUiFont.SelectionChanged
+        If AniControlEnabled = 0 Then
+            If sender.SelectedIndex = 0 Then
+                Setup.Set("UiFont", "")
+                SetLaunchFont()
+            Else
+                Setup.Set("UiFont", sender.SelectedItem.Tag)
+                SetLaunchFont(sender.SelectedItem.Tag)
+            End If
+        End If
+    End Sub
+
     '背景图片
     Private Sub BtnUIBgOpen_Click(sender As Object, e As EventArgs) Handles BtnBackgroundOpen.Click
-        OpenExplorer("""" & Path & "PCL\Pictures""")
+        OpenExplorer(Path & "PCL\Pictures\")
     End Sub
     Private Sub BtnBackgroundRefresh_Click(sender As Object, e As EventArgs) Handles BtnBackgroundRefresh.Click
         BackgroundRefresh(True, True)
@@ -335,7 +377,7 @@ Refresh:
     Private Sub BtnLogoDelete_Click(sender As Object, e As EventArgs) Handles BtnLogoDelete.Click
         Try
             File.Delete(Path & "PCL\Logo.png")
-            RadioLogoType1.SetChecked(True, True, True)
+            RadioLogoType1.SetChecked(True, True)
             Hint("标题栏图片已清空！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "清空标题栏图片失败", LogLevel.Msgbox)
@@ -344,7 +386,7 @@ Refresh:
 
     '背景音乐
     Private Sub BtnMusicOpen_Click(sender As Object, e As EventArgs) Handles BtnMusicOpen.Click
-        OpenExplorer("""" & Path & "PCL\Musics""")
+        OpenExplorer(Path & "PCL\Musics\")
     End Sub
     Private Sub BtnMusicRefresh_Click(sender As Object, e As EventArgs) Handles BtnMusicRefresh.Click
         MusicRefreshPlay(True)
@@ -377,6 +419,7 @@ Refresh:
                 '删除文件
                 Try
                     DeleteDirectory(Path & "PCL\Musics")
+                    DisableSMTCSupport()
                     Hint("背景音乐已删除！", HintType.Finish)
                 Catch ex As Exception
                     Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
@@ -407,7 +450,7 @@ Refresh:
             End If
             WriteFile(Path & "PCL\Custom.xaml", GetResources("Custom"))
             Hint("教学文件已生成！", HintType.Finish)
-            OpenExplorer("/select,""" & Path & "PCL\Custom.xaml""")
+            OpenExplorer(Path & "PCL\Custom.xaml")
         Catch ex As Exception
             Log(ex, "生成教学文件失败", LogLevel.Feedback)
         End Try
@@ -519,7 +562,7 @@ Refresh:
                 '顶部栏未被全部隐藏
                 FrmMain.PanTitleSelect.Visibility = Visibility.Visible
                 FrmMain.BtnTitleSelect1.Visibility = If(Not HiddenForceShow AndAlso Setup.Get("UiHiddenPageDownload"), Visibility.Collapsed, Visibility.Visible)
-                FrmMain.BtnTitleSelect2.Visibility = Visibility.Collapsed 'If(Not HiddenForceShow AndAlso Setup.Get("UiHiddenPageLink"), Visibility.Collapsed, Visibility.Visible)
+                FrmMain.BtnTitleSelect2.Visibility = If(Not VersionBranchName = "Debug", Visibility.Collapsed, Visibility.Visible) 'If(Not HiddenForceShow AndAlso Setup.Get("UiHiddenPageLink"), Visibility.Collapsed, Visibility.Visible)
                 FrmMain.BtnTitleSelect3.Visibility = If(Not HiddenForceShow AndAlso Setup.Get("UiHiddenPageSetup"), Visibility.Collapsed, Visibility.Visible)
                 FrmMain.BtnTitleSelect4.Visibility = If(Not HiddenForceShow AndAlso Setup.Get("UiHiddenPageOther"), Visibility.Collapsed, Visibility.Visible)
             End If

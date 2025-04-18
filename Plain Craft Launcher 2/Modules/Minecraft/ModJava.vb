@@ -33,6 +33,10 @@
         ''' 是否为用户手动导入的 Java。
         ''' </summary>
         Public IsUserImport As Boolean
+        ''' <summary>
+        ''' 是否使用此 Java
+        ''' </summary>
+        Public IsEnabled As Boolean = True
 
         '版本信息
         ''' <summary>
@@ -68,10 +72,19 @@
 
         '序列化
         Public Function ToJson() As JObject
-            Return New JObject({New JProperty("Path", PathFolder), New JProperty("VersionString", Version.ToString), New JProperty("IsJre", IsJre), New JProperty("Is64Bit", Is64Bit), New JProperty("IsUserImport", IsUserImport)})
+            Return New JObject({New JProperty("Path", PathFolder),
+                               New JProperty("VersionString", Version.ToString),
+                               New JProperty("IsJre", IsJre),
+                               New JProperty("Is64Bit", Is64Bit),
+                               New JProperty("IsUserImport", IsUserImport),
+                               New JProperty("IsEnabled", IsEnabled)})
         End Function
         Public Shared Function FromJson(Data As JObject) As JavaEntry
-            Return New JavaEntry(Data("Path"), Data("IsUserImport")) With {.Version = New Version(Data("VersionString")), .IsJre = Data("IsJre"), .Is64Bit = Data("Is64Bit")}
+            Return New JavaEntry(Data("Path"),
+                                 Data("IsUserImport")) With {.Version = New Version(Data("VersionString")),
+                                 .IsJre = Data("IsJre"),
+                                 .Is64Bit = Data("Is64Bit"),
+                                 .IsEnabled = If(Data("IsEnabled"), True)}
         End Function
         ''' <summary>
         ''' 转化为用户友好的字符串输出。
@@ -131,7 +144,7 @@
                     Version = New Version(1, Version.Major, Version.Build, Version.Revision)
                 End If
                 Is64Bit = Output.Contains("64-bit")
-                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New ApplicationException("分析详细信息失败，获取的版本为 " & Version.ToString)
+                If Version.Minor <= 4 OrElse Version.Minor >= 100 Then Throw New ApplicationException("分析详细信息失败，获取的版本为 " & Version.ToString)
                 '基于 #3649，在 64 位系统上禁用 32 位 Java
                 If Not Is64Bit AndAlso Not Is32BitSystem Then Throw New Exception("该 Java 为 32 位版本，请安装 64 位的 Java")
                 '基于 #2249 发现 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
@@ -140,6 +153,8 @@
                 Throw ex
             Catch ex As ThreadInterruptedException
                 Throw ex
+            Catch ex As System.ComponentModel.Win32Exception
+                Throw New ApplicationException($"与系统交互时出现错误。来自：{ex.Source}，错误代码：{ex.HResult}", ex)
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
@@ -296,6 +311,9 @@ RetryGet:
             AllJavaList.AddRange(TargetJavaList)
             AllJavaList.AddRange(JavaList)
 
+            '禁用用户不希望使用的 Java
+            AllJavaList = AllJavaList.Where(Function(i) i.IsEnabled).ToList()
+
             '根据选定条件进行过滤
             For Each Java In AllJavaList
                 If MinVersion IsNot Nothing AndAlso Java.Version < MinVersion Then Continue For
@@ -342,7 +360,7 @@ RetryGet:
                 Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
             End If
             Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
-            If Setup.Get("LaunchAdvanceJava") OrElse (RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionAdvanceJava", RelatedVersion)) Then
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionAdvanceJava", RelatedVersion) Then
                 '直接跳过弹窗
                 Log("[Java] 设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", LogLevel.Debug)
                 AllowedJavaList = New List(Of JavaEntry) From {UserJava}
@@ -382,7 +400,7 @@ ExitUserJavaCheck:
 UserPass:
 
             '对适合的 Java 进行排序
-            AllowedJavaList = Sort(AllowedJavaList, AddressOf JavaSorter)
+            AllowedJavaList = AllowedJavaList.Sort(AddressOf JavaSorter)
             Log($"[Java] 排序后的 Java 优先顺序：")
             For Each Java In AllowedJavaList
                 Log($"[Java]  - {Java}")
@@ -520,14 +538,20 @@ NoUserJava:
                 '粗略检查有效性
                 If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
             Next
-            '查找磁盘中的 Java
-            For Each Disk As DriveInfo In DriveInfo.GetDrives()
-                If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
-                JavaSearchFolder(Disk.Name, JavaPreList, False)
-            Next
-            '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            '细致搜索
+            If Setup.Get("LaunchArgumentJavaTraversal") Then
+                '查找磁盘中的 Java
+                For Each Disk As DriveInfo In DriveInfo.GetDrives()
+                    If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
+                    JavaSearchFolder(Disk.Name, JavaPreList, False)
+                Next
+
+                '查找 AppData 文件夹中的 Java
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            End If
+            '查找 AppData 中 .minecraft 目录下的 Java
+            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\", JavaPreList, False)
             '查找启动器目录中的 Java
             JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:=True)
             '查找所选 Minecraft 文件夹中的 Java
@@ -575,7 +599,7 @@ NoUserJava:
                     If Entry.IsUserImport Then JavaPreList(Entry.PathFolder) = True
                 Next
             Catch ex As Exception
-                Log(ex, "Java 列表已损坏", LogLevel.Feedback)
+                Log(ex, "Java 列表已损坏，无法获取用户导入的 Java", LogLevel.Feedback)
                 Setup.Set("LaunchArgumentJavaAll", "[]")
             End Try
 
@@ -586,7 +610,21 @@ NoUserJava:
             For Each Entry In JavaPreList.Distinct(Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
-            NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
+            NewJavaList = JavaCheckList(NewJavaList).Sort(AddressOf JavaSorter)
+
+#Region "同步原有的启用信息"
+            Try
+                For Each JavaJsonObject In GetJson(ImportedJava)
+                    Dim Target = NewJavaList.Find(Function(j) j.PathFolder = JavaEntry.FromJson(JavaJsonObject).PathFolder)
+                    If Target IsNot Nothing Then
+                        Target.IsEnabled = JavaEntry.FromJson(JavaJsonObject).IsEnabled
+                    End If
+                Next
+            Catch ex As Exception
+                Log(ex, "Java 列表已损坏，无法获取原有 Java 启用情况", LogLevel.Feedback)
+                Setup.Set("LaunchArgumentJavaAll", "[]")
+            End Try
+#End Region
 
             '修改设置项
             Dim AllList As New JArray
@@ -653,7 +691,7 @@ Wait:
     Private Sub JavaSearchFolder(OriginalPath As String, ByRef Results As Dictionary(Of String, Boolean), Source As Boolean, Optional IsFullSearch As Boolean = False)
         Try
             Log("[Java] 开始" & If(IsFullSearch, "完全", "部分") & "遍历查找：" & OriginalPath)
-            JavaSearchFolder(New DirectoryInfo(OriginalPath), Results, Source, IsFullSearch)
+            JavaSearchFolder(New DirectoryInfo(ShortenPath(OriginalPath)), Results, Source, IsFullSearch)
         Catch ex As UnauthorizedAccessException
             Log("[Java] 遍历查找 Java 时遭遇无权限的文件夹：" & OriginalPath)
         Catch ex As Exception
@@ -685,7 +723,7 @@ Wait:
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
                 If IsFullSearch OrElse
-                   FolderInfo.Parent.Name.ToLower = "users" OrElse Val(SearchEntry) > 0 OrElse Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
+                   OriginalPath.Name.ToLower = "users" OrElse Val(SearchEntry) > 0 OrElse Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next
@@ -741,7 +779,7 @@ Wait:
     Private LastJavaBaseDir As String = Nothing '用于在下载中断或失败时删除未完成下载的 Java 文件夹，防止残留只下了一半但 -version 能跑的 Java
     Private Sub JavaFileList(Loader As LoaderTask(Of Integer, List(Of NetFile)))
         Log("[Java] 开始获取 Java 下载信息")
-        Dim IndexFileStr As String = NetGetCodeByDownload(
+        Dim IndexFileStr As String = NetGetCodeByLoader(
             {"https://bmclapi2.bangbang93.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json",
              "https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json"},
         IsJson:=True)
@@ -753,7 +791,7 @@ Wait:
         Dim Address As String = TargetEntry.Value("manifest")("url")
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表
-        Dim ListFileStr As String = NetGetCodeByDownload({Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"), Address}, IsJson:=True)
+        Dim ListFileStr As String = NetGetCodeByLoader({Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"), Address}, IsJson:=True)
         LastJavaBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
         Dim Results As New List(Of NetFile)
         For Each File As JProperty In CType(GetJson(ListFileStr), JObject)("files")

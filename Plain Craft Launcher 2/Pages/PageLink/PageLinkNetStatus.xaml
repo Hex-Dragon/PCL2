@@ -1,0 +1,133 @@
+﻿<local:MyPageRight
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" x:Class="PageLinkNetStatus"
+    PanScroll="{Binding ElementName=PanBack}">
+    <local:MyScrollViewer x:Name="PanBack" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid x:Name="PanNetStatus" Margin="0,15,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="480" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="130" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="130" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="130" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <!--<local:MyHint IsWarn="True" Text="这是错误文本。" x:Name="HintTypeError" Visibility="Collapsed" Grid.ColumnSpan="5" Grid.RowSpan="5" Margin="15,15,15,0" VerticalAlignment="Top" />-->
+            <local:MyCard Grid.Column="1" Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="Auto" />
+                        <!--Logo-->
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="1*" />
+                        <!--文本区 ↓↓-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 1-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 2-->
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="21" />
+                        <RowDefinition Height="Auto" />
+                        <!--标题栏-->
+                        <RowDefinition Height="Auto" />
+                        <!--文本区-->
+                        <RowDefinition Height="Auto" />
+                        <!--按钮-->
+                        <RowDefinition Height="21" />
+                    </Grid.RowDefinitions>
+                    <Path Grid.Column="1" Grid.Row="1" Height="25" Width="25"
+  Stretch="Uniform" Fill="{DynamicResource ColorBrush3}"
+  Data="M845 547.45h65.54A400.6 400.6 0 0 0 712.7 201.77l-33.22 56.49C781.6 318.32 845 429.13 845 547.45zM347.72 253.92L316 196.58a401.21 401.21 0 0 0-207 350.87h65.54a335.66 335.66 0 0 1 173.18-293.53zM509.79 882.68a334 334 0 0 1-181.3-53.2L293 884.57a401.13 401.13 0 0 0 419.1 8.91L679 836.93a334.94 334.94 0 0 1-169.21 45.75z M821.51 625.1A108.64 108.64 0 0 0 752.2 650l-67.31-38.86a185.44 185.44 0 0 0 11.22-63.7c0-91.55-66.38-167.9-153.54-183.42V289a109.14 109.14 0 1 0-65.57 0v75c-87.16 15.53-153.54 91.87-153.54 183.42a185.46 185.46 0 0 0 11.22 63.7L267.39 650a109.17 109.17 0 1 0 35.81 55l64.47-37.23a186 186 0 0 0 284.23 0L716.38 705a109.13 109.13 0 1 0 105.13-79.9zM198.07 777.85a43.6 43.6 0 1 1 43.61-43.61 43.66 43.66 0 0 1-43.61 43.61z m311.72-636.53a43.61 43.61 0 1 1-43.61 43.61 43.65 43.65 0 0 1 43.61-43.61z m0 526.91a120.78 120.78 0 1 1 120.78-120.78 120.91 120.91 0 0 1-120.78 120.77z m311.72 109.62a43.6 43.6 0 1 1 43.61-43.61 43.65 43.65 0 0 1-43.61 43.61z" />
+                    <TextBlock x:Name="LabNetStatusNATTitle" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
+       Text="NAT 环境：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
+                    <TextBlock x:Name="LabNetStatusNATDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
+       Text="点击测试按钮以开始测试。"
+       FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                </Grid>
+            </local:MyCard>
+
+            <local:MyCard Grid.Column="1" Grid.Row="3">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="Auto" />
+                        <!--Logo-->
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="1*" />
+                        <!--文本区 ↓↓-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 1-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 2-->
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="21" />
+                        <RowDefinition Height="Auto" />
+                        <!--标题栏-->
+                        <RowDefinition Height="Auto" />
+                        <!--文本区-->
+                        <RowDefinition Height="Auto" />
+                        <!--按钮-->
+                        <RowDefinition Height="21" />
+                    </Grid.RowDefinitions>
+                    <Path Grid.Column="1" Grid.Row="1" Height="25" Width="25"
+  Stretch="Uniform" Fill="{DynamicResource ColorBrush3}"
+  Data="M845 547.45h65.54A400.6 400.6 0 0 0 712.7 201.77l-33.22 56.49C781.6 318.32 845 429.13 845 547.45zM347.72 253.92L316 196.58a401.21 401.21 0 0 0-207 350.87h65.54a335.66 335.66 0 0 1 173.18-293.53zM509.79 882.68a334 334 0 0 1-181.3-53.2L293 884.57a401.13 401.13 0 0 0 419.1 8.91L679 836.93a334.94 334.94 0 0 1-169.21 45.75z M821.51 625.1A108.64 108.64 0 0 0 752.2 650l-67.31-38.86a185.44 185.44 0 0 0 11.22-63.7c0-91.55-66.38-167.9-153.54-183.42V289a109.14 109.14 0 1 0-65.57 0v75c-87.16 15.53-153.54 91.87-153.54 183.42a185.46 185.46 0 0 0 11.22 63.7L267.39 650a109.17 109.17 0 1 0 35.81 55l64.47-37.23a186 186 0 0 0 284.23 0L716.38 705a109.13 109.13 0 1 0 105.13-79.9zM198.07 777.85a43.6 43.6 0 1 1 43.61-43.61 43.66 43.66 0 0 1-43.61 43.61z m311.72-636.53a43.61 43.61 0 1 1-43.61 43.61 43.65 43.65 0 0 1 43.61-43.61z m0 526.91a120.78 120.78 0 1 1 120.78-120.78 120.91 120.91 0 0 1-120.78 120.77z m311.72 109.62a43.6 43.6 0 1 1 43.61-43.61 43.65 43.65 0 0 1-43.61 43.61z" />
+                    <TextBlock x:Name="LabNetStatusPingTitle" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
+       Text="Ping 值：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
+                    <TextBlock x:Name="LabNetStatusPingDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
+       Text="点击测试按钮以开始测试。"
+       FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                </Grid>
+            </local:MyCard>
+
+            <local:MyCard Grid.Column="1" Grid.Row="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="Auto" />
+                        <!--Logo-->
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="1*" />
+                        <!--文本区 ↓↓-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 1-->
+                        <ColumnDefinition Width="Auto" />
+                        <!--按钮 2-->
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="21" />
+                        <RowDefinition Height="Auto" />
+                        <!--标题栏-->
+                        <RowDefinition Height="Auto" />
+                        <!--文本区-->
+                        <RowDefinition Height="Auto" />
+                        <!--按钮-->
+                        <RowDefinition Height="21" />
+                    </Grid.RowDefinitions>
+                    <Path Grid.Column="1" Grid.Row="1" Height="25" Width="25"
+          Stretch="Uniform" Fill="{DynamicResource ColorBrush3}"
+          Data="M845 547.45h65.54A400.6 400.6 0 0 0 712.7 201.77l-33.22 56.49C781.6 318.32 845 429.13 845 547.45zM347.72 253.92L316 196.58a401.21 401.21 0 0 0-207 350.87h65.54a335.66 335.66 0 0 1 173.18-293.53zM509.79 882.68a334 334 0 0 1-181.3-53.2L293 884.57a401.13 401.13 0 0 0 419.1 8.91L679 836.93a334.94 334.94 0 0 1-169.21 45.75z M821.51 625.1A108.64 108.64 0 0 0 752.2 650l-67.31-38.86a185.44 185.44 0 0 0 11.22-63.7c0-91.55-66.38-167.9-153.54-183.42V289a109.14 109.14 0 1 0-65.57 0v75c-87.16 15.53-153.54 91.87-153.54 183.42a185.46 185.46 0 0 0 11.22 63.7L267.39 650a109.17 109.17 0 1 0 35.81 55l64.47-37.23a186 186 0 0 0 284.23 0L716.38 705a109.13 109.13 0 1 0 105.13-79.9zM198.07 777.85a43.6 43.6 0 1 1 43.61-43.61 43.66 43.66 0 0 1-43.61 43.61z m311.72-636.53a43.61 43.61 0 1 1-43.61 43.61 43.65 43.65 0 0 1 43.61-43.61z m0 526.91a120.78 120.78 0 1 1 120.78-120.78 120.91 120.91 0 0 1-120.78 120.77z m311.72 109.62a43.6 43.6 0 1 1 43.61-43.61 43.65 43.65 0 0 1-43.61 43.61z" />
+                    <TextBlock x:Name="LabNetStatusIPv6Title" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
+               Text="IP 版本：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
+                    <TextBlock x:Name="LabNetStatusIPv6Desc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
+               Text="点击测试按钮以开始测试。"
+               FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                </Grid>
+            </local:MyCard>
+        </Grid>
+    </local:MyScrollViewer>
+</local:MyPageRight>

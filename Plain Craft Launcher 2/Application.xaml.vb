@@ -1,4 +1,4 @@
-﻿Imports System.Net
+﻿Imports System.Drawing
 Imports System.Reflection
 Imports System.Windows.Threading
 
@@ -26,7 +26,15 @@ Public Class Application
                 If e.Args(0) = "--update" Then
                     '自动更新
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
+                ElseIf e.Args(0) = "--gpu" Then
+                    '调整显卡设置
+                    Try
+                        SetGPUPreference(e.Args(1).Trim(""""))
+                        Environment.Exit(ProcessReturnValues.TaskDone)
+                    Catch ex As Exception
+                        Environment.Exit(ProcessReturnValues.Fail)
+                    End Try
                 ElseIf e.Args(0).StartsWithF("--memory") Then
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
@@ -45,10 +53,10 @@ Public Class Application
                     '制作更新包
                 ElseIf e.Args(0) = "--edit1" Then
                     ExeEdit(e.Args(1), True)
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
                 ElseIf e.Args(0) = "--edit2" Then
                     ExeEdit(e.Args(1), False)
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
 #End If
                 End If
             End If
@@ -75,8 +83,8 @@ Public Class Application
             Dim ShouldWaitForExit As Boolean = e.Args.Length > 0 AndAlso e.Args(0) = "--wait" '要求等待已有的 PCL 退出
             Dim WaitRetryCount As Integer = 0
 WaitRetry:
-            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher　")
-            If WindowHwnd = IntPtr.Zero Then FindWindow(Nothing, "Plain Craft Launcher 2　")
+            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher Community Edition ")
+            If WindowHwnd = IntPtr.Zero Then FindWindow(Nothing, "Plain Craft Launcher 2 Community Edition ")
             If WindowHwnd <> IntPtr.Zero Then
                 If ShouldWaitForExit AndAlso WaitRetryCount < 20 Then '至多等待 10 秒
                     WaitRetryCount += 1
@@ -87,7 +95,7 @@ WaitRetry:
                 ShowWindowToTop(WindowHwnd)
                 '播放提示音并退出
                 Beep()
-                Environment.[Exit](Result.Cancel)
+                Environment.[Exit](ProcessReturnValues.Cancel)
             End If
 #End If
             '设置 ToolTipService 默认值
@@ -102,14 +110,13 @@ WaitRetry:
                 FrmStart = New SplashScreen("Images\icon.ico")
                 FrmStart.Show(False, True)
             End If
-            '动态 DLL 调用
-            AddHandler AppDomain.CurrentDomain.AssemblyResolve, AddressOf AssemblyResolve
             '日志初始化
             LogStart()
             '添加日志
-            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
-            Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
+            Log($"[Start] 程序版本：{VersionBaseName} ({VersionBranchName}, {VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
+            Log($"[Start] 识别码：{UniqueAddress}")
             Log($"[Start] 程序路径：{PathWithName}")
+            Log($"[Start] 系统版本：{Environment.OSVersion.Version}, 架构：{Runtime.InteropServices.RuntimeInformation.OSArchitecture}")
             Log($"[Start] 系统编码：{Encoding.Default.HeaderName} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测异常环境
@@ -124,10 +131,29 @@ WaitRetry:
             Setup.Load("SystemDebugAnim")
             Setup.Load("ToolDownloadThread")
             Setup.Load("ToolDownloadCert")
+            '释放资源
+            Directory.CreateDirectory(PathPure & "CE")
+            SetDllDirectory(PathPure & "CE")
+            WriteFile(PathPure & "CE\" & "libwebp.dll", GetResources("libwebp64"))
             '网络配置初始化
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
             ServicePointManager.DefaultConnectionLimit = 1024
+            '设置字体
+            Dim TargetFont As String = Setup.Get("UiFont")
+            If Not String.IsNullOrEmpty(TargetFont) Then
+                Try
+                    Dim Font = Fonts.SystemFontFamilies.FirstOrDefault(Function(x) x.FamilyNames.Values.Contains(TargetFont))
+                    If Font Is Nothing Then
+                        Setup.Reset("UiFont")
+                    Else
+                        SetLaunchFont(TargetFont)
+                    End If
+                Catch ex As Exception
+                    Log(ex, "字体加载失败", LogLevel.Hint)
+                    Setup.Reset("UiFont")
+                End Try
+            End If
             '计时
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()
@@ -143,7 +169,7 @@ WaitRetry:
             Catch
             End Try
             MsgBox(GetExceptionDetail(ex, True) & vbCrLf & "PCL 所在路径：" & If(String.IsNullOrEmpty(FilePath), "获取失败", FilePath), MsgBoxStyle.Critical, "PCL 初始化错误")
-            FormMain.EndProgramForce(Result.Exception)
+            FormMain.EndProgramForce(ProcessReturnValues.Exception)
         End Try
     End Sub
 
@@ -160,7 +186,7 @@ WaitRetry:
         If IsProgramEnded Then Exit Sub
         If IsCritErrored Then
             '在汇报错误后继续引发错误，知道这次压不住了
-            FormMain.EndProgramForce(Result.Exception)
+            FormMain.EndProgramForce(ProcessReturnValues.Exception)
             Exit Sub
         End If
         IsCritErrored = True
@@ -169,64 +195,17 @@ WaitRetry:
            ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
-            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
-            MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！", MsgBoxStyle.Information, "运行环境错误")
-            FormMain.EndProgramForce(Result.Cancel)
+            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net481-offline-installer")
+            MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.8.1！", MsgBoxStyle.Information, "运行环境错误")
+            FormMain.EndProgramForce(ProcessReturnValues.Cancel)
         Else
             FeedbackInfo()
             Log(e.Exception, "程序出现未知错误", LogLevel.Assert, "锟斤拷烫烫烫")
         End If
     End Sub
 
-    '动态 DLL 调用
-    Private Shared AssemblyNAudio As Assembly
-    Private Shared AssemblyJson As Assembly
-    Private Shared AssemblyDialog As Assembly
-    Private Shared AssemblyImazenWebp As Assembly
-    Private Shared ReadOnly AssemblyNAudioLock As New Object
-    Private Shared ReadOnly AssemblyJsonLock As New Object
-    Private Shared ReadOnly AssemblyDialogLock As New Object
-    Private Shared ReadOnly AssemblyImazenWebpLock As New Object
     Private Declare Function SetDllDirectory Lib "kernel32" Alias "SetDllDirectoryA" (lpPathName As String) As Boolean
-    Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
-        If args.Name.StartsWithF("NAudio") Then
-            SyncLock AssemblyNAudioLock
-                If AssemblyNAudio Is Nothing Then
-                    Log("[Start] 加载 DLL：NAudio")
-                    AssemblyNAudio = Assembly.Load(GetResources("NAudio"))
-                End If
-                Return AssemblyNAudio
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Newtonsoft.Json") Then
-            SyncLock AssemblyJsonLock
-                If AssemblyJson Is Nothing Then
-                    Log("[Start] 加载 DLL：Json")
-                    AssemblyJson = Assembly.Load(GetResources("Json"))
-                End If
-                Return AssemblyJson
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Ookii.Dialogs.Wpf") Then
-            SyncLock AssemblyDialogLock
-                If AssemblyDialog Is Nothing Then
-                    Log("[Start] 加载 DLL：Dialogs")
-                    AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
-                End If
-                Return AssemblyDialog
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Imazen.WebP") Then
-            SyncLock AssemblyImazenWebpLock
-                If AssemblyImazenWebp Is Nothing Then
-                    Log("[Start] 加载 DLL：Imazen.WebP")
-                    AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
-                    SetDllDirectory(PathPure.TrimEnd("\"))
-                    WriteFile(PathPure & "libwebp.dll", GetResources("libwebp64"))
-                End If
-                Return AssemblyImazenWebp
-            End SyncLock
-        Else
-            Return Nothing
-        End If
-    End Function
+
 
     '切换窗口
 

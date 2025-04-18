@@ -1,24 +1,10 @@
 ﻿Public Class CrashAnalyzer
-    Private Shared IsAnalyzeCacheCleared As Boolean = False
-    Private Shared IsAnalyzeCacheClearedLock As New Object
 
     '构造函数
     Private TempFolder As String
     Public Sub New(UUID As Integer)
-        '清理缓存
-        SyncLock IsAnalyzeCacheClearedLock
-            If Not IsAnalyzeCacheCleared Then
-                Try
-                    DeleteDirectory(PathTemp & "CrashAnalyzer\")
-                Catch ex As Exception
-                    Log(ex, "清理崩溃分析缓存失败")
-                End Try
-                IsAnalyzeCacheCleared = True
-            End If
-        End SyncLock
         '构建文件结构
-        TempFolder = PathTemp & "CrashAnalyzer\" & UUID & RandomInteger(0, 99999999) & "\"
-        DeleteDirectory(TempFolder)
+        TempFolder = RequestTaskTempFolder()
         Directory.CreateDirectory(TempFolder & "Temp\")
         Directory.CreateDirectory(TempFolder & "Report\")
         Log("[Crash] 崩溃分析暂存文件夹：" & TempFolder)
@@ -179,7 +165,7 @@ Extracted:
                    MatchName = "游戏崩溃前的输出.txt" OrElse MatchName = "rawoutput.log" Then
                 TargetType = AnalyzeFileType.MinecraftLog
                 If DirectFile Is Nothing Then DirectFile = LogFile
-            ElseIf MatchName = "启动器日志.txt" OrElse MatchName = "PCL2 启动器日志.txt" OrElse MatchName = "PCL 启动器日志.txt" OrElse MatchName = "log1.txt" Then
+            ElseIf MatchName = "启动器日志.txt" OrElse MatchName = "PCL2 启动器日志.txt" OrElse MatchName = "PCL 启动器日志.txt" OrElse MatchName = "log1.txt" OrElse MatchName = "log-ce1.log" Then
                 If LogFile.Value.Any(Function(s) s.Contains("以下为游戏输出的最后一段内容")) Then
                     TargetType = AnalyzeFileType.MinecraftLog
                     If DirectFile Is Nothing Then DirectFile = LogFile
@@ -245,7 +231,7 @@ Extracted:
                             Log("[Crash] 输出报告：" & SelectedFile.Key & "，作为 Minecraft 或启动器日志")
                         Next
                         '选择一份最佳的来自启动器的游戏日志
-                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt", "PCL 启动器日志.txt"}
+                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "log-ce1.log", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt", "PCL 启动器日志.txt"}
                             If FileNameDict.ContainsKey(FileName) Then
                                 Dim CurrentLog = FileNameDict(FileName)
                                 '截取 “以下为游戏输出的最后一段内容” 后的内容
@@ -873,7 +859,7 @@ NextStack:
             Sub()
                 '弹窗选择：查看日志
                 If File.Exists(DirectFile.Value.Key) Then
-                    ShellOnly("notepad", DirectFile.Value.Key)
+                    ShellOnly(DirectFile.Value.Key)
                 Else
                     Dim FilePath As String = PathTemp & "Crash.txt"
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
@@ -885,7 +871,7 @@ NextStack:
                 Dim FileAddress As String = Nothing
                 Try
                     '获取文件路径
-                    RunInUiWait(Sub() FileAddress = SelectAs("选择保存位置", "错误报告-" & Date.Now.ToString("G").Replace("/", "-").Replace(":", ".").Replace(" ", "_") & ".zip", "Minecraft 错误报告(*.zip)|*.zip"))
+                    RunInUiWait(Sub() FileAddress = SelectSaveFile("选择保存位置", "错误报告-" & Date.Now.ToString("G").Replace("/", "-").Replace(":", ".").Replace(" ", "_") & ".zip", "Minecraft 错误报告(*.zip)|*.zip"))
                     If String.IsNullOrEmpty(FileAddress) Then Exit Sub
                     Directory.CreateDirectory(GetPathFromFullPath(FileAddress))
                     If File.Exists(FileAddress) Then File.Delete(FileAddress)
@@ -900,7 +886,7 @@ NextStack:
                         Select Case FileName
                             Case "LatestLaunch.bat"
                                 FileName = "启动脚本.bat"
-                            Case "Log1.txt"
+                            Case "Log-CE1.log"
                                 FileName = "PCL 启动器日志.txt"
                                 FileEncoding = Encoding.UTF8
                             Case "RawOutput.log"
@@ -923,7 +909,7 @@ NextStack:
                     Log(ex, "导出错误报告失败", LogLevel.Feedback)
                     Exit Sub
                 End Try
-                OpenExplorer("/select,""" & FileAddress & """")
+                OpenExplorer(FileAddress)
         End Select
     End Sub
     ''' <summary>

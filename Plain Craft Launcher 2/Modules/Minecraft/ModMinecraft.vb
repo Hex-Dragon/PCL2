@@ -73,7 +73,8 @@ Public Module ModMinecraft
                 End If
                 Dim Name As String = Folder.Split(">")(0)
                 Dim Path As String = Folder.Split(">")(1)
-                If CheckPermission(Path) Then
+                Try
+                    CheckPermissionWithException(Path)
                     '若已有该文件夹，则直接重命名；没有则添加
                     Dim Renamed As Boolean = False
                     For Each OriginalFolder As McFolder In CacheMcFolderList
@@ -84,9 +85,10 @@ Public Module ModMinecraft
                         End If
                     Next
                     If Not Renamed Then CacheMcFolderList.Add(New McFolder With {.Name = Name, .Path = Path, .Type = McFolderType.Custom})
-                Else
-                    Hint("无法访问 Minecraft 文件夹：" & Path, HintType.Critical)
-                End If
+                Catch ex As Exception
+                    MyMsgBox("失效的 Minecraft 文件夹：" & vbCrLf & Path & vbCrLf & vbCrLf & GetExceptionSummary(ex), "Minecraft 文件夹失效", IsWarn:=True)
+                    Log(ex, $"无法访问 Minecraft 文件夹 {Path}")
+                End Try
             Next
 
             '将自定义文件夹情况同步到设置
@@ -212,45 +214,45 @@ Public Module ModMinecraft
         ''' 在不加载版本的情况下获取版本隔离目录。
         ''' </summary>
         Public Function GetPathIndie(Modable As Boolean) As String
-            Dim IndieType As Integer = Setup.Get("LaunchArgumentIndie")
-            Select Case Setup.Get("VersionArgumentIndie", Version:=Me)
-                Case -1
-                    '尚未判断
+            '决定版本隔离类型
+            If Setup.IsUnset("VersionArgumentIndieV2", Version:=Me) Then
+                Dim ShouldBeIndie =
+                Function() As Boolean
+                    '从老的版本独立设置中迁移：-1 未决定，0 使用全局设置，1 手动开启，2 手动关闭
+                    If Not Setup.IsUnset("VersionArgumentIndie", Version:=Me) AndAlso Setup.Get("VersionArgumentIndie", Version:=Me) > 0 Then
+                        Log($"[Minecraft] 版本隔离初始化（{Name}）：从老的版本独立设置中迁移")
+                        Return Setup.Get("VersionArgumentIndie", Version:=Me) = 1
+                    End If
+                    '若版本文件夹下包含 mods 或 saves 文件夹，则自动开启版本隔离
                     Dim ModFolder As New DirectoryInfo(Path & "mods\")
                     Dim SaveFolder As New DirectoryInfo(Path & "saves\")
-                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse
-                       (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
-                        '自动开启
-                        Setup.Set("VersionArgumentIndie", 1, Version:=Me)
-                        Log("[Setup] 已自动开启单版本隔离：" & Name)
-                        IndieType = 4
-                    Else
-                        '使用全局设置
-                        Setup.Set("VersionArgumentIndie", 0, Version:=Me)
-                        Log("[Setup] 版本隔离使用全局设置：" & Name)
+                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
+                        Log($"[Minecraft] 版本隔离初始化（{Name}）：版本文件夹下存在 mods 或 saves 文件夹，自动开启")
+                        Return True
                     End If
-                Case 0
-                    '使用全局设置
-                Case 1
-                    '开启
-                    IndieType = 4
-                Case 2
-                    '关闭
-                    IndieType = 0
-            End Select
-            Select Case IndieType
-                Case 0 '关闭
-                Case 1 '仅隔离可安装 Mod 的版本
-                    If Modable Then Return Path
-                Case 2 '仅隔离非正式版
-                    If State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot Then Return Path
-                Case 3 '隔离非正式版与可安装 Mod 的版本
-                    If Modable Then Return Path
-                    If State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot Then Return Path
-                Case 4 '隔离所有版本
-                    Return Path
-            End Select
-            Return PathMcFolder
+                    '根据全局的默认设置决定是否隔离
+                    Log($"[Minecraft] 版本隔离初始化（{Name}）：从全局默认设置中（{Setup.Get("LaunchArgumentIndieV2")}）判断")
+                    Select Case Setup.Get("LaunchArgumentIndieV2")
+                        Case 0 '关闭
+                            Return False
+                        Case 1 '仅隔离可安装 Mod 的版本
+                            Return Modable
+                        Case 2 '仅隔离非正式版
+                            Return State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
+                        Case 3 '隔离非正式版与可安装 Mod 的版本
+                            Return Modable OrElse State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
+                        Case Else '隔离所有版本
+                            Return True
+                    End Select
+                End Function
+                Setup.Set("VersionArgumentIndieV2", ShouldBeIndie(), Version:=Me)
+            End If
+            '根据隔离类型决定路径
+            If Setup.Get("VersionArgumentIndieV2", Version:=Me) Then
+                Return Path
+            Else
+                Return PathMcFolder
+            End If
         End Function
 
         ''' <summary>
@@ -290,7 +292,7 @@ Public Module ModMinecraft
         Public ReadOnly Property Modable As Boolean
             Get
                 If Not IsLoaded Then Load()
-                Return Version.HasFabric OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse
+                Return Version.HasFabric OrElse Version.HasQuilt OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse Version.HasCleanroom OrElse
                     DisplayType = McVersionCardType.API '#223
             End Get
         End Property
@@ -381,40 +383,25 @@ Public Module ModMinecraft
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
                         End If
-                        '从 Fabric 版本中获取版本号
+                        '从 Fabric / Quilt 版本中获取版本号
                         Regex = RegexSeek(LibrariesString, "(?<=((fabricmc)|(quiltmc)):intermediary:)[^""]*")
                         If Regex IsNot Nothing Then
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
                         End If
-                        'FUTURE: [Quilt 支持] 从 Quilt 版本中获取版本号
-                        '从 jar 项中获取版本号
+                        '从 Jar 项中获取版本号
                         If JsonObject("jar") IsNot Nothing Then
                             _Version.McName = JsonObject("jar").ToString
                             GoTo VersionSearchFinish
                         End If
                         '从 jar 文件的 version.json 中获取版本号
-                        If File.Exists(Path & Name & ".jar") Then
-                            Try
-                                Using JarArchive As New ZipArchive(New FileStream(Path & Name & ".jar", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                                    Dim VersionJson As ZipArchiveEntry = JarArchive.GetEntry("version.json")
-                                    If VersionJson IsNot Nothing Then
-                                        Using VersionJsonStream As New StreamReader(VersionJson.Open)
-                                            Dim VersionJsonObj As JObject = GetJson(VersionJsonStream.ReadToEnd)
-                                            If VersionJsonObj("id") IsNot Nothing Then
-                                                Dim VersionId As String = VersionJsonObj("id").ToString
-                                                If VersionId.Length < 32 Then '因为 wiki 说这玩意儿可能是个 hash，虽然我没发现
-                                                    _Version.McName = VersionId
-                                                    Log("[Minecraft] 从版本 jar 中的 version.json 获取到版本号：" & VersionId)
-                                                    GoTo VersionSearchFinish
-                                                End If
-                                            End If
-                                        End Using
-                                    End If
-                                End Using
-                            Catch ex As Exception
-                                Log(ex, "从版本 jar 中的 version.json 获取版本号失败")
-                            End Try
+                        If JsonVersion?("name") IsNot Nothing Then
+                            Dim JsonVerName As String = JsonVersion("name").ToString
+                            If JsonVerName.Length < 32 Then '因为 wiki 说这玩意儿可能是个 hash，虽然我没发现
+                                _Version.McName = JsonVerName
+                                Log("[Minecraft] 从版本 jar 中的 version.json 获取到版本号：" & JsonVerName)
+                                GoTo VersionSearchFinish
+                            End If
                         End If
                         '非准确的版本判断警告
                         Log("[Minecraft] 无法完全确认 MC 版本号的版本：" & Name)
@@ -482,17 +469,27 @@ VersionSearchFinish:
                     Return TrimedJson.StartsWithF("{") AndAlso TrimedJson.EndsWithF("}")
                 End Function
                 If _JsonText Is Nothing Then
-                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception($"未找到版本 JSON 文件：{Path}{Name}.json")
-                    _JsonText = ReadFile(Path & Name & ".json")
+                    Dim JsonPath As String = Path & Name & ".json"
+                    If Not File.Exists(JsonPath) Then
+                        '如果文件夹下只有一个 JSON 文件，则将其作为版本 JSON
+                        Dim JsonFiles As String() = Directory.GetFiles(Path, "*.json")
+                        If JsonFiles.Count = 1 Then
+                            JsonPath = JsonFiles(0)
+                            Log("[Minecraft] 未找到同名版本 JSON，自动换用 " & JsonPath, LogLevel.Debug)
+                        Else
+                            Throw New Exception($"未找到版本 JSON 文件：{Path}{Name}.json")
+                        End If
+                    End If
+                    _JsonText = ReadFile(JsonPath)
                     '如果 ReadFile 失败会返回空字符串；这可能是由于文件被临时占用，故延时后重试
                     If Not FastJsonCheck(_JsonText) Then
                         If RunInUi() Then
                             Log("[Minecraft] 版本 JSON 文件为空或有误，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
                             GetJson(_JsonText) '触发异常
                         Else
-                            Log("[Minecraft] 版本 JSON 文件为空或有误，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
+                            Log($"[Minecraft] 版本 JSON 文件为空或有误，将在 2s 后重试读取（{JsonPath}）", LogLevel.Debug)
                             Thread.Sleep(2000)
-                            _JsonText = ReadFile(Path & Name & ".json")
+                            _JsonText = ReadFile(JsonPath)
                             If Not FastJsonCheck(_JsonText) Then GetJson(_JsonText) '触发异常
                         End If
                     End If
@@ -524,9 +521,8 @@ VersionSearchFinish:
                             For Each Subjson As JObject In _JsonObject("patches")
                                 SubjsonList.Add(Subjson)
                             Next
-                            SubjsonList = Sort(SubjsonList, Function(Left As JObject, Right As JObject) As Boolean
-                                                                Return Val(If(Left("priority"), "0").ToString) < Val(If(Right("priority"), "0").ToString)
-                                                            End Function)
+                            SubjsonList = SubjsonList.Sort(
+                                Function(Left, Right) Val(If(Left("priority"), "0").ToString) < Val(If(Right("priority"), "0").ToString))
                             For Each Subjson As JObject In SubjsonList
                                 Dim Id As String = Subjson("id")
                                 If Id IsNot Nothing Then
@@ -615,6 +611,35 @@ Recheck:
         ''' 是否包含 JumpLoader。
         ''' </summary>
         Public Property HasJumpLoader As Boolean = False
+
+        ''' <summary>
+        ''' 版本 jar 中的 version.json 文件对象。
+        ''' 若没有则返回 Nothing。
+        ''' </summary>
+        Public ReadOnly Property JsonVersion As JObject
+            Get
+                If Not JsonVersionInited Then
+                    JsonVersionInited = True
+                    If File.Exists(Path & Name & ".jar") Then
+                        Try
+                            Using JarArchive As New ZipArchive(New FileStream(Path & Name & ".jar", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                                Dim VersionJson As ZipArchiveEntry = JarArchive.GetEntry("version.json")
+                                If VersionJson IsNot Nothing Then
+                                    Using VersionJsonStream As New StreamReader(VersionJson.Open)
+                                        _JsonVersion = GetJson(VersionJsonStream.ReadToEnd)
+                                    End Using
+                                End If
+                            End Using
+                        Catch ex As Exception
+                            Log(ex, "从版本 jar 中读取 version.json 失败")
+                        End Try
+                    End If
+                End If
+                Return _JsonVersion
+            End Get
+        End Property
+        Private JsonVersionInited As Boolean = False
+        Private _JsonVersion As JObject = Nothing
 
         ''' <summary>
         ''' 该版本的依赖版本。若无依赖版本则为空字符串。
@@ -728,12 +753,19 @@ Recheck:
                             State = McVersionState.LiteLoader
                             Version.HasLiteLoader = True
                         End If
-                        'Fabric、Forge
-                        'FUTURE: [Quilt 支持] 确认这里的玩意儿对不对
-                        If RealJson.Contains("net.fabricmc:fabric-loader") OrElse RealJson.Contains("org.quiltmc:quilt-loader") Then
+                        'Fabric、Forge、Quilt
+                        If RealJson.Contains("net.fabricmc:fabric-loader") Then
                             State = McVersionState.Fabric
                             Version.HasFabric = True
-                            Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:)|(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
+                            Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
+                        ElseIf RealJson.Contains("org.quiltmc:quilt-loader") Then
+                            State = McVersionState.Quilt
+                            Version.HasQuilt = True
+                            Version.QuiltVersion = If(RegexSeek(RealJson, "(?<=(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?((-beta.)[0-9]([0-9]?))"), "未知版本").Replace("+build", "")
+                        ElseIf RealJson.Contains("com.cleanroommc:cleanroom:") Then
+                            State = McVersionState.Cleanroom
+                            Version.HasCleanroom = True
+                            Version.CleanroomVersion = If(RegexSeek(RealJson, "(?<=(com.cleanroommc:cleanroom:))[0-9\.]+(\+build.[0-9]+)?(-alpha)?"), "未知版本").Replace("+build", "")
                         ElseIf RealJson.Contains("minecraftforge") AndAlso Not RealJson.Contains("net.neoforge") Then
                             State = McVersionState.Forge
                             Version.HasForge = True
@@ -765,8 +797,12 @@ ExitDataLoad:
                             Logo = PathImage & "Blocks/Anvil.png"
                         Case McVersionState.NeoForge
                             Logo = PathImage & "Blocks/NeoForge.png"
+                        Case McVersionState.Cleanroom
+                            Logo = PathImage & "Blocks/Cleanroom.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
+                        Case McVersionState.Quilt
+                            Logo = PathImage & "Blocks/Quilt.png"
                         Case McVersionState.OptiFine
                             Logo = PathImage & "Blocks/GrassPath.png"
                         Case McVersionState.LiteLoader
@@ -779,37 +815,7 @@ ExitDataLoad:
                 End If
                 '确定版本描述
                 Dim CustomInfo As String = ReadIni(Path & "PCL\Setup.ini", "CustomInfo")
-                If CustomInfo = "" Then
-                    Select Case State
-                        Case McVersionState.Snapshot
-                            If Version.McName.ContainsF("pre", True) Then
-                                Info = "预发布版 " & Version.McName
-                            ElseIf Version.McName.ContainsF("rc", True) Then
-                                Info = "发布候选 " & Version.McName
-                            ElseIf Version.McName.Contains("experimental") OrElse Version.McName = "pending" Then
-                                Info = "实验性快照"
-                            Else
-                                Info = "快照 " & Version.McName
-                            End If
-                        Case McVersionState.Old
-                            Info = "远古版本"
-                        Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
-                            Info = Version.ToString
-                        Case McVersionState.Fool
-                            Info = GetMcFoolName(Version.McName)
-                        Case McVersionState.Error
-                            '已有错误信息
-                        Case Else
-                            Info = "发生了未知错误，请向作者反馈此问题"
-                    End Select
-                    If Not State = McVersionState.Error Then
-                        If HasJumpLoader Then Info += ", JumpLoader"
-                        If Setup.Get("VersionServerLogin", Version:=Me) = 3 Then Info += ", 统一通行证验证"
-                        If Setup.Get("VersionServerLogin", Version:=Me) = 4 Then Info += ", Authlib 验证"
-                    End If
-                Else
-                    Info = CustomInfo
-                End If
+                Info = If(CustomInfo <> "", CustomInfo, GetDefaultDescription())
                 '确定版本收藏状态
                 IsStar = ReadIni(Path & "PCL\Setup.ini", "IsStar", False)
                 '确定版本显示种类
@@ -823,10 +829,12 @@ ExitDataLoad:
                 If State <> McVersionState.Error Then
                     WriteIni(Path & "PCL\Setup.ini", "ReleaseTime", ReleaseTime.ToString("yyyy'-'MM'-'dd HH':'mm"))
                     WriteIni(Path & "PCL\Setup.ini", "VersionFabric", Version.FabricVersion)
+                    WriteIni(Path & "PCL\Setup.ini", "VersionQuilt", Version.QuiltVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOptiFine", Version.OptiFineVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionLiteLoader", Version.HasLiteLoader)
                     WriteIni(Path & "PCL\Setup.ini", "VersionForge", Version.ForgeVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionNeoForge", Version.NeoForgeVersion)
+                    WriteIni(Path & "PCL\Setup.ini", "VersionCleanroom", Version.CleanroomVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionApiCode", Version.SortCode)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginal", Version.McName)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginalMain", Version.McCodeMain)
@@ -842,6 +850,41 @@ ExitDataLoad:
             End Try
             Return Me
         End Function
+        ''' <summary>
+        ''' 获取版本的默认描述。
+        ''' </summary>
+        Public Function GetDefaultDescription() As String
+            Dim Info As String = ""
+            Select Case State
+                Case McVersionState.Snapshot
+                    If Version.McName.ContainsF("pre", True) Then
+                        Info = "预发布版 " & Version.McName
+                    ElseIf Version.McName.ContainsF("rc", True) Then
+                        Info = "发布候选 " & Version.McName
+                    ElseIf Version.McName.Contains("experimental") OrElse Version.McName = "pending" Then
+                        Info = "实验性快照"
+                    Else
+                        Info = "快照 " & Version.McName
+                    End If
+                Case McVersionState.Old
+                    Info = "远古版本"
+                Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.OptiFine, McVersionState.LiteLoader, McVersionState.Cleanroom
+                    Info = Version.ToString
+                Case McVersionState.Fool
+                    Info = GetMcFoolName(Version.McName)
+                Case McVersionState.Error
+                    Return Me.Info '已有错误信息
+                Case Else
+                    Info = "发生了未知错误，请向作者反馈此问题"
+            End Select
+            If Not State = McVersionState.Error Then
+                If HasJumpLoader Then Info += ", JumpLoader"
+                If Setup.Get("VersionServerLogin", Version:=Me) = 3 Then Info += ", 统一通行证验证"
+                If Setup.Get("VersionServerLogin", Version:=Me) = 4 Then Info += ", Authlib 验证"
+            End If
+            Return Info
+        End Function
+
         Public IsLoaded As Boolean = False
 
         Public Overrides Function Equals(obj As Object) As Boolean
@@ -869,6 +912,8 @@ ExitDataLoad:
         NeoForge
         LiteLoader
         Fabric
+        Quilt
+        Cleanroom
     End Enum
 
     ''' <summary>
@@ -929,6 +974,17 @@ ExitDataLoad:
         ''' </summary>
         Public NeoForgeVersion As String = ""
 
+        'Cleanroom
+
+        ''' <summary>
+        ''' 该版本是否安装了 Cleanroom。
+        ''' </summary>
+        Public HasCleanroom As Boolean = False
+        ''' <summary>
+        ''' Cleanroom 版本号，如 0.2.4-alpha。
+        ''' </summary>
+        Public CleanroomVersion As String = ""
+
         'Fabric
 
         ''' <summary>
@@ -939,6 +995,17 @@ ExitDataLoad:
         ''' Fabric 版本号，如 0.7.2.175。
         ''' </summary>
         Public FabricVersion As String = ""
+
+        'Quilt
+
+        ''' <summary>
+        ''' 该版本是否安装了 Quilt。
+        ''' </summary>
+        Public HasQuilt As Boolean = False
+        ''' <summary>
+        ''' Quilt 版本号，如 0.26.1-beta.1、0.26.0。
+        ''' </summary>
+        Public QuiltVersion As String = ""
 
         'LiteLoader
 
@@ -956,7 +1023,9 @@ ExitDataLoad:
             ToString = ""
             If HasForge Then ToString += ", Forge" & If(ForgeVersion = "未知版本", "", " " & ForgeVersion)
             If HasNeoForge Then ToString += ", NeoForge" & If(NeoForgeVersion = "未知版本", "", " " & NeoForgeVersion)
+            If HasCleanroom Then ToString += ", Cleanroom" & If(CleanroomVersion = "未知版本", "", " " & CleanroomVersion)
             If HasFabric Then ToString += ", Fabric" & If(FabricVersion = "未知版本", "", " " & FabricVersion)
+            If HasQuilt Then ToString += ", Quilt" & If(QuiltVersion = "未知版本", "", " " & QuiltVersion)
             If HasOptiFine Then ToString += ", OptiFine" & If(OptiFineVersion = "未知版本", "", " " & OptiFineVersion)
             If HasLiteLoader Then ToString += ", LiteLoader"
             If ToString = "" Then
@@ -980,7 +1049,25 @@ ExitDataLoad:
                             If SubVersions.Length >= 3 Then
                                 _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2))
                             Else
-                                Throw New Exception("无效的 Fabric 版本：" & ForgeVersion)
+                                Throw New Exception("无效的 Fabric 版本：" & FabricVersion)
+                            End If
+                        ElseIf HasQuilt Then
+                            If QuiltVersion = "未知版本" Then Return 0
+                            Dim IsBeta As Boolean = QuiltVersion.Contains("-beta")
+                            Dim SubVersions = QuiltVersion.Replace("-beta", "").Split(".")
+                            If SubVersions.Length >= 3 Then
+                                _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2)) + IsBeta
+                            Else
+                                Throw New Exception("无效的 Quilt 版本：" & QuiltVersion)
+                            End If
+                        ElseIf HasCleanroom Then
+                            If CleanroomVersion = "未知版本" Then Return 0
+                            Dim IsAlpha As Boolean = CleanroomVersion.Contains("-alpha")
+                            Dim SubVersions = CleanroomVersion.Replace("-alpha", "").Split(".")
+                            If SubVersions.Length >= 3 Then
+                                _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2)) + IsAlpha
+                            Else
+                                Throw New Exception("无效的 Cleanroom 版本：" & CleanroomVersion)
                             End If
                         ElseIf HasForge OrElse HasNeoForge Then
                             If ForgeVersion = "未知版本" AndAlso NeoForgeVersion = "未知版本" Then Return 0
@@ -1107,7 +1194,7 @@ ExitDataLoad:
                     Throw New Exception("无法读取版本文件夹，可能是由于没有权限（" & Path & "versions）", ex)
                 End Try
             End If
-            '没有可用版本
+            '不可用
             If Not FolderList.Any() Then
                 WriteIni(Path & "PCL.ini", "VersionCache", "") '清空缓存
                 GoTo OnLoaded
@@ -1131,10 +1218,10 @@ Reload:
                 McVersionList = McVersionListLoadNoCache(Path)
             End If
             IsFirstMcVersionListLoad = False
-            If Loader.IsAborted Then Exit Sub
 
             '改变当前选择的版本
 OnLoaded:
+            If Loader.IsAborted Then Exit Sub
             If McVersionList.Any(Function(v) v.Key <> McVersionCardType.Error) Then
                 '尝试读取已储存的选择
                 Dim SavedSelection As String = ReadIni(Path & "PCL.ini", "Version")
@@ -1209,6 +1296,7 @@ OnLoaded:
                            ReadIni(Version.Path & "PCL\Setup.ini", "VersionOriginal", "Unknown") <> "Unknown" Then '旧版本可能没有这一项，导致 Version 不加载（#643）
                             Dim VersionInfo As New McVersionInfo With {
                                 .FabricVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionFabric", ""),
+                                .QuiltVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionQuilt", ""),
                                 .ForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionForge", ""),
                                 .NeoForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionNeoForge", ""),
                                 .OptiFineVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionOptiFine", ""),
@@ -1220,6 +1308,7 @@ OnLoaded:
                                 .IsApiLoaded = True
                             }
                             VersionInfo.HasFabric = VersionInfo.FabricVersion.Any()
+                            VersionInfo.HasQuilt = VersionInfo.QuiltVersion.Any()
                             VersionInfo.HasForge = VersionInfo.ForgeVersion.Any()
                             VersionInfo.HasNeoForge = VersionInfo.NeoForgeVersion.Any()
                             VersionInfo.HasOptiFine = VersionInfo.OptiFineVersion.Any()
@@ -1312,7 +1401,7 @@ OnLoaded:
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Fool}, McVersionCardType.Fool)
 
             '筛选 API 版本
-            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric}, McVersionCardType.API)
+            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric, McVersionState.Quilt, McVersionState.Cleanroom}, McVersionCardType.API)
 
             '将老版本预先分类入不常用，只剩余原版、快照、OptiFine
             Dim VersionUseful As New List(Of McVersion)
@@ -1418,7 +1507,7 @@ OnLoaded:
             Next
             If Not IsNothing(Snapshot) Then OldList.Remove(Snapshot)
             '按版本号排序
-            Dim NewList As List(Of McVersion) = Sort(OldList, Function(Left, Right) Left.Version.McCodeMain > Right.Version.McCodeMain)
+            Dim NewList As List(Of McVersion) = OldList.OrderByDescending(Function(v) v.Version.McCodeMain).ToList
             '回设
             If Not IsNothing(Snapshot) Then NewList.Insert(0, Snapshot)
             ResultVersionList(McVersionCardType.OriginalLike) = NewList
@@ -1426,7 +1515,7 @@ OnLoaded:
 
         '不常用版本：按发布时间新旧排序，如果不可用则按名称排序
         If ResultVersionList.ContainsKey(McVersionCardType.Rubbish) Then
-            ResultVersionList(McVersionCardType.Rubbish) = Sort(ResultVersionList(McVersionCardType.Rubbish),
+            ResultVersionList(McVersionCardType.Rubbish) = ResultVersionList(McVersionCardType.Rubbish).Sort(
             Function(Left As McVersion, Right As McVersion)
                 Dim LeftYear As Integer = Left.ReleaseTime.Year '+ If(Left.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
                 Dim RightYear As Integer = Right.ReleaseTime.Year '+ If(Right.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
@@ -1446,9 +1535,9 @@ OnLoaded:
             End Function)
         End If
 
-        'API 版本：优先按版本排序，此后【先放 Fabric，再放 Neo/Forge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
+        'API 版本：优先按版本排序，此后【先放 Fabric / Quilt，再放 Neo/Forge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
         If ResultVersionList.ContainsKey(McVersionCardType.API) Then
-            ResultVersionList(McVersionCardType.API) = Sort(ResultVersionList(McVersionCardType.API),
+            ResultVersionList(McVersionCardType.API) = ResultVersionList(McVersionCardType.API).Sort(
             Function(Left As McVersion, Right As McVersion)
                 Dim Basic = VersionSortInteger(Left.Version.McName, Right.Version.McName)
                 If Basic <> 0 Then
@@ -1456,6 +1545,8 @@ OnLoaded:
                 Else
                     If Left.Version.HasFabric Xor Right.Version.HasFabric Then
                         Return Left.Version.HasFabric
+                    ElseIf Left.Version.HasQuilt Xor Right.Version.HasQuilt Then
+                        Return Left.Version.HasQuilt
                     ElseIf Left.Version.HasNeoForge Xor Right.Version.HasNeoForge Then
                         Return Left.Version.HasNeoForge
                     ElseIf Left.Version.HasForge Xor Right.Version.HasForge Then
@@ -1627,7 +1718,7 @@ OnLoaded:
         Dim FileAddress As String = PathTemp & "Cache\Skin\" & GetHash(Address) & ".png"
         SyncLock McSkinDownloadLock
             If Not File.Exists(FileAddress) Then
-                NetDownload(Address, FileAddress & NetDownloadEnd)
+                NetDownloadByClient(Address, FileAddress & NetDownloadEnd)
                 File.Delete(FileAddress)
                 FileSystem.Rename(FileAddress & NetDownloadEnd, FileAddress)
                 Log("[Minecraft] 皮肤下载成功：" & FileAddress)
@@ -1663,7 +1754,7 @@ OnLoaded:
 
 #End Region
 
-#Region "支持库文件（Library）"
+#Region "支持库文件（Libraries）"
 
     Public Class McLibToken
         ''' <summary>
@@ -1805,7 +1896,7 @@ OnLoaded:
             '不能调用 RealVersion.Check()，可能会莫名其妙地触发 CheckPermission 正被另一进程使用，导致误判前置不存在
             If Not File.Exists(RealVersion.Path & RealVersion.Name & ".json") Then
                 RealVersion = Version
-                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 json 文件", LogLevel.Debug)
+                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 Json 文件", LogLevel.Debug)
             End If
             '获取详细下载信息
             If RealVersion.JsonObject("downloads") IsNot Nothing AndAlso RealVersion.JsonObject("downloads")("client") IsNot Nothing Then
@@ -1956,7 +2047,7 @@ OnLoaded:
             Dim MainJar As NetFile = DlClientJarGet(Version, True)
             If MainJar IsNot Nothing Then Result.Add(MainJar)
         Catch ex As Exception
-            Log(ex, "版本缺失主 jar 文件所必须的信息", LogLevel.Developer)
+            Log(ex, "版本缺失主 Jar 文件所必须的信息", LogLevel.Developer)
         End Try
 
         'Library 文件
@@ -1970,7 +2061,7 @@ OnLoaded:
             Try
                 Log("[Minecraft] 开始获取统一通行证下载信息")
                 '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
-                DownloadInfo = GetJson(NetGetCodeByDownload({
+                DownloadInfo = GetJson(NetGetCodeByLoader({
                         "https://auth.mc-user.com:233/" & Setup.Get("VersionServerNide", Version:=Version)}, IsJson:=True))
             Catch ex As Exception
                 Log(ex, "获取统一通行证下载信息失败")
@@ -1993,7 +2084,7 @@ OnLoaded:
             '获取下载信息
             Try
                 Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
-                DownloadInfo = GetJson(NetGetCodeByDownload({
+                DownloadInfo = GetJson(NetGetCodeByLoader({
                         "https://authlib-injector.yushi.moe/artifact/latest.json",
                         "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"
                     }, IsJson:=True))
@@ -2093,8 +2184,8 @@ OnLoaded:
                    Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & ".jar"
         '判断 OptiFine 是否应该使用 installer
         If McLibGet.Contains("optifine\OptiFine\1.") AndAlso Splited(2).Split(".").Count > 1 Then
-            Dim MajorVersion As Integer = Val(Splited(2).Split(".")(1))
-            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 1, Val(Splited(2).Split(".")(2).BeforeFirst("_")), 0)
+            Dim MajorVersion As Integer = Val(Splited(2).Split(".")(1).BeforeFirst("_"))
+            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 2, Val(Splited(2).Split(".")(2).BeforeFirst("_")), 0)
             If (MajorVersion = 12 OrElse (MajorVersion = 20 AndAlso MinorVersion >= 4) OrElse MajorVersion >= 21) AndAlso '仅在 1.12 (无法追溯) 和 1.20.4+ (#5376) 遇到此问题
                 File.Exists($"{CustomMcFolder}libraries\{Splited(0).Replace(".", "\")}\{Splited(1)}\{Splited(2)}\{Splited(1)}-{Splited(2)}-installer.jar") Then
                 McLaunchLog("已将 " & Original & " 替换为对应的 Installer 文件")
@@ -2107,7 +2198,7 @@ OnLoaded:
     ''' 检查设置，是否应当忽略文件检查？
     ''' </summary>
     Public Function ShouldIgnoreFileCheck(Version As McVersion)
-        Return Setup.Get("LaunchAdvanceAssets") OrElse Setup.Get("VersionAdvanceAssetsV2", Version:=Version) OrElse (Setup.Get("VersionAdvanceAssets", Version:=Version) = 2)
+        Return Setup.Get("VersionAdvanceAssetsV2", Version:=Version) OrElse (Setup.Get("VersionAdvanceAssets", Version:=Version) = 2)
     End Function
 
 #End Region

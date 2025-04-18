@@ -121,7 +121,7 @@
             Try
                 JsonObject = GetJson(ReadFile(PageVersionLeft.Version.Path & PageVersionLeft.Version.Name & ".json"))
             Catch ex As Exception
-                Log(ex, "重命名读取 json 时失败")
+                Log(ex, "重命名读取 Json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
             '重命名主文件夹
@@ -164,7 +164,7 @@
                     JsonObject("id") = NewName
                     WriteFile(NewPath & NewName & ".json", JsonObject.ToString)
                 Catch ex As Exception
-                    Log(ex, "重命名版本 json 失败")
+                    Log(ex, "重命名版本 Json 失败")
                 End Try
             End If
             '刷新与提示
@@ -235,21 +235,21 @@
         OpenVersionFolder(PageVersionLeft.Version)
     End Sub
     Public Shared Sub OpenVersionFolder(Version As McVersion)
-        OpenExplorer("""" & Version.Path & """")
+        OpenExplorer(Version.Path)
     End Sub
 
     '存档文件夹
     Private Sub BtnFolderSaves_Click() Handles BtnFolderSaves.Click
         Dim FolderPath As String = PageVersionLeft.Version.PathIndie & "saves\"
         Directory.CreateDirectory(FolderPath)
-        OpenExplorer("""" & FolderPath & """")
+        OpenExplorer(FolderPath)
     End Sub
 
     'Mod 文件夹
     Private Sub BtnFolderMods_Click() Handles BtnFolderMods.Click
         Dim FolderPath As String = PageVersionLeft.Version.PathIndie & "mods\"
         Directory.CreateDirectory(FolderPath)
-        OpenExplorer("""" & FolderPath & """")
+        OpenExplorer(FolderPath)
     End Sub
 
 #End Region
@@ -260,7 +260,7 @@
     Private Sub BtnManageScript_Click() Handles BtnManageScript.Click
         Try
             '弹窗要求指定脚本的保存位置
-            Dim SavePath As String = SelectAs("选择脚本保存位置", "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
+            Dim SavePath As String = SelectSaveFile("选择脚本保存位置", "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
             If SavePath = "" Then Exit Sub
             '检查中断（等玩家选完弹窗指不定任务就结束了呢……）
             If McLaunchLoader.State = LoadState.Loading Then
@@ -285,11 +285,7 @@
         Try
             '忽略文件检查提示
             If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
-                If Setup.Get("LaunchAdvanceAssets") Then
-                    Hint("请先关闭 [设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
-                Else
-                    Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
-                End If
+                Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
                 Exit Sub
             End If
             '重复任务检查
@@ -317,6 +313,52 @@
             FrmMain.BtnExtraDownload.Ribble()
         Catch ex As Exception
             Log(ex, "尝试补全文件失败（" & PageVersionLeft.Version.Name & "）", LogLevel.Msgbox)
+        End Try
+    End Sub
+
+    '重置
+    Private Sub BtnManageRestore_Click(sender As Object, e As EventArgs) Handles BtnManageRestore.Click
+        Try
+            Dim CurrentVersion = PageVersionLeft.Version.Version
+            If Not CurrentVersion.McCodeMain = 99 AndAlso VersionSortInteger(CurrentVersion.McName, "1.5.2") = -1 AndAlso CurrentVersion.HasForge Then
+                Hint("该版本暂不支持重置！", HintType.Info)
+                Exit Sub
+            End If
+            '确认操作
+            If MyMsgBox("你确定要重置版本 " & PageVersionLeft.Version.Name & " 吗？" & vbCrLf & "PCL 将会尝试重新从互联网获取此版本的资源文件信息，并重新执行自动安装。" & vbCrLf & vbCrLf & "本功能尚处于测试阶段，可能不稳定。", "版本重置确认", "确认", "取消") = 2 Then Exit Sub
+
+            '备份版本核心文件
+            CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
+            CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
+            '提交安装申请
+            Dim Request As New McInstallRequest With {
+                .TargetVersionName = PageVersionLeft.Version.Name,
+                .TargetVersionFolder = $"{PathMcFolder}versions\{PageVersionLeft.Version.Name}\",
+                .MinecraftName = CurrentVersion.McName,
+                .OptiFineEntry = If(CurrentVersion.HasOptiFine, New DlOptiFineListEntry With {.Inherit = CurrentVersion.McName, .NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}, Nothing),
+                .ForgeEntry = If(CurrentVersion.HasForge, New DlForgeVersionEntry(CurrentVersion.ForgeVersion, Nothing, Inherit:=CurrentVersion.McName) With {.Category = "installer"}, Nothing),
+                .NeoForgeEntry = If(CurrentVersion.HasNeoForge, New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.ForgeType = 1, .VersionName = CurrentVersion.NeoForgeVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .CleanroomEntry = If(CurrentVersion.HasCleanroom, New DlCleanroomListEntry(CurrentVersion.CleanroomVersion) With {.ForgeType = 2, .VersionName = CurrentVersion.CleanroomVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .FabricVersion = If(CurrentVersion.HasFabric, CurrentVersion.FabricVersion, Nothing),
+                .QuiltVersion = If(CurrentVersion.HasQuilt, CurrentVersion.QuiltVersion, Nothing),
+                .LiteLoaderEntry = If(CurrentVersion.HasLiteLoader, New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}, Nothing)
+            }
+            '.MinecraftJson = CurrentVersion.McName,
+            If Not McInstall(Request, "重置") Then Exit Sub
+            FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
+        Catch ex As Exception
+            Log(ex, "重置版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
+        End Try
+    End Sub
+
+    '测试游戏
+    Private Sub BtnManageTest_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageTest.Click
+        Try
+            McLaunchStart(New McLaunchOptions With
+                 {.Version = PageVersionLeft.Version, .Test = True})
+            FrmMain.PageChange(FormMain.PageType.Launch)
+        Catch ex As Exception
+            Log(ex, "测试游戏失败", LogLevel.Feedback)
         End Try
     End Sub
 

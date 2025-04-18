@@ -53,12 +53,12 @@
             '自动整合包安装
             If PackInstallPath IsNot Nothing Then
                 Try
-                    Dim InstallLoader = ModpackInstall(PackInstallPath, GetFolderNameFromPath(Path))
+                    Dim InstallLoader = ModpackInstall(PackInstallPath)
                     Log("[Launch] 自动安装整合包已开始：" & PackInstallPath)
                     InstallLoader.WaitForExit()
                     If InstallLoader.State = LoadState.Finished Then
-                        Log("[Launch] 自动安装整合包成功，删除安装包：" & PackInstallPath)
-                        File.Delete(PackInstallPath)
+                        Log("[Launch] 自动安装整合包成功，清理安装包：" & PackInstallPath)
+                        If File.Exists(PackInstallPath) Then File.Delete(PackInstallPath)
                     End If
                 Catch ex As CancelledException
                     Log(ex, "自动安装整合包被用户取消：" & PackInstallPath)
@@ -110,7 +110,7 @@
         '修改登陆方式
         Select Case Setup.Get("LoginType")
             Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
+                If PageLinkLobby.HiperState = LoadState.Finished Then
                     LabLaunchingMethod.Text = "联机离线登录"
                 Else
                     LabLaunchingMethod.Text = "离线登录"
@@ -138,13 +138,9 @@
         LabLaunchingDownloadLeft.Visibility = Visibility.Collapsed
         ProgressLaunchingFinished.Width = New GridLength(0, GridUnitType.Star)
         ProgressLaunchingUnfinished.Width = New GridLength(1, GridUnitType.Star)
-        PanLaunchingHint.Opacity = 0
-        PanLaunchingHint.Visibility = Visibility.Collapsed
         PanLaunchingInfo.Width = Double.NaN '重置宽度改变动画
         McLaunchProcess = Nothing
         McLaunchWatcher = Nothing
-        '获取 “你知道吗” 提示
-        LabLaunchingHint.Text = PageOtherTest.GetRandomHint()
         '初始化其他页面
         PanInput.IsHitTestVisible = False
         PanLaunching.IsHitTestVisible = False
@@ -611,6 +607,10 @@ Finish:
         End If
         '实际的启动
         If BtnLaunch.Text = "启动游戏" Then
+            If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+                Hint("当前版本正在安装，无法启动！", HintType.Critical)
+                Exit Sub
+            End If
             McLaunchStart()
         ElseIf BtnLaunch.Text = "下载游戏" Then
             FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
@@ -698,6 +698,10 @@ ExitRefresh:
         If McLaunchLoader.State = LoadState.Loading Then Exit Sub
         McVersionCurrent.Load()
         PageVersionLeft.Version = McVersionCurrent
+        If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+            Hint("当前版本正在安装，暂无法进行版本设置！", HintType.Critical)
+            Exit Sub
+        End If
         FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
     End Sub
     ''' <summary>
@@ -764,18 +768,9 @@ ExitRefresh:
             If IsProgressStateChanged Then
                 LabLaunchingProgress.Visibility = Visibility.Visible
                 LabLaunchingProgressLeft.Visibility = Visibility.Visible
-                If IsLaunched Then
-                    'IsWidthAnimating = True
-                    PanLaunchingHint.Visibility = Visibility.Visible
-                    'AniStop("Launching Info Width")
-                    'PanLaunchingInfo.Width = 260
-                    'ActualUsedWidth = 260
-                    'IsWidthAnimating = False
-                End If
                 AnimList.AddRange({
                  AaOpacity(LabLaunchingProgress, If(Not IsLaunched, 1, 0) - LabLaunchingProgress.Opacity, 100),
-                 AaOpacity(LabLaunchingProgressLeft, If(Not IsLaunched, 0.5, 0) - LabLaunchingProgressLeft.Opacity, 100),
-                 AaOpacity(PanLaunchingHint, If(IsLaunched, 1, 0) - PanLaunchingHint.Opacity, 100)
+                 AaOpacity(LabLaunchingProgressLeft, If(Not IsLaunched, 0.5, 0) - LabLaunchingProgressLeft.Opacity, 100)
             })
             End If
             AniStart(AnimList, "Launching Progress")

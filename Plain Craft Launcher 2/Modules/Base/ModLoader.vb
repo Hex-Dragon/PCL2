@@ -315,23 +315,26 @@
                 Sub()
                     Try
                         IsForceRestarting = IsForceRestart
-                        If ModeDebug Then Log("[Loader] 加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已" & If(IsForceRestarting, "强制", "") & "启动")
+                        If ModeDebug Then Log($"[Loader] 加载线程 {Name} ({Thread.CurrentThread.ManagedThreadId}) 已{If(IsForceRestarting, "强制", "")}启动")
                         LoadDelegate(Me)
                         If IsAborted Then
-                            Log("[Loader] 加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已中断但线程正常运行至结束，输出被弃用（最新线程：" & If(LastRunningThread Is Nothing, -1, LastRunningThread.ManagedThreadId) & "）", LogLevel.Developer)
+                            Log($"[Loader] 加载线程 {Name} ({Thread.CurrentThread.ManagedThreadId}) 已中断但线程正常运行至结束，输出被弃用（最新线程：{If(LastRunningThread Is Nothing, -1, LastRunningThread.ManagedThreadId)}）", LogLevel.Developer)
                         Else
                             RaisePreviewFinish()
                             State = LoadState.Finished
                             LastFinishedTime = GetTimeTick() '未中断，本次输出有效
                         End If
+                    Catch ex As CancelledException
+                        If ModeDebug Then Log(ex, $"加载线程 {Name} ({Thread.CurrentThread.ManagedThreadId}) 已触发取消中断，已完成 {Math.Round(Progress * 100)}%")
+                        If Not IsAborted Then State = LoadState.Aborted
                     Catch ex As ThreadInterruptedException
-                        If ModeDebug Then Log(ex, "加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已触发线程中断")
+                        If ModeDebug Then Log(ex, $"加载线程 {Name} ({Thread.CurrentThread.ManagedThreadId}) 已触发线程中断，已完成 {Math.Round(Progress * 100)}%")
                         '如果线程是因为判断到 IsAborted 而提前中止，则代表已有新线程被重启，此时不应当改为 Aborted
                         '如果线程是在没有 IsAborted 时手动引发了 ThreadInterruptedException，则代表没有重启线程，这通常代表用户手动取消，应当改为 Aborted
                         If Not IsAborted Then State = LoadState.Aborted
                     Catch ex As Exception
                         If IsAborted Then Exit Sub
-                        Log(ex, "加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 发生运行时错误", LogLevel.Developer)
+                        Log(ex, $"加载线程 {Name} ({Thread.CurrentThread.ManagedThreadId}) 出错，已完成 {Math.Round(Progress * 100)}%", LogLevel.Developer)
                         [Error] = ex
                         State = LoadState.Failed
                     End Try
@@ -347,7 +350,7 @@
         End Sub
         Private Sub TriggerThreadAbort()
             If LastRunningThread Is Nothing Then Exit Sub
-            If ModeDebug Then Log("[Loader] 加载线程 " & Name & " (" & LastRunningThread.ManagedThreadId & ") 已中断")
+            If ModeDebug Then Log($"[Loader] 加载线程 {Name} ({LastRunningThread.ManagedThreadId}) 已中断")
             If LastRunningThread.IsAlive Then LastRunningThread.Interrupt()
             LastRunningThread = Nothing
         End Sub
@@ -652,7 +655,8 @@ Restart:
     ''' 返回是否执行了加载器。
     ''' </summary>
     ''' <param name="ExtraPath">用于检查文件夹修改的额外路径。该路径不会传入加载器。</param>
-    Public Function LoaderFolderRun(Loader As LoaderBase, FolderPath As String, Type As LoaderFolderRunType, Optional MaxDepth As Integer = 0, Optional ExtraPath As String = "", Optional WaitForExit As Boolean = False) As Boolean
+    ''' <param name="LoaderInput">如果不想要文件夹路径为输入值，则传入期望数据</param>
+    Public Function LoaderFolderRun(Loader As LoaderBase, FolderPath As String, Type As LoaderFolderRunType, Optional MaxDepth As Integer = 0, Optional ExtraPath As String = "", Optional WaitForExit As Boolean = False, Optional LoaderInput As Object = Nothing) As Boolean
         Dim FolderInfo As DirectoryInfo
         Dim Value As New LoaderFolderDictionaryEntry With {.FolderPath = FolderPath & ExtraPath, .LastCheckTime = Nothing}
         Try
@@ -676,9 +680,9 @@ Restart:
         '开始检查
         If Type = LoaderFolderRunType.UpdateOnly Then Return False
         If WaitForExit Then
-            Loader.WaitForExit(FolderPath, IsForceRestart:=True)
+            Loader.WaitForExit(If(LoaderInput, FolderPath), IsForceRestart:=True)
         Else
-            Loader.Start(FolderPath, IsForceRestart:=True)
+            Loader.Start(If(LoaderInput, FolderPath), IsForceRestart:=True)
         End If
         Return True
     End Function

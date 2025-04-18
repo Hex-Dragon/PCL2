@@ -130,6 +130,7 @@ RetryStart:
                 TempDownloadingPath = TempPath & RandomInteger(0, 10000000)
                 Directory.CreateDirectory(GetPathFromFullPath(TempPath)) '重新实现下载，以避免携带 Header（#5072）
                 Using Client As New Net.WebClient
+                    Client.Proxy = GetProxy()
                     Client.DownloadFile(Url, TempDownloadingPath)
                 End Using
                 If Url <> Source AndAlso Url <> FallbackSource Then
@@ -138,7 +139,7 @@ RetryStart:
                 ElseIf EnableCache Then
                     '保存缓存并显示
                     If File.Exists(TempPath) Then File.Delete(TempPath)
-                    Rename(TempDownloadingPath, TempPath)
+                    FileSystem.Rename(TempDownloadingPath, TempPath)
                     RunInUi(Sub() ActualSource = TempPath)
                 Else
                     '直接显示

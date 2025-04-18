@@ -1,7 +1,35 @@
-﻿Imports System.Net
-
-Public Module ModNet
+﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
+
+    Private Property _Proxy As WebProxy
+    ''' <summary>
+    ''' 获取 Proxy 代理
+    ''' </summary>
+    ''' <returns>返回 WebProxy 或者 Nothing</returns>
+    Public Function GetProxy()
+        Dim proxy As String = Setup.Get("SystemHttpProxy")
+        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+            Log("[Net] 当前代理状态：跟随系统代理设置")
+            Return _Proxy
+        End If
+        If Not String.IsNullOrWhiteSpace(proxy) Then
+            _Proxy = New WebProxy(proxy, True)
+            Log("[Net] 当前代理状态：自定义")
+            Dim ProxyUri As New Uri(_Proxy.ToString)
+            Try
+                If ProxyUri.IsLoopBack OrElse
+                ProxyUri.Host.StartsWithF("192.168.") OrElse
+                ProxyUri.Host.StartsWithF("10.") OrElse
+                ProxyUri.Host.StartswithF("fe80") OrElse
+                (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
+            '视作非本地地址
+            Catch
+            End Try
+            Return _Proxy
+        End If
+        Log("[Net] 当前代理状态：禁用")
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
@@ -146,14 +174,15 @@ Retry:
         Dim RequestEx As Exception = Nothing
         Dim FailCount As Integer = 0
         For i = 1 To 4
-            Dim th As New Thread(Sub()
-                                     Try
-                                         RequestResult = NetGetCodeByRequestOnce(Url, Encode, 30000, IsJson, Accept)
-                                     Catch ex As Exception
-                                         FailCount += 1
-                                         RequestEx = ex
-                                     End Try
-                                 End Sub)
+            Dim th As New Thread(
+            Sub()
+                Try
+                    RequestResult = NetGetCodeByRequestOnce(Url, Encode, 30000, IsJson, Accept)
+                Catch ex As Exception
+                    FailCount += 1
+                    RequestEx = ex
+                End Try
+            End Sub)
             th.Start()
             Threads.Add(th)
             Thread.Sleep(i * 250)
@@ -185,7 +214,7 @@ RequestFinished:
     Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
-        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
+        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
         Dim Result As New List(Of Byte)
         Try
@@ -220,12 +249,12 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
-    Public Function NetGetCodeByDownload(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
-        Dim Temp As String = PathTemp & "Cache\Code\" & Url.GetHashCode() & "_" & GetUuid()
+    Public Function NetGetCodeByLoader(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
+        Dim Temp As String = RequestTaskTempFolder() & "download.txt"
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（" & Url & "）")
-            NetGetCodeByDownload = ReadFile(Temp)
+            NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
             NewTask.Abort()
@@ -235,12 +264,12 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Urls">网页的 Url 列表。</param>
-    Public Function NetGetCodeByDownload(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
-        Dim Temp As String = PathTemp & "Cache\Code\" & Urls.First.GetHashCode() & "_" & GetUuid()
+    Public Function NetGetCodeByLoader(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
+        Dim Temp As String = RequestTaskTempFolder() & "download.txt"
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（第一下载源：" & Urls.First & "）")
-            NetGetCodeByDownload = ReadFile(Temp)
+            NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
             NewTask.Abort()
@@ -248,13 +277,12 @@ RequestFinished:
     End Function
 
     ''' <summary>
-    ''' 从网络中直接下载文件。这不能下载 CDN 中的文件。
+    ''' 使用 WebClient 从网络中下载文件。这不能下载 CDN 中的文件。
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
-    Public Sub NetDownload(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
+    Public Sub NetDownloadByClient(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
         Log("[Net] 直接下载文件：" & Url)
-
         '初始化
         Try
             '建立目录
@@ -262,9 +290,8 @@ RequestFinished:
             '尝试删除原文件
             File.Delete(LocalFile)
         Catch ex As Exception
-            Throw New WebException("预处理下载文件路径失败（" & LocalFile & "）。", ex)
+            Throw New WebException($"预处理下载文件路径失败（{LocalFile}）", ex)
         End Try
-
         '下载
         Using Client As New WebClient
             Try
@@ -272,10 +299,41 @@ RequestFinished:
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 File.Delete(LocalFile)
-                Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
+                Throw New WebException($"直接下载文件失败（{Url}）", ex)
             End Try
         End Using
+    End Sub
 
+    ''' <summary>
+    ''' 简单的多线程下载文件。可以下载 CDN 中的文件。
+    ''' </summary>
+    ''' <param name="Url">文件的 Url。</param>
+    ''' <param name="LocalFile">下载的本地地址。</param>
+    Public Sub NetDownloadByLoader(Url As String, LocalFile As String, Optional LoaderToSyncProgress As LoaderBase = Nothing, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
+        Dim NewTask As New LoaderDownload("文件下载 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, LocalFile, Check, UseBrowserUserAgent)})
+        Try
+            NewTask.WaitForExit(LoaderToSyncProgress:=LoaderToSyncProgress)
+        Catch ex As Exception
+            Throw New WebException($"多线程直接下载文件失败（{Url}）", ex)
+        Finally
+            NewTask.Abort()
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 简单的多线程下载文件。可以下载 CDN 中的文件。
+    ''' </summary>
+    ''' <param name="Urls">文件的 Url 列表。</param>
+    ''' <param name="LocalFile">下载的本地地址。</param>
+    Public Sub NetDownloadByLoader(Urls As IEnumerable(Of String), LocalFile As String, Optional LoaderToSyncProgress As LoaderBase = Nothing, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
+        Dim NewTask As New LoaderDownload("文件下载 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, LocalFile, Check, UseBrowserUserAgent)})
+        Try
+            NewTask.WaitForExit(LoaderToSyncProgress:=LoaderToSyncProgress)
+        Catch ex As Exception
+            Throw New WebException($"多线程直接下载文件失败（第一下载源：" & Urls.First() & "）", ex)
+        Finally
+            NewTask.Abort()
+        End Try
     End Sub
 
     ''' <summary>
@@ -373,17 +431,21 @@ RequestFinished:
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
-        Dim DataStream As Stream = Nothing
-        Dim Resp As WebResponse = Nothing
         Dim Req As HttpWebRequest
+        Dim Res As String = ""
         Try
             Req = WebRequest.Create(Url)
+            Req.Proxy = GetProxy()
             Req.Method = Method
-            Dim SendData As Byte()
-            If TypeOf Data Is Byte() Then
-                SendData = Data
-            Else
-                SendData = New UTF8Encoding(False).GetBytes(Data.ToString)
+            Dim SendData As Byte() = Nothing
+            If Not IsNothing(Data) Then
+                If TypeOf Data Is Byte() Then
+                    SendData = DirectCast(Data, Byte())
+                ElseIf TypeOf Data Is String Then
+                    SendData = New UTF8Encoding(False).GetBytes(DirectCast(Data, String))
+                Else
+                    Throw New ArgumentException("Data 参数类型不支持")
+                End If
             End If
             If Headers IsNot Nothing Then
                 For Each Pair In Headers
@@ -393,55 +455,57 @@ RequestFinished:
             Req.ContentType = ContentType
             Req.Timeout = Timeout
             SecretHeadersSign(Url, Req, UseBrowserUserAgent)
-            If Url.StartsWithF("https", True) Then Req.ProtocolVersion = HttpVersion.Version11
+            If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Req.ProtocolVersion = HttpVersion.Version11
             If Method = "POST" OrElse Method = "PUT" Then
-                Req.ContentLength = SendData.Length
-                DataStream = Req.GetRequestStream()
-                DataStream.WriteTimeout = Timeout
-                DataStream.ReadTimeout = Timeout
-                DataStream.Write(SendData, 0, SendData.Length)
-                DataStream.Close()
+                If Not IsNothing(SendData) Then
+                    Req.ContentLength = SendData.Length
+                    Using DataStream As Stream = Req.GetRequestStream()
+                        DataStream.WriteTimeout = Timeout
+                        DataStream.ReadTimeout = Timeout
+                        DataStream.Write(SendData, 0, SendData.Length)
+                    End Using
+                End If
             End If
-            Resp = Req.GetResponse()
-            DataStream = Resp.GetResponseStream()
-            DataStream.WriteTimeout = Timeout
-            DataStream.ReadTimeout = Timeout
-            Using Reader As New StreamReader(DataStream)
-                Return Reader.ReadToEnd()
-            End Using
-        Catch ex As ThreadInterruptedException
-            Throw
-        Catch ex As WebException
-            If ex.Status = WebExceptionStatus.Timeout Then
-                ex = New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
-            Else
-                '获取请求失败的返回
-                Dim Res As String = ""
-                Try
-                    If ex.Response Is Nothing Then Exit Try
-                    DataStream = ex.Response.GetResponseStream()
+            Using Resp As WebResponse = Req.GetResponse()
+                Using DataStream As Stream = Resp.GetResponseStream()
                     DataStream.WriteTimeout = Timeout
                     DataStream.ReadTimeout = Timeout
                     Using Reader As New StreamReader(DataStream)
                         Res = Reader.ReadToEnd()
                     End Using
+                End Using
+            End Using
+            Return Res
+        Catch ex As ThreadInterruptedException
+            Throw
+        Catch ex As WebException
+            If ex.Status = WebExceptionStatus.Timeout Then
+                Throw New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
+            Else
+                Dim RespStream As Stream = Nothing
+                Try
+                    If ex.Response IsNot Nothing Then
+                        RespStream = ex.Response.GetResponseStream()
+                        If RespStream IsNot Nothing Then
+                            Using Reader As New StreamReader(RespStream)
+                                Res = Reader.ReadToEnd()
+                            End Using
+                        End If
+                    End If
                 Catch
+                Finally
+                    If RespStream IsNot Nothing Then RespStream.Dispose()
                 End Try
-                If Res = "" Then
-                    ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                If String.IsNullOrEmpty(Res) Then
+                    Throw New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
                 Else
-                    ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
+                    Throw New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
                 End If
             End If
-            If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
-            Throw ex
         Catch ex As Exception
-            ex = New WebException("网络请求失败（" & Url & "）", ex)
-            If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
-            Throw ex
-        Finally
-            If DataStream IsNot Nothing Then DataStream.Dispose()
-            If Resp IsNot Nothing Then Resp.Dispose()
+            Dim nx = New WebException("网络请求失败（" & Url & "）", ex)
+            If MakeLog AndAlso Not String.IsNullOrEmpty(Res) Then Log(nx, "NetRequestOnce 请求失败", LogLevel.Developer)
+            Throw nx
         End Try
     End Function
     Public Class ResponsedWebException
@@ -705,7 +769,7 @@ RequestFinished:
         ''' <summary>
         ''' 所有下载源。
         ''' </summary>
-        Public Sources As NetSource()
+        Public Sources As SafeList(Of NetSource)
         ''' <summary>
         ''' 用于在第一个线程出错时切换下载源。
         ''' </summary>
@@ -713,7 +777,7 @@ RequestFinished:
         ''' <summary>
         ''' 所有已经被标记为失败的，但未完整尝试过的，不允许断点续传的下载源。
         ''' </summary>
-        Public SourcesOnce As New List(Of NetSource)
+        Public SourcesOnce As New SafeList(Of NetSource)
         ''' <summary>
         ''' 获取从某个源开始，第一个可用的源。
         ''' </summary>
@@ -914,7 +978,7 @@ RequestFinished:
                 Sources.Add(New NetSource With {.FailCount = 0, .Url = SecretCdnSign(Source.Replace(vbCr, "").Replace(vbLf, "").Trim), .Id = Count, .IsFailed = False, .Ex = Nothing})
                 Count += 1
             Next
-            Me.Sources = Sources.ToArray
+            Me.Sources = Sources
             Me.LocalPath = LocalPath
             Me.Check = Check
             Me.UseBrowserUserAgent = UseBrowserUserAgent
@@ -974,7 +1038,7 @@ Capture:
                     Next
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
-                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("mcimirror") OrElse TargetUrl.Contains("github.com") OrElse
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("bmclapi") OrElse TargetUrl.Contains("github.com") OrElse
                        TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") OrElse TargetUrl.Contains("gitcode") Then Return Nothing
                     '寻找最大碎片
                     'FUTURE: 下载引擎重做，计算下载源平均链接时间和线程下载速度，按最高时间节省来开启多线程
@@ -1039,7 +1103,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
+                HttpRequest.Proxy = GetProxy()
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
@@ -1122,7 +1186,7 @@ NotSupportRange:
                         Info.Temp = Nothing
                         SmailFileCache = New Queue(Of Byte)
                     Else
-                        Info.Temp = PathTemp & "Download\" & Uuid & "_" & Info.Uuid & "_" & RandomInteger(0, 999999) & ".tmp"
+                        Info.Temp = $"{PathTemp}Download\{Uuid}_{Info.Uuid}_{RandomInteger(0, 999999)}.tmp"
                         ResultStream = New FileStream(Info.Temp, FileMode.Create, FileAccess.Write, FileShare.Read)
                     End If
                     '开始下载
@@ -1538,9 +1602,8 @@ FinishExCatch:
                     TotalProgress += 1
                 End If
             Next
-            If TotalProgress > 0 Then NewProgress /= TotalProgress
+            If TotalProgress > 0 AndAlso Not Double.IsNaN(TotalProgress) Then NewProgress /= TotalProgress
             '刷新进度
-            If NewProgress < 1 AndAlso NewProgress > 0 Then NewProgress = 2 * (NewProgress ^ 3) - 3 * (NewProgress ^ 2) + 2 * NewProgress '2x^3-3x^2+2x，模拟开头和结尾更慢的情况
             _Progress = NewProgress
         End Sub
 
@@ -1885,7 +1948,7 @@ Retry:
                         For Each File As NetFile In WaitingFiles
                             If NetTaskThreadCount >= NetTaskThreadLimit Then Continue While '最大线程数检查
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(100) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(30) '减少 BMCLAPI 请求频率（目前每分钟限制 4000 次）
                         Next
                         '为进行中的文件追加线程
                         If Speed >= NetTaskSpeedLimitLow Then Continue While '下载速度足够，无需新增
@@ -1905,7 +1968,7 @@ Retry:
                             '新增线程
                             If PreparingCount > DownloadingCount Then Continue For '准备中的线程已多于下载中的线程，不再新增
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(100) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(30) '减少 BMCLAPI 请求频率（目前每分钟限制 4000 次）
                         Next
                     End While
                 Catch ex As Exception
