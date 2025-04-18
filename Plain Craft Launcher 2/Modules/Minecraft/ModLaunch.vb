@@ -1325,8 +1325,7 @@ Retry:
     ''' 判断是否使用 RetroWrapper。
     ''' </summary>
     Private Function McLaunchNeedsRetroWrapper() As Boolean
-        Return McVersionCurrent.Version.McCodeMain <= 5 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso '<=1.5
-               Not Setup.Get("LaunchAdvanceDisableRW") AndAlso Not Setup.Get("VersionAdvanceDisableRW", McVersionCurrent) 
+        Return (McVersionCurrent.ReleaseTime >= New Date(2013, 6, 25) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse (McVersionCurrent.Version.McCodeMain < 6 AndAlso McVersionCurrent.Version.McCodeMain <> 99) AndAlso Not Setup.Get("LaunchAdvanceDisableRW") AndAlso Not Setup.Get("VersionAdvanceDisableRW", McVersionCurrent) '<1.6
     End Function
 
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
