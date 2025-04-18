@@ -56,6 +56,7 @@
             TextAdvanceRun.Text = Setup.Get("LaunchAdvanceRun")
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceDisableJLW.Checked = Setup.Get("LaunchAdvanceDisableJLW")
+            CheckAdvanceDisableRW.Checked = Setup.Get("LaunchAdvanceDisableRW")
             CheckAdvanceGraphicCard.Checked = Setup.Get("LaunchAdvanceGraphicCard")
 
         Catch ex As NullReferenceException

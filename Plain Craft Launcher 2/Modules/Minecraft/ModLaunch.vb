@@ -1321,6 +1321,14 @@ Retry:
     End Function
     Private ExtractJavaWrapperLock As New Object
 
+    ''' <summary>
+    ''' 判断是否使用 RetroWrapper。
+    ''' </summary>
+    Private Function McLaunchNeedsRetroWrapper() As Boolean
+        Return McVersionCurrent.Version.McCodeMain <= 5 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso '<=1.5
+               Not Setup.Get("LaunchAdvanceDisableRW") AndAlso Not Setup.Get("VersionAdvanceDisableRW", McVersionCurrent) 
+    End Function
+
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
         McLaunchLog("开始获取 Minecraft 启动参数")
@@ -1502,6 +1510,13 @@ NextVersion:
             If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
+
+        '添加 RetroWrapper 相关参数
+        If McLaunchNeedsRetroWrapper() Then
+            'https://github.com/NeRdTheNed/RetroWrapper/wiki/RetroWrapper-flags
+            DataList.Add("-Dretrowrapper.doUpdateCheck=false")
+            DataList.Add("-Dretrowrapper.enableFMLPatch=true")
         End If
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
@@ -1696,6 +1711,18 @@ NextVersion:
         Loader.Output = LibList
         Dim CpStrings As New List(Of String)
         Dim OptiFineCp As String = Nothing
+
+        'RetroWrapper 释放
+        If McLaunchNeedsRetroWrapper() Then
+            Dim WrapperPath As String = PathMcFolder & "libraries\retrowrapper\RetroWrapper.jar"
+            Try
+                WriteFile(WrapperPath, GetResources("RetroWrapper"))
+                CpStrings.Add(WrapperPath)  
+            Catch ex As Exception
+                Log(ex, "RetroWrapper 释放失败")
+            End Try
+        End If
+
         For Each Library As McLibToken In LibList
             If Library.IsNatives Then Continue For
             If Library.Name IsNot Nothing AndAlso Library.Name = "optifine:OptiFine" Then
