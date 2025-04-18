@@ -58,6 +58,102 @@ Friend Module ModSecret
         Return "0000-0000-0000-0000"
     End Function
 
+        ' PCL.ModSecret
+' Token: 0x0600050D RID: 1293 RVA: 0x00030FFC File Offset: 0x0002F1FC
+Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
+	Dim CS$<>8__locals1 As ModSecret._Closure$__55-0 = New ModSecret._Closure$__55-0(CS$<>8__locals1)
+	CS$<>8__locals1.$VB$Local_BaseUrl = BaseUrl
+	If ModSecret._FieldService Then
+		If Not Slient Then
+			ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Info, True)
+			ModSecret._FilterService = False
+		End If
+		If ModSecret.definitionService Then
+			ModSecret.UpdateRestart(True)
+			Return
+		End If
+	Else
+		ModSecret._FieldService = True
+		ModSecret._FilterService = Slient
+		ModBase.Log("[System] 更新已开始，静默：" + Conversions.ToString(ModSecret._FilterService), ModBase.LogLevel.Normal, "出现错误")
+		CS$<>8__locals1.$VB$Local_UpdateKey = "Publi2"
+		If Not ModSecret._FilterService Then
+			ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Info, True)
+		End If
+		ModBase.RunInUi(Sub()
+			Try
+				Dim CS$<>8__locals2 As ModSecret._Closure$__55-1 = New ModSecret._Closure$__55-1(CS$<>8__locals2)
+				CS$<>8__locals1.$VB$Local_BaseUrl = CS$<>8__locals1.$VB$Local_BaseUrl.Replace("{KEY}", CS$<>8__locals1.$VB$Local_UpdateKey)
+				Dim array As String()
+				If CS$<>8__locals1.$VB$Local_BaseUrl.EndsWithF(String.Format("pcl2-server-1253424809.file.myqcloud.com/update/{0}.zip{{CDN}}", "Publi2"), True) Then
+					array = New String() { "https://github.com/Hex-Dragon/PCL2/raw/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip", "https://gitcode.net/LTCat_/pcl2/-/raw/master/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip?inline=false", CS$<>8__locals1.$VB$Local_BaseUrl }
+				Else
+					array = New String() { CS$<>8__locals1.$VB$Local_BaseUrl }
+				End If
+				Dim CS$<>8__locals3 As ModSecret._Closure$__55-1 = CS$<>8__locals2
+				Dim text As String = "启动器更新"
+				Dim array2 As ModLoader.LoaderBase() = New ModLoader.LoaderBase(1) {}
+				array2(0) = New ModNet.LoaderDownload("下载更新文件", New List(Of ModNet.NetFile)() From { New ModNet.NetFile(array, ModBase.schemaStrategy + "Update.zip", New ModBase.FileChecker(1048576L, -1L, Nothing, False, False), False) }) With { .ProgressWeight = 1.0 }
+				Dim num As Integer = 1
+				Dim text2 As String = "安装更新"
+				Dim action As Action(Of ModLoader.LoaderTask(Of String, Integer))
+				If ModSecret._Closure$__.$IR55-1 IsNot Nothing Then
+					action = ModSecret._Closure$__.$IR55-1
+				Else
+					Dim action2 As Action(Of ModLoader.LoaderTask(Of String, Integer)) = Sub(a0 As ModLoader.LoaderTask(Of String, Integer))
+						Dim vb$AnonymousDelegate_ As VB$AnonymousDelegate_3
+						If ModSecret._Closure$__.$I55-1 IsNot Nothing Then
+							vb$AnonymousDelegate_ = ModSecret._Closure$__.$I55-1
+						Else
+							Dim vb$AnonymousDelegate_2 As VB$AnonymousDelegate_3 = Sub()
+								Dim text3 As String = ModBase.Path + "PCL\Plain Craft Launcher 2.exe"
+								If File.Exists(text3) Then
+									File.Delete(text3)
+									ModBase.Log("[System] 已清理存在的更新文件：" + text3, ModBase.LogLevel.Normal, "出现错误")
+								Else
+									ModBase.Log("[System] 无需清理目标更新文件：" + text3, ModBase.LogLevel.Normal, "出现错误")
+								End If
+								ModBase.ExtractFile(ModBase.schemaStrategy + "Update.zip", ModBase.Path + "PCL\", Nothing)
+								File.Delete(ModBase.schemaStrategy + "Update.zip")
+								ModBase.Log("[System] 更新文件解压完成", ModBase.LogLevel.Normal, "出现错误")
+								If ModSecret._FilterService Then
+									ModSecret.definitionService = True
+									Return
+								End If
+								If ModLaunch.m_RuleInfo.State = ModBase.LoadState.Loading Then
+									ModMain.Hint("更新已准备就绪，PCL 将在游戏启动完成后重启！", ModMain.HintType.Finish, True)
+									While ModLaunch.m_RuleInfo.State = ModBase.LoadState.Loading
+										Thread.Sleep(10)
+									End While
+								End If
+								ModSecret.UpdateRestart(True)
+							End Sub
+							vb$AnonymousDelegate_ = vb$AnonymousDelegate_2
+							ModSecret._Closure$__.$I55-1 = vb$AnonymousDelegate_2
+						End If
+						vb$AnonymousDelegate_()
+					End Sub
+					action = action2
+					ModSecret._Closure$__.$IR55-1 = action2
+				End If
+				array2(num) = New ModLoader.LoaderTask(Of String, Integer)(text2, action, Nothing, ThreadPriority.Normal) With { .ProgressWeight = 0.1 }
+				CS$<>8__locals3.$VB$Local_Loader = New ModLoader.LoaderCombo(Of String)(text, array2)
+				CS$<>8__locals2.$VB$Local_Loader.OnStateChanged = Sub(a0 As ModLoader.LoaderBase)
+					MyBase._Lambda$__2()
+				End Sub
+				CS$<>8__locals2.$VB$Local_Loader.Start(Nothing, False)
+				If Not ModSecret._FilterService Then
+					ModLoader.LoaderTaskbarAdd(Of String)(CS$<>8__locals2.$VB$Local_Loader)
+					ModMain._PredicateTask.BtnExtraDownload.ShowRefresh()
+				End If
+			Catch ex As Exception
+				ModBase.Log(ex, "开始启动器更新失败", ModBase.LogLevel.Feedback, "出现错误")
+			End Try
+		End Sub, False)
+	End If
+End Sub
+
+
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))
         Dim DataJvmCustom As String = Setup.Get("VersionAdvanceJvm", Version:=McVersionCurrent)
         DataList.Insert(0, If(DataJvmCustom = "", Setup.Get("LaunchAdvanceJvm"), DataJvmCustom)) '可变 JVM 参数
