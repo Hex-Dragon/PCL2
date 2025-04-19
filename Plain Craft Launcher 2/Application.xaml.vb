@@ -29,7 +29,7 @@ Public Class Application
                 ElseIf e.Args(0) = "--gpu" Then
                     '调整显卡设置
                     Try
-                        SetGPUPreference(e.Args(1).Trim(""""))
+                        SetGPUPreference(e.Args(1).Trim(""""), Setup.Get("LaunchAdvanceGraphicCard"))
                         Environment.Exit(ProcessReturnValues.TaskDone)
                     Catch ex As Exception
                         Environment.Exit(ProcessReturnValues.Fail)

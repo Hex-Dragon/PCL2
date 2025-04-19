@@ -812,12 +812,17 @@ NextFile:
     Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As Boolean
 
     ''' <summary>
-    ''' 将特定程序设置为使用高性能显卡启动。
+    ''' 将特定程序设置为使用高性能或平衡显卡启动。
     ''' 如果失败，则抛出异常。
     ''' </summary>
-    Public Sub SetGPUPreference(Executeable As String)
+    Public Sub SetGPUPreference(Executeable As String, HighPerformance As Boolean)
         Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
-        Const REG_VALUE As String = "GpuPreference=2;"
+        Dim REG_VALUE As String = Nothing
+        If HighPerformance Then
+            REG_VALUE = "GpuPreference=2;"
+        Else
+            REG_VALUE = "GpuPreference=1;"
+        End If
         '查看现有设置
         Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
             If ReadOnlyKey IsNot Nothing Then
