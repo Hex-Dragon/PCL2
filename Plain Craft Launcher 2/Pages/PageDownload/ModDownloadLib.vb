@@ -2124,6 +2124,7 @@ Retry:
             '下载
             'TODO: BMCLAPI 不支持 Quilt Installer 下载
             Dim Address As New List(Of String)
+            Dim sdasda = 0
             Address.Add(Url)
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
             '启动
@@ -2205,6 +2206,78 @@ Retry:
         Return NewItem
     End Function
 
+#End Region
+
+#Region "LabyMod 下载"
+
+    Public Sub McDownloadLabyModLoaderSave()
+        Try
+            Dim Url As String = "https://releases.labymod.net/api/v1/installer/production/java"
+            Dim FileName As String = GetFileNameFromPath(Url)
+            Dim Target As String = SelectSaveFile("选择保存位置", FileName, "LabyMod 安装器 (*.jar)|*.jar")
+            If Not Target.Contains("\") Then Exit Sub
+
+            '重复任务检查
+            For Each OngoingLoader In LoaderTaskbar.ToList()
+                If OngoingLoader.Name <> $"LabyMod 安装器下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
+
+            '构造步骤加载器
+            Dim Loaders As New List(Of LoaderBase)
+            '下载
+            Dim Address As New List(Of String)
+            Address.Add(Url)
+            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+            '启动
+            Dim Loader As New LoaderCombo(Of JObject)("LabyMod 安装器下载", Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
+            Loader.Start()
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+        Catch ex As Exception
+            Log(ex, "开始 LabyMod 安装器下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 获取下载某个 LabyMod 版本的加载器列表。
+    ''' </summary>
+    Private Function McDownloadLabyModLoader(LabyModCommitRef As String, LabyModChannel As String, MinecraftName As String, Optional McFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+
+        '参数初始化
+        McFolder = If(McFolder, PathMcFolder)
+        Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
+        Dim Id As String = "labymod-" & LabyModCommitRef & "-" & MinecraftName
+        Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
+        Dim Loaders As New List(Of LoaderBase)
+
+        '下载 Json
+        MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 LabyMod 主文件下载地址",
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            '启动依赖版本的下载
+            If FixLibrary Then
+                McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, MinecraftName, $"https://releases.r2.labymod.net/api/v1/download/manifest/labymod4/{LabyModChannel}/{MinecraftName}/{LabyModCommitRef}.json")
+            End If
+            Task.Progress = 0.5
+            '构造文件请求
+            Task.Output = New List(Of NetFile) From {New NetFile({
+                $"https://releases.r2.labymod.net/api/v1/download/manifest/labymod4/{LabyModChannel}/{MinecraftName}/{LabyModCommitRef}.json"
+            }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
+        End Sub) With {.ProgressWeight = 0.5})
+        Loaders.Add(New LoaderDownload("下载 LabyMod 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
+
+        '下载支持库
+        If FixLibrary Then
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 LabyMod 支持库文件",
+                Sub(Task) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+            Loaders.Add(New LoaderDownload("下载 LabyMod 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 8})
+        End If
+
+        Return Loaders
+    End Function
 #End Region
 
 #Region "合并安装"
@@ -2291,6 +2364,16 @@ Retry:
         ''' 欲下载的 Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) 信息。
         ''' </summary>
         Public QSL As CompFile = Nothing
+
+        ''' <summary>
+        ''' 欲下载的 LabyMod 版本。
+        ''' </summary>
+        Public LabyModCommitRef As String = Nothing
+
+        ''' <summary>
+        ''' 欲下载的 LabyMod 通道。
+        ''' </summary>
+        Public LabyModChannel As String = Nothing
 
         ''' <summary>
         ''' 欲下载的 OptiFabric 信息。
@@ -2421,6 +2504,8 @@ Retry:
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
         Dim QuiltFolder As String = Nothing
         If Request.QuiltVersion IsNot Nothing Then QuiltFolder = TempMcFolder & "versions\quilt-loader-" & Request.QuiltVersion & "-" & Request.MinecraftName
+        Dim LabyModFolder As String = Nothing
+        If Request.QuiltVersion IsNot Nothing Then QuiltFolder = TempMcFolder & "versions\labymod-" & Request.LabyModCommitRef & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
@@ -2442,6 +2527,7 @@ Retry:
         If CleanroomFolder IsNot Nothing Then Log("[Download] Cleanroom 缓存：" & CleanroomFolder)
         If FabricFolder IsNot Nothing Then Log("[Download] Fabric 缓存：" & FabricFolder)
         If QuiltFolder IsNot Nothing Then Log("[Download] Quilt 缓存：" & QuiltFolder)
+        If LabyModFolder IsNot Nothing Then Log("[Download] LabyMod 缓存：" & LabyModFolder)
         If LiteLoaderFolder IsNot Nothing Then Log("[Download] LiteLoader 缓存：" & LiteLoaderFolder)
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
@@ -2501,6 +2587,10 @@ Retry:
         If Request.QuiltVersion IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 Quilt " & Request.QuiltVersion, McDownloadQuiltLoader(Request.QuiltVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
+        'Quilt
+        If Request.QuiltVersion IsNot Nothing Then
+            LoaderList.Add(New LoaderCombo(Of String)("下载 LabyMod " & Request.LabyModCommitRef, McDownloadLabyModLoader(Request.LabyModCommitRef, Request.LabyModChannel, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
+        End If
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
@@ -2533,7 +2623,7 @@ Retry:
     ''' <summary>
     ''' 将多个版本 Json 进行合并，如果目标已存在则直接覆盖。失败会抛出异常。
     ''' </summary>
-    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional CleanroomFolder As String = Nothing, Optional CleanroomVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional QuiltFolder As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
+    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional CleanroomFolder As String = Nothing, Optional CleanroomVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional QuiltFolder As String = Nothing, Optional LabyModFolder As String = Nothing, Optional LabyModChannel As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
         Log("[Download] 开始进行版本合并，输出：" & OutputFolder & "，Minecraft：" & MinecraftFolder &
             If(OptiFineFolder IsNot Nothing, "，OptiFine：" & OptiFineFolder, "") &
             If(ForgeFolder IsNot Nothing, "，Forge：" & ForgeFolder, "") &
@@ -2541,12 +2631,13 @@ Retry:
             If(CleanroomFolder IsNot Nothing, "，Cleanroom：" & CleanroomFolder, "") &
             If(LiteLoaderFolder IsNot Nothing, "，LiteLoader：" & LiteLoaderFolder, "") &
             If(FabricFolder IsNot Nothing, "，Fabric：" & FabricFolder, "") &
-            If(QuiltFolder IsNot Nothing, "，Quilt：" & QuiltFolder, ""))
+            If(QuiltFolder IsNot Nothing, "，Quilt：" & QuiltFolder, "") &
+            If(LabyModFolder IsNot Nothing, "，LabyMod：" & LabyModFolder, ""))
         Directory.CreateDirectory(OutputFolder)
 
-        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasCleanroom As Boolean = CleanroomFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing, HasQuilt As Boolean = QuiltFolder IsNot Nothing
-        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, CleanroomName As String, LiteLoaderName As String, FabricName As String, QuiltName As String
-        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, CleanroomJsonPath As String, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing, QuiltJsonPath As String = Nothing
+        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasCleanroom As Boolean = CleanroomFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing, HasQuilt As Boolean = QuiltFolder IsNot Nothing, HasLabyMod As Boolean = LabyModFolder IsNot Nothing
+        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, CleanroomName As String, LiteLoaderName As String, FabricName As String, QuiltName As String, LabyModName As String
+        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, CleanroomJsonPath As String, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing, QuiltJsonPath As String = Nothing, LabyModJsonPath As String = Nothing
         Dim OutputJar As String, MinecraftJar As String
 #Region "初始化路径信息"
         If Not OutputFolder.EndsWithF("\") Then OutputFolder += "\"
@@ -2600,9 +2691,15 @@ Retry:
             QuiltName = GetFolderNameFromPath(QuiltFolder)
             QuiltJsonPath = QuiltFolder & QuiltName & ".json"
         End If
+
+        If HasLabyMod Then
+            If Not LabyModFolder.EndsWithF("\") Then LabyModFolder += "\"
+            LabyModName = GetFolderNameFromPath(LabyModFolder)
+            LabyModJsonPath = LabyModFolder & LabyModName & ".json"
+        End If
 #End Region
 
-        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, CleanroomJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing
+        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, CleanroomJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing, LabyModJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
         If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
@@ -2648,6 +2745,12 @@ Retry:
             Dim QuiltJsonText As String = ReadFile(QuiltJsonPath)
             If Not QuiltJsonText.StartsWithF("{") Then Throw New Exception("Quilt Json 有误，地址：" & QuiltJsonPath & "，前段内容：" & QuiltJsonText.Substring(0, Math.Min(QuiltJsonText.Length, 1000)))
             QuiltJson = GetJson(QuiltJsonText)
+        End If
+
+        If HasLabyMod Then
+            Dim LabyModJsonText As String = ReadFile(LabyModJsonPath)
+            If Not LabyModJsonText.StartsWithF("{") Then Throw New Exception("LabyMod Json 有误，地址：" & LabyModJsonPath & "，前段内容：" & LabyModJsonText.Substring(0, Math.Min(LabyModJsonText.Length, 1000)))
+            LabyModJson = GetJson(LabyModJsonText)
         End If
 #End Region
 
@@ -2717,6 +2820,14 @@ Retry:
             QuiltJson.Remove("releaseTime")
             QuiltJson.Remove("time")
             OutputJson.Merge(QuiltJson)
+        End If
+        If HasLabyMod Then
+            '合并 LabyMod
+            LabyModJson.Remove("releaseTime")
+            LabyModJson.Remove("time")
+            OutputJson.Merge(LabyModJson)
+            Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
+            OutputJson("libraries") = LabyModLib("libraries")
         End If
         '修改
         If RealArguments IsNot Nothing AndAlso RealArguments.Replace(" ", "") <> "" Then OutputJson("minecraftArguments") = RealArguments
