@@ -2253,7 +2253,7 @@ IgnoreCustomSkin:
         '输出信息
         McLaunchLog("")
         McLaunchLog("~ 基础参数 ~")
-        McLaunchLog("PCL 版本：" & VersionDisplayName & " (" & VersionCode & ")")
+        McLaunchLog("PCL 版本：" & VersionBaseName & " (" & VersionCode & ")")
         McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（识别为 1." & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
         McLaunchLog("资源版本：" & McAssetsGetIndexName(McVersionCurrent))
         McLaunchLog("版本继承：" & If(McVersionCurrent.InheritVersion = "", "无", McVersionCurrent.InheritVersion))
