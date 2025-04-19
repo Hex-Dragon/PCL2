@@ -57,12 +57,14 @@ Public Class PageVersionWorld
 
     Private Sub CheckQuickPlay()
         Dim VersionJson = PageVersionLeft.Version.JsonObject
-        For Each Argument In VersionJson("arguments")("game")
-            If Argument.Type = JTokenType.Object AndAlso JObject.FromObject(Argument).ContainsKey("value") AndAlso Argument("value").ToString().Contains("--quickPlaySingleplayer") Then
-                QuickPlayFeature = True
-                Exit For
-            End If
-        Next
+        If VersionJson("arguments")("game") IsNot Nothing
+            For Each Argument In VersionJson("arguments")("game")
+                If Argument.Type = JTokenType.Object AndAlso JObject.FromObject(Argument).ContainsKey("value") AndAlso Argument("value").ToString().Contains("--quickPlaySingleplayer") Then
+                    QuickPlayFeature = True
+                    Exit For
+                End If
+            Next
+        End If
     End Sub
 
     Private Sub LoadFileList()
