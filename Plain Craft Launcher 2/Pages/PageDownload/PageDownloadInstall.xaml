@@ -27,6 +27,8 @@
                         <local:MyHint Text="必须安装 OptiFabric 才能正常使用 OptiFine！" Margin="0,10,0,0" x:Name="HintOptiFabric" IsWarn="True" />
                         <local:MyHint Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！" Margin="0,10,0,0" x:Name="HintOptiFabricOld" IsWarn="False" />
                         <local:MyHint Text="OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。" Margin="0,10,0,0" x:Name="HintModOptiFine" IsWarn="False" />
+                        <local:MyHint Text="你尚未选择安装 QFAPI / QSL，这会导致大多数 Mod 无法使用！如果 QFAPI / QSL 无可用版本，你可以选择安装 Fabric API。" Margin="0,1,0,7" x:Name="HintQSL" IsWarn="True" />
+                        <local:MyHint Text="你选择了在 Quilt 中安装 Fabric API，而当前存在适配的 QFAPI / QSL 可供安装。请优先考虑安装 QFAPI / QSL。" Margin="0,1,0,7" x:Name="HintQuiltFabricAPI" IsWarn="False" />
                         <local:MyCard Title="Forge" Height="40" Margin="0,12,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanForge" />
                         <Grid x:Name="PanForgeInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
@@ -42,7 +44,25 @@
                         </Grid>
                         <Grid x:Name="BtnForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
                             <Path x:Name="BtnForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                                        Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                        </Grid>
+                    </local:MyCard>
+                    <local:MyCard Title="Cleanroom" Height="40" Margin="0,15,0,0" x:Name="CardCleanroom" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanCleanroom" />
+                            <Grid x:Name="PanCleanroomInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="ImgCleanroom" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Cleanroom.png" />
+                            <TextBlock x:Name="LabCleanroom" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </Grid>
+                        <Grid x:Name="BtnCleanroomClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnCleanroomClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
                         <local:MyCard Title="NeoForge" Height="40" Margin="0,12,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
@@ -96,7 +116,43 @@
                         </Grid>
                         <Grid x:Name="BtnFabricApiClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
                             <Path x:Name="BtnFabricApiClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                                        Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                        </Grid>
+                    </local:MyCard>
+                    <local:MyCard Title="Quilt" Height="40" Margin="0,15,0,0" x:Name="CardQuilt" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQuilt" />
+                            <Grid x:Name="PanQuiltInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="ImgQuilt" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Quilt.png" />
+                            <TextBlock x:Name="LabQuilt" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </Grid>
+                        <Grid x:Name="BtnQuiltClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnQuiltClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                        </Grid>
+                    </local:MyCard>
+                    <local:MyCard Title="QFAPI / QSL" Height="40" Margin="0,15,0,0" x:Name="CardQSL" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQSL" />
+                            <Grid x:Name="PanQSLInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="ImgQSL" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Quilt.png" />
+                            <TextBlock x:Name="LabQSL" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </Grid>
+                        <Grid x:Name="BtnQSLClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnQSLClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
                         <local:MyCard Title="OptiFine" Height="40" Margin="0,12,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
@@ -167,9 +223,12 @@
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFine" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadForge" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadNeoForge" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadCleanroom" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadLiteLoader" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabric" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabricApi" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadQuilt" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadQSL" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFabric" HasAnimation="False" />
         </local:MyCard>
     </Grid>

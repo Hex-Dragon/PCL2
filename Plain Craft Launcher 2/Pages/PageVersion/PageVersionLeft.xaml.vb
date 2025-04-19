@@ -1,4 +1,4 @@
-﻿Public Class PageVersionLeft
+Public Class PageVersionLeft
     Implements IRefreshable
 
     ''' <summary>
@@ -26,7 +26,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemExport.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check, ItemInstall.Check, ItemExport.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -39,7 +39,7 @@
                 If FrmVersionOverall Is Nothing Then FrmVersionOverall = New PageVersionOverall
                 Return FrmVersionOverall
             Case FormMain.PageSubType.VersionMod
-                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionMod
+                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionCompResource(CompType.Mod)
                 Return FrmVersionMod
             Case FormMain.PageSubType.VersionModDisabled
                 If FrmVersionModDisabled Is Nothing Then FrmVersionModDisabled = New PageVersionModDisabled
@@ -47,6 +47,21 @@
             Case FormMain.PageSubType.VersionSetup
                 If IsNothing(FrmVersionSetup) Then FrmVersionSetup = New PageVersionSetup
                 Return FrmVersionSetup
+            Case FormMain.PageSubType.VersionWorld
+                If FrmVersionWorld Is Nothing Then FrmVersionWorld = New PageVersionWorld
+                Return FrmVersionWorld
+            Case FormMain.PageSubType.VersionScreenshot
+                If FrmVersionScreenshot Is Nothing Then FrmVersionScreenshot = New PageVersionScreenshot
+                Return FrmVersionScreenshot
+            Case FormMain.PageSubType.VersionResourcePack
+                If FrmVersionResourcePack Is Nothing Then FrmVersionResourcePack = New PageVersionCompResource(CompType.ResourcePack)
+                Return FrmVersionResourcePack
+            Case FormMain.PageSubType.VersionShader
+                If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionCompResource(CompType.Shader)
+                Return FrmVersionShader
+            Case FormMain.PageSubType.VersionInstall
+                If FrmVersionInstall Is Nothing Then FrmVersionInstall = New PageVersionInstall
+                Return FrmVersionInstall
             Case FormMain.PageSubType.VersionExport
                 If FrmVersionExport Is Nothing Then FrmVersionExport = New PageVersionExport
                 Return FrmVersionExport
@@ -100,8 +115,28 @@
     Public Sub Refresh(SubType As FormMain.PageSubType)
         Select Case SubType
             Case FormMain.PageSubType.VersionMod
-                PageVersionMod.Refresh()
-                ItemMod.Checked = True
+                PageVersionCompResource.Refresh(CompType.Mod)
+            Case FormMain.PageSubType.VersionScreenshot
+                PageVersionScreenshot.Refresh()
+            Case FormMain.PageSubType.VersionWorld
+                PageVersionWorld.Refresh()
+            Case FormMain.PageSubType.VersionResourcePack
+                PageVersionCompResource.Refresh(CompType.ResourcePack)
+            Case FormMain.PageSubType.VersionShader
+                PageVersionCompResource.Refresh(CompType.Shader)
+            Case FormMain.PageSubType.VersionInstall
+                DlClientListLoader.Start(IsForceRestart:=True)
+                DlOptiFineListLoader.Start(IsForceRestart:=True)
+                DlForgeListLoader.Start(IsForceRestart:=True)
+                DlNeoForgeListLoader.Start(IsForceRestart:=True)
+                DlLiteLoaderListLoader.Start(IsForceRestart:=True)
+                DlFabricListLoader.Start(IsForceRestart:=True)
+                DlFabricApiLoader.Start(IsForceRestart:=True)
+                DlQuiltListLoader.Start(IsForceRestart:=True)
+                DlQSLLoader.Start(IsForceRestart:=True)
+                DlOptiFabricLoader.Start(IsForceRestart:=True)
+                ItemInstall.Checked = True
+                FrmVersionInstall.GetCurrentInfo()
             Case FormMain.PageSubType.VersionExport
                 If FrmVersionExport IsNot Nothing Then FrmVersionExport.RefreshAll()
                 ItemExport.Checked = True

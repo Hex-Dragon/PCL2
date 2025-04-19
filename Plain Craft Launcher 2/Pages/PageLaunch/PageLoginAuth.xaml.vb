@@ -38,6 +38,7 @@
     ''' 当前页面的登录信息是否有效。
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginServer) As String
+        If Not LittleSkinClientId = "" Then Return ""
         If LoginData.UserName = "" Then Return "账号不能为空！"
         If LoginData.Password = "" Then Return "密码不能为空！"
         Return ""

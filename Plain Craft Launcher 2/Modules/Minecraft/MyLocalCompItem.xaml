@@ -1,4 +1,4 @@
-﻿<Grid x:Class="MyLocalModItem"
+﻿<Grid x:Class="MyLocalCompItem"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="clr-namespace:PCL;assembly="
@@ -38,7 +38,7 @@
         <TextBlock x:Name="LabTitle" TextTrimming="CharacterEllipsis" FontSize="14" IsHitTestVisible="False" />
         <TextBlock x:Name="LabSubtitle" Grid.Column="1" HorizontalAlignment="Left"
             TextTrimming="CharacterEllipsis" FontSize="12" IsHitTestVisible="False" 
-            Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
+            Foreground="{DynamicResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
         <!-- 更新按钮 -->
         <local:MyIconButton Grid.Column="2"
             Width="21" Height="21" Margin="-2,-1.6,0,0" x:Name="BtnUpdate" Theme="Black" Opacity="0.4" Visibility="Collapsed"
@@ -52,6 +52,6 @@
         </Border>-->
     </StackPanel>
     <TextBlock x:Name="LabInfo" Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" Margin="0,0,3,1"
-               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray4}"
+               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{DynamicResource ColorBrushGray4}"
                IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" />
 </Grid>

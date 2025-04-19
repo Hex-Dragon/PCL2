@@ -1,4 +1,8 @@
-﻿Public Class PageLinkHiper
+﻿Imports System.Security.Cryptography.X509Certificates
+Imports NAudio.CoreAudioApi
+Imports Open.Nat
+
+Public Class PageLinkDirect
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
@@ -17,63 +21,31 @@
 
     Private IsLoad As Boolean = False
     Private Sub OnLoaded() Handles Me.Loaded
-        FormMain.EndProgramForce(ProcessReturnValues.Aborted)
+        'FormMain.EndProgramForce(ProcessReturnValues.Aborted)
         If IsLoad Then Exit Sub
         IsLoad = True
         '启动监视线程
         If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
-        '读取索引码
-        Try
-            Dim Time As String = Setup.Get("LinkHiperCertTime")
-            If Time = "" Then
-                Log("[HiPer] 没有缓存凭证")
-            ElseIf Date.Parse(Time) > Date.Now Then
-                TextCert.Text = Setup.Get("LinkHiperCertLast")
-                Log("[HiPer] 缓存凭证尚未过期：" & Time)
-                CurrentSubpage = Subpages.PanSelect
-            Else
-                Log("[HiPer] 缓存凭证已过期：" & Time)
-                LabCertTitle.Text = "输入索引码"
-                LabCertDesc.Text = "你的 HiPer 索引码已经过期，请输入新的索引码。" & vbCrLf & "如果实在没有索引码，可以在左侧选择 IOI 方式联机。"
-            End If
-        Catch ex As Exception
-            Log(ex, "读取缓存凭证失败")
-            Setup.Set("LinkHiperCertTime", "")
-        End Try
     End Sub
 
 #End Region
 
 #Region "加载步骤"
 
-    Public Shared PathHiper As String = PathAppdata & "联机模块\"
     Public Shared WithEvents InitLoader As New LoaderCombo(Of Integer)("HiPer 初始化", {
-        New LoaderTask(Of Integer, Integer)("网络环境：连通检测", AddressOf InitPingCheck) With {.Block = False, .ProgressWeight = 0.5},
-        New LoaderTask(Of Integer, Integer)("网络环境：IP 检测", AddressOf InitIpCheck) With {.Block = False, .ProgressWeight = 1},
-        New LoaderTask(Of Integer, Integer)("检查网络环境", AddressOf InitCheck) With {.ProgressWeight = 0.5},
-        New LoaderTask(Of Integer, List(Of NetFile))("获取所需文件", AddressOf InitGetFile) With {.ProgressWeight = 4},
-        New LoaderDownload("下载所需文件", New List(Of NetFile)) With {.ProgressWeight = 4},
-        New LoaderTask(Of Integer, Integer)("启动联机模块", AddressOf InitLaunch) With {.ProgressWeight = 7}
+        New LoaderTask(Of Integer, Integer)("检查网络环境", AddressOf InitCheck) With {.ProgressWeight = 0.5}
     })
-
-    '检查网络状态
-    Private Shared Sub InitPingCheck(Task As LoaderTask(Of Integer, Integer))
-    End Sub
-    Private Shared Sub InitIpCheck()
-    End Sub
-    Private Shared PingTime As Integer, IpCheckStatus As LoadState = LoadState.Loading, IpIsInChina As Boolean
     Private Shared Sub InitCheck(Task As LoaderTask(Of Integer, Integer))
     End Sub
-
-    '获取所需文件
-    Private Shared Sub InitGetFile(Task As LoaderTask(Of Integer, List(Of NetFile)))
-    End Sub
-    Public Class CertOutdatedException
-        Inherits Exception
-    End Class
     '启动联机模块
-    Private Shared Sub InitLaunch(Task As LoaderTask(Of Integer, Integer))
-    End Sub
+    Private Shared Async Function InitLaunch() As Tasks.Task
+        Dim worlds = Await ModLink.MCInstanceFinding()
+        If Not worlds.Any Then
+            Hint("没有找到可用的联机世界")
+            Exit Function
+        End If
+        Hint($"找到了 {worlds.Count} 个世界")
+    End Function
     Private Shared PingNodes As Integer, AllNodes As List(Of String)
 
 #End Region
@@ -87,23 +59,14 @@
         End Get
         Set(value As LoadState)
             _HiperState = value
-            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemHiper.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
+            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemDirect.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
         End Set
     End Property
-    Public Shared Sub ModuleStopManually() '关闭联机模块按钮
-        HiperExit(False)
-    End Sub
 
     Private Shared HiperIp As String = Nothing
     Private Shared HiperProcessId As Integer = -1, McbProcessId As Integer = -1
     Private Shared HiperCertTime As Date = Date.Now
 
-    ''' <summary>
-    ''' 若程序正在运行，则结束程序进程，同时初始化状态数据。返回是否关闭了相关进程。
-    ''' </summary>
-    Public Shared Function HiperStop(SleepWhenKilled As Boolean) As Boolean
-        Return False
-    End Function
     ''' <summary>
     ''' 启动程序，并等待初始化完成后退出运行，同时更新 HiperIp。
     ''' 若启动失败，则会直接抛出异常。
@@ -151,38 +114,9 @@
     Private Sub WatcherTimer1()
         If HiperState <> LoadState.Finished Then Exit Sub
         RunInUi(Sub()
-                    '索引码剩余时间
-                    Dim Span As TimeSpan = HiperCertTime - Date.Now
-                    If Span.TotalDays >= 30 Then
-                        LabFinishTime.Text = "> 30 天"
-                    ElseIf Span.TotalDays >= 4 Then
-                        LabFinishTime.Text = Span.Days & " 天"
-                    ElseIf Span.TotalDays >= 1 Then
-                        LabFinishTime.Text = Span.Days & " 天" & If(Span.Hours > 0, " " & Span.Hours & " 小时", "")
-                    ElseIf Span.TotalMinutes >= 10 Then
-                        LabFinishTime.Text = Span.Hours & ":" & Span.Minutes.ToString.PadLeft(2, "0") & "'"
-                    Else
-                        LabFinishTime.Text = Span.Minutes & "'" & Span.Seconds.ToString.PadLeft(2, "0") & """"
-                    End If
-                    '提示索引码即将到期
-                    If Span.TotalSeconds <= 5 * 60 AndAlso Span.TotalSeconds > 5 * 60 - 1 AndAlso Setup.Get("LinkHiperCertWarn") Then
-                        MyMsgBox("你的索引码还有不到 5 分钟就要过期了！" & vbCrLf & "你可以在设置中关闭这个提示……", "索引码即将过期", "我知道了……")
-                        ShowWindowToTop(Handle)
-                        Beep()
-                    End If
-                    '检查索引码到期
-                    If Span.TotalSeconds < 2 Then
-                        LabCertTitle.Text = "索引码已过期"
-                        LabCertDesc.Text = "你的 HiPer 索引码已经过期，请输入新的索引码。" & vbCrLf & "如果实在没有索引码，可以在左侧选择 IOI 方式联机。"
-                        TextCert.Text = ""
-                        HiperExit(True)
-                        ShowWindowToTop(Handle)
-                        Beep()
-                        Exit Sub
-                    End If
                     '网络质量
-                    Dim QualityScore As Integer = If(IpIsInChina, 0, -2)
-                    QualityScore -= Math.Ceiling((Math.Min(PingTime, 600) + Math.Min(PingNodes, 600)) / 80)
+                    Dim QualityScore As Integer = 0
+                    QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
                     Select Case QualityScore
                         Case Is >= -1
                             LabFinishQuality.Text = "优秀"
@@ -199,8 +133,8 @@
                     End Select
                     'Ping
                     If HostPing <> -1 Then
-                        If FrmLinkHiper IsNot Nothing AndAlso FrmLinkHiper.LabFinishPing.IsLoaded Then
-                            FrmLinkHiper.LabFinishPing.Text = HostPing & "ms"
+                        If FrmLinkDirect IsNot Nothing AndAlso FrmLinkDirect.LabFinishPing.IsLoaded Then
+                            FrmLinkDirect.LabFinishPing.Text = HostPing & "ms"
                         End If
                     End If
                 End Sub)
@@ -212,34 +146,18 @@
 
 #End Region
 
-#Region "PanCert | 索引码输入页面"
-
-    '检测输入
-    Private Sub TextCert_ValidateChanged(sender As Object, e As EventArgs) Handles TextCert.ValidateChanged
-        BtnCertDone.IsEnabled = TextCert.ValidateResult = ""
-    End Sub
-    Private Sub TextCert_KeyDown(sender As Object, e As KeyEventArgs) Handles TextCert.KeyDown
-        If e.Key = Key.Enter AndAlso BtnCertDone.IsEnabled Then BtnCertDone_Click() '允许回车确认
-    End Sub
-
-    '确认
-    Private Sub BtnCertDone_Click() Handles BtnCertDone.Click
-        CurrentSubpage = Subpages.PanSelect
-    End Sub
-
-#End Region
-
 #Region "PanSelect | 种类选择页面"
 
-    '返回
-    Private Sub BtnSelectReturn_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectReturn.MouseLeftButtonUp
-        LabCertTitle.Text = "输入索引码"
-        LabCertDesc.Text = "你需要获取索引码才能使用 HiPer。" & vbCrLf & "如果实在没有索引码，可以在左侧选择 IOI 方式联机。"
-        CurrentSubpage = Subpages.PanCert
-    End Sub
-
+    Private Property _LoadingWorldInfo As Boolean = False
     '创建房间
-    Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
+    Private Async Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
+        If _LoadingWorldInfo Then
+            Hint("加载中，请稍候……")
+            Exit Sub
+        End If
+        _LoadingWorldInfo = True
+        Await InitLaunch()
+        _LoadingWorldInfo = False
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
@@ -251,6 +169,7 @@
 
     '加入房间
     Private Sub BtnSelectJoin_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectJoin.MouseLeftButtonUp
+        MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息
@@ -272,9 +191,9 @@
         Log("[Hiper] 连接步骤：" & Intro)
         LoadStep = [Step]
         RunInUiWait(Sub()
-                        If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.LabLoadDesc.IsLoaded Then Exit Sub
-                        FrmLinkHiper.LabLoadDesc.Text = Intro
-                        FrmLinkHiper.UpdateProgress()
+                        If FrmLinkDirect Is Nothing OrElse Not FrmLinkDirect.LabLoadDesc.IsLoaded Then Exit Sub
+                        FrmLinkDirect.LabLoadDesc.Text = Intro
+                        FrmLinkDirect.UpdateProgress()
                     End Sub)
     End Sub
 
@@ -292,7 +211,6 @@
         Else
             InitLoader.State = LoadState.Waiting
         End If
-        HiperStop(False)
     End Sub
 
     '进度改变
@@ -328,7 +246,6 @@
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
         If IsServerSide AndAlso MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 2 Then Exit Sub
-        HiperExit(False)
     End Sub
 
     '复制联机码
@@ -352,11 +269,10 @@
 #Region "子页面管理"
 
     Public Enum Subpages
-        PanCert
         PanSelect
         PanFinish
     End Enum
-    Private _CurrentSubpage As Subpages = Subpages.PanCert
+    Private _CurrentSubpage As Subpages = Subpages.PanSelect
     Public Property CurrentSubpage As Subpages
         Get
             Return _CurrentSubpage
@@ -366,27 +282,22 @@
             _CurrentSubpage = value
             Log("[Hiper] 子页面更改为 " & GetStringFromEnum(value))
             PageOnContentExit()
-            If value = Subpages.PanSelect Then
-                LabSelectCode.Text = "(" & TextCert.Text.Substring(0, Math.Min(TextCert.Text.Length, 3)) & "…)"
-            End If
         End Set
     End Property
 
     Private Sub PageLinkHiper_OnPageEnter() Handles Me.PageEnter
-        FrmLinkHiper.PanCert.Visibility = If(CurrentSubpage = Subpages.PanCert, Visibility.Visible, Visibility.Collapsed)
-        FrmLinkHiper.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
-        FrmLinkHiper.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
+        FrmLinkDirect.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
+        FrmLinkDirect.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
     Private Shared Sub HiperExit(ExitToCertPage As Boolean)
         Log("[Hiper] 要求退出 Hiper（当前加载器状态为 " & GetStringFromEnum(InitLoader.State) & "）")
-        HiperStop(False)
         If InitLoader.State = LoadState.Loading Then InitLoader.Abort()
         If InitLoader.State = LoadState.Failed Then InitLoader.State = LoadState.Waiting
         RunInUi(Sub()
-                    If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.IsLoaded Then Exit Sub
-                    FrmLinkHiper.CurrentSubpage = If(ExitToCertPage, Subpages.PanCert, Subpages.PanSelect)
-                    FrmLinkHiper.PageOnContentExit()
+                    If FrmLinkDirect Is Nothing OrElse Not FrmLinkDirect.IsLoaded Then Exit Sub
+                    FrmLinkDirect.CurrentSubpage = Subpages.PanSelect
+                    FrmLinkDirect.PageOnContentExit()
                 End Sub)
     End Sub
 
