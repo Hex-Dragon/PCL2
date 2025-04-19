@@ -89,9 +89,14 @@ End Class
 ''' </summary>
 Public Class ValidateHttp
     Inherits Validate
+    Public Property AllowsNullOrEmpty As Boolean = False
     Public Sub New()
     End Sub '用于 XAML 初始化
+    Public Sub New(Optional AllowsNullOrEmpty As Boolean = False)
+        Me.AllowsNullOrEmpty = AllowsNullOrEmpty
+    End Sub
     Public Overrides Function Validate(Str As String) As String
+        If AllowsNullOrEmpty AndAlso String.IsNullOrEmpty(Str) Then Return ""
         If Str.EndsWithF("/") Then Str = Str.Substring(0, Str.Length - 1)
         If Not RegexCheck(Str, "^(http[s]?)\://") Then Return "输入的网址无效！"
         Return ""

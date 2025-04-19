@@ -5,14 +5,16 @@
     '“返回顶部” 按钮检测的滚动区域
     Public Property PanScroll As MyScrollViewer
         Get
-            Return GetValue(PanScrollProperty)
+            Dim res = GetValue(PanScrollProperty)
+            If res Is Nothing Then Log($"[MyPageRight] 获取到 PanScroll 的值为 null", LogLevel.Debug)
+            Return res
         End Get
         Set(value As MyScrollViewer)
             SetValue(PanScrollProperty, value)
         End Set
     End Property
-    Private Shared ReadOnly PanScrollProperty =
-        DependencyProperty.Register("PanScroll", GetType(MyScrollViewer), GetType(MyPageRight), New PropertyMetadata(Nothing))
+    Private Shared PanScrollProperty =
+        DependencyProperty.Register("PanScroll", GetType(MyScrollViewer), GetType(MyPageRight))
 
     '当前状态
     Public Enum PageStates

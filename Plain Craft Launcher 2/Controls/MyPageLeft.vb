@@ -5,13 +5,15 @@
     '执行逐个进入动画的控件
     Public Property AnimatedControl As FrameworkElement
         Get
-            Return GetValue(AnimatedControlProperty)
+            Dim res = GetValue(AnimatedControlProperty)
+            If res Is Nothing Then Log($"[MyPageLeft] 获取到 AnimatedControl 的值为 null", LogLevel.Debug)
+            Return res
         End Get
         Set(value As FrameworkElement)
             SetValue(AnimatedControlProperty, value)
         End Set
     End Property
-    Public Shared ReadOnly AnimatedControlProperty As DependencyProperty = DependencyProperty.Register("AnimatedControl", GetType(FrameworkElement), GetType(MyPageLeft), New PropertyMetadata(Nothing))
+    Public Shared AnimatedControlProperty As DependencyProperty = DependencyProperty.Register("AnimatedControl", GetType(FrameworkElement), GetType(MyPageLeft))
 
     Public Sub TriggerShowAnimation()
         If AnimatedControl Is Nothing Then

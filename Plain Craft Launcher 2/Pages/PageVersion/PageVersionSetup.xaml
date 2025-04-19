@@ -166,7 +166,7 @@
                         <TextBlock Name="LabServerAuthRegister" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="注册链接" Margin="0,8,25,0" Visibility="Collapsed" />
                         <local:MyTextBox x:Name="TextServerAuthRegister" Grid.Row="2" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthRegister" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="注册账号的网页地址，如 https://xxxxx.xxx/auth/register">
                             <local:MyTextBox.ValidateRules>
-                                <local:ValidateHttp />
+                                <local:ValidateHttp AllowsNullOrEmpty="True" />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
                         <TextBlock Name="LabServerAuthName" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="服务器名称" Margin="0,8,25,0" Visibility="Collapsed" />

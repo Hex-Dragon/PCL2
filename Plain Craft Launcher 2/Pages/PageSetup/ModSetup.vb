@@ -1,4 +1,4 @@
-﻿Public Class ModSetup
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -80,6 +80,7 @@
         {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"CacheAnnounceVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginLegacyName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -206,6 +207,66 @@
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}}
+
+#Region "Register 存储"
+
+    Private LocalRegisterData As New LocalJsonFileConfig(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & $"\.{RegFolder}\Config.json")
+
+    Public Class LocalJsonFileConfig
+        Private ReadOnly _ConfigData As JObject
+        Private _ConfigFilePath As String
+
+        Public Sub New(JsonFilePath As String)
+            _ConfigFilePath = JsonFilePath
+            If File.Exists(JsonFilePath) Then
+                Try
+                    Dim JsonText = ReadFile(JsonFilePath)
+                    _ConfigData = JObject.Parse(JsonText)
+                Catch ex As Exception
+                    Log(ex, "读取配置项数据失败", LogLevel.Feedback)
+                End Try
+            Else
+                _ConfigData = New JObject()
+            End If
+        End Sub
+
+        Private Sub Save()
+            WriteFile(_ConfigFilePath, _ConfigData.ToString())
+        End Sub
+
+        Private ReadOnly _SetLock As New Object()
+        Public Sub [Set](key As String, value As String)
+            SyncLock _SetLock
+                _ConfigData(key) = value
+                Save()
+            End SyncLock
+        End Sub
+
+        Public Function [Get](Key As String) As String
+            If _ConfigData.ContainsKey(Key) Then
+                Return _ConfigData(Key)
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        Public Sub Remove(key As String)
+            _ConfigData.Remove(key)
+            Save()
+        End Sub
+
+        Public Function Contains(key As String) As Boolean
+            Return _ConfigData.ContainsKey(key)
+        End Function
+
+        Public ReadOnly Property RawJObject As JObject
+            Get
+                Return _ConfigData
+            End Get
+        End Property
+    End Class
+#End Region
+
 #Region "基础"
 
     Private Enum SetupSource
@@ -235,7 +296,7 @@
                 Me.Value = Value
                 Me.Source = Source
                 Me.Type = If(Value, New Object).GetType
-                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
+                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value), Value)
             Catch ex As Exception
                 Log(ex, "初始化 SetupEntry 失败", LogLevel.Feedback) '#5095 的 fallback
             End Try
@@ -266,7 +327,7 @@
             If E.Encoded Then
                 Try
                     If Value Is Nothing Then Value = ""
-                    Value = SecretEncrypt(Value, "PCL" & UniqueAddress)
+                    Value = SecretEncrypt(Value)
                 Catch ex As Exception
                     Log(ex, "加密设置失败：" & Key, LogLevel.Developer)
                 End Try
@@ -275,7 +336,7 @@
                 Case SetupSource.Normal
                     WriteIni("Setup", Key, Value)
                 Case SetupSource.Registry
-                    WriteReg(Key, Value)
+                    LocalRegisterData.Set(Key, Value)
                 Case SetupSource.Version
                     If Version Is Nothing Then Throw New Exception($"更改版本设置 {Key} 时未提供目标版本")
                     WriteIni(Version.Path & "PCL\Setup.ini", Key, Value)
@@ -341,6 +402,7 @@
                 DeleteIniKey("Setup", Key)
             Case SetupSource.Registry
                 DeleteReg(Key)
+                LocalRegisterData.Remove(Key)
             Case Else 'SetupSource.Version
                 If Version Is Nothing Then Throw New Exception($"重置版本设置 {Key} 时未提供目标版本")
                 DeleteIniKey(Version.Path & "PCL\Setup.ini", Key)
@@ -360,7 +422,7 @@
             Case SetupSource.Normal
                 Return Not HasIniKey("Setup", Key)
             Case SetupSource.Registry
-                Return Not HasReg(Key)
+                Return Not HasReg(Key) AndAlso Not LocalRegisterData.Contains(Key)
             Case Else 'SetupSource.Version
                 If Version Is Nothing Then Throw New Exception($"判断版本设置 {Key} 是否存在时未提供目标版本")
                 Return Not HasIniKey(Version.Path & "PCL\Setup.ini", Key)
@@ -378,7 +440,22 @@
                 Case SetupSource.Normal
                     SourceValue = ReadIni("Setup", Key, E.DefaultValueEncoded)
                 Case SetupSource.Registry
-                    SourceValue = ReadReg(Key, E.DefaultValueEncoded)
+                    Dim OldSourceData = ReadReg(Key)
+                    If Not String.IsNullOrWhiteSpace(OldSourceData) Then
+                        If LocalRegisterData.Contains(Key) Then '如果本地配置文件中已经存在该项，则不覆盖
+                            OldSourceData = LocalRegisterData.Get(Key)
+                        Else
+                            If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
+                            LocalRegisterData.Set(Key, OldSourceData)
+                            DeleteReg(Key)
+                            SourceValue = OldSourceData
+                        End If
+                    Else
+                        SourceValue = LocalRegisterData.Get(Key)
+                    End If
+                    If String.IsNullOrEmpty(SourceValue) Then
+                        SourceValue = E.DefaultValueEncoded
+                    End If
                 Case SetupSource.Version
                     If Version Is Nothing Then
                         Throw New Exception("读取版本设置 " & Key & " 时未提供目标版本")
@@ -391,7 +468,7 @@
                     SourceValue = E.DefaultValue
                 Else
                     Try
-                        SourceValue = SecretDecrypt(SourceValue, "PCL" & UniqueAddress)
+                        SourceValue = SecretDecrypt(SourceValue)
                     Catch ex As Exception
                         Log(ex, "解密设置失败：" & Key, LogLevel.Developer)
                         SourceValue = E.DefaultValue
