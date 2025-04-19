@@ -210,14 +210,6 @@
             If Not File.Exists(CacheFilePath) Then
                 Try
                     Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
-                    For Each versionuvmc As JObject In UnlistedJson("versions")
-                        If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
-                            versionuvmc("type") = "snapshot"
-                        End If
-                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
-                            versionuvmc("type") = "old_beta"
-                        End If
-                    Next
                     File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
                 Catch ex As Exception
                     Log("[Download] 未列出的版本官方源下载失败: " & ex.Message)
@@ -259,15 +251,7 @@
             Dim CacheFilePath As String = PathTemp & "Cache\uvmc-download.json"
             If Not File.Exists(CacheFilePath) Then
                 Try
-                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
-                    For Each versionuvmc As JObject In UnlistedJson("versions")
-                        If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
-                            versionuvmc("type") = "snapshot"
-                        End If
-                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
-                            versionuvmc("type") = "old_beta"
-                        End If
-                    Next
+                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
                     File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
                 Catch ex As Exception
                     Log("[Download] 未列出的版本镜像源下载失败: " & ex.Message)
@@ -1423,12 +1407,12 @@
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven").
-                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
+                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
                 Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries").
-                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft")
+                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main")
             }
         Else
             Return {
@@ -1436,12 +1420,12 @@
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven").
-                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
+                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
                 Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries").
-                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
+                    Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
                 Original
             }
         End If
@@ -1467,7 +1451,7 @@
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
             Original
         }
     End Function

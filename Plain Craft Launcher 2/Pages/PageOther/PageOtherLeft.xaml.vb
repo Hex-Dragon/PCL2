@@ -148,7 +148,7 @@
                                Case 1
                                    Feedback(True, False)
                                Case 2
-                                   OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+                                   OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
                            End Select
                        End Sub)
 

@@ -887,17 +887,26 @@ NextFile:
     End Sub
 
     ''' <summary>
-    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。
-    ''' 这些文件夹无需进行后续清理。
+    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。这些文件夹无需进行后续清理。
+    ''' 若所有缓存位置均没有权限，会抛出异常。
     ''' </summary>
     ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
     Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
         TryClearTaskTemp()
-        RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-        If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
-            RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-        End If
-        Directory.CreateDirectory(RequestTaskTempFolder)
+        Dim ResultFolder As String
+        Try
+            ResultFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+            If RequireNonSpace AndAlso ResultFolder.Contains(" ") Then Exit Try '带空格
+            Directory.CreateDirectory(ResultFolder)
+            CheckPermissionWithException(ResultFolder)
+            Return ResultFolder
+        Catch
+        End Try
+        '使用备用路径
+        ResultFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        Directory.CreateDirectory(ResultFolder)
+        CheckPermission(ResultFolder)
+        Return ResultFolder
     End Function
 
 #End Region

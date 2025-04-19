@@ -1134,6 +1134,9 @@
     <PackageReference Include="System.Security.AccessControl">
       <Version>6.0.1</Version>
     </PackageReference>
+    <PackageReference Include="TagLibSharp">
+      <Version>2.3.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\Cleanroom.png" />

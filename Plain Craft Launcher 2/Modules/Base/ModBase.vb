@@ -4,8 +4,8 @@ Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Xaml
 Imports System.Threading.Tasks
-Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
 Public Module ModBase
@@ -13,26 +13,22 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.5." & VersionCodeString '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.7" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.7." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.9.2" '上游版本
-    Public Const VersionCode As Integer = 365 '内部版本号
-    Public Const VersionCodeString As String = "365" '内部版本号的字符串形式
+    Public Const VersionCode As Integer = 367 '内部版本号
     '自动生成的版本信息
 #If RELEASE Then
     Public Const VersionBranchName As String = "Slow Ring"
     Public Const VersionBranchCode As String = "0"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #ElseIf BETA Then
     Public Const VersionBranchName As String = "Fast Ring"
     Public Const VersionBranchCode As String = "50"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #Else
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #End If
 
     ''' <summary>
@@ -1754,6 +1750,7 @@ RetryDir:
     End Function
     ''' <summary>
     ''' 获取处于两个子字符串之间的部分，裁切尽可能多的内容。
+    ''' 等效于 AfterLast 后接 BeforeFirst。
     ''' 如果未找到子字符串则不裁切。
     ''' </summary>
     <Extension> Public Function Between(Str As String, After As String, Before As String, Optional IgnoreCase As Boolean = False) As String
@@ -2932,13 +2929,27 @@ Retry:
     ''' <summary>
     ''' 将 XML 转换为对应 UI 对象。
     ''' </summary>
-    Public Function GetObjectFromXML(Str As String)
-        Using Stream As New MemoryStream
+    Public Function GetObjectFromXML(Str As String) As Object
+        Using Stream As New MemoryStream(Encoding.UTF8.GetBytes(Str))
+            '类型检查
+            Using Reader As New XamlXmlReader(Stream)
+                While Reader.Read()
+                    For Each BlackListType In {GetType(WebBrowser), GetType(Frame), GetType(MediaElement), GetType(ObjectDataProvider), GetType(XamlReader), GetType(Window), GetType(XmlDataProvider)}
+                        If Reader.Type IsNot Nothing AndAlso BlackListType.IsAssignableFrom(Reader.Type.UnderlyingType) Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 类型。")
+                        If Reader.Value IsNot Nothing AndAlso Reader.Value = BlackListType.Name Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 值。")
+                    Next
+                    For Each BlackListMember In {"Code", "FactoryMethod", "Static"}
+                        If Reader.Member IsNot Nothing AndAlso Reader.Member.Name = BlackListMember Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListMember} 成员。")
+                    Next
+                End While
+            End Using
+            '实际的加载
+            Stream.Position = 0
             Using Writer As New StreamWriter(Stream)
                 Writer.Write(Str)
                 Writer.Flush()
                 Stream.Position = 0
-                Return XamlReader.Load(Stream)
+                Return Markup.XamlReader.Load(Stream)
             End Using
         End Using
     End Function

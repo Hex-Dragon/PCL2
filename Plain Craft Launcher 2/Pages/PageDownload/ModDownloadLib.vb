@@ -1,4 +1,4 @@
-﻿Imports System.IO.Compression
+Imports System.IO.Compression
 Imports System.Net.Http
 
 Public Module ModDownloadLib
@@ -545,9 +545,9 @@ pause"
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments As String
         If UseJavaWrapper AndAlso Not Setup.Get("LaunchAdvanceDisableJLW") Then
-            Arguments = $"-Doolloo.jlw.tmpdir=""{PathPure.TrimEnd("\")}"" -Duser.home=""{BaseMcFolderHome}"" -cp ""{Target}"" -jar ""{ExtractJavaWrapper()}"" optifine.Installer"
+            Arguments = $"-Doolloo.jlw.tmpdir=""{PathPure.TrimEnd("\")}"" -Duser.home=""{BaseMcFolderHome.TrimEnd("\")}"" -cp ""{Target}"" -jar ""{ExtractJavaWrapper()}"" optifine.Installer"
         Else
-            Arguments = $"-Duser.home=""{BaseMcFolderHome}"" -cp ""{Target}"" optifine.Installer"
+            Arguments = $"-Duser.home=""{BaseMcFolderHome.TrimEnd("\")}"" -cp ""{Target}"" optifine.Installer"
         End If
         If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
@@ -649,8 +649,8 @@ pause"
         Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
         Dim IsNewVersion As Boolean = DownloadInfo.Inherit.Contains("w") OrElse Val(DownloadInfo.Inherit.Split(".")(1)) >= 14
         Dim Target As String = If(IsNewVersion,
-            RequestTaskTempFolder(),
-            McFolder & "libraries\optifine\OptiFine\" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & "\" & DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", ""))
+            $"{RequestTaskTempFolder()}OptiFine.jar",
+            $"{McFolder}libraries\optifine\OptiFine\{DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "")}\{DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", "")}")
         Dim Loaders As New List(Of LoaderBase)
 
         '获取下载地址
@@ -2164,7 +2164,7 @@ Retry:
                                                                     "https://meta.quiltmc.org/v3/versions/loader/" & MinecraftName & "/" & QuiltVersion & "/profile/json"
                                                                 }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
                                                                 '新建 mods 文件夹
-                                                                Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                                                                Directory.CreateDirectory($"{If(McFolder, McFolder, PathMcFolder)}mods\")
                                                             End Sub) With {.ProgressWeight = 0.5})
         Loaders.Add(New LoaderDownload("下载 Quilt 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
 
@@ -2386,14 +2386,15 @@ Retry:
     ''' 获取合并安装加载器列表，并进行前期的缓存清理与 Java 检查工作。
     ''' </summary>
     ''' <exception cref="CancelledException" />
+
+        
     Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False, Optional IgnoreDump As Boolean = False) As List(Of LoaderBase)
-        '获取缓存目录
-        Dim TempMcFolder As String = RequestTaskTempFolder(
-            PathTemp.Contains(" ") AndAlso '要求路径不包含空格
-            (Request.OptiFineEntry IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing))
+
+        '获取缓存目录（安装 Mod 加载器的文件夹不能包含空格）
+        Dim TempMcFolder As String = RequestTaskTempFolder(Request.OptiFineEntry IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing)
 
         '获取参数
-        Dim OutputFolder As String = PathMcFolder & "versions\" & Request.TargetVersionName & "\"
+        Dim VersionFolder As String = PathMcFolder & "versions\" & Request.TargetVersionName & "\"
         If Directory.Exists(TempMcFolder) Then DeleteDirectory(TempMcFolder)
         Dim OptiFineFolder As String = Nothing
         If Request.OptiFineVersion IsNot Nothing Then
@@ -2424,12 +2425,14 @@ Retry:
         Dim LiteLoaderFolder As String = Nothing
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
-        '判断 OptiFine 是否作为 Mod 进行下载
-        'Dim MinecraftCode As Integer = If(Request.MinecraftName.Contains("."), Val(Request.MinecraftName.Split(".")(1)), 0)
-        Dim OptiFineAsMod As Boolean = Request.OptiFineEntry IsNot Nothing AndAlso
-            (Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing) '选择了 OptiFine 与任意 Mod 加载器
-        Dim ModsFolder As String = New McVersion(OutputFolder).GetPathIndie(True) & "mods\"
+        '决定版本隔离情况（#5970）
+        Dim Modable As Boolean = Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing
+        Dim Version As New McVersion(VersionFolder)
+        Version.InitPathIndie(Modable)
+        Dim ModsFolder As String = If(Modable, VersionFolder, PathMcFolder) & "mods\"
 
+        '判断 OptiFine 是否作为 Mod 进行下载
+        Dim OptiFineAsMod As Boolean = Request.OptiFineEntry IsNot Nothing AndAlso Modable '选择了 OptiFine 与任意 Mod 加载器
         If OptiFineAsMod Then
             Log("[Download] OptiFine 将作为 Mod 进行下载")
             OptiFineFolder = ModsFolder
@@ -2446,21 +2449,21 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
+        If File.Exists(TempMcFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If
 
         Dim LoaderList As New List(Of LoaderBase)
         '添加忽略标识
-        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(VersionFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL)
         If Request.QSL IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
@@ -2506,7 +2509,7 @@ Retry:
             Sub(Task As LoaderTask(Of String, String))
                 Log("[Test] Clr folder: " & CleanroomFolder)
                 Log("[Test] Clr version: " & Request.CleanroomVersion)
-                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
+                InstallMerge(TempMcFolder, TempMcFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
@@ -2520,12 +2523,12 @@ Retry:
         If Not DontFixLibraries AndAlso
         (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
-            LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
+            LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
             LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
         End If
         '删除忽略标识
-        LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(OutputFolder & ".pclignore")) With {.Show = False})
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(VersionFolder & ".pclignore")) With {.Show = False})
         '总加载器
         Return LoaderList
     End Function
