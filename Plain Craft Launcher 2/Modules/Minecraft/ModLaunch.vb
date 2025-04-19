@@ -225,7 +225,24 @@ NextInner:
         If McVersionCurrent.State = McVersionState.Error Then Throw New Exception("Minecraft 存在问题：" & McVersionCurrent.Info)
         '检查输入信息
         Dim CheckResult As String = ""
-        RunInUiWait(Sub() CheckResult = McLoginAble(McLoginInput()))
+        RunInUiWait(Sub() CheckResult = IsProfileVaild())
+        If Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 1 Then '要求正版验证
+            If Not SelectedProfile.Type = McLoginType.Ms Then
+                CheckResult = "当前实例要求使用正版验证，请使用正版验证档案启动游戏！"
+            End If
+        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 2 Then '要求第三方验证
+            If Not SelectedProfile.Type = McLoginType.Auth Then
+                CheckResult = "当前实例要求使用第三方验证，请使用第三方验证档案启动游戏！"
+            ElseIf Not SelectedProfile.Server.BeforeLast("/authserver") = Setup.Get("VersionServerAuthServer", McVersionCurrent) Then
+                CheckResult = "当前档案使用的第三方验证服务器与实例要求使用的不一致，请使用符合要求的档案启动游戏！"
+            End If
+        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 3 Then '要求正版验证或第三方验证
+            If SelectedProfile.Type = McLoginType.Legacy Then
+                CheckResult = "当前实例要求使用正版验证或第三方验证，请使用符合要求的档案启动游戏！"
+            ElseIf SelectedProfile.Type = McLoginType.Auth AndAlso Not SelectedProfile.Server.BeforeLast("/authserver") = Setup.Get("VersionServerAuthServer", McVersionCurrent) Then
+                CheckResult = "当前档案使用的第三方验证服务器与实例要求使用的不一致，请使用符合要求的档案启动游戏！"
+            End If
+        End If
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
 #If BETA Then
         '求赞助
@@ -243,7 +260,7 @@ NextInner:
         End Sub, "Donate")
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso PageLoginProfile.SelectedProfile.Type <> McLoginType.Ms Then
+        If Not Setup.Get("HintBuy") AndAlso SelectedProfile.Type <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -257,7 +274,7 @@ NextInner:
                             End If
                     End Select
                 End Sub, "Buy Minecraft")
-            ElseIf PageLoginProfile.SelectedProfile.Type = McLoginType.Legacy Then
+            ElseIf SelectedProfile.Type = McLoginType.Legacy Then
                 Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
@@ -391,102 +408,21 @@ NextInner:
         Public ProfileJson As String
     End Structure
 
-    ''' <summary>
-    ''' 根据登录信息获取玩家的 MC 用户名。如果无法获取则返回 Nothing。
-    ''' </summary>
-    Public Function McLoginName() As String
-        '根据当前登录方式优先返回
-        If PageLoginProfile.SelectedProfile.Username <> "" Then Return PageLoginProfile.SelectedProfile.Username
-        '查找所有可能的项
-        If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
-        Return Nothing
-    End Function
-    ''' <summary>
-    ''' 当前是否可以进行登录。若不可以则会返回错误原因。
-    ''' </summary>
-    Public Function McLoginAble() As String
-        Return PageLoginProfileSkin.IsVaild()
-        Select Case PageLoginProfile.SelectedProfile.Type
-            Case McLoginType.Ms
-                If PageLoginProfile.SelectedProfile.RefreshToken = "" Then
-                    Return FrmLoginMs.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case McLoginType.Legacy
-                Return FrmLoginLegacy.IsVaild()
-            Case McLoginType.Nide
-                If Setup.Get("CacheNideAccess") = "" Then
-                    Return FrmLoginNide.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case McLoginType.Auth
-                If PageLoginProfile.SelectedProfile.AccessToken = "" Then
-                    Return FrmLoginAuth.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case Else
-                Return "未知的登录方式"
-        End Select
-    End Function
-    ''' <summary>
-    ''' 登录输入是否可以进行登录。若不可以则会返回错误原因。
-    ''' </summary>
-    Public Function McLoginAble(LoginData As McLoginData) As String
-        Select Case LoginData.Type
-            Case McLoginType.Ms
-                Return PageLoginMs.IsVaild(LoginData)
-            Case McLoginType.Legacy
-                Return PageLoginLegacy.IsVaild(LoginData)
-            Case McLoginType.Nide
-                Return PageLoginNide.IsVaild(LoginData)
-            Case McLoginType.Auth
-                Return PageLoginAuth.IsVaild(LoginData)
-            Case Else
-                Return "未知的登录方式"
-        End Select
-    End Function
-
     '登录主模块加载器
     Public McLoginLoader As New LoaderTask(Of McLoginData, McLoginResult)("登录", AddressOf McLoginStart, AddressOf McLoginInput, ThreadPriority.BelowNormal) With {.ReloadTimeout = 1, .ProgressWeight = 15, .Block = False}
     Public Function McLoginInput() As McLoginData
         Dim LoginData As McLoginData = Nothing
-        Dim LoginType As McLoginType = PageLoginProfile.SelectedProfile.Type
         Try
-            LoginData = PageLoginProfileSkin.GetLoginData()
-            'Select Case LoginType
-            '    Case McLoginType.Legacy
-            '        LoginData = PageLoginLegacy.GetLoginData()
-            '    Case McLoginType.Ms
-            '        If PageLoginProfile.SelectedProfile.RefreshToken = "" Then
-            '            LoginData = PageLoginMs.GetLoginData()
-            '        Else
-            '            LoginData = PageLoginMsSkin.GetLoginData()
-            '        End If
-            '    Case McLoginType.Nide
-            '        If Setup.Get("CacheNideAccess") = "" Then
-            '            LoginData = PageLoginNide.GetLoginData()
-            '        Else
-            '            LoginData = PageLoginNideSkin.GetLoginData()
-            '        End If
-            '    Case McLoginType.Auth
-            '        If Setup.Get("CacheAuthAccess") = "" Then
-            'LoginData = PageLoginAuth.GetLoginData()
-            '        Else
-            'LoginData = PageLoginAuthSkin.GetLoginData()
-            '        End If
-            'End Select
+            LoginData = GetLoginData()
         Catch ex As Exception
-            Log(ex, "获取登录输入信息失败（" & GetStringFromEnum(LoginType) & "）", LogLevel.Feedback)
+            Log(ex, "获取登录输入信息失败", LogLevel.Feedback)
         End Try
         Return LoginData
     End Function
     Private Sub McLoginStart(Data As LoaderTask(Of McLoginData, McLoginResult))
         McLaunchLog("登录加载已开始")
         '校验登录信息
-        Dim CheckResult As String = McLoginAble(Data.Input)
+        Dim CheckResult As String = IsProfileVaild()
         If Not CheckResult = "" Then Throw New ArgumentException(CheckResult)
         '获取对应加载器
         Dim Loader As LoaderBase = Nothing
@@ -571,15 +507,15 @@ Relogin:
         Dim Result = MsLoginStep6(AccessToken)
         If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
-        For Each Profile In PageLoginProfile.ProfileList
-            If Profile.Type = 5 AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
+        For Each Profile In ProfileList
+            If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
                 MyMsgBox("已经存在该档案，无需再次创建了哦.....", "档案已存在")
                 GoTo SkipLogin
             End If
         Next
         '输出登录结果
         If IsNewProfile Then
-            Dim NewProfile = New PageLoginProfile.McProfile With {
+            Dim NewProfile = New McProfile With {
                 .Type = McLoginType.Ms,
                 .Uuid = Result(0),
                 .Username = Result(1),
@@ -589,14 +525,14 @@ Relogin:
                 .Desc = "",
                 .RawJson = Result(2)
             }
-            PageLoginProfile.ProfileList.Add(NewProfile)
+            ProfileList.Add(NewProfile)
         Else
-            Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-            PageLoginProfile.ProfileList(ProfileIndex).Username = Result(1)
-            PageLoginProfile.ProfileList(ProfileIndex).AccessToken = AccessToken
-            PageLoginProfile.ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
+            Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+            ProfileList(ProfileIndex).Username = Result(1)
+            ProfileList(ProfileIndex).AccessToken = AccessToken
+            ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
         End If
-        PageLoginProfile.WriteProfileJson()
+        WriteProfileJson()
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '结束
         McLoginMsRefreshTime = GetTimeTick()
@@ -606,8 +542,8 @@ SkipLogin:
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
         If IsSkipAuth Then
             Data.Progress = 0.99
-            Data.Output = New McLoginResult With {.AccessToken = PageLoginProfile.SelectedProfile.AccessToken,
-                    .Name = PageLoginProfile.SelectedProfile.Username, .Uuid = PageLoginProfile.SelectedProfile.Uuid,
+            Data.Output = New McLoginResult With {.AccessToken = SelectedProfile.AccessToken,
+                    .Name = SelectedProfile.Username, .Uuid = SelectedProfile.Uuid,
                     .Type = "Microsoft"}
             Exit Sub
         End If
@@ -622,7 +558,7 @@ SkipLogin:
         McLaunchLog("登录方式：" & Input.Description & "（" & LogUsername & "）")
         Data.Progress = 0.05
         '尝试登录
-        If (Not Data.Input.ForceReselectProfile) AndAlso
+        If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) AndAlso
             Setup.Get("Cache" & Input.Token & "Username") = Data.Input.UserName AndAlso
             Setup.Get("Cache" & Input.Token & "Pass") = Data.Input.Password AndAlso
             Setup.Get("Cache" & Input.Token & "Access") <> "" AndAlso
@@ -700,7 +636,7 @@ LoginFinish:
         Data.Progress = 0.1
         With Data.Output
             .Name = Input.UserName
-            .Uuid = PageLoginProfile.SelectedProfile.Uuid
+            .Uuid = SelectedProfile.Uuid
             .Type = "Legacy"
         End With
         '将结果扩展到所有项目中
@@ -718,10 +654,16 @@ LoginFinish:
     Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
         McLaunchLog("验证登录开始（Validate, " & Data.Input.Token & "）")
         '提前缓存信息，否则如果在登录请求过程中退出登录，设置项目会被清空，导致输出存在空值
-        Dim AccessToken As String = Setup.Get("Cache" & Data.Input.Token & "Access")
-        Dim ClientToken As String = Setup.Get("Cache" & Data.Input.Token & "Client")
-        Dim Uuid As String = Setup.Get("Cache" & Data.Input.Token & "Uuid")
-        Dim Name As String = Setup.Get("Cache" & Data.Input.Token & "Name")
+        Dim AccessToken As String = ""
+        Dim ClientToken As String = ""
+        Dim Uuid As String = ""
+        Dim Name As String = ""
+        If SelectedProfile IsNot Nothing Then
+            AccessToken = SelectedProfile.AccessToken
+            ClientToken = SelectedProfile.ClientToken
+            Uuid = SelectedProfile.Uuid
+            Name = SelectedProfile.Username
+        End If
         '发送登录请求
         Dim RequestData As New JObject(
             New JProperty("accessToken", AccessToken), New JProperty("clientToken", ClientToken), New JProperty("requestUser", True))
@@ -743,11 +685,11 @@ LoginFinish:
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         Dim RefreshInfo As New JObject
         Dim SelectProfile As New JObject From {
-            {"name", PageLoginProfile.SelectedProfile.Username},
-            {"id", PageLoginProfile.SelectedProfile.Uuid}
+            {"name", SelectedProfile.Username},
+            {"id", SelectedProfile.Uuid}
         }
         RefreshInfo.Add("selectedProfile", SelectProfile)
-        RefreshInfo.Add(New JProperty("accessToken", PageLoginProfile.SelectedProfile.AccessToken))
+        RefreshInfo.Add(New JProperty("accessToken", SelectedProfile.AccessToken))
         RefreshInfo.Add(New JProperty("requestUser", True))
 
 
@@ -766,15 +708,19 @@ LoginFinish:
         Data.Output.Name = LoginJson("selectedProfile")("name").ToString
         Data.Output.Type = Data.Input.Token
         '保存缓存
-        Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-        PageLoginProfile.ProfileList(ProfileIndex).Username = Data.Output.Name
-        PageLoginProfile.ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
-        Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
-        Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
-        Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
-        Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
-        Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
-        Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
+        Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+        ProfileList(ProfileIndex).Username = Data.Output.Name
+        ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
+        ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
+        ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
+        ProfileList(ProfileIndex).Name = Data.Input.UserName
+        ProfileList(ProfileIndex).Password = Data.Input.Password
+        'Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
+        'Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
+        'Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
+        'Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
+        'Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
+        'Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
         McLaunchLog("刷新登录成功（Refresh, " & Data.Input.Token & "）")
     End Sub
     Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
@@ -804,7 +750,7 @@ LoginFinish:
             If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
                 '要求选择档案；优先从缓存读取
                 NeedRefresh = True
-                Dim CacheId As String = If(PageLoginProfile.SelectedProfile IsNot Nothing, PageLoginProfile.SelectedProfile.Uuid, "")
+                Dim CacheId As String = If(SelectedProfile IsNot Nothing, SelectedProfile.Uuid, "")
                 For Each Profile In LoginJson("availableProfiles")
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
@@ -845,14 +791,14 @@ LoginFinish:
             Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
             '保存缓存
             If Data.Input.IsExist Then
-                Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
-                PageLoginProfile.ProfileList(ProfileIndex).Username = Data.Output.Name
-                PageLoginProfile.ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
-                PageLoginProfile.ProfileList(ProfileIndex).ServerName = ServerName
-                PageLoginProfile.ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
-                PageLoginProfile.ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
+                Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+                ProfileList(ProfileIndex).Username = Data.Output.Name
+                ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
+                ProfileList(ProfileIndex).ServerName = ServerName
+                ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
+                ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
             Else
-                Dim NewProfile As New PageLoginProfile.McProfile With {
+                Dim NewProfile As New McProfile With {
                     .Type = McLoginType.Auth,
                     .Uuid = Data.Output.Uuid,
                     .Username = Data.Output.Name,
@@ -865,10 +811,10 @@ LoginFinish:
                     .Expires = 1743779140286,
                     .Desc = ""
                 }
-                PageLoginProfile.ProfileList.Add(NewProfile)
-                PageLoginProfile.SelectedProfile = NewProfile
+                ProfileList.Add(NewProfile)
+                SelectedProfile = NewProfile
             End If
-            PageLoginProfile.WriteProfileJson()
+            WriteProfileJson()
             Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
             Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
             Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
@@ -893,7 +839,7 @@ LoginFinish:
                         McLaunchLog("密码错误，退出登录")
                         Select Case Data.Input.Type
                             Case McLoginType.Auth
-                                RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
+
                             Case McLoginType.Nide
                                 RunInUi(AddressOf PageLoginNideSkin.ExitLogin)
                         End Select
@@ -978,7 +924,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile.AccessToken, "Ignore"}
+                    Return {SelectedProfile.AccessToken, "Ignore"}
                     Exit Function
                 End If
                 Throw
@@ -1070,7 +1016,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile.AccessToken, "Ignore"}
+                    Return {SelectedProfile.AccessToken, "Ignore"}
                     Exit Function
                 End If
                 Throw
@@ -1164,7 +1110,7 @@ Retry:
                                 If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
                             End Sub)
                 If IsIgnore Then
-                    Return {PageLoginProfile.SelectedProfile.Uuid, PageLoginProfile.SelectedProfile.Username, "Ignore"}
+                    Return {SelectedProfile.Uuid, SelectedProfile.Username, "Ignore"}
                     Exit Function
                 End If
                 Throw
@@ -1239,10 +1185,6 @@ Retry:
         If Not Len(Uuid) = 32 Then Throw New Exception("获取的正版 Uuid 长度不足（" & Uuid & "）")
         WriteIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, Uuid)
         Return Uuid
-    End Function
-    Public Function McLoginLegacyUuid(Name As String)
-        Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
-        Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
     End Function
 
 #End Region
@@ -1338,10 +1280,10 @@ Retry:
         End If
 
         '统一通行证检测
-        If Setup.Get("LoginType") = McLoginType.Nide Then
-            '至少 Java 8u101
-            MinVer = If(New Version(1, 8, 0, 141) > MinVer, New Version(1, 8, 0, 141), MinVer)
-        End If
+        'If Setup.Get("LoginType") = McLoginType.Nide Then
+        '    '至少 Java 8u101
+        '    MinVer = If(New Version(1, 8, 0, 141) > MinVer, New Version(1, 8, 0, 141), MinVer)
+        'End If
 
         SyncLock JavaLock
 

@@ -1,52 +1,19 @@
 ﻿Public Class PageLoginAuth
-    Private IsFirstLoad As Boolean = True
-    ''' <summary>
-    ''' 刷新页面显示的所有信息。
-    ''' </summary>
-    Public Sub Reload(KeepInput As Boolean)
-        IsFirstLoad = False
-    End Sub
-    ''' <summary>
-    ''' 获取当前页面的登录信息。
-    ''' </summary>
-    Public Shared Function GetLoginData() As McLoginServer
-        Dim Server As String = PageLoginProfile.SelectedProfile.Server
-        If FrmLoginAuth Is Nothing Then
-            Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = "", .Password = "", .Description = "Authlib-Injector", .Type = McLoginType.Auth}
-        Else
-            Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = FrmLoginAuth.TextName.Text.Replace("¨", "").Trim, .Password = FrmLoginAuth.TextPass.Password.Replace("¨", "").Trim, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
-        End If
-    End Function
-    ''' <summary>
-    ''' 当前页面的登录信息是否有效。
-    ''' </summary>
-    Public Shared Function IsVaild(LoginData As McLoginServer) As String
-        If Not LittleSkinClientId = "" Then Return ""
-        If LoginData.UserName = "" Then Return "账号不能为空！"
-        If LoginData.Password = "" Then Return "密码不能为空！"
-        Return ""
-    End Function
-    Public Function IsVaild() As String
-        Return IsVaild(GetLoginData())
-    End Function
-
-    '保存输入信息
-    Private Sub TextName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextName.TextChanged
-        If sender.Text = "" Then TextPass.Password = ""
-        'If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")  '迫使其不进行 Validate
-    End Sub
-    Private Sub TextPass_PasswordChanged(sender As Object, e As RoutedEventArgs) Handles TextPass.PasswordChanged
-        'If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")
-    End Sub
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
     End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
+        If String.IsNullOrWhiteSpace(TextServer.Text) OrElse String.IsNullOrWhiteSpace(TextName.Text) OrElse String.IsNullOrWhiteSpace(TextPass.Password) Then
+            Hint("验证服务器、用户名与密码均不能为空！", HintType.Critical)
+            Exit Sub
+        End If
         BtnLogin.IsEnabled = False
         BtnBack.IsEnabled = False
-        Dim LoginData As New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = If(TextServer.Text.EndsWithF("/"), TextServer.Text & "authserver", TextServer.Text & "/authserver"), .UserName = TextName.Text, .Password = TextPass.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
+        Dim LoginData As New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = If(TextServer.Text.EndsWithF("/"),
+            TextServer.Text & "authserver", TextServer.Text & "/authserver"), .UserName = TextName.Text, .Password = TextPass.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         RunInNewThread(Sub()
                            Try
+                               IsCreatingProfile = True
                                McLoginAuthLoader.Start(LoginData, IsForceRestart:=True)
                                Do While McLoginAuthLoader.State = LoadState.Loading
                                    RunInUi(Sub() BtnLogin.Text = Math.Round(McLoginAuthLoader.Progress * 100) & "%")
@@ -75,6 +42,7 @@
                            Finally
                                RunInUi(
                                Sub()
+                                   IsCreatingProfile = False
                                    BtnLogin.IsEnabled = True
                                    BtnBack.IsEnabled = True
                                    BtnLogin.Text = "登录"

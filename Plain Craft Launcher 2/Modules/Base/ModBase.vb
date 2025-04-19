@@ -102,7 +102,7 @@ Public Module ModBase
     ''' <summary>
     ''' AppData 中的 PCLCE 配置文件夹路径，以 \ 结尾。
     ''' </summary>
-    Public PathAppdataConfig As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.pclce\"
+    Public PathAppdataConfig As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & If(VersionBranchName = "Debug", "\.pclcedebug\", "\.pclce\")
 
 #End Region
 

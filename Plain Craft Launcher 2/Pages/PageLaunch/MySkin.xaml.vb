@@ -117,7 +117,7 @@ Public Class MySkin
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
-            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{PageLoginProfile.SelectedProfile.Type}_{PageLoginProfile.SelectedProfile.Username}_{PageLoginProfile.SelectedProfile.Uuid}.png"
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{SelectedProfile.Type}_{SelectedProfile.Username}_{SelectedProfile.Uuid}.png"
             If SkinHead Is Nothing Then
                 SkinHead.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)
             Else
@@ -137,7 +137,7 @@ Public Class MySkin
                     Next
                 Next
             End If
-            If Not File.Exists(CachePath) Then File.Create(CachePath)
+            If Not File.Exists(CachePath) Then File.Create(CachePath).Close()
             SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
@@ -212,8 +212,8 @@ Public Class MySkin
         Sub()
             Try
                 '更新缓存
-                WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", Setup.Get("CacheMsV2Uuid"), SkinAddress)
-                Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("CacheMsV2Uuid"), SkinAddress))
+                WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", SelectedProfile.Uuid, SkinAddress)
+                Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", SelectedProfile.Uuid, SkinAddress))
                 '刷新控件
                 For Each SkinLoader In {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}
                     SkinLoader.WaitForExit(IsForceRestart:=True)
@@ -258,7 +258,7 @@ Public Class MySkin
             Try
 Retry:
                 '获取登录信息
-                If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
+                If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(GetLoginData())
                 If McLoginMsLoader.State <> LoadState.Finished Then
                     Hint("登录失败，无法更改披风！", HintType.Critical)
                     Exit Sub

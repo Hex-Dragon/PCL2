@@ -18,7 +18,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
-            <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="False" Margin="0,0,0,8" IsHitTestVisible="False"/>
+            <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="False" Margin="0,0,0,10" IsHitTestVisible="False"/>
             <TextBlock Name="TextName" Text="Username" Margin="8,0" FontSize="16" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
             <TextBlock Name="TextType" Text="AuthType" Margin="8,4,8,5" FontSize="12" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ColorBrushGray3}" />
         </StackPanel>

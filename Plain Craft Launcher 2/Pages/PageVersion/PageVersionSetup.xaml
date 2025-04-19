@@ -126,7 +126,7 @@
             </local:MyCard>
             <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="服务器">
                 <StackPanel Margin="25,42,25,18">
-                    <local:MyHint Text="档案管理相关功能仍在开发中，验证方式限制选项暂时禁用。你可以直接在新的管理界面添加第三方验证。" IsWarn="False" Margin="0,0,0,13"  />
+                    <local:MyHint x:Name="HintServerLoginLock" Text="当前实例的验证方式已锁定，无法再次更改。请使用要求的验证方式启动游戏。" IsWarn="True" Margin="0,0,0,13" Visibility="Collapsed"/>
                     <local:MyHint x:Name="LabServerAuthServerSecurityVerify" Text="未启用 SSL 证书验证可能导致登录密码面临被第三方截获的安全风险。&#xA;如果没有特殊需求，请始终考虑启用 SSL 证书验证！" IsWarn="False" Visibility="Collapsed"/>
                     <local:MyHint x:Name="LabServerAuthServerSecurity" Text="使用 HTTP 协议进行登录操作可能面临登录密码在未加密的情况下被明文传输的安全风险。&#xA;如果没有特殊需求，请始终考虑使用 HTTPS 协议！" Visibility="Collapsed"/>
                     <TextBlock Name="LabServerAuthServerSecurityCL" Text="&#xA;" Visibility="Collapsed"/>
@@ -144,13 +144,12 @@
                             <RowDefinition Height="28" />
                             <RowDefinition Height="3" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="登录方式" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboServerLogin" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionServerLogin" Grid.Column="1" IsEnabled="False">
-                            <local:MyComboBoxItem Content="档案管理" IsSelected="True"/>
-                            <local:MyComboBoxItem Content="仅正版登录" />
-                            <local:MyComboBoxItem Content="仅离线登录" />
-                            <local:MyComboBoxItem Content="第三方登录：统一通行证" />
-                            <local:MyComboBoxItem Content="第三方登录：Authlib Injector 或 LittleSkin" />
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="限制验证方式" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboServerLoginRequire" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionServerLoginRequire" Grid.Column="1">
+                            <local:MyComboBoxItem Content="无限制" IsSelected="True"/>
+                            <local:MyComboBoxItem Content="仅正版验证" />
+                            <local:MyComboBoxItem Content="仅第三方验证（Authlib-Injector）" />
+                            <local:MyComboBoxItem Content="正版验证与第三方验证（Authlib-Injector）" />
                         </local:MyComboBox>
                         <TextBlock Name="LabServerNide" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="服务器 ID（必填）" Margin="0,8,25,0" Visibility="Collapsed" />
                         <local:MyTextBox x:Name="TextServerNide" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerNide" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="服主后台 → 集成说明 中提供的服务器 ID">
@@ -158,7 +157,7 @@
                                 <local:ValidateLength Min="32" Max="32" />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Name="LabServerAuthServer" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="认证服务器（必填）" Margin="0,8,25,0" Visibility="Collapsed" />
+                        <TextBlock Name="LabServerAuthServer" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="目标验证服务器" Margin="0,8,25,0" Visibility="Collapsed" />
                         <local:MyTextBox x:Name="TextServerAuthServer" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthServer" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="Yggdrasil API 认证服务器的完整地址">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateHttp />
@@ -192,6 +191,7 @@
                         <local:MyButton x:Name="BtnServerNideWeb" Grid.Column="0" MinWidth="140" Text="服主后台" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
                     </Grid>
                     <local:MyButton x:Name="BtnServerAuthLittle" Height="35" MinWidth="150" Margin="0,12,0,0" Text="设置为 LittleSkin" HorizontalAlignment="Left" ColorType="Highlight" />
+                    <local:MyButton x:Name="BtnServerAuthLock" Height="35" MinWidth="150" Margin="180,-35,0,0" Text="锁定验证方式" HorizontalAlignment="Left" IsEnabled="False" />
                 </StackPanel>
             </local:MyCard>
             <local:MyCard x:Name="CardAdvance" Margin="0,0,0,15" Title="高级启动选项" IsSwaped="True" CanSwap="True">

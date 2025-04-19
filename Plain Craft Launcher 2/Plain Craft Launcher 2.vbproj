@@ -284,6 +284,7 @@
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
+    <Compile Include="Modules\Minecraft\ModProfile.vb" />
     <Compile Include="Modules\Minecraft\MyLocalCompItem.xaml.vb">
       <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
     </Compile>
@@ -370,14 +371,8 @@
     <Compile Include="Pages\PageLaunch\PageLoginAuth.xaml.vb">
       <DependentUpon>PageLoginAuth.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLaunch\PageLoginAuthSkin.xaml.vb">
-      <DependentUpon>PageLoginAuthSkin.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageLaunch\PageLoginMs.xaml.vb">
       <DependentUpon>PageLoginMs.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageLaunch\PageLoginMsSkin.xaml.vb">
-      <DependentUpon>PageLoginMsSkin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageLaunch\PageLoginNideSkin.xaml.vb">
       <DependentUpon>PageLoginNideSkin.xaml</DependentUpon>
@@ -463,9 +458,6 @@
     </Compile>
     <Compile Include="Pages\PageLaunch\PageLoginNide.xaml.vb">
       <DependentUpon>PageLoginNide.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageLaunch\PageLoginLegacy.xaml.vb">
-      <DependentUpon>PageLoginLegacy.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageSelectRight.xaml.vb">
       <DependentUpon>PageSelectRight.xaml</DependentUpon>
@@ -685,15 +677,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\PageLaunch\PageLoginAuthSkin.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\PageLaunch\PageLoginMs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\PageLaunch\PageLoginMsSkin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -791,10 +775,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageLaunch\PageLoginNide.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\PageLaunch\PageLoginLegacy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -89,7 +89,7 @@
                 IsLoadFinished = True
                 RefreshButtonsUI()
                 RefreshPage(False, False) '有可能选择的版本变化了，需要重新刷新
-                If McLoginAble() = "" Then McLoginLoader.Start() '自动登录
+                'If IsProfileVaild() = "" Then McLoginLoader.Start() '自动登录
             End Sub)
         End Sub, "Version Check", ThreadPriority.AboveNormal)
 
@@ -106,7 +106,7 @@
     ''' </summary>
     Public Sub PageChangeToLaunching()
         '修改登陆方式
-        Select Case PageLoginProfile.SelectedProfile.Type
+        Select Case SelectedProfile.Type
             Case McLoginType.Legacy
                 LabLaunchingMethod.Text = "离线验证"
             Case McLoginType.Ms
@@ -114,7 +114,7 @@
             Case McLoginType.Nide
                 LabLaunchingMethod.Text = "统一通行证"
             Case McLoginType.Auth
-                LabLaunchingMethod.Text = "第三方验证" & If(Not PageLoginProfile.SelectedProfile.ServerName = "", " / " & PageLoginProfile.SelectedProfile.ServerName, "")
+                LabLaunchingMethod.Text = "第三方验证" & If(Not SelectedProfile.ServerName = "", " / " & SelectedProfile.ServerName, "")
         End Select
         '初始化页面
         LabLaunchingName.Text = McVersionCurrent.Name
@@ -190,9 +190,6 @@
 
     Private Function PageGet(Type As PageType)
         Select Case Type
-            Case PageType.Legacy
-                If IsNothing(FrmLoginLegacy) Then FrmLoginLegacy = New PageLoginLegacy
-                Return FrmLoginLegacy
             Case PageType.Nide
                 If IsNothing(FrmLoginNide) Then FrmLoginNide = New PageLoginNide
                 Return FrmLoginNide
@@ -202,15 +199,9 @@
             Case PageType.Auth
                 If IsNothing(FrmLoginAuth) Then FrmLoginAuth = New PageLoginAuth
                 Return FrmLoginAuth
-            Case PageType.AuthSkin
-                If IsNothing(FrmLoginAuthSkin) Then FrmLoginAuthSkin = New PageLoginAuthSkin
-                Return FrmLoginAuthSkin
             Case PageType.Ms
                 If IsNothing(FrmLoginMs) Then FrmLoginMs = New PageLoginMs
                 Return FrmLoginMs
-            Case PageType.MsSkin
-                If IsNothing(FrmLoginMsSkin) Then FrmLoginMsSkin = New PageLoginMsSkin
-                Return FrmLoginMsSkin
             Case PageType.Profile
                 If IsNothing(FrmLoginProfile) Then FrmLoginProfile = New PageLoginProfile
                 Return FrmLoginProfile
@@ -277,9 +268,9 @@
     Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As McLoginType = Nothing)
         If IsLogin Then
             Dim TargetLoginPage As PageType
-            If TargetLoginType = 5 Then TargetLoginPage = PageType.Ms
-            If TargetLoginType = 3 Then TargetLoginPage = PageType.Auth
-            If TargetLoginType = 0 Then TargetLoginPage = PageType.Legacy
+            If TargetLoginType = McLoginType.Ms Then TargetLoginPage = PageType.Ms
+            If TargetLoginType = McLoginType.Auth Then TargetLoginPage = PageType.Auth
+            If TargetLoginType = McLoginType.Legacy Then TargetLoginPage = PageType.Legacy
             If PageCurrent = TargetLoginPage Then Exit Sub
             PageChange(TargetLoginPage, Anim).Reload(KeepInput)
             Exit Sub
@@ -287,17 +278,10 @@
         '获取页面的可用种类并回写缓存
         Dim Type As PageType
         Dim LoginPageType As Integer = 0
-        'If McVersionCurrent IsNot Nothing Then
-        '    LoginPageType = Setup.Get("VersionServerLogin", Version:=McVersionCurrent)
-        '    '缓存当前版本的页面种类，下一次打开 McVersionCurrent 为空时才能加载出正确的页面
-        '    Setup.Set("LoginPageType", LoginPageType)
-        'Else
-        '    LoginPageType = Setup.Get("LoginPageType")
-        'End If
         Select Case LoginPageType
-            Case 0 '档案
+            Case 0
 UnknownType:
-                If PageLoginProfile.SelectedProfile IsNot Nothing Then
+                If SelectedProfile IsNot Nothing Then
                     Type = PageType.ProfileSkin
                     PanTypeOne.Visibility = Visibility.Hidden
                     BtnLaunch.IsEnabled = True
@@ -309,65 +293,17 @@ UnknownType:
                 PanType.Visibility = Visibility.Collapsed
                 PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
                 LabTypeOne.Text = "档案管理"
-            'Case 0 '正版或离线
-            '    If RadioLoginType5.Checked Then
-            '        If Setup.Get("CacheMsV2Access") = "" Then
-            '            Type = PageType.Ms
-            '        Else
-            '            Type = PageType.MsSkin
-            '        End If
-            '        Setup.Set("LoginType", McLoginType.Ms)
-            '    Else
-            '        Type = PageType.Legacy
-            '        Setup.Set("LoginType", McLoginType.Legacy)
-            '    End If
-            '    PanType.Visibility = Visibility.Visible
-            '    PanTypeOne.Visibility = Visibility.Collapsed
-            '    RadioLoginType5.Visibility = Visibility.Visible
-            '    RadioLoginType0.Visibility = Visibility.Visible
-            Case 1 '仅正版
-                If Setup.Get("CacheMsV2Access") = "" Then
-                    Type = PageType.Ms
-                Else
-                    Type = PageType.MsSkin
-                End If
-                Setup.Set("LoginType", McLoginType.Ms)
-                PanType.Visibility = Visibility.Collapsed
-                PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonShield)
-                LabTypeOne.Text = "正版登录"
-                RadioLoginType5.Visibility = Visibility.Visible
-                RadioLoginType0.Visibility = Visibility.Collapsed
-            Case 2 '仅离线
-                Type = PageType.Legacy
-                Setup.Set("LoginType", McLoginType.Legacy)
-                PanType.Visibility = Visibility.Collapsed
-                PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonOffline)
-                LabTypeOne.Text = "离线登录"
-            Case 3 '统一通行证
-                If Setup.Get("CacheNideAccess") = "" Then
-                    Type = PageType.Nide
-                Else
-                    Type = PageType.NideSkin
-                End If
-                Setup.Set("LoginType", McLoginType.Nide)
-                PanType.Visibility = Visibility.Collapsed
-                PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
-                LabTypeOne.Text = "统一通行证登录"
-            Case 4 'Authlib-Injector
-                If Setup.Get("CacheAuthAccess") = "" Then
-                    Type = PageType.Auth
-                Else
-                    Type = PageType.AuthSkin
-                End If
-                Setup.Set("LoginType", McLoginType.Auth)
-                PanType.Visibility = Visibility.Collapsed
-                PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
-                LabTypeOne.Text = If(McVersionCurrent Is Nothing, Setup.Get("CacheAuthServerName"), Setup.Get("VersionServerAuthName", Version:=McVersionCurrent))
-                If LabTypeOne.Text = "" Then LabTypeOne.Text = "第三方登录"
+                'Case 3 '统一通行证
+                '    If Setup.Get("CacheNideAccess") = "" Then
+                '        Type = PageType.Nide
+                '    Else
+                '        Type = PageType.NideSkin
+                '    End If
+                '    Setup.Set("LoginType", McLoginType.Nide)
+                '    PanType.Visibility = Visibility.Collapsed
+                '    PanTypeOne.Visibility = Visibility.Visible
+                '    PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
+                '    LabTypeOne.Text = "统一通行证登录"
             Case Else
                 Log("[Control] 未知的登录页面：" & LoginPageType, LogLevel.Hint)
                 GoTo UnknownType
@@ -390,18 +326,18 @@ UnknownType:
     Public Shared SkinMs As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Ms", AddressOf SkinMsLoad, AddressOf SkinMsInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinMsInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {Setup.Get("CacheMsV2Name"), Setup.Get("CacheMsV2Uuid")}
+        Return New EqualableList(Of String) From {SelectedProfile.Username, SelectedProfile.Uuid}
     End Function
     Private Shared Sub SkinMsLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
         '如果在输入时清空皮肤，若输入内容一样则不会执行 Load 方法，导致皮肤不被加载
-        RunInUi(Sub() If FrmLoginMsSkin IsNot Nothing AndAlso FrmLoginMsSkin.Skin IsNot Nothing Then FrmLoginMsSkin.Skin.Clear())
+        RunInUi(Sub() If FrmLoginProfileSkin IsNot Nothing AndAlso FrmLoginProfileSkin.Skin IsNot Nothing Then FrmLoginProfileSkin.Skin.Clear())
         '获取 Url
         Dim UserName As String = Data.Input(0)
         Dim Uuid As String = Data.Input(1)
-        If PageLoginProfileSkin.SelectedProfile IsNot Nothing Then
-            UserName = PageLoginProfileSkin.SelectedProfile.Username
-            Uuid = PageLoginProfileSkin.SelectedProfile.Uuid
+        If SelectedProfile IsNot Nothing Then
+            UserName = SelectedProfile.Username
+            Uuid = SelectedProfile.Uuid
         End If
         If UserName = "" Then
             Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
@@ -431,9 +367,7 @@ UnknownType:
         End Try
 Finish:
         '刷新显示
-        If FrmLoginMsSkin IsNot Nothing Then
-            RunInUi(AddressOf FrmLoginMsSkin.Skin.Load)
-        ElseIf FrmLoginProfileSkin IsNot Nothing Then
+        If FrmLoginProfileSkin IsNot Nothing Then
             RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
@@ -447,13 +381,7 @@ Finish:
         Dim Type As Integer = Setup.Get("LaunchSkinType")
         Select Case Type
             Case 0
-                If FrmLoginLegacy IsNot Nothing AndAlso FrmLoginLegacy.IsReloaded Then
-                    Return New EqualableList(Of String) From {0, If(FrmLoginLegacy.ComboName.Text.Trim, "")}
-                ElseIf Setup.Get("LoginLegacyName") = "" Then
-                    Return New EqualableList(Of String) From {0, ""}
-                Else
-                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨"), "")}
-                End If
+                Return New EqualableList(Of String) From {0, SelectedProfile.Username}
             Case 3
                 Return New EqualableList(Of String) From {3, Setup.Get("LaunchSkinID")}
             Case Else
@@ -462,7 +390,7 @@ Finish:
     End Function
     Private Shared Sub SkinLegacyLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
-        RunInUi(Sub() If FrmLoginLegacy IsNot Nothing AndAlso FrmLoginLegacy.Skin IsNot Nothing Then FrmLoginLegacy.Skin.Clear())
+        RunInUi(Sub() If FrmLoginProfileSkin IsNot Nothing AndAlso FrmLoginProfileSkin.Skin IsNot Nothing Then FrmLoginProfileSkin.Skin.Clear())
         '获取 Url
         Select Case Data.Input(0)
             Case 0 '默认
@@ -507,10 +435,8 @@ UseDefault:
                 Data.Output = PathAppdata & "CustomSkin.png"
         End Select
         '刷新显示
-        If FrmLoginLegacy IsNot Nothing Then
-            RunInUi(AddressOf FrmLoginLegacy.Skin.Load)
-        ElseIf FrmLoginProfileSkin IsNot Nothing Then
-            RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
+        If FrmLoginProfileSkin IsNot Nothing Then
+            RunInUi(Sub() FrmLoginProfileSkin.Skin.Load())
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
         End If
@@ -568,12 +494,12 @@ Finish:
     Public Shared SkinAuth As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Auth", AddressOf SkinAuthLoad, AddressOf SkinAuthInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinAuthInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {PageLoginProfile.SelectedProfile.Username, PageLoginProfile.SelectedProfile.Uuid}
+        Return New EqualableList(Of String) From {SelectedProfile.Username, SelectedProfile.Uuid}
     End Function
     Private Shared Sub SkinAuthLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
         '如果在输入时清空皮肤，若输入内容一样则不会执行 Load 方法，导致皮肤不被加载
-        RunInUi(Sub() If FrmLoginAuthSkin IsNot Nothing AndAlso FrmLoginAuthSkin.Skin IsNot Nothing Then FrmLoginAuthSkin.Skin.Clear())
+        RunInUi(Sub() If FrmLoginProfileSkin IsNot Nothing AndAlso FrmLoginProfileSkin.Skin IsNot Nothing Then FrmLoginProfileSkin.Skin.Clear())
         '获取 Url
         Dim UserName As String = Data.Input(0)
         Dim Uuid As String = Data.Input(1)
@@ -605,9 +531,7 @@ Finish:
         End Try
 Finish:
         '刷新显示
-        If FrmLoginAuthSkin IsNot Nothing Then
-            RunInUi(AddressOf FrmLoginAuthSkin.Skin.Load)
-        ElseIf FrmLoginProfileSkin IsNot Nothing Then
+        If FrmLoginProfileSkin IsNot Nothing Then
             RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染

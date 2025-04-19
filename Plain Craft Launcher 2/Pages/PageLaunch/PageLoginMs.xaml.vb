@@ -1,31 +1,4 @@
 ﻿Public Class PageLoginMs
-
-    ''' <summary>
-    ''' 刷新页面显示的所有信息。
-    ''' </summary>
-    Public Sub Reload(KeepInput As Boolean)
-    End Sub
-
-    ''' <summary>
-    ''' 获取当前页面的登录信息。
-    ''' </summary>
-    Public Shared Function GetLoginData() As McLoginMs
-        If FrmLoginMs Is Nothing Then Return New McLoginMs With {.OAuthRefreshToken = PageLoginProfile.SelectedProfile.RefreshToken, .UserName = PageLoginProfile.SelectedProfile.Username}
-        Return New McLoginMs
-    End Function
-    ''' <summary>
-    ''' 当前页面的登录信息是否有效。
-    ''' </summary>
-    Public Shared Function IsVaild(LoginData As McLoginMs) As String
-        If LoginData.OAuthRefreshToken = "" Then
-            Return "请在登录账号后再启动游戏！"
-        Else
-            Return ""
-        End If
-    End Function
-    Public Function IsVaild() As String
-        Return IsVaild(GetLoginData())
-    End Function
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
     End Sub
@@ -71,5 +44,4 @@
             End Try
         End Sub, "Ms Login")
     End Sub
-
 End Class

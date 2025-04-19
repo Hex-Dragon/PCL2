@@ -47,17 +47,6 @@
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"CacheMsOAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsAccess", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsV2Migrated", New SetupEntry(False, Source:=SetupSource.Registry)},
-        {"CacheMsV2OAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsV2Access", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsV2ProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsV2Uuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheMsV2Name", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideAccess", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideClient", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -65,29 +54,13 @@
         {"CacheNideUsername", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNidePass", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideServer", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthAccess", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthClient", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthUsername", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthPass", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthServerServer", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthServerName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthServerRegister", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthIDToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginLegacyName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"LoginMsJson", New SetupEntry("{}", Source:=SetupSource.Registry, Encoded:=True)}, '{UserName: OAuthToken, ...}
         {"LoginNideEmail", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginNidePass", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"LoginAuthEmail", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"LoginAuthPass", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"LoginType", New SetupEntry(McLoginType.Legacy, Source:=SetupSource.Registry)},
         {"LoginPageType", New SetupEntry(0)},
         {"LaunchSkinID", New SetupEntry("", Source:=SetupSource.Registry)},
         {"LaunchSkinType", New SetupEntry(0, Source:=SetupSource.Registry)},
@@ -200,11 +173,12 @@
         {"VersionArgumentIndieV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionArgumentJavaSelect", New SetupEntry("使用全局设置", Source:=SetupSource.Version)},
         {"VersionServerEnter", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerLogin", New SetupEntry(0, Source:=SetupSource.Version)},
+        {"VersionServerLoginRequire", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}}
+        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)},
+        {"VersionServerLoginLock", New SetupEntry(False, Source:=SetupSource.Version)}}
 #Region "基础"
 
     Private Enum SetupSource
@@ -280,7 +254,7 @@
                     WriteIni(Version.Path & "PCL\Setup.ini", Key, Value)
             End Select
             '应用
-            '例如 VersionServerLogin 要求在设置之后再引发事件
+            '例如 VersionServerLoginRequire 要求在设置之后再引发事件
             Dim Method As Reflection.MethodInfo = GetType(ModSetup).GetMethod(Key)
             If Method IsNot Nothing Then Method.Invoke(Me, {Value})
 
@@ -452,11 +426,11 @@
                         End Select
                         FrmSetupLaunch.CardSkin.TriggerForceResize()
                     End If
-                    PageLaunchLeft.SkinLegacy.Start()
+                    'PageLaunchLeft.SkinLegacy.Start()
                 End Sub)
     End Sub
     Public Sub LaunchSkinID(Value As String)
-        PageLaunchLeft.SkinLegacy.Start()
+        'PageLaunchLeft.SkinLegacy.Start()
     End Sub
 
 #End Region

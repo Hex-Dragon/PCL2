@@ -269,7 +269,7 @@
             End If
             '生成脚本
             If McLaunchStart(New McLaunchOptions With {.SaveBatch = SavePath, .Version = PageVersionLeft.Version}) Then
-                If PageLoginProfile.SelectedProfile.Type = McLoginType.Legacy Then
+                If SelectedProfile.Type = McLoginType.Legacy Then
                     Hint("正在导出启动脚本……")
                 Else
                     Hint("正在导出启动脚本……（注意，使用脚本启动可能会导致登录失效！）")
