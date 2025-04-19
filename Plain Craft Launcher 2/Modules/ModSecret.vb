@@ -512,28 +512,30 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 #Region "更新"
 
     Public Class SelfUpdateInfo
-        Public Property server As String
+        Public Property Server As String
 
-        Public Property latests As SelfUpdateAssest
+        Public Property Latests As SelfUpdateAssest
     End Class
 
     Public Class SelfUpdateAssest
-        Public Property slow As SelfUpdateChannelInfo
-        Public Property fast As SelfUpdateChannelInfo
-        Public Property legacy As SelfUpdateChannelInfo
+        Public Property Slow As SelfUpdateChannelInfo
+        Public Property Fast As SelfUpdateChannelInfo
+        Public Property Legacy As SelfUpdateChannelInfo
     End Class
 
     Public Class SelfUpdateChannelInfo
-        Public Property version As String
-        Public Property code As Integer
-        Public Property file As String
-        Public Property sha256 As String
+        Public Property Version As String
+        Public Property Code As Integer
+        Public Property File As String
+        Public Property Sha256 As String
     End Class
 
     Public RemoteVersionData As SelfUpdateInfo = Nothing
+    Public IsLauncherLatest As Boolean = False
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public Const PysioServer As String = "https://s3.pysio.online/pcl2-ce/"
+    Public Const GitHubServer As String = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/"
 
     Public Sub UpdateCheckByButton()
         If IsUpdateStarted Then
@@ -557,31 +559,40 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Log("[System] 获取更新信息失败：在 UI 线程中运行")
         End If
         Log("[System] 正在获取版本信息")
+        IsLauncherLatest = False
         Dim LatestReleaseInfoJson As JObject = Nothing
         Dim Server As String = Nothing
+        Dim JsonLink As String = Nothing
+        Dim AnnounceVersionLink As String = Nothing
         Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch")
         Log($"[System] 启动器为 Fast Ring：{IsBeta}")
         If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
             Log("[System] 使用 Pysio 源获取版本信息")
-            If IsArm64System Then
-                Server = PysioServer + "updateARM_v2.json"
-            Else
-                Server = PysioServer + "update_v2.json"
-            End If
+            Server = PysioServer
         Else 'GitHub 源
             Log("[System] 使用 GitHub 源获取版本信息")
-            If IsArm64System Then
-                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/updateARM_v2.json"
-            Else
-                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/update_v2.json"
-            End If
+            Server = GitHubServer
         End If
-        LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
+        If IsArm64System Then
+            JsonLink = Server + "updateARM_v2.json"
+        Else
+            JsonLink = Server + "update_v2.json"
+        End If
+        Dim CacheAnnounceVer As Integer = NetRequestRetry(Server + "announceVer.ini", "GET", "", "application/x-www-form-urlencoded")
+        Setup.Set("CacheAnnounceVersion", CacheAnnounceVer)
+        If CacheAnnounceVer = Setup.Get("CacheAnnounceVersion") Then
+            IsLauncherLatest = True
+            Exit Sub
+        End If
+        LatestReleaseInfoJson = GetJson(NetRequestRetry(JsonLink, "GET", "", "application/x-www-form-urlencoded"))
         RemoteVersionData = LatestReleaseInfoJson.ToObject(Of SelfUpdateInfo)()
         Log($"[System] 已获取到更新信息：{LatestReleaseInfoJson.ToString(Newtonsoft.Json.Formatting.None)}")
     End Sub
 
     Public Function GetCurrentUpdateChannelInfo() As SelfUpdateChannelInfo
+        If IsLauncherLatest Then
+            Return New SelfUpdateChannelInfo With {.Version = VersionBaseName, .Code = VersionCode, .File = PathWithName, .Sha256 = ""}
+        End If
         If RemoteVersionData Is Nothing Then
             Log("[Update] 未获取到远程版本信息，尝试重新获取")
             UpdateLatestVersionInfo()
@@ -589,22 +600,22 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Dim targetChannel As SelfUpdateChannelInfo = Nothing
         Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch")
         If IsBeta Then
-            targetChannel = RemoteVersionData.latests.fast
+            targetChannel = RemoteVersionData.Latests.Fast
         Else
-            targetChannel = RemoteVersionData.latests.slow
+            targetChannel = RemoteVersionData.Latests.Slow
         End If
         Return targetChannel
     End Function
 
     Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
         Dim LatestVersion = GetCurrentUpdateChannelInfo()
-        If LatestVersion.code > VersionCode Then
-            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.version.StartsWithF("2.9.") Then
-                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.version}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+        If LatestVersion.Code > VersionCode Then
+            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.Version.StartsWithF("2.9.") Then
+                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.Version}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
-            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
-                UpdateStart(LatestVersion.version, False)
+            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.Version}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
+                UpdateStart(LatestVersion.Version, False)
             End If
         Else
             If Not Silent Then Hint("启动器已是最新版 " + VersionBaseName + "，无须更新啦！", HintType.Finish)

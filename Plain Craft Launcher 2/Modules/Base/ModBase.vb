@@ -13,26 +13,22 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.5." & VersionCodeString '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.6" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.6." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.9.2" '上游版本
-    Public Const VersionCode As Integer = 365 '内部版本号
-    Public Const VersionCodeString As String = "365" '内部版本号的字符串形式
+    Public Const VersionCode As Integer = 366 '内部版本号
     '自动生成的版本信息
 #If RELEASE Then
     Public Const VersionBranchName As String = "Slow Ring"
     Public Const VersionBranchCode As String = "0"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #ElseIf BETA Then
     Public Const VersionBranchName As String = "Fast Ring"
     Public Const VersionBranchCode As String = "50"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #Else
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #End If
 
     ''' <summary>
