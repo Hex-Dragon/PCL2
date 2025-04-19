@@ -817,12 +817,7 @@ NextFile:
     ''' </summary>
     Public Sub SetGPUPreference(Executeable As String, HighPerformance As Boolean)
         Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
-        Dim REG_VALUE As String = Nothing
-        If HighPerformance Then
-            REG_VALUE = "GpuPreference=2;"
-        Else
-            REG_VALUE = "GpuPreference=1;"
-        End If
+        Dim REG_VALUE As String = If(HighPerformance, "GpuPreference=2;", "GpuPreference=1;")
         '查看现有设置
         Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
             If ReadOnlyKey IsNot Nothing Then
