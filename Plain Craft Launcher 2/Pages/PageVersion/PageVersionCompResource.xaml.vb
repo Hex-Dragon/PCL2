@@ -495,7 +495,9 @@ Install:
 
 #Region "选择"
 
-    '选择的 Mod 的路径（不含 .disabled 和 .old）
+    ''' <summary>
+    ''' 选择的 Mod 的路径（不含 .disabled 和 .old）。
+    ''' </summary>
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
@@ -1008,6 +1010,13 @@ Install:
         ChangeAllSelected(False)
     End Sub
 
+    '收藏
+    Private Sub BtnSelectFavorites_Click(sender As Object, e As RouteEventArgs) Handles BtnSelectFavorites.Click
+        Dim Selected As List(Of CompProject) = CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.Comp IsNot Nothing).Select(Function(i) i.Comp).ToList
+        CompFavorites.ShowMenu(Selected, sender)
+    End Sub
+
+    '分享
     Private Sub BtnSelectShare_Click() Handles BtnSelectShare.Click
         Dim ShareList As List(Of String) = CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.Comp IsNot Nothing).Select(Function(i) i.Comp.Id).ToList()
         ClipboardSet(CompFavorites.GetShareCode(ShareList))
