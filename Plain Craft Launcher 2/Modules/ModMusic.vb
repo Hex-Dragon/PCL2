@@ -251,7 +251,12 @@ Public Module ModMusic
             RunInThread(
             Sub()
                 Log("[Music] 已恢复播放")
-                MusicNAudio?.Play()
+                Try
+                    MusicNAudio?.Play()
+                Catch 'https://github.com/Hex-Dragon/PCL2/pull/5415#issuecomment-2751135223
+                    MusicNAudio?.Stop()
+                    MusicNAudio?.Play()
+                End Try
                 SetSMTCStatus()
                 MusicRefreshUI()
             End Sub)
@@ -456,6 +461,7 @@ Public Module ModMusic
             '开始播放
             CurrentWave = New NAudio.Wave.WaveOutEvent()
             MusicNAudio = CurrentWave
+            CurrentWave.DeviceNumber = -1
             Reader = New NAudio.Wave.AudioFileReader(MusicCurrent)
             CurrentWave.Init(Reader)
             CurrentWave.Play()

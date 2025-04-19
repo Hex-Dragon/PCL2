@@ -4,8 +4,8 @@ Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Xaml
 Imports System.Threading.Tasks
-Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
 Public Module ModBase
@@ -1746,6 +1746,7 @@ RetryDir:
     End Function
     ''' <summary>
     ''' 获取处于两个子字符串之间的部分，裁切尽可能多的内容。
+    ''' 等效于 AfterLast 后接 BeforeFirst。
     ''' 如果未找到子字符串则不裁切。
     ''' </summary>
     <Extension> Public Function Between(Str As String, After As String, Before As String, Optional IgnoreCase As Boolean = False) As String
@@ -2924,13 +2925,27 @@ Retry:
     ''' <summary>
     ''' 将 XML 转换为对应 UI 对象。
     ''' </summary>
-    Public Function GetObjectFromXML(Str As String)
-        Using Stream As New MemoryStream
+    Public Function GetObjectFromXML(Str As String) As Object
+        Using Stream As New MemoryStream(Encoding.UTF8.GetBytes(Str))
+            '类型检查
+            Using Reader As New XamlXmlReader(Stream)
+                While Reader.Read()
+                    For Each BlackListType In {GetType(WebBrowser), GetType(Frame), GetType(MediaElement), GetType(ObjectDataProvider), GetType(XamlReader), GetType(Window), GetType(XmlDataProvider)}
+                        If Reader.Type IsNot Nothing AndAlso BlackListType.IsAssignableFrom(Reader.Type.UnderlyingType) Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 类型。")
+                        If Reader.Value IsNot Nothing AndAlso Reader.Value = BlackListType.Name Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 值。")
+                    Next
+                    For Each BlackListMember In {"Code", "FactoryMethod", "Static"}
+                        If Reader.Member IsNot Nothing AndAlso Reader.Member.Name = BlackListMember Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListMember} 成员。")
+                    Next
+                End While
+            End Using
+            '实际的加载
+            Stream.Position = 0
             Using Writer As New StreamWriter(Stream)
                 Writer.Write(Str)
                 Writer.Flush()
                 Stream.Position = 0
-                Return XamlReader.Load(Stream)
+                Return Markup.XamlReader.Load(Stream)
             End Using
         End Using
     End Function

@@ -378,4 +378,11 @@ local:MyIconButton（图标按钮）：
  - Theme：设置颜色主题，Color（默认）为当前启动器的主题颜色，也可设置为 White、Black、Red
  - EventType、EventData：触发特定事件
 
+默认会声明以下命名空间：
+ - xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ - xmlns:sys="clr-namespace:System;assembly=mscorlib"
+ - xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ - xmlns:local="clr-namespace:PCL;assembly=Plain Craft Launcher 2"
+除此之外，不能声明其他命名空间。
+
 -->
