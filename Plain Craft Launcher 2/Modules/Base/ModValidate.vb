@@ -9,6 +9,7 @@ Public Module ModValidate
         Dim Result As String = ""
         For Each ValidateRule As Validate In ValidateRules
             Result = ValidateRule.Validate(Text)
+            If Result = "IGNOREME" Then Return "" '#6107
             If Result <> "" Then Return Result
         Next
         Return Result
@@ -34,7 +35,7 @@ Public Class ValidateNullable
     Public Sub New()
     End Sub
     Public Overrides Function Validate(Str As String) As String
-        If IsNothing(Str) OrElse String.IsNullOrEmpty(Str) Then Return Nothing
+        If IsNothing(Str) OrElse String.IsNullOrEmpty(Str) Then Return "IGNOREME"
         Return ""
     End Function
 End Class
