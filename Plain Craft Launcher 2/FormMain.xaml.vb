@@ -115,6 +115,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 367 Then '2.10.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持 Mod 列表多选收藏"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 资源管理查看存档崩溃"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "更新 UVMC 服务器地址"))
+        End If
         If LastVersion < 366 Then '2.10.6
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "迁移配置文件，不再使用注册表，使用 AES 加密部分信息"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "改进了 SMTC 获取信息的方式"))
@@ -251,7 +256,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBaseName, "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBranchName & " " & VersionBaseName, "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
