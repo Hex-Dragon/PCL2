@@ -179,7 +179,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="标题栏文本" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextLogoText" Tag="UiLogoText" Grid.Column="1" MaxLength="30" />
+                        <local:MyTextBox x:Name="TextLogoText" Tag="UiLogoText" Grid.Column="1" MaxLength="100" />
                     </Grid>
                     <Grid x:Name="PanLogoChange" Margin="0,14,0,5" Height="35" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
@@ -206,6 +206,8 @@
                         <local:MyRadioBox Text="读取本地文件" x:Name="RadioCustomType1" Height="22" Tag="UiCustomType/1" Grid.Column="2" />
                         <local:MyRadioBox Text="联网更新" x:Name="RadioCustomType2" Height="22" Tag="UiCustomType/2" Grid.Column="3" />
                     </Grid>
+                    <local:MyHint Margin="0,15,0,-9" Text="在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！" IsWarn="True" x:Name="HintCustomWarn" 
+                                  CanClose="True" RelativeSetup="HintCustomWarn" />
                     <local:MyHint Margin="0,15,0,1" Text="内容见 ModSetup" IsWarn="False" x:Name="HintCustom" />
                     <Grid Height="35" x:Name="PanCustomLocal" Visibility="Collapsed" Margin="0,10,0,5">
                         <Grid.ColumnDefinitions>
@@ -247,7 +249,7 @@
                             <local:MyComboBoxItem Content="PCL 主页市场（作者：凌云）" />
                             <local:MyComboBoxItem Content="PCL 新闻速报（作者：Joker2184）" />
                             <local:MyComboBoxItem Content="PCL 新功能说明书（作者：WForst-Breeze）" />
-                            <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" />
+                            <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" Visibility="Collapsed" />
                             <local:MyComboBoxItem Content="杂志主页（作者：CreeperIsASpy）" />
                         </local:MyComboBox>
                     </Grid>

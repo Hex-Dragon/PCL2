@@ -434,6 +434,7 @@ EndHint:
     Public FrmVersionMod As PageVersionMod
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionExport As PageVersionExport
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail
@@ -676,8 +677,8 @@ NextFile:
     ''' </summary>
     Public Function HelpArgumentReplace(Xaml As String) As String
         Dim Result = Xaml.Replace("{path}", EscapeXML(Path))
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomHint()), "\{hint\}")
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomCave()), "\{cave\}")
+        Result = Result.RegexReplaceEach("\{hint\}", Function() EscapeXML(PageOtherTest.GetRandomHint()))
+        Result = Result.RegexReplaceEach("\{cave\}", Function() EscapeXML(PageOtherTest.GetRandomCave()))
         Return Result
     End Function
 
@@ -809,6 +810,90 @@ NextFile:
     Public Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ClassName As String, WindowName As String) As IntPtr
     Public Declare Function SetForegroundWindow Lib "user32" (hWnd As IntPtr) As Integer
     Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As Boolean
+
+    ''' <summary>
+    ''' 将特定程序设置为使用高性能显卡启动。
+    ''' 如果失败，则抛出异常。
+    ''' </summary>
+    Public Sub SetGPUPreference(Executeable As String)
+        Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
+        Const REG_VALUE As String = "GpuPreference=2;"
+        '查看现有设置
+        Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
+            If ReadOnlyKey IsNot Nothing Then
+                Dim CurrentValue = ReadOnlyKey.GetValue(Executeable)
+                If REG_VALUE = CurrentValue?.ToString() Then
+                    Log($"[System] 无需调整显卡设置：{Executeable}")
+                    Return
+                End If
+            Else
+                '创建父级键
+                Log($"[System] 需要创建显卡设置的父级键")
+                My.Computer.Registry.CurrentUser.CreateSubKey(REG_KEY)
+            End If
+        End Using
+        '写入新设置
+        Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, True)
+            WriteKey.SetValue(Executeable, REG_VALUE)
+            Log($"[System] 已调整显卡设置：{Executeable}")
+        End Using
+    End Sub
+
+#End Region
+
+#Region "任务缓存"
+
+    Private IsTaskTempCleared As Boolean = False
+    Private IsTaskTempClearing As Boolean = False
+
+    ''' <summary>
+    ''' 尝试清理任务缓存文件夹。
+    ''' 在整次运行中只会实际清理一次。
+    ''' </summary>
+    Public Sub TryClearTaskTemp()
+        If Not IsTaskTempCleared Then
+            IsTaskTempCleared = True
+            IsTaskTempClearing = True
+            Try
+                Log("[System] 开始清理任务缓存文件夹")
+                DeleteDirectory($"{OsDrive}ProgramData\PCL\TaskTemp\")
+                DeleteDirectory($"{PathTemp}TaskTemp\")
+                Log("[System] 已清理任务缓存文件夹")
+            Catch ex As Exception
+                Log(ex, "清理任务缓存文件夹失败")
+            Finally
+                IsTaskTempClearing = False
+            End Try
+        ElseIf IsTaskTempClearing Then
+            '等待另一个清理步骤完成
+            Do While IsTaskTempClearing
+                Thread.Sleep(1)
+            Loop
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。这些文件夹无需进行后续清理。
+    ''' 若所有缓存位置均没有权限，会抛出异常。
+    ''' </summary>
+    ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
+    Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
+        TryClearTaskTemp()
+        Dim ResultFolder As String
+        Try
+            ResultFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+            If RequireNonSpace AndAlso ResultFolder.Contains(" ") Then Exit Try '带空格
+            Directory.CreateDirectory(ResultFolder)
+            CheckPermissionWithException(ResultFolder)
+            Return ResultFolder
+        Catch
+        End Try
+        '使用备用路径
+        ResultFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        Directory.CreateDirectory(ResultFolder)
+        CheckPermission(ResultFolder)
+        Return ResultFolder
+    End Function
 
 #End Region
 

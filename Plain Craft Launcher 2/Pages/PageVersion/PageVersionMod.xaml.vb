@@ -289,7 +289,7 @@
     Private Sub BtnManageOpen_Click(sender As Object, e As EventArgs) Handles BtnManageOpen.Click, BtnHintOpen.Click
         Try
             Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "mods\")
-            OpenExplorer("""" & PageVersionLeft.Version.PathIndie & "mods\""")
+            OpenExplorer(PageVersionLeft.Version.PathIndie & "mods\")
         Catch ex As Exception
             Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
         End Try
@@ -601,12 +601,20 @@ Install:
                 Dim CurrentSegs = CurrentReplaceName.Split("-"c).ToList()
                 Dim NewestSegs = NewestReplaceName.Split("-"c).ToList()
                 Dim Shortened As Boolean = False
-                For Each Seg In CurrentSegs.ToList()
-                    If Not NewestSegs.Contains(Seg) Then Continue For
-                    CurrentSegs.Remove(Seg)
-                    NewestSegs.Remove(Seg)
+                Do While True '移除前导相同部分（不能移除所有相同项，这会导致例如 1.2-forge-2 和 1.3-forge-3 中间的 forge 被去掉，导致尝试替换 1.2-2）
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.First <> NewestSegs.First Then Exit Do
+                    CurrentSegs.RemoveAt(0)
+                    NewestSegs.RemoveAt(0)
                     Shortened = True
-                Next
+                Loop
+                Do While True '移除后导相同部分
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.Last <> NewestSegs.Last Then Exit Do
+                    CurrentSegs.RemoveAt(CurrentSegs.Count - 1)
+                    NewestSegs.RemoveAt(NewestSegs.Count - 1)
+                    Shortened = True
+                Loop
                 If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
                     CurrentReplaceName = Join(CurrentSegs, "-")
                     NewestReplaceName = Join(NewestSegs, "-")
@@ -856,10 +864,8 @@ Install:
     '打开文件所在的位置
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
-
             Dim ListItem As MyLocalModItem = sender.Tag
-            OpenExplorer("/select,""" & ListItem.Entry.Path & """")
-
+            OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
         End Try

@@ -3,7 +3,7 @@
     '控件
     Inherits Grid
     Private ReadOnly MainGrid As Grid
-    Private ReadOnly MainChrome As SystemDropShadowChrome
+    Public ReadOnly Property MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
     Public Property BorderChild As UIElement
         Get
@@ -36,6 +36,20 @@
 
     '属性
     Public Uuid As Integer = GetUuid()
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return MainTextBlock.Inlines
+        End Get
+    End Property
+    Public Property CornerRadius As CornerRadius
+        Get
+            Return MainChrome.CornerRadius
+        End Get
+        Set(value As CornerRadius)
+            MainChrome.CornerRadius = value
+            MainBorder.CornerRadius = value
+        End Set
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)
@@ -62,7 +76,7 @@
         If IsLoad Then Exit Sub
         IsLoad = True
         '初次加载限定
-        If Title <> "" AndAlso MainTextBlock Is Nothing Then
+        If MainTextBlock Is Nothing Then
             MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(15, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
             MainTextBlock.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush1")
             MainTextBlock.SetBinding(TextBlock.TextProperty, New Binding("Title") With {.Source = Me, .Mode = BindingMode.OneWay})
@@ -98,13 +112,13 @@
         '排序
         Select Case Type
             Case 3
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
+                Stack.Tag = CType(Stack.Tag, List(Of DlOptiFineListEntry)).Sort(Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
             Case 4, 10
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
+                Stack.Tag = CType(Stack.Tag, List(Of DlLiteLoaderListEntry)).Sort(Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
             Case 6
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
+                Stack.Tag = CType(Stack.Tag, List(Of DlForgeVersionEntry)).Sort(Function(a, b) a.Version > b.Version)
             Case 8, 9
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                Stack.Tag = CType(Stack.Tag, List(Of CompFile)).Sort(Function(a, b) a.ReleaseDate > b.ReleaseDate)
         End Select
         '控件转换
         Select Case Type
@@ -180,10 +194,10 @@
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush2", 150))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush2", 150))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, 255, 255, 255) - MainBorder.Background, 180),
-                         AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, 255, 255, 255) - MainBorder.Background, 180),
+            AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
+        })
         AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
     Private Sub MyCard_MouseLeave(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
@@ -192,10 +206,10 @@
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush1", 250))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush1", 250))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300),
-                         AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300),
+            AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
+        })
         AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
 
@@ -222,20 +236,21 @@
             '高度增加较大，使用弹起动画
             Dim Delta As Double = MathClamp(Math.Abs(DeltaHeight) * 0.05, 3, 10) * Math.Sign(DeltaHeight)
             AnimList.AddRange({
-                     AaHeight(Me, DeltaHeight + Delta, 300, If(IsLoadAnimation, 30, 0), If(DeltaHeight > FrmMain.Height, New AniEaseInFluent(AniEasePower.ExtraStrong), New AniEaseOutFluent(AniEasePower.ExtraStrong))),
-                     AaHeight(Me, -Delta, 150, 260, Ease:=New AniEaseOutFluent(AniEasePower.Strong))
-                })
+                AaHeight(Me, DeltaHeight + Delta, 300, If(IsLoadAnimation, 30, 0), If(DeltaHeight > FrmMain.Height, New AniEaseInFluent(AniEasePower.ExtraStrong), New AniEaseOutFluent(AniEasePower.ExtraStrong))),
+                AaHeight(Me, -Delta, 150, 260, Ease:=New AniEaseOutFluent(AniEasePower.Strong))
+            })
         Else
             '普通的改变就行啦
             AnimList.AddRange({
-                         AaHeight(Me, DeltaHeight, MathClamp(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
-                    })
+                AaHeight(Me, DeltaHeight, MathClamp(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
+            })
         End If
-        AnimList.Add(AaCode(Sub()
-                                IsHeightAnimating = False
-                                Height = ActualUsedHeight
-                                If IsSwaped Then SwapControl.Visibility = Visibility.Collapsed
-                            End Sub,, True))
+        AnimList.Add(AaCode(
+        Sub()
+            IsHeightAnimating = False
+            Height = ActualUsedHeight
+            If IsSwaped Then SwapControl.Visibility = Visibility.Collapsed
+        End Sub,, True))
         AniStart(AnimList, "MyCard Height " & Uuid)
 
         IsHeightAnimating = True
@@ -253,7 +268,8 @@
 
 #End Region
 
-    '折叠
+#Region "折叠"
+
     '若设置了 CanSwap，或 SwapControl 不为空，则判定为会进行折叠
     '这是因为不能直接在 XAML 中设置 SwapControl
     Public SwapControl As Object
@@ -294,7 +310,7 @@
     Private Sub MyCard_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
         Dim Pos As Double = Mouse.GetPosition(Me).Y
         If Not IsSwaped AndAlso
-            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+            (SwapControl Is Nothing OrElse Pos > If(IsSwaped, SwapedHeight, SwapedHeight - 6) OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
         IsMouseDown = True
     End Sub
     Private Sub MyCard_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
@@ -303,7 +319,7 @@
 
         Dim Pos As Double = Mouse.GetPosition(Me).Y
         If Not IsSwaped AndAlso
-            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+            (SwapControl Is Nothing OrElse Pos > If(IsSwaped, SwapedHeight, SwapedHeight - 6) OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
 
         Dim ee = New RouteEventArgs(True)
         RaiseEvent PreviewSwap(Me, ee)
@@ -320,24 +336,27 @@
         IsMouseDown = False
     End Sub
 
+#End Region
+
 End Class
 Partial Public Module ModAnimation
     Public Sub AniDispose(Control As MyCard, RemoveFromChildren As Boolean, Optional CallBack As ParameterizedThreadStart = Nothing)
         If Control.IsHitTestVisible Then
             Control.IsHitTestVisible = False
             AniStart({
-                     AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
-                     AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
-                     AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
-                     AaCode(Sub()
-                                If RemoveFromChildren Then
-                                    If Control.Parent Is Nothing Then Exit Sub
-                                    CType(Control.Parent, Object).Children.Remove(Control)
-                                Else
-                                    Control.Visibility = Visibility.Collapsed
-                                End If
-                                If CallBack IsNot Nothing Then CallBack(Control)
-                            End Sub,, True)
+                AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
+                AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
+                AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
+                AaCode(
+                Sub()
+                    If RemoveFromChildren Then
+                        If Control.Parent Is Nothing Then Exit Sub
+                        CType(Control.Parent, Object).Children.Remove(Control)
+                    Else
+                        Control.Visibility = Visibility.Collapsed
+                    End If
+                    If CallBack IsNot Nothing Then CallBack(Control)
+                End Sub,, True)
             }, "MyCard Dispose " & Control.Uuid)
         Else
             If RemoveFromChildren Then

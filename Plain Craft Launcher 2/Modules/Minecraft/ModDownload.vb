@@ -644,12 +644,12 @@
     Public Sub DlForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
         Dim Result As String
         Try
-            Result = NetGetCodeByDownload("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" &
+            Result = NetGetCodeByLoader("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" &
                                           Loader.Input.Replace("-", "_") & '兼容 Forge 1.7.10-pre4，#4057
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
-                Throw New Exception("没有可用版本")
+                Throw New Exception("不可用")
             Else
                 Throw
             End If
@@ -707,7 +707,7 @@
         Catch ex As Exception
             Throw New Exception("Forge 官方源版本列表解析失败（" & Result & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -762,7 +762,7 @@
         Catch ex As Exception
             Throw New Exception("Forge BMCLAPI 版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -851,8 +851,8 @@
     Public DlNeoForgeListOfficialLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Official", AddressOf DlNeoForgeListOfficialMain)
     Private Sub DlNeoForgeListOfficialMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
-        Dim ResultLatest As String = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
-        Dim ResultLegacy As String = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLatest As String = NetGetCodeByLoader("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLegacy As String = NetGetCodeByLoader("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
         '解析
         Try
@@ -869,8 +869,8 @@
     Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
     Public Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
-        Dim ResultLatest As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
-        Dim ResultLegacy As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLatest As String = NetGetCodeByLoader("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLegacy As String = NetGetCodeByLoader("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
         '解析
         Try
@@ -887,7 +887,7 @@
         Dim Versions = VersionNames.
             Where(Function(name) name <> "47.1.82"). '这个版本虽然在版本列表中，但不能下载
             Select(Function(name) New DlNeoForgeListEntry(name)).ToList
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
         Return Versions
     End Function
@@ -1117,12 +1117,12 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
-    ''' 调用 NetGetCodeByRequest。
+    ''' 调用 NetGetCodeByRequest，会进行重试。
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
         'Dim McimUrl As String = DlSourceModGet(Url)
         'If McimUrl <> Url Then
         '    Select Case Setup.Get("ToolDownloadMod")
@@ -1154,12 +1154,12 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理。
-    ''' 调用 NetRequest。
+    ''' 调用 NetRequest，会进行重试。
     ''' </summary>
     Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String) As String
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
         'Dim McimUrl As String = DlSourceModGet(Url)
         'If McimUrl <> Url Then
         '   Select Case Setup.Get("ToolDownloadMod")
@@ -1303,7 +1303,7 @@
                     For ii = 0 To LoaderList.Count - 1
                         LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
                         If LoaderList(ii).Key.Error IsNot Nothing Then
-                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("没有可用版本") Then
+                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("不可用") Then
                                 ErrorInfo = LoaderList(ii).Key.Error
                             End If
                         End If
