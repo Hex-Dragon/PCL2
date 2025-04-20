@@ -1,6 +1,18 @@
 ﻿Public Class PageLoginAuth
+    Public Shared DraggedAuthServer As String = Nothing
+    Private Sub Reload() Handles Me.Loaded
+        If DraggedAuthServer IsNot Nothing Then
+            TextServer.Text = DraggedAuthServer
+            DraggedAuthServer = Nothing
+        End If
+    End Sub
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
-        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+        RunInUi(Sub()
+                    TextServer.Text = Nothing
+                    TextName.Text = Nothing
+                    TextPass.Password = Nothing
+                    FrmLaunchLeft.RefreshPage(False, True)
+                End Sub)
     End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
         If String.IsNullOrWhiteSpace(TextServer.Text) OrElse String.IsNullOrWhiteSpace(TextName.Text) OrElse String.IsNullOrWhiteSpace(TextPass.Password) Then
