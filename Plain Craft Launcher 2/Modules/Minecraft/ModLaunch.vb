@@ -504,6 +504,7 @@ NextInner:
     End Sub
 
 #End Region
+
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
@@ -1438,7 +1439,7 @@ Retry:
         End If
 
         '设置代理
-        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing Then
+        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Setup.Get("SystemHttpProxy")) Then
             Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
             DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
             DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
@@ -1513,7 +1514,7 @@ NextVersion:
         End If
 
         '设置代理
-        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing Then
+        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Setup.Get("SystemHttpProxy")) Then
             Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
             DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
             DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
