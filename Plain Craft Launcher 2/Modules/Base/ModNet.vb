@@ -1,16 +1,17 @@
 ﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
-    Private Property _Proxy As WebProxy
+    Private Property _Proxy As IWebProxy = WebRequest.GetSystemWebProxy()
     ''' <summary>
-    ''' 确定是否使用代理
+    ''' 确定是否使用代理。
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
-        If _Proxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
+        Dim SystemProxy As New WebProxy(_Proxy.GetProxy(New Uri("https://www.example.com")))
+        If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
-            Return _Proxy
+            Return SystemProxy
         End If
         If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
             _Proxy = New WebProxy(proxy, True)
