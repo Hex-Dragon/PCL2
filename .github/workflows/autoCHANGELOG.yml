@@ -47,7 +47,6 @@ jobs:
             echo "## $RELEASE_TITLE $SECTION_TYPE ($FORMATTED_DATE)"
             echo ""
             echo "${{ steps.process-body.outputs.processed_content }}"
-            echo ""
           } >> CHANGELOG.md
 
       - name: Commit changes
