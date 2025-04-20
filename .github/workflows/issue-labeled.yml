@@ -52,5 +52,5 @@ jobs:
           actions: 'create-comment'
           token: '${{ secrets.BOT }}'
           body: |
-            @${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。
+            @${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。（如果上游仓库已经存在此反馈，可以去补充信息。）
             感谢您的反馈。
