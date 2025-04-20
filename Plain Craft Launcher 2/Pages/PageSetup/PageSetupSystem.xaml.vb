@@ -58,6 +58,7 @@
         '网络
         TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
         CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
+        CheckUseDefaultProxy.Checked = Setup.Get("SystemUseDefaultProxy")
 
         '调试选项
         CheckDebugMode.Checked = Setup.Get("SystemDebugMode")
@@ -92,6 +93,7 @@
             Setup.Reset("SystemDisableHardwareAcceleration")
             Setup.Reset("SystemHttpProxy")
             Setup.Reset("ToolDownloadCert")
+            Setup.Reset("SystemUseDefaultProxy")
             Setup.Reset("UiAniFPS")
 
             Log("[Setup] 已初始化启动器页设置")
@@ -104,7 +106,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
