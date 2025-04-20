@@ -1,4 +1,4 @@
-﻿Public Class PageSetupUI
+Public Class PageSetupUI
 
     Public Shadows IsLoaded As Boolean = False
 

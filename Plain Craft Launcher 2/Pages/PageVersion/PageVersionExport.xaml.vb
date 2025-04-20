@@ -22,7 +22,7 @@ Public Class PageVersionExport
     Private Sub PageVersionExport_Loaded() Handles Me.Loaded
         AniControlEnabled += 1
         If CurrentVersion <> PageVersionLeft.Version.Path Then RefreshAll() '切换到了另一个版本，重置页面
-        BtnAdvancedHelp.EventData = If(VersionBranchName = "Release", "指南/整合包制作 - Public.json", "指南/整合包制作 - Snapshot.json")
+        BtnAdvancedHelp.EventData = "指南/整合包制作.json"
         AniControlEnabled -= 1
     End Sub
     Public Sub RefreshAll() Implements IRefreshable.Refresh

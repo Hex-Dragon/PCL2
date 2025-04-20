@@ -12,6 +12,11 @@ Public Module ModLaunch
         ''' </summary>
         Public ServerIp As String = Nothing
         ''' <summary>
+        ''' 指定在启动之后进入的存档名称。
+        ''' 默认值：Nothing。使用版本设置的值。
+        ''' </summary>
+        Public WorldName As String = Nothing
+        ''' <summary>
         ''' 将启动脚本保存到该地址，然后取消启动。这同时会改变启动时的提示等。
         ''' 默认值：Nothing。不保存。
         ''' </summary>
@@ -246,21 +251,24 @@ NextInner:
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
 #If BETA Then
         '求赞助
-        RunInNewThread(
-        Sub()
-            Select Case Setup.Get("SystemLaunchCount")
-                Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
-                    If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
-                                "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
-                                Setup.Get("SystemLaunchCount") & " 次启动！", "支持 PCL！", "但是我拒绝") = 1 Then
-                        OpenWebsite("https://afdian.com/a/LTCat")
-                    End If
-            End Select
-        End Sub, "Donate")
+        If CurrentLaunchOptions?.SaveBatch Is Nothing Then '保存脚本时不提示
+            RunInNewThread(
+            Sub()
+                Select Case Setup.Get("SystemLaunchCount")
+                    Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
+                        If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
+                                    "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
+                                    "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
+                                    Setup.Get("SystemLaunchCount") & " 次启动！", "支持 PCL！", "但是我拒绝") = 1 Then
+                            OpenWebsite("https://afdian.com/a/LTCat")
+                        End If
+                End Select
+            End Sub, "Donate")
+        End If
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso SelectedProfile.Type <> McLoginType.Ms Then
+        If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
+           Not Setup.Get("HintBuy") AndAlso SelectedProfile.Type <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -1416,6 +1424,12 @@ LoginFinish:
             Arguments += " " & McLaunchArgumentsGameNew(McVersionCurrent)
             McLaunchLog("新版 Game 参数获取成功")
         End If
+        '编码参数（#5818、#5892）
+        If McLaunchJavaSelected.VersionCode > 8 Then
+            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments += " -Dstdout.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments += " -Dstderr.encoding=UTF-8"
+        End If
         '替换参数
         Dim ReplaceArguments = McLaunchArgumentsReplace(McVersionCurrent, Loader)
         If String.IsNullOrWhiteSpace(ReplaceArguments("${version_type}")) Then
@@ -1434,9 +1448,14 @@ LoginFinish:
         For Each Arg In CurrentLaunchOptions.ExtraArgs
             Arguments += " " & Arg.Trim
         Next
+        '进存档
+        Dim WorldName As String = CurrentLaunchOptions.WorldName
+        If WorldName IsNot Nothing Then
+            Arguments += $" --quickPlaySingleplayer ""{WorldName}"""
+        End If
         '进服
         Dim Server As String = If(String.IsNullOrEmpty(CurrentLaunchOptions.ServerIp), Setup.Get("VersionServerEnter", McVersionCurrent), CurrentLaunchOptions.ServerIp)
-        If Server.Length > 0 Then
+        If WorldName IsNot Nothing AndAlso Server.Length > 0 Then
             If McVersionCurrent.ReleaseTime > New Date(2023, 4, 4) Then
                 'QuickPlay
                 Arguments += $" --quickPlayMultiplayer ""{Server}"""
@@ -2290,7 +2309,7 @@ IgnoreCustomSkin:
         '输出信息
         McLaunchLog("")
         McLaunchLog("~ 基础参数 ~")
-        McLaunchLog("PCL 版本：" & VersionDisplayName & " (" & VersionCode & ")")
+        McLaunchLog("PCL 版本：" & VersionBaseName & " (" & VersionCode & ")")
         McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（识别为 1." & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
         McLaunchLog("资源版本：" & McAssetsGetIndexName(McVersionCurrent))
         McLaunchLog("版本继承：" & If(McVersionCurrent.InheritVersion = "", "无", McVersionCurrent.InheritVersion))

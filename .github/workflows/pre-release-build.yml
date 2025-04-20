@@ -2,7 +2,7 @@ name: Pre-Release Build
 
 on:
   release:
-    types: [published, edited]
+    types: [published]
 
 jobs:
   build:
