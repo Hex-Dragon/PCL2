@@ -634,8 +634,8 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">MC Experience Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office Cape</s:String>
-    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">Home</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">Menace</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
