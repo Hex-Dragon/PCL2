@@ -1547,7 +1547,6 @@ NextVersion:
         If McLaunchNeedsRetroWrapper() Then
             'https://github.com/NeRdTheNed/RetroWrapper/wiki/RetroWrapper-flags
             DataList.Add("-Dretrowrapper.doUpdateCheck=false")
-            DataList.Add("-Dretrowrapper.enableFMLPatch=true")
         End If
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
