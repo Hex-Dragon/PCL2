@@ -231,7 +231,7 @@
                                           ToolTip="PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。&#xa;如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。" />
                         <local:MyCheckBox Height="28" Text="禁用 RetroWrapper" x:Name="CheckAdvanceDisableRW" Tag="VersionAdvanceDisableRW"
                                           ToolTipService.Placement="Right"
-                                          ToolTip="PCL 会在启动 1.5.x 即以下版本时使用 NeRdTheNed/RetroWrapper 来修复老版本的体验和兼容的问题。" />
+                                          ToolTip="PCL 会在启动 1.5.x 及以下版本时使用 NeRd 的 RetroWrapper 来改善老版本游戏体验和修复兼容性问题。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
