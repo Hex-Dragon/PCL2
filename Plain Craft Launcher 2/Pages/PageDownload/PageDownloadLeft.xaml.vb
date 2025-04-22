@@ -110,18 +110,24 @@
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
-                PageDownloadMod.Storage = New CompProjectStorage
-                PageDownloadMod.Page = 0
                 CompProjectCache.Clear()
                 CompFilesCache.Clear()
-                If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
+                If FrmDownloadMod IsNot Nothing Then
+                    FrmDownloadMod.Storage = New CompProjectStorage
+                    FrmDownloadMod.Page = 0
+                    FrmDownloadMod.ShouldCardPagesExit = True
+                    FrmDownloadMod.PageLoaderRestart()
+                End If
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
-                PageDownloadPack.Storage = New CompProjectStorage
-                PageDownloadPack.Page = 0
                 CompProjectCache.Clear()
                 CompFilesCache.Clear()
-                If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
+                If FrmDownloadPack IsNot Nothing Then
+                    FrmDownloadPack.Storage = New CompProjectStorage
+                    FrmDownloadPack.Page = 0
+                    FrmDownloadPack.ShouldCardPagesExit = True
+                    FrmDownloadPack.PageLoaderRestart()
+                End If
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadClient
                 DlClientListLoader.Start(IsForceRestart:=True)
