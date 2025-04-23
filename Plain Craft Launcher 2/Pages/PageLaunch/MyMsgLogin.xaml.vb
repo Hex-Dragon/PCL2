@@ -126,7 +126,7 @@
                     Finished(New Exception("$登录用时太长啦，重新试试吧！"))
                     Return
                 ElseIf ex.Message.ContainsF("abuse mode") Then
-                    Finished(New Exception("该账号似乎已被微软封禁，无法登录。"))
+                    Finished(New Exception("$该账号似乎已被微软封禁，无法登录。"))
                 ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                     Finished(New RestartException)
                     Return
