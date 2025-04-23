@@ -57,7 +57,6 @@
             TextAdvanceRun.Text = Setup.Get("LaunchAdvanceRun")
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceDisableRW.Checked = Setup.Get("LaunchAdvanceDisableRW")
-
             CheckAdvanceGraphicCard.Checked = Setup.Get("LaunchAdvanceGraphicCard")
             If IsArm64System Then
                 CheckAdvanceDisableJlw.Checked = True
