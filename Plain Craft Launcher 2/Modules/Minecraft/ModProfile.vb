@@ -56,7 +56,7 @@ Public Module ModProfile
         ProfileList.Clear()
         Try
             If Not File.Exists(PathAppdataConfig & "Profiles.json") Then
-                File.Create(PathAppdataConfig & "Profiles.json")
+                File.Create(PathAppdataConfig & "Profiles.json").Close()
                 WriteFile(PathAppdataConfig & "Profiles.json", "{""lastUsed"":0,""profiles"":[]}", False) '创建档案列表文件
             End If
             Dim ProfileJobj As JObject = JObject.Parse(ReadFile(PathAppdataConfig & "Profiles.json"))
@@ -113,7 +113,7 @@ Public Module ModProfile
     ''' <summary>
     ''' 以当前的档案列表写入配置文件
     ''' </summary>
-    Public Sub WriteProfileJson(Optional ListJson As JArray = Nothing)
+    Public Sub SaveProfile(Optional ListJson As JArray = Nothing)
         Try
             Log("[Profile] 写入档案列表")
             Dim Json As New JObject
@@ -191,9 +191,9 @@ Public Module ModProfile
                     End Sub)
         If SelectedAuthTypeNum Is Nothing Then Exit Sub
         If SelectedAuthTypeNum = 1 Then '正版验证
-            RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Ms))
+            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, True, McLoginType.Ms))
         ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
-            RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True, True, McLoginType.Auth))
+            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, True, McLoginType.Auth))
         Else '离线验证
             Dim UserName As String = Nothing '玩家 ID
             Dim UserUuid As String = Nothing 'UUID
@@ -229,7 +229,7 @@ Public Module ModProfile
                 .Username = UserName,
                 .Desc = ""}
             ProfileList.Add(NewProfile)
-            WriteProfileJson()
+            SaveProfile()
             Hint("档案新建成功！", HintType.Finish)
         End If
     End Sub
@@ -305,7 +305,7 @@ Public Module ModProfile
 Write:
         ProfileList(ProfileIndex).Uuid = NewUuid
         SelectedProfile = ProfileList(ProfileIndex)
-        WriteProfileJson()
+        SaveProfile()
         Hint("档案信息已保存！", HintType.Finish)
     End Sub
     ''' <summary>
@@ -315,7 +315,7 @@ Write:
     Public Sub RemoveProfile(Profile As McProfile)
         ProfileList.Remove(Profile)
         LastUsedProfile = Nothing
-        WriteProfileJson()
+        SaveProfile()
         Hint("档案删除成功！", HintType.Finish)
     End Sub
 #End Region
@@ -323,10 +323,17 @@ Write:
 #Region "导入与导出"
     Public Sub MigrateProfile()
         Dim Type As Integer = 3
-        RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
-        If Type = 3 Then Exit Sub
+        RunInUiWait(Sub()
+                        If ProfileList.Any() Then
+                            Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True)
+                            If Type = 3 Then Exit Sub
+                        Else
+                            Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}由于目前 PCL CE 不存在任何可用档案，无法导出档案。", "导入 / 导出档案", "导入", "取消", ForceWait:=True)
+                            If Type = 2 Then Exit Sub
+                        End If
+                    End Sub)
         Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
-        If Type = 1 Then
+        If Type = 1 Then '导入
             Hint("正在导入，请稍后...", HintType.Info)
             Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
             Dim OutputList As New List(Of McProfile)
@@ -359,7 +366,8 @@ Write:
                                             .ClientToken = Profile("clientToken"),
                                             .Desc = ""
                                         }
-                    Dim Response As String = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8)
+                    Dim Response As String = Nothing
+                    RunInNewThread(Sub() Response = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8))
                     Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
                     NewProfile.ServerName = ServerName
                 Else
@@ -376,9 +384,9 @@ Write:
             For Each Profile In OutputList
                 ProfileList.Add(Profile)
             Next
-            WriteProfileJson()
+            SaveProfile()
             Hint($"已导入 {ImportNum} 个档案，部分档案可能需要重新验证密码！", HintType.Finish)
-        Else
+        Else '导出
             Hint("正在导出，请稍后...", HintType.Info)
             Dim ExistList As JArray = JArray.Parse(ReadFile(OutsidePath))
             Dim OutputList As JArray = New JArray
@@ -488,28 +496,49 @@ Write:
     End Function
     ''' <summary>
     ''' 获取当前档案的验证信息。
+    ''' <param name="TargetAuthType">若为新档案，则填写此值</param>
     ''' </summary>
-    Public Function GetLoginData() As McLoginData
-        If SelectedProfile Is Nothing Then SelectedProfile = ProfileList(LastUsedProfile)
-        If SelectedProfile.Type = McLoginType.Auth Then
-            Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth",
-                .BaseUrl = SelectedProfile.Server,
-                .UserName = SelectedProfile.Name,
-                .Password = SelectedProfile.Password,
-                .Description = "Authlib-Injector",
-                .Type = McLoginType.Auth,
-                .IsExist = (FrmLoginAuth Is Nothing)
-            }
-        ElseIf SelectedProfile.Type = McLoginType.Ms Then
-            If McLoginMsLoader.State = LoadState.Finished Then
-                Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken,
-                    .UserName = SelectedProfile.Username, .AccessToken = SelectedProfile.AccessToken,
-                    .Uuid = SelectedProfile.Uuid, .ProfileJson = SelectedProfile.RawJson}
+    Public Function GetLoginData(Optional TargetAuthType As McLoginType = Nothing) As McLoginData
+        Dim AuthType As McLoginType = Nothing
+        If SelectedProfile Is Nothing Then '新档案
+            If Not TargetAuthType = Nothing Then
+                AuthType = TargetAuthType
             Else
-                Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken, .UserName = SelectedProfile.Name}
+                AuthType = McLoginType.Legacy
             End If
-        Else
-            Return New McLoginLegacy With {.UserName = SelectedProfile.Username, .Uuid = SelectedProfile.Uuid}
+            If AuthType = McLoginType.Auth Then
+                Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth",
+                    .Description = "Authlib-Injector",
+                    .Type = McLoginType.Auth,
+                    .IsExist = (FrmLoginAuth Is Nothing)
+                }
+            ElseIf AuthType = McLoginType.Ms Then
+                Return New McLoginMs
+            Else
+                Return New McLoginLegacy
+            End If
+        Else '已有档案
+            AuthType = SelectedProfile.Type
+            If AuthType = McLoginType.Auth Then
+                Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth",
+                    .BaseUrl = SelectedProfile.Server,
+                    .UserName = SelectedProfile.Name,
+                    .Password = SelectedProfile.Password,
+                    .Description = "Authlib-Injector",
+                    .Type = McLoginType.Auth,
+                    .IsExist = (FrmLoginAuth Is Nothing)
+                }
+            ElseIf AuthType = McLoginType.Ms Then
+                If McLoginMsLoader.State = LoadState.Finished Then
+                    Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken,
+                        .UserName = SelectedProfile.Username, .AccessToken = SelectedProfile.AccessToken,
+                        .Uuid = SelectedProfile.Uuid, .ProfileJson = SelectedProfile.RawJson}
+                Else
+                    Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken, .UserName = SelectedProfile.Name}
+                End If
+            Else
+                Return New McLoginLegacy With {.UserName = SelectedProfile.Username, .Uuid = SelectedProfile.Uuid}
+            End If
         End If
         Return Nothing
     End Function

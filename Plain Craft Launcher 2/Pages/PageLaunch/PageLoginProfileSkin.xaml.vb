@@ -6,7 +6,7 @@
     ''' <summary>
     ''' 刷新页面显示的所有信息。
     ''' </summary>
-    Public Sub Reload(KeepInput As Boolean)
+    Public Sub Reload() Handles Me.Loaded
         Log("[Profile] 刷新档案界面")
         Skin.Clear()
         If SelectedProfile.Type = McLoginType.Ms Then
@@ -22,7 +22,7 @@
             Log("[Profile] 使用离线皮肤加载器")
             Skin.Loader = PageLaunchLeft.SkinLegacy
         End If
-        Skin.Loader.WaitForExit(IsForceRestart:=True)
+        Skin.Loader.Start(IsForceRestart:=True)
         TextName.Text = SelectedProfile.Username
         TextType.Text = GetProfileInfo(SelectedProfile)
     End Sub
@@ -64,7 +64,7 @@
         SelectedProfile = Nothing
         LastUsedProfile = Nothing
         RunInUi(Sub()
-                    FrmLaunchLeft.RefreshPage(False, True)
+                    FrmLaunchLeft.RefreshPage(True)
                     FrmLaunchLeft.BtnLaunch.IsEnabled = False
                 End Sub)
     End Sub

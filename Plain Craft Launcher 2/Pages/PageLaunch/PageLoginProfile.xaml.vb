@@ -2,14 +2,14 @@
     ''' <summary>
     ''' 刷新页面显示的所有信息。
     ''' </summary>
-    Public Sub Reload(KeepInput As Boolean)
+    Public Sub Reload() Handles Me.Loaded
         RefreshProfileList()
+        FrmLoginProfileSkin = Nothing
         RunInNewThread(Sub()
                            Thread.Sleep(800)
-                           RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+                           RunInUi(Sub() FrmLaunchLeft.RefreshPage(True))
                        End Sub)
     End Sub
-
     ''' <summary>
     ''' 刷新档案列表
     ''' </summary>
@@ -33,15 +33,13 @@
         Log($"[Profile] 选定档案: {sender.Tag.Username}, 以 {sender.Tag.Type} 方式验证")
         LastUsedProfile = ProfileList.IndexOf(sender.Tag) '获取当前档案的序号
         RunInUi(Sub()
-                    FrmLaunchLeft.RefreshPage(False, True)
+                    FrmLaunchLeft.RefreshPage(True)
                     FrmLaunchLeft.BtnLaunch.IsEnabled = True
                 End Sub)
     End Sub
     Public Function ProfileListItem(Profile As McProfile, OnClick As MyListItem.ClickEventHandler)
-        Dim LogoPath As String = Nothing
-        If File.Exists(PathTemp & $"Cache\Skin\Head\{Profile.Type}_{Profile.Username}_{Profile.Uuid}.png") AndAlso Not New FileInfo(PathTemp & $"Cache\Skin\Head\{Profile.Type}_{Profile.Username}_{Profile.Uuid}.png").Length = 0 Then
-            LogoPath = PathTemp & $"Cache\Skin\Head\{Profile.Type}_{Profile.Username}_{Profile.Uuid}.png"
-        Else
+        Dim LogoPath As String = PathTemp & $"Cache\Skin\Head\{If(Profile.Type = McLoginType.Auth, Profile.Server.Between("://", "/api/yggdrasil"), Profile.Type)}_{Profile.Username}_{Profile.Uuid}.png"
+        If Not (File.Exists(LogoPath) AndAlso Not New FileInfo(LogoPath).Length = 0) Then
             LogoPath = Logo.IconButtonUser
         End If
         Dim NewItem As New MyListItem With {

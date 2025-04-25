@@ -4,7 +4,7 @@
     Private IsLoad As Boolean = False
     Private IsLoadFinished As Boolean = False
     Public Sub PageLaunchLeft_Loaded() Handles Me.Loaded
-        If IsLoad Then RefreshPage(True, False)
+        If IsLoad Then RefreshPage(False)
 
         AprilPosTrans.X = 0
         AprilPosTrans.Y = 0
@@ -88,13 +88,13 @@
                 McVersionCurrent = Version '绕这一圈是为了避免 McVersionCheck 触发第二次版本改变
                 IsLoadFinished = True
                 RefreshButtonsUI()
-                RefreshPage(False, False) '有可能选择的版本变化了，需要重新刷新
+                RefreshPage(False) '有可能选择的版本变化了，需要重新刷新
                 'If IsProfileVaild() = "" Then McLoginLoader.Start() '自动登录
             End Sub)
         End Sub, "Version Check", ThreadPriority.AboveNormal)
 
         '改变页面
-        RefreshPage(False, False)
+        RefreshPage(False)
 
         AniControlEnabled -= 1
     End Sub
@@ -265,14 +265,14 @@
     ''' <summary>
     ''' 确认当前显示的子页面正确，并刷新该页面。
     ''' </summary>
-    Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As McLoginType = Nothing)
+    Public Sub RefreshPage(Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As McLoginType = Nothing)
         If IsLogin Then
             Dim TargetLoginPage As PageType
             If TargetLoginType = McLoginType.Ms Then TargetLoginPage = PageType.Ms
             If TargetLoginType = McLoginType.Auth Then TargetLoginPage = PageType.Auth
             If TargetLoginType = McLoginType.Legacy Then TargetLoginPage = PageType.Legacy
             If PageCurrent = TargetLoginPage Then Exit Sub
-            PageChange(TargetLoginPage, Anim).Reload(KeepInput)
+            PageChange(TargetLoginPage, Anim)
             Exit Sub
         End If
         '获取页面的可用种类并回写缓存
@@ -310,12 +310,12 @@ UnknownType:
         End Select
         '刷新页面
         If PageCurrent = Type Then Exit Sub
-        PageChange(Type, Anim).Reload(KeepInput)
+        PageChange(Type, Anim)
         'Dim Control As MyRadioButton = FindName("RadioLoginType" & Setup.Get("LoginType"))
         'If Control IsNot Nothing Then Control.Checked = True
     End Sub
     Private Sub RadioLoginType_Change(sender As Object, raiseByMouse As Boolean) Handles RadioLoginType0.Check, RadioLoginType5.Check
-        If raiseByMouse Then RefreshPage(True, True)
+        If raiseByMouse Then RefreshPage(True)
     End Sub
 
 #End Region

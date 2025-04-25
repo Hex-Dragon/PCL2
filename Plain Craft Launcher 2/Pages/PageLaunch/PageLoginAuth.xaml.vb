@@ -11,7 +11,7 @@
                     TextServer.Text = Nothing
                     TextName.Text = Nothing
                     TextPass.Password = Nothing
-                    FrmLaunchLeft.RefreshPage(False, True)
+                    FrmLaunchLeft.RefreshPage(True)
                 End Sub)
     End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
@@ -32,7 +32,7 @@
                                    Thread.Sleep(50)
                                Loop
                                If McLoginAuthLoader.State = LoadState.Finished Then
-                                   RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+                                   RunInUi(Sub() FrmLaunchLeft.RefreshPage(True))
                                ElseIf McLoginAuthLoader.State = LoadState.Aborted Then
                                    Throw New ThreadInterruptedException
                                ElseIf McLoginAuthLoader.Error Is Nothing Then
@@ -62,21 +62,42 @@
                            End Try
                        End Sub)
     End Sub
+    '获取验证服务器名称
+    Private Sub GetServerName() Handles TextServer.LostKeyboardFocus
+        Dim Link As String = TextServer.Text
+        Dim Name As String = Nothing
+        RunInNewThread(Sub()
+                           Try
+                               Dim Response As String = NetGetCodeByRequestRetry(Link, Encoding.UTF8)
+                               Name = JObject.Parse(Response)("meta")("serverName").ToString()
+                           Catch ex As Exception
+                               Name = Nothing
+                           End Try
+                           RunInUi(Sub()
+                                       If Name = Nothing Then
+                                           TextServerName.Visibility = Visibility.Hidden
+                                       Else
+                                           TextServerName.Text = "验证服务器: " & Name
+                                           TextServerName.Visibility = Visibility.Visible
+                                       End If
+                                   End Sub)
+                       End Sub)
+    End Sub
     '链接处理
     Private Sub ComboName_TextChanged() Handles TextName.TextChanged
         BtnLink.Content = If(TextName.Text = "", "注册账号", "找回密码")
     End Sub
     Private Sub Btn_Click(sender As Object, e As EventArgs) Handles BtnLink.Click
         If BtnLink.Content = "注册账号" Then
-            OpenWebsite(If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister")))
+            OpenWebsite(If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), ""))
         Else
-            Dim Website As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister"))
+            Dim Website As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), "")
             OpenWebsite(Website.Replace("/auth/register", "/auth/forgot"))
         End If
     End Sub
     '切换注册按钮可见性
     Private Sub ReloadRegisterButton() Handles Me.Loaded
-        Dim Address As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister"))
+        Dim Address As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), "")
         BtnLink.Visibility = If(String.IsNullOrEmpty(New ValidateHttp().Validate(Address)), Visibility.Visible, Visibility.Collapsed)
     End Sub
 End Class

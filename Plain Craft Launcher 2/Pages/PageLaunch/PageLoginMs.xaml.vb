@@ -1,6 +1,6 @@
 ﻿Public Class PageLoginMs
     Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
-        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+        RunInUi(Sub() FrmLaunchLeft.RefreshPage(True))
     End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
         BtnLogin.IsEnabled = False
@@ -9,13 +9,13 @@
         RunInNewThread(
         Sub()
             Try
-                McLoginMsLoader.Start(GetLoginData(), IsForceRestart:=True)
+                McLoginMsLoader.Start(GetLoginData(McLoginType.Ms), IsForceRestart:=True)
                 Do While McLoginMsLoader.State = LoadState.Loading
                     RunInUi(Sub() BtnLogin.Text = Math.Round(McLoginMsLoader.Progress * 100) & "%")
                     Thread.Sleep(50)
                 Loop
                 If McLoginMsLoader.State = LoadState.Finished Then
-                    RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+                    RunInUi(Sub() FrmLaunchLeft.RefreshPage(True))
                 ElseIf McLoginMsLoader.State = LoadState.Aborted Then
                     Throw New ThreadInterruptedException
                 ElseIf McLoginMsLoader.Error Is Nothing Then

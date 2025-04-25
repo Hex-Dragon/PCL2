@@ -117,7 +117,7 @@ Public Class MySkin
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
-            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{SelectedProfile.Type}_{SelectedProfile.Username}_{SelectedProfile.Uuid}.png"
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{If(SelectedProfile.Type = McLoginType.Auth, SelectedProfile.Server.Between("://", "/api/yggdrasil"), SelectedProfile.Type)}_{SelectedProfile.Username}_{SelectedProfile.Uuid}.png"
             If SkinHead Is Nothing Then
                 SkinHead.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)
             Else
@@ -137,6 +137,7 @@ Public Class MySkin
                     Next
                 Next
             End If
+            If Not Directory.Exists(PathTemp & "Cache\Skin\Head") Then Directory.CreateDirectory(PathTemp & "Cache\Skin\Head")
             If Not File.Exists(CachePath) Then File.Create(CachePath).Close()
             SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)

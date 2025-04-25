@@ -22,9 +22,8 @@
             <TextBlock Name="TextName" Text="Username" Margin="8,0" FontSize="16" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
             <TextBlock Name="TextType" Text="AuthType" Margin="8,4,8,5" FontSize="12" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ColorBrushGray3}" />
         </StackPanel>
-        <!--<local:MyIconButton ToolTip="选择档案" Grid.Row="2" Height="27" Opacity="0" x:Name="BtnSelect" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="32" ToolTipService.HorizontalOffset="1" ToolTipService.InitialShowDelay="50" Grid.Column="1" HorizontalAlignment="Center" Logo="F1 M 53.2929,21.2929L 54.7071,22.7071C 56.4645,24.4645 56.4645,27.3137 54.7071,29.0711L 52.2323,31.5459L 44.4541,23.7677L 46.9289,21.2929C 48.6863,19.5355 51.5355,19.5355 53.2929,21.2929 Z M 31.7262,52.052L 23.948,44.2738L 43.0399,25.182L 50.818,32.9601L 31.7262,52.052 Z M 23.2409,47.1023L 28.8977,52.7591L 21.0463,54.9537L 23.2409,47.1023 Z" Margin="5,7,9,0" VerticalAlignment="Center" />-->
         <Border Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="0"
-                CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,9,3" Margin="0,0,0,0">
+                CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,9,3" Margin="0,8,0,0">
             <StackPanel Orientation="Horizontal">
                 <local:MyIconButton Height="24" Margin="0,0.5,9,0"  x:Name="BtnSkin"
                         ToolTip="皮肤与披风" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="35" ToolTipService.HorizontalOffset="1" ToolTipService.InitialShowDelay="50" 

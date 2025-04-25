@@ -64,7 +64,7 @@ Public Module ModLaunch
             McVersionCurrent = CurrentLaunchOptions.Version
             Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
             FrmLaunchLeft.RefreshButtonsUI()
-            FrmLaunchLeft.RefreshPage(False, False)
+            FrmLaunchLeft.RefreshPage(False)
         End If
         FrmMain.AprilGiveup()
         '禁止进入版本选择页面（否则就可以在启动中切换 McVersionCurrent 了）
@@ -447,7 +447,7 @@ NextInner:
         '尝试加载
         Loader.WaitForExit(Data.Input, McLoginLoader, Data.IsForceRestarting)
         Data.Output = CType(Loader, Object).Output
-        RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, False)) '刷新自动填充列表
+        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False)) '刷新自动填充列表
         McLaunchLog("登录加载已结束")
     End Sub
 
@@ -542,7 +542,7 @@ Relogin:
             ProfileList(ProfileIndex).AccessToken = AccessToken
             ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
         End If
-        WriteProfileJson()
+        SaveProfile()
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '结束
         McLoginMsRefreshTime = GetTimeTick()
@@ -813,19 +813,11 @@ Retry:
         Dim Input As McLoginServer = Data.Input
         Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
         Dim LogUsername As String = Input.UserName
-        If LogUsername.Contains("@") AndAlso Setup.Get("UiLauncherEmail") Then
-            LogUsername = AccountFilter(LogUsername)
-        End If
+        If LogUsername.Contains("@") Then LogUsername = AccountFilter(LogUsername)
         McLaunchLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
         Data.Progress = 0.05
         '尝试登录
-        If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) AndAlso
-            Setup.Get("Cache" & Input.Token & "Username") = Data.Input.UserName AndAlso
-            Setup.Get("Cache" & Input.Token & "Pass") = Data.Input.Password AndAlso
-            Setup.Get("Cache" & Input.Token & "Access") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Client") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Uuid") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Name") <> "" Then
+        If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) Then
             '尝试验证登录
             Try
                 If Data.IsAborted Then Throw New ThreadInterruptedException
@@ -873,8 +865,6 @@ LoginFinish:
         Dim Emails As New List(Of String)
         Dim Passwords As New List(Of String)
         Try
-            If Not Setup.Get("Login" & Input.Token & "Email") = "" Then Emails.AddRange(Setup.Get("Login" & Input.Token & "Email").ToString.Split("¨"))
-            If Not Setup.Get("Login" & Input.Token & "Pass") = "" Then Passwords.AddRange(Setup.Get("Login" & Input.Token & "Pass").ToString.Split("¨"))
             For i = 0 To Emails.Count - 1
                 Dict.Add(Emails(i), Passwords(i))
             Next
@@ -883,12 +873,8 @@ LoginFinish:
             Emails.Insert(0, Input.UserName)
             Passwords = New List(Of String)(Dict.Values)
             Passwords.Insert(0, Input.Password)
-            Setup.Set("Login" & Input.Token & "Email", Join(Emails, "¨"))
-            Setup.Set("Login" & Input.Token & "Pass", Join(Passwords, "¨"))
         Catch ex As Exception
             Log(ex, "保存启动记录失败", LogLevel.Hint)
-            Setup.Set("Login" & Input.Token & "Email", "")
-            Setup.Set("Login" & Input.Token & "Pass", "")
         End Try
     End Sub
     'Server 登录：三种验证方式的请求
@@ -932,8 +918,6 @@ LoginFinish:
         RefreshInfo.Add("selectedProfile", SelectProfile)
         RefreshInfo.Add(New JProperty("accessToken", SelectedProfile.AccessToken))
         RefreshInfo.Add(New JProperty("requestUser", True))
-
-
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
@@ -1049,7 +1033,7 @@ LoginFinish:
                 ProfileList.Add(NewProfile)
                 SelectedProfile = NewProfile
             End If
-            WriteProfileJson()
+            SaveProfile()
             McLaunchLog("登录成功（Login, " & Data.Input.Token & "）")
             Return NeedRefresh
         Catch ex As Exception

@@ -50,7 +50,7 @@
     Public Shared Sub ExitLogin() Handles BtnExit.Click
         Setup.Set("CacheNideAccess", "")
         McLoginNideLoader.Input = Nothing '防止因为输入的用户名密码相同，直接使用了上次登录的加载器结果
-        FrmLaunchLeft.RefreshPage(False, True)
+        FrmLaunchLeft.RefreshPage(True)
     End Sub
 
     Private Sub Skin_Click(sender As Object, e As MouseButtonEventArgs) Handles Skin.Click
