@@ -286,11 +286,7 @@ ReType:
         Try
             '忽略文件检查提示
             If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
-                If Setup.Get("LaunchAdvanceAssets") Then
-                    Hint("请先关闭 [设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
-                Else
-                    Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
-                End If
+                Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
                 Exit Sub
             End If
             '重复任务检查
