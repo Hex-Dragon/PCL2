@@ -1,4 +1,4 @@
-name: Issue Closed
+name: Issue Reopened
 run-name: '#${{ github.event.issue.number }} ${{ github.event.issue.title }}'
 
 on:
