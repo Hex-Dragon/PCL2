@@ -555,7 +555,7 @@ NoUserJava:
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") OrElse Pair.Key.ContainsF("system32") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                 Else
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
