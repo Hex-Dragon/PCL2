@@ -217,53 +217,46 @@ Public Module ModMinecraft
         ''' </summary>
         Public ReadOnly Property PathIndie As String
             Get
-                Return GetPathIndie(Modable)
+                InitPathIndie(Modable)
+                Return If(Setup.Get("VersionArgumentIndieV2", Version:=Me), Path, PathMcFolder)
             End Get
         End Property
         ''' <summary>
-        ''' 在不加载版本的情况下获取版本隔离目录。
+        ''' 决定该版本是否应该被隔离。
         ''' </summary>
-        Public Function GetPathIndie(Modable As Boolean) As String
-            '决定版本隔离类型
-            If Setup.IsUnset("VersionArgumentIndieV2", Version:=Me) Then
-                Dim ShouldBeIndie =
-                Function() As Boolean
-                    '从老的版本独立设置中迁移：-1 未决定，0 使用全局设置，1 手动开启，2 手动关闭
-                    If Not Setup.IsUnset("VersionArgumentIndie", Version:=Me) AndAlso Setup.Get("VersionArgumentIndie", Version:=Me) > 0 Then
-                        Log($"[Minecraft] 版本隔离初始化（{Name}）：从老的版本独立设置中迁移")
-                        Return Setup.Get("VersionArgumentIndie", Version:=Me) = 1
-                    End If
-                    '若版本文件夹下包含 mods 或 saves 文件夹，则自动开启版本隔离
-                    Dim ModFolder As New DirectoryInfo(Path & "mods\")
-                    Dim SaveFolder As New DirectoryInfo(Path & "saves\")
-                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
-                        Log($"[Minecraft] 版本隔离初始化（{Name}）：版本文件夹下存在 mods 或 saves 文件夹，自动开启")
+        Public Sub InitPathIndie(Modable As Boolean)
+            If Not Setup.IsUnset("VersionArgumentIndieV2", Version:=Me) Then Return
+            Dim ShouldBeIndie =
+            Function() As Boolean
+                '从老的版本独立设置中迁移：-1 未决定，0 使用全局设置，1 手动开启，2 手动关闭
+                If Not Setup.IsUnset("VersionArgumentIndie", Version:=Me) AndAlso Setup.Get("VersionArgumentIndie", Version:=Me) > 0 Then
+                    Log($"[Minecraft] 版本隔离初始化（{Name}）：从老的版本独立设置中迁移")
+                    Return Setup.Get("VersionArgumentIndie", Version:=Me) = 1
+                End If
+                '若版本文件夹下包含 mods 或 saves 文件夹，则自动开启版本隔离
+                Dim ModFolder As New DirectoryInfo(Path & "mods\")
+                Dim SaveFolder As New DirectoryInfo(Path & "saves\")
+                If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
+                    Log($"[Minecraft] 版本隔离初始化（{Name}）：版本文件夹下存在 mods 或 saves 文件夹，自动开启")
+                    Return True
+                End If
+                '根据全局的默认设置决定是否隔离
+                Log($"[Minecraft] 版本隔离初始化（{Name}）：从全局默认设置中（{Setup.Get("LaunchArgumentIndieV2")}）判断")
+                Select Case Setup.Get("LaunchArgumentIndieV2")
+                    Case 0 '关闭
+                        Return False
+                    Case 1 '仅隔离可安装 Mod 的版本
+                        Return Modable
+                    Case 2 '仅隔离非正式版
+                        Return State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
+                    Case 3 '隔离非正式版与可安装 Mod 的版本
+                        Return Modable OrElse State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
+                    Case Else '隔离所有版本
                         Return True
-                    End If
-                    '根据全局的默认设置决定是否隔离
-                    Log($"[Minecraft] 版本隔离初始化（{Name}）：从全局默认设置中（{Setup.Get("LaunchArgumentIndieV2")}）判断")
-                    Select Case Setup.Get("LaunchArgumentIndieV2")
-                        Case 0 '关闭
-                            Return False
-                        Case 1 '仅隔离可安装 Mod 的版本
-                            Return Modable
-                        Case 2 '仅隔离非正式版
-                            Return State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
-                        Case 3 '隔离非正式版与可安装 Mod 的版本
-                            Return Modable OrElse State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
-                        Case Else '隔离所有版本
-                            Return True
-                    End Select
-                End Function
-                Setup.Set("VersionArgumentIndieV2", ShouldBeIndie(), Version:=Me)
-            End If
-            '根据隔离类型决定路径
-            If Setup.Get("VersionArgumentIndieV2", Version:=Me) Then
-                Return Path
-            Else
-                Return PathMcFolder
-            End If
-        End Function
+                End Select
+            End Function
+            Setup.Set("VersionArgumentIndieV2", ShouldBeIndie(), Version:=Me)
+        End Sub
 
         ''' <summary>
         ''' 该版本的版本文件夹名称。
@@ -1090,6 +1083,8 @@ ExitDataLoad:
             Return "2023 | 研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
             Return "2024 | 毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
+        ElseIf Name = "25w14craftmine" Then
+            Return "2025 | 你可以合成任何东西——包括合成你的世界！"
         Else
             Return ""
         End If

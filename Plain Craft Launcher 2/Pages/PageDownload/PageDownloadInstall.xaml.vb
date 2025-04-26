@@ -590,7 +590,7 @@
                                 Version("id") = "20w14∞"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
-                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b", "24w14potato"
+                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b", "24w14potato", "25w14craftmine"
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
@@ -756,6 +756,7 @@
     Private Sub OptiFine_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnOptiFineClear.MouseLeftButtonUp
         SelectedOptiFine = Nothing
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         CardOptiFine.IsSwaped = True
         e.Handled = True
         Forge_Loaded()
@@ -1025,7 +1026,9 @@
     Private Sub Fabric_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricClear.MouseLeftButtonUp
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
+        AutoSelectedFabricApi = False
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         CardFabric.IsSwaped = True
         e.Handled = True
         SelectReload()
