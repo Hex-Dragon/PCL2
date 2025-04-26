@@ -202,17 +202,14 @@ Public Module ModProfile
                                                        Button1:="继续", Button2:="取消"))
             If UserName = Nothing Then Exit Sub
             Dim UuidType As Integer = Nothing
-            Dim UuidTypeInput As Integer? = Nothing
             RunInUiWait(Sub()
                             Dim UuidTypeList As New List(Of IMyRadio) From {
                                 New MyRadioBox With {.Text = "行业规范 UUID（推荐）"},
                                 New MyRadioBox With {.Text = "官方版 PCL UUID（若单人存档的部分信息丢失，可尝试此项）"},
                                 New MyRadioBox With {.Text = "自定义"}
                             }
-                            UuidTypeInput = MyMsgBoxSelect(UuidTypeList, "新建档案 - 选择 UUID 类型", "继续", "取消")
+                            UuidType = MyMsgBoxSelect(UuidTypeList, "新建档案 - 选择 UUID 类型", "继续")
                         End Sub)
-            If UuidTypeInput Is Nothing Then Exit Sub
-            UuidType = UuidTypeInput
             If UuidType = 0 Then
                 UserUuid = GetOfflineUuid(UserName, False)
             ElseIf UuidType = 1 Then

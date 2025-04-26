@@ -24,6 +24,7 @@ Public Class ModSetup
         {"HintCustomWarn", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintMoreAdvancedSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintIndieSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"HintProfileSelect", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintExportConfig", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemEula", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemCount", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},

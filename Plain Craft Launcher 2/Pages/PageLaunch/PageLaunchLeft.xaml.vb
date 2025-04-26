@@ -288,7 +288,7 @@ UnknownType:
                 Else
                     Type = PageType.Profile
                     PanTypeOne.Visibility = Visibility.Visible
-                    BtnLaunch.IsEnabled = False
+                    If Not BtnLaunch.Text = "下载游戏" Then BtnLaunch.IsEnabled = False
                 End If
                 PanType.Visibility = Visibility.Collapsed
                 PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)

@@ -25,6 +25,12 @@
         Catch ex As Exception
             Log(ex, "读取档案列表失败", LogLevel.Feedback)
         End Try
+        If Not ProfileList.Any() Then
+            Setup.Set("HintProfileSelect", True)
+            HintCreate.Visibility = Visibility.Visible
+        Else
+            HintCreate.Visibility = Visibility.Collapsed
+        End If
     End Sub
 
 #Region "控件"

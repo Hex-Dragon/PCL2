@@ -7,6 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
     <Grid.RowDefinitions>
+        <RowDefinition Height="30" />
+        <RowDefinition Height="10" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="10" />
         <RowDefinition Height="Auto" />
@@ -15,7 +17,7 @@
     <Grid.ColumnDefinitions>
         <ColumnDefinition />
     </Grid.ColumnDefinitions>
-    <local:MyScrollViewer MaxHeight="296" Margin="10,0,10,0">
+    <local:MyScrollViewer MaxHeight="296" Margin="10,0,10,0" Grid.Row="2">
         <StackPanel x:Name="StackProfile">
             <local:MyListItem Title="LTCat" Info="离线验证 / 当前选择"
                 Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
@@ -28,9 +30,7 @@
                 Logo="pack://application:,,,/images/Blocks/Grass.png" />
         </StackPanel>
     </local:MyScrollViewer>
-    <!--<local:MyButton x:Name="BtnNew" Grid.Row="2" Margin="-80,12,0,0" Text="新增" Height="28" Width="50" HorizontalAlignment="Center" VerticalAlignment="Top"/>-->
-    <!--<local:MyButton x:Name="BtnPort" Grid.Row="2" Margin="80,12,0,0" Text="导入 / 导出" Height="28" Width="90" HorizontalAlignment="Center" VerticalAlignment="Top"/>-->
-    <Border Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="10"
+    <Border Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="10"
         CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,0,3" Margin="0,0,4,0">
         <StackPanel Orientation="Horizontal">
             <local:MyIconButton Height="24" Margin="0,0.5,9,0"  x:Name="BtnNew"
@@ -43,4 +43,6 @@
             </local:MyIconButton>
         </StackPanel>
     </Border>
+    <local:MyHint x:Name="HintSelect" IsWarn="False" Text="选择一个档案以启动游戏" Grid.Row="0" CanClose="True" RelativeSetup="HintProfileSelect"/>
+    <local:MyHint x:Name="HintCreate" IsWarn="False" Text="新建并选择一个档案以启动游戏" Grid.Row="0" Visibility="Collapsed"/>
 </Grid>
