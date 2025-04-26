@@ -11,7 +11,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemFavorites.Check, ItemCleanroom.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemLabyMod.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemFavorites.Check, ItemCleanroom.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -47,6 +47,9 @@
             Case FormMain.PageSubType.DownloadQuilt
                 If FrmDownloadQuilt Is Nothing Then FrmDownloadQuilt = New PageDownloadQuilt
                 Return FrmDownloadQuilt
+            Case FormMain.PageSubType.DownloadLabyMod
+                If FrmDownloadLabyMod Is Nothing Then FrmDownloadLabyMod = New PageDownloadLabyMod
+                Return FrmDownloadLabyMod
             Case FormMain.PageSubType.DownloadMod
                 If FrmDownloadMod Is Nothing Then FrmDownloadMod = New PageDownloadMod
                 Return FrmDownloadMod
@@ -126,6 +129,7 @@
                 DlQuiltListLoader.Start(IsForceRestart:=True)
                 DlQSLLoader.Start(IsForceRestart:=True)
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
+                DlLabyModListLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
                 PageDownloadMod.Storage = New CompProjectStorage
@@ -177,6 +181,9 @@
             Case FormMain.PageSubType.DownloadQuilt
                 DlQuiltListLoader.Start(IsForceRestart:=True)
                 ItemQuilt.Checked = True
+            Case FormMain.PageSubType.DownloadLabyMod
+                DlLabyModListLoader.Start(IsForceRestart:=True)
+                ItemLabyMod.Checked = True
             Case FormMain.PageSubType.DownloadCompFavorites
                 If FrmDownloadCompFavorites IsNot Nothing Then FrmDownloadCompFavorites.PageLoaderRestart()
                 ItemFavorites.Checked = True
@@ -215,6 +222,7 @@
         ItemNeoForge.Visibility = Visibility.Visible
         ItemCleanroom.Visibility = Visibility.Visible
         ItemLiteLoader.Visibility = Visibility.Visible
+        ItemLabyMod.Visibility = Visibility.Visible
         RunInThread(
         Sub()
             Thread.Sleep(20)
@@ -237,6 +245,7 @@
         ItemQuilt.Visibility = Visibility.Collapsed
         ItemForge.Visibility = Visibility.Collapsed
         ItemLiteLoader.Visibility = Visibility.Collapsed
+        ItemLabyMod.Visibility = Visibility.Collapsed
         RunInThread(
         Sub()
             Thread.Sleep(20)

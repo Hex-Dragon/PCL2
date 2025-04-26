@@ -1363,10 +1363,14 @@
     ''' </summary>
     Public DlLabyModListOfficialLoader As New LoaderTask(Of Integer, DlLabyModListResult)("DlLabyModList Official", AddressOf DlLabyModListOfficialMain)
     Private Sub DlLabyModListOfficialMain(Loader As LoaderTask(Of Integer, DlLabyModListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://releases.r2.labymod.net/api/v1/manifest/production/latest.json", IsJson:=True)
+        Dim ResultProduction As JObject = NetGetCodeByRequestRetry("https://releases.r2.labymod.net/api/v1/manifest/production/latest.json", IsJson:=True)
+        Dim ResultSnapshot As JObject = NetGetCodeByRequestRetry("https://releases.r2.labymod.net/api/v1/manifest/snapshot/latest.json", IsJson:=True)
+        Dim Result As New JObject
+        Result.Add("production", ResultProduction)
+        Result.Add("snapshot", ResultSnapshot)
         Try
             Dim Output = New DlLabyModListResult With {.Value = Result}
-            If Output.Value("minecraftVersions") Is Nothing OrElse Output.Value("assets") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            If Output.Value("production")("labyModVersion") Is Nothing OrElse Output.Value("snapshot")("labyModVersion") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
             Loader.Output = Output
         Catch ex As Exception
             Throw New Exception("LabyMod 版本列表解析失败（" & Result.ToString & "）", ex)

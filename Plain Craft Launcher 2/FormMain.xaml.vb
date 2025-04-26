@@ -1070,6 +1070,7 @@ Public Class FormMain
         DownloadFabric = 8
         DownloadQuilt = 10
         DownloadLiteLoader = 9
+        DownloadLabyMod = 20
         DownloadMod = 11
         DownloadPack = 12
         DownloadResourcePack = 13

@@ -347,16 +347,27 @@ Public Module ModMinecraft
                                 End If
                             Next
                         End If
-                        '从 Forge / NeoForge Arguments 中获取版本号
-                        If JsonObject("arguments") IsNot Nothing AndAlso JsonObject("arguments")("game") IsNot Nothing Then
-                            Dim Mark As Boolean = False
-                            For Each Argument In JsonObject("arguments")("game")
-                                If Mark Then
-                                    _Version.McName = Argument.ToString
-                                    GoTo VersionSearchFinish
-                                End If
-                                If Argument.ToString = "--fml.mcVersion" Then Mark = True
-                            Next
+                        '从 Forge / NeoForge / LabyMod Arguments 中获取版本号
+                        If JsonObject("arguments") IsNot Nothing Then
+                            If JsonObject("arguments")("game") IsNot Nothing Then
+                                Dim Mark As Boolean = False
+                                For Each Argument In JsonObject("arguments")("game")
+                                    If Mark Then
+                                        _Version.McName = Argument.ToString
+                                        GoTo VersionSearchFinish
+                                    End If
+                                    If Argument.ToString = "--fml.mcVersion" Then Mark = True
+                                Next
+                            End If
+                            If JsonObject("arguments")("jvm") IsNot Nothing Then
+                                For Each Argument In JsonObject("arguments")("game")
+                                    Dim RegexArgument = RegexSeek(Argument.ToString, "(?<=-Dnet.labymod.running-version=)1.[0-9+.]+")
+                                    If RegexArgument IsNot Nothing Then
+                                        _Version.McName = RegexArgument
+                                        GoTo VersionSearchFinish
+                                    End If
+                                Next
+                            End If
                         End If
                         '从继承版本中获取版本号
                         If Not InheritVersion = "" Then
@@ -753,8 +764,12 @@ Recheck:
                             State = McVersionState.LiteLoader
                             Version.HasLiteLoader = True
                         End If
-                        'Fabric、Forge、Quilt
-                        If RealJson.Contains("net.fabricmc:fabric-loader") Then
+                        'Fabric、Forge、Quilt、LabyMod
+                        If RealJson.Contains("labymod_data") Then
+                            State = McVersionState.LabyMod
+                            Version.HasLabyMod = True
+                            Version.LabyModVersion = JsonObject("labymod_data")("version")
+                        ElseIf RealJson.Contains("net.fabricmc:fabric-loader") Then
                             State = McVersionState.Fabric
                             Version.HasFabric = True
                             Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
@@ -830,6 +845,7 @@ ExitDataLoad:
                     WriteIni(Path & "PCL\Setup.ini", "ReleaseTime", ReleaseTime.ToString("yyyy'-'MM'-'dd HH':'mm"))
                     WriteIni(Path & "PCL\Setup.ini", "VersionFabric", Version.FabricVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionQuilt", Version.QuiltVersion)
+                    WriteIni(Path & "PCL\Setup.ini", "VersionLabyMod", Version.LabyModVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOptiFine", Version.OptiFineVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionLiteLoader", Version.HasLiteLoader)
                     WriteIni(Path & "PCL\Setup.ini", "VersionForge", Version.ForgeVersion)
@@ -868,7 +884,7 @@ ExitDataLoad:
                     End If
                 Case McVersionState.Old
                     Info = "远古版本"
-                Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.OptiFine, McVersionState.LiteLoader, McVersionState.Cleanroom
+                Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.LabyMod, McVersionState.OptiFine, McVersionState.LiteLoader, McVersionState.Cleanroom
                     Info = Version.ToString
                 Case McVersionState.Fool
                     Info = GetMcFoolName(Version.McName)
@@ -914,6 +930,7 @@ ExitDataLoad:
         Fabric
         Quilt
         Cleanroom
+        LabyMod
     End Enum
 
     ''' <summary>
@@ -1007,6 +1024,17 @@ ExitDataLoad:
         ''' </summary>
         Public QuiltVersion As String = ""
 
+        'LabyMod
+
+        ''' <summary>
+        ''' 该版本是否安装了 LabyMod。
+        ''' </summary>
+        Public HasLabyMod As Boolean = False
+        ''' <summary>
+        ''' LabyMod 版本号，如 4.2.59。
+        ''' </summary>
+        Public LabyModVersion As String = ""
+
         'LiteLoader
 
         ''' <summary>
@@ -1026,6 +1054,7 @@ ExitDataLoad:
             If HasCleanroom Then ToString += ", Cleanroom" & If(CleanroomVersion = "未知版本", "", " " & CleanroomVersion)
             If HasFabric Then ToString += ", Fabric" & If(FabricVersion = "未知版本", "", " " & FabricVersion)
             If HasQuilt Then ToString += ", Quilt" & If(QuiltVersion = "未知版本", "", " " & QuiltVersion)
+            If HasLabyMod Then ToString += ", LabyMod" & If(LabyModVersion = "未知版本", "", " " & LabyModVersion)
             If HasOptiFine Then ToString += ", OptiFine" & If(OptiFineVersion = "未知版本", "", " " & OptiFineVersion)
             If HasLiteLoader Then ToString += ", LiteLoader"
             If ToString = "" Then
@@ -1078,6 +1107,16 @@ ExitDataLoad:
                                 _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
                             Else
                                 Throw New Exception("无效的 Neo/Forge 版本：" & ForgeVersion)
+                            End If
+                        ElseIf HasLabyMod Then
+                            If LabyModVersion = "未知版本" Then Return 0
+                            Dim SubVersions = LabyModVersion.Split(".")
+                            If SubVersions.Length = 4 Then
+                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(3))
+                            ElseIf SubVersions.Length = 3 Then
+                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
+                            Else
+                                Throw New Exception("无效的 LabyMod 版本：" & LabyModVersion)
                             End If
                         ElseIf HasOptiFine Then
                             If OptiFineVersion = "未知版本" Then Return 0
@@ -1298,6 +1337,7 @@ OnLoaded:
                                 .FabricVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionFabric", ""),
                                 .QuiltVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionQuilt", ""),
                                 .ForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionForge", ""),
+                                .LabyModVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionLabyMod", ""),
                                 .NeoForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionNeoForge", ""),
                                 .OptiFineVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionOptiFine", ""),
                                 .HasLiteLoader = ReadIni(Version.Path & "PCL\Setup.ini", "VersionLiteLoader", False),

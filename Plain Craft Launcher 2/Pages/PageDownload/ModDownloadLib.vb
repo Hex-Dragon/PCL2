@@ -2210,10 +2210,41 @@ Retry:
 
 #Region "LabyMod 下载"
 
-    Public Sub McDownloadLabyModLoaderSave()
+    Public Sub McDownloadLabyModProductionLoaderSave()
         Try
             Dim Url As String = "https://releases.labymod.net/api/v1/installer/production/java"
-            Dim FileName As String = GetFileNameFromPath(Url)
+            Dim FileName As String = "LabyMod4ProductionInstaller.jar"
+            Dim Target As String = SelectSaveFile("选择保存位置", FileName, "LabyMod 安装器 (*.jar)|*.jar")
+            If Not Target.Contains("\") Then Exit Sub
+
+            '重复任务检查
+            For Each OngoingLoader In LoaderTaskbar.ToList()
+                If OngoingLoader.Name <> $"LabyMod 安装器下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
+
+            '构造步骤加载器
+            Dim Loaders As New List(Of LoaderBase)
+            '下载
+            Dim Address As New List(Of String)
+            Address.Add(Url)
+            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+            '启动
+            Dim Loader As New LoaderCombo(Of JObject)("LabyMod 安装器下载", Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
+            Loader.Start()
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+        Catch ex As Exception
+            Log(ex, "开始 LabyMod 安装器下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    Public Sub McDownloadLabyModSnapshotLoaderSave()
+        Try
+            Dim Url As String = "https://releases.labymod.net/api/v1/installer/snapshot/java"
+            Dim FileName As String = "LabyMod4SnapshotInstaller.jar"
             Dim Target As String = SelectSaveFile("选择保存位置", FileName, "LabyMod 安装器 (*.jar)|*.jar")
             If Not Target.Contains("\") Then Exit Sub
 
@@ -2269,6 +2300,36 @@ Retry:
         End Sub) With {.ProgressWeight = 0.5})
         Loaders.Add(New LoaderDownload("下载 LabyMod 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
 
+        Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
+        Dim LabyModCore As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True)
+        Dim VersionJson As JObject = JObject.Parse(ReadFile(VersionFolder & Id & ".json"))
+        VersionJson("libraries") = New JArray
+
+        For Each Library In LabyModLib("libraries")
+            VersionJson("libraries").Append(JObject.Parse($"{{
+                    ""name"": ""{Library("name")}"",
+                    ""downloads"": {{
+                        ""artifact"": {{
+                            ""path"": ""{Library("url").ToString.Substring(Library("url").ToString.LastIndexOfF("https://releases.r2.labymod.net/libraries/") + 1)}"",
+                            ""sha1"": ""{Library("sha1")}"",
+                            ""size"": {Library("size")},
+                            ""url"": ""{Library("url")}""
+                        }}
+                    }}
+                }}"))
+        Next
+        VersionJson("libraries").Append(JObject.Parse($"{{
+                    ""name"": ""net.labymod:LabyMod:4"",
+                    ""downloads"": {{
+                        ""artifact"": {{
+                            ""path"": ""net/labymod/LabyMod/4/LabyMod-4.jar"",
+                            ""sha1"": ""{LabyModCore("sha1")}"",
+                            ""size"": {LabyModCore("size")},
+                            ""url"": ""https://releases.r2.labymod.net/api/v1/download/labymod4/{LabyModChannel}/{LabyModCore("commitReference")}.jar""
+                        }}
+                    }}
+                }}"))
+        WriteFile(VersionFolder & Id & ".json", VersionJson.ToString)
         '下载支持库
         If FixLibrary Then
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 LabyMod 支持库文件",
@@ -2277,6 +2338,20 @@ Retry:
         End If
 
         Return Loaders
+    End Function
+#End Region
+
+#Region "LabyMod 下载菜单"
+    Public Function LabyModDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Entry("version").ToString & If(Entry("channel").ToString.Contains("snapshot"), " 测试版", " 稳定版"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = If(Entry("channel").ToString.Contains("snapshot"), "测试版", "稳定版"),
+            .Logo = PathImage & "Blocks/Quilt.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '结束
+        Return NewItem
     End Function
 #End Region
 
@@ -2827,7 +2902,38 @@ Retry:
             LabyModJson.Remove("time")
             OutputJson.Merge(LabyModJson)
             Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
-            OutputJson("libraries") = LabyModLib("libraries")
+            Dim LabyModCore As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True)
+            OutputJson("libraries") = New JArray
+            For Each Library In LabyModLib("libraries")
+                OutputJson("libraries").Append(JObject.Parse($"{{
+                    ""name"": ""{Library("name")}"",
+                    ""downloads"": {{
+                        ""artifact"": {{
+                            ""path"": ""{Library("url").ToString.Substring(Library("url").ToString.LastIndexOfF("https://releases.r2.labymod.net/libraries/") + 1)}"",
+                            ""sha1"": ""{Library("sha1")}"",
+                            ""size"": {Library("size")},
+                            ""url"": ""{Library("url")}""
+                        }}
+                    }}
+                }}"))
+            Next
+            OutputJson("libraries").Append(JObject.Parse($"{{
+                    ""name"": ""net.labymod:LabyMod:4"",
+                    ""downloads"": {{
+                        ""artifact"": {{
+                            ""path"": ""net/labymod/LabyMod/4/LabyMod-4.jar"",
+                            ""sha1"": ""{LabyModCore("sha1")}"",
+                            ""size"": {LabyModCore("size")},
+                            ""url"": ""https://releases.r2.labymod.net/api/v1/download/labymod4/{LabyModChannel}/{LabyModCore("commitReference")}.jar""
+                        }}
+                    }}
+                }}"))
+            OutputJson.Add("labymod_data", JObject.Parse($"{{
+                ""channelType"": ""{LabyModChannel}"",
+                ""commitReference"": ""{LabyModCore("commitReference")}"",
+                ""version"": ""{LabyModCore("labyModVersion")}"",
+                ""versionType"": ""release""
+            }}"))
         End If
         '修改
         If RealArguments IsNot Nothing AndAlso RealArguments.Replace(" ", "") <> "" Then OutputJson("minecraftArguments") = RealArguments

@@ -1343,6 +1343,32 @@ Retry:
     End Function
     Private ExtractJavaWrapperLock As New Object
 
+    ''' <summary>
+    ''' 释放 linkd 并返回完整文件路径。
+    ''' </summary>
+    Public Function ExtractLinkD() As String
+        Dim LinkDPath As String = PathPure & "linkd.exe"
+        SyncLock ExtractLinkDLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
+            Try
+                WriteFile(LinkDPath, GetResources("linkd"))
+            Catch ex As Exception
+                If File.Exists(LinkDPath) Then
+                    Log(ex, "linkd 文件释放失败，但文件已存在，将在删除后尝试重新生成", LogLevel.Developer)
+                    Try
+                        File.Delete(LinkDPath)
+                        WriteFile(LinkDPath, GetResources("linkd"))
+                    Catch ex2 As Exception
+                        Throw New FileNotFoundException("释放 linkd 失败", ex2)
+                    End Try
+                Else
+                    Throw New FileNotFoundException("释放 linkd 失败", ex)
+                End If
+            End Try
+        End SyncLock
+        Return LinkDPath
+    End Function
+    Private ExtractLinkDLock As New Object
+
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
         McLaunchLog("开始获取 Minecraft 启动参数")
@@ -2102,6 +2128,18 @@ IgnoreCustomSkin:
             Log(ex, "离线皮肤资源包设置失败", LogLevel.Hint)
         End Try
 
+        'LabyMod 预处理
+        If ReadIni(McVersionCurrent.Path & "PCL\Setup.ini", "VersionLabyMod", "") <> "" Then
+            Dim RootPath = McVersionCurrent.Path & "..\..\"
+            If Not Directory.Exists(RootPath & "labymod-neo") Then Directory.CreateDirectory(RootPath & "labymod-neo")
+            If Directory.Exists(McVersionCurrent.Path & "labymod-neo") Then
+                MoveDirectory(McVersionCurrent.Path & "labymod-neo", RootPath & "labymod-neo")
+                Directory.Delete(McVersionCurrent.Path & "labymod-neo", True)
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo", RootPath & "labymod-neo", &H2)
+            Else
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo", RootPath & "labymod-neo", &H2)
+            End If
+        End If
     End Sub
     Private Sub McLaunchCustom(Loader As LoaderTask(Of Integer, Integer))
 

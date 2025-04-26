@@ -25,7 +25,7 @@ Public Module ModComp
         Other = 4
     End Enum
     Public Enum CompLoaderType
-        'https://docs.curseforge.com/?http#tocS_ModLoaderType
+        'https://docs.curseforge.com/?http#tocS_ModLoaderType我的意思是这个判断该写在哪里
         ''' <summary>
         ''' 模组加载器
         ''' </summary>
@@ -70,6 +70,10 @@ Public Module ModComp
         ''' 光影包
         ''' </summary>
         Vanilla = 11
+        ''' <summary>
+        ''' LabyMod 客户端
+        ''' </summary>
+        LabyMod = 12
     End Enum
     <Flags> Public Enum CompSourceType
         CurseForge = 1
