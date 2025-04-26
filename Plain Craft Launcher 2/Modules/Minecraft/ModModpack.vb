@@ -113,8 +113,10 @@ Public Module ModModpack
         '解压文件
         Dim RetryCount As Integer = 1
         Dim Encode = Encoding.GetEncoding("GB18030")
+        Dim InitialProgress = Loader.Progress
         Try
 Retry:
+            Loader.Progress = InitialProgress
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之多试试
             DeleteDirectory(InstallTemp)
             ExtractFile(FileAddress, InstallTemp, Encode, ProgressIncrementHandler:=Sub(Delta) Loader.Progress += Delta * LoaderProgressDelta)
@@ -828,9 +830,13 @@ Retry:
                     Log("[Modpack] 找到压缩包中附带的启动器：" & Launcher)
                     If MyMsgBox($"整合包里似乎自带了启动器，是否换用它继续安装？{vbCrLf}即将打开：{Launcher}", "换用整合包启动器？", "换用", "不换用") = 1 Then
                         OpenExplorer(TargetFolder)
-                        ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
-                        Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
-                        FrmMain.EndProgram(False)
+                        Try
+                            ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
+                            Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
+                            FrmMain.EndProgram(False)
+                        Catch ex As Exception
+                            Log(ex, "打开文件失败", LogLevel.Msgbox)
+                        End Try
                         Return
                     End If
                 Else
