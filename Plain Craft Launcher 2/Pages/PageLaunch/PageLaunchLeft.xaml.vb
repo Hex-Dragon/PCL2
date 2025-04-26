@@ -153,7 +153,7 @@
     ''' 切换至登录页面。
     ''' </summary>
     Public Sub PageChangeToLogin()
-        PageGet(PageCurrent).Reload(KeepInput:=False)
+        PageGet(PageCurrent).Reload()
         PanInput.IsHitTestVisible = False
         PanLaunching.IsHitTestVisible = False
         LoadLaunching.State.LoadingState = MyLoading.MyLoadingState.Stop
