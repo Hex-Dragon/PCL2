@@ -84,7 +84,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         SyncLock _cacheLock
             Try
                 If _RawCodeCache IsNot Nothing Then Return _RawCodeCache
-                Dim rawCode As String
+                Dim rawCode As String = Nothing
                 Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
                 For Each obj As ManagementObject In searcher.Get()
                     rawCode = obj("ProcessorId")?.ToString()
