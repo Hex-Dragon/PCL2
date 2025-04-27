@@ -1,4 +1,20 @@
 ﻿'提供不同的输入验证方法，名称以 Validate 开头
+Public Module ModValidate
+
+    ''' <summary>
+    ''' 进行输入验证，并返回错误原因。
+    ''' 如果没有错误则返回空字符串。
+    ''' </summary>
+    Public Function Validate(Text As String, ValidateRules As IEnumerable(Of Validate)) As String
+        Dim Result As String = ""
+        For Each ValidateRule As Validate In ValidateRules
+            Result = ValidateRule.Validate(Text)
+            If Result <> "" Then Return Result
+        Next
+        Return Result
+    End Function
+
+End Module
 
 ''' <summary>
 ''' 输入验证规则基类。要查看所有的输入验证规则，可在输入 Validate 后查看自动补全。
@@ -134,13 +150,13 @@ Public Class ValidateExcept
     Public Property Excepts As ObjectModel.Collection(Of String) = New ObjectModel.Collection(Of String)
     Public Property ErrorMessage As String
     Public Sub New()
-        ErrorMessage = "输入内容不能包含 %！"
+        ErrorMessage = "输入内容不能包含 %"
     End Sub '用于 XAML 初始化
-    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能包含 %！")
+    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能包含 %")
         Me.Excepts = Excepts
         Me.ErrorMessage = ErrorMessage
     End Sub
-    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能包含 %！")
+    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能包含 %")
         Me.Excepts = New ObjectModel.Collection(Of String)
         Me.ErrorMessage = ErrorMessage
         For Each Data As String In Excepts
@@ -169,12 +185,12 @@ Public Class ValidateExceptSame
     Public Property IgnoreCase As Boolean = False
     Public Sub New()
     End Sub
-    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能为 %！", Optional IgnoreCase As Boolean = False)
+    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能为 %", Optional IgnoreCase As Boolean = False)
         Me.Excepts = Excepts
         Me.ErrorMessage = ErrorMessage
         Me.IgnoreCase = IgnoreCase
     End Sub
-    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能为 %！", Optional IgnoreCase As Boolean = False)
+    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能为 %", Optional IgnoreCase As Boolean = False)
         Me.Excepts = New ObjectModel.Collection(Of String)
         For Each Data As String In Excepts
             Me.Excepts.Add(Data)
@@ -233,6 +249,8 @@ Public Class ValidateFolderName
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件夹名不能包含这一特殊格式！"
             '检查文件夹重名
             Dim Arr As New List(Of String)
             If PathIgnore IsNot Nothing Then
@@ -286,6 +304,8 @@ Public Class ValidateFileName
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件名不能包含这一特殊格式！"
             '检查文件重名
             If ParentFolder IsNot Nothing Then
                 Dim DirInfo As New DirectoryInfo(ParentFolder)
@@ -351,6 +371,8 @@ Fin:
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！").Validate(SubStr)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件夹名不能包含这一特殊格式！"
         Next
         Return ""
     End Function

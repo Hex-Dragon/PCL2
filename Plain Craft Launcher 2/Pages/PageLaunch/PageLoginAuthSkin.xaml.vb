@@ -70,9 +70,11 @@
             End Try
         End Sub)
     End Sub
-    Private Sub BtnExit_Click() Handles BtnExit.Click
+    Public Shared Sub ExitLogin() Handles BtnExit.Click
         Setup.Set("CacheAuthAccess", "")
         Setup.Set("CacheAuthUuid", "")
+        Setup.Set("CacheAuthName", "")
+        McLoginAuthLoader.Input = Nothing '防止因为输入的用户名密码相同，直接使用了上次登录的加载器结果
         FrmLaunchLeft.RefreshPage(False, True)
     End Sub
 

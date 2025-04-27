@@ -1,4 +1,7 @@
-﻿Public Class MyRadioButton
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyRadioButton
 
     '基础
 
@@ -108,6 +111,12 @@
             Log(ex, "单选按钮勾选改变错误", LogLevel.Hint)
         End Try
     End Sub
+
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
             Return GetValue(TextProperty)
@@ -117,9 +126,7 @@
         End Set
     End Property '内容
     Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyRadioButton), New PropertyMetadata(New PropertyChangedCallback(
-                                                                                                                                                               Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
-                                                                                                                                                                   If Not IsNothing(sender) Then CType(sender, MyRadioButton).LabText.Text = e.NewValue
-                                                                                                                                                               End Sub)))
+    Sub(sender, e) If sender IsNot Nothing Then CType(sender, MyRadioButton).LabText.Text = e.NewValue)))
     Public Enum ColorState
         White
         Highlight

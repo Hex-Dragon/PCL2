@@ -353,12 +353,16 @@
                 If Control.RenderTransform IsNot Nothing AndAlso TypeOf Control.RenderTransform Is TranslateTransform Then Control.RenderTransform = Nothing
             Next
             For Each Control As FrameworkElement In GetAllAnimControls(Element)
-                Control.Opacity = 0
-                Control.RenderTransform = New TranslateTransform(0, -16)
-                AniList.Add(AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
-                AniList.Add(AaTranslateY(Control, 5, 250, Delay, New AniEaseOutFluent))
-                AniList.Add(AaTranslateY(Control, 11, 350, Delay, New AniEaseOutBack))
-                Delay += 40
+                If TypeOf Control Is MyExtraTextButton Then
+                    CType(Control, MyExtraTextButton).Show = True
+                Else
+                    Control.Opacity = 0
+                    Control.RenderTransform = New TranslateTransform(0, -16)
+                    AniList.Add(AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
+                    AniList.Add(AaTranslateY(Control, 5, 250, Delay, New AniEaseOutFluent))
+                    AniList.Add(AaTranslateY(Control, 11, 350, Delay, New AniEaseOutBack))
+                    Delay += 40
+                End If
             Next
         Next
         '滚动条动画
@@ -379,10 +383,14 @@
         Dim Delay As Integer = 0
         For Each Element In RealElements
             For Each Control As FrameworkElement In GetAllAnimControls(Element)
-                Control.IsHitTestVisible = False
-                AniList.Add(AaOpacity(Control, -1, 90, Delay))
-                AniList.Add(AaTranslateY(Control, -6, 90, Delay))
-                Delay += 20
+                If TypeOf Control Is MyExtraTextButton Then
+                    CType(Control, MyExtraTextButton).Show = False
+                Else
+                    Control.IsHitTestVisible = False
+                    AniList.Add(AaOpacity(Control, -1, 90, Delay))
+                    AniList.Add(AaTranslateY(Control, -6, 90, Delay))
+                    Delay += 20
+                End If
             Next
         Next
         '滚动条动画
@@ -392,31 +400,38 @@
             AniList.Add(AaTranslateX(Scroll, 10 - CType(Scroll.RenderTransform, TranslateTransform).X, 90, 0, New AniEaseInFluent))
         End If
         '结束
-        AniList.Add(AaCode(Sub()
-                               For Each Element In RealElements
-                                   Element.Visibility = Visibility.Collapsed
-                               Next
-                               PageOnExitAnimationFinished()
-                           End Sub,, True))
+        AniList.Add(AaCode(
+        Sub()
+            For Each Element In RealElements
+                Element.Visibility = Visibility.Collapsed
+            Next
+            PageOnExitAnimationFinished()
+        End Sub,, True))
         AniStart(AniList, "PageRight PageChange " & PageUuid)
     End Sub
 
-    '遍历获取所有需要生成动画的控件
-    Friend Function GetAllAnimControls(Element As FrameworkElement, Optional IgnoreInvisibility As Boolean = False) As List(Of FrameworkElement)
+    ''' <summary>
+    ''' 禁用页面切换动画的控件列表。
+    ''' </summary>
+    Public DisabledPageAnimControls As New List(Of FrameworkElement)
+    ''' <summary>
+    ''' 遍历获取所有需要生成动画的控件。
+    ''' </summary>
+    Friend Function GetAllAnimControls(Element As FrameworkElement, Optional IgnoreInvisibility As Boolean = False) As IEnumerable(Of FrameworkElement)
         Dim AllControls As New List(Of FrameworkElement)
-        GetAllAnimControls(Element, AllControls, IgnoreInvisibility)
-        Return AllControls
+        _GetAllAnimControls(Element, AllControls, IgnoreInvisibility)
+        Return AllControls.Except(DisabledPageAnimControls)
     End Function
-    Private Sub GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement), IgnoreInvisibility As Boolean)
+    Private Sub _GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement), IgnoreInvisibility As Boolean)
         If Not IgnoreInvisibility AndAlso Element.Visibility = Visibility.Collapsed Then Exit Sub
-        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint OrElse TypeOf Element Is TextBlock OrElse TypeOf Element Is MyTextButton Then
+        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint OrElse TypeOf Element Is MyExtraTextButton OrElse TypeOf Element Is TextBlock OrElse TypeOf Element Is MyTextButton Then
             AllControls.Add(Element)
         ElseIf TypeOf Element Is ContentControl Then
             Dim Content = CType(Element, ContentControl).Content
-            If Content IsNot Nothing AndAlso TypeOf Content Is FrameworkElement Then GetAllAnimControls(Content, AllControls, IgnoreInvisibility)
+            If Content IsNot Nothing AndAlso TypeOf Content Is FrameworkElement Then _GetAllAnimControls(Content, AllControls, IgnoreInvisibility)
         ElseIf TypeOf Element Is Panel Then
             For Each Element2 In CType(Element, Panel).Children
-                If TypeOf Element2 Is FrameworkElement Then GetAllAnimControls(Element2, AllControls, IgnoreInvisibility)
+                If TypeOf Element2 Is FrameworkElement Then _GetAllAnimControls(Element2, AllControls, IgnoreInvisibility)
             Next
         End If
     End Sub
