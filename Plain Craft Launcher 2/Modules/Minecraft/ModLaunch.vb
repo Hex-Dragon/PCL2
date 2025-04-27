@@ -128,10 +128,6 @@ Public Module ModLaunch
                     Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("内存优化", AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
                 Case 2 '关闭
             End Select
-            '显示设置
-            If Setup.Get("LaunchGraphicSetup") Then
-                Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("检查显示设置", AddressOf McLaunchCheckGraphicSettings) With {.ProgressWeight = 2})
-            End If
             Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", Loaders) With {.Show = False}
             If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
@@ -207,48 +203,6 @@ NextInner:
 
 #End Region
 
-#Region "显示设置"
-
-    Private Sub McLaunchCheckGraphicSettings(Loader As LoaderTask(Of Integer, Integer))
-        Const GPU_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
-        Const TARGET_SETUP As String = "GpuPreference=2;"
-        Dim javaPath As String = McLaunchJavaSelected.PathJavaw
-
-        McLaunchLog("显示设置开始")
-        '读取现行设置
-        Try
-            Dim parentKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser
-            Dim regKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(GPU_KEY, False)
-            If regKey IsNot Nothing Then
-                Dim currentSetting As Object = regKey.GetValue(javaPath)
-                If currentSetting IsNot Nothing And TARGET_SETUP.Equals(currentSetting.ToString()) Then
-                    McLaunchLog("不需要调整显示设置")
-                    Exit Sub
-                End If
-                regKey.Close()
-            End If
-        Catch ex As Exception
-            McLaunchLog("无法读取注册表，跳过显示设置")
-            Exit Sub
-        End Try
-        '更新设置
-        Try
-            If Not IsAdmin() Then RunAsAdmin("")
-            Dim parentKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser
-            Dim regKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(GPU_KEY, True)
-            If regKey Is Nothing Then
-                regKey = parentKey.CreateSubKey(GPU_KEY)
-            End If
-            regKey.SetValue(javaPath, TARGET_SETUP)
-        Catch ex As Exception
-            McLaunchLog("无法写入显示设置")
-            Exit Sub
-        End Try
-        McLaunchLog("已修改显示设置")
-    End Sub
-
-#End Region
-
 #Region "预检测"
 
     Private Sub McLaunchPrecheck()
@@ -266,21 +220,24 @@ NextInner:
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
 #If BETA Then
         '求赞助
-        RunInNewThread(
-        Sub()
-            Select Case Setup.Get("SystemLaunchCount")
-                Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
-                    If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
-                                "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
-                                Setup.Get("SystemLaunchCount") & " 次启动！", "支持 PCL！", "但是我拒绝") = 1 Then
-                        OpenWebsite("https://afdian.com/a/LTCat")
-                    End If
-            End Select
-        End Sub, "Donate")
+        If CurrentLaunchOptions?.SaveBatch Is Nothing Then '保存脚本时不提示
+            RunInNewThread(
+            Sub()
+                Select Case Setup.Get("SystemLaunchCount")
+                    Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
+                        If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
+                                    "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
+                                    "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
+                                    Setup.Get("SystemLaunchCount") & " 次启动！", "支持 PCL！", "但是我拒绝") = 1 Then
+                            OpenWebsite("https://afdian.com/a/LTCat")
+                        End If
+                End Select
+            End Sub, "Donate")
+        End If
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+        If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
+           Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -939,7 +896,8 @@ Retry:
                 $"client_id={OAuthClientId}&refresh_token={Uri.EscapeDataString(Code)}&grant_type=refresh_token&scope=XboxLive.signin%20offline_access",
                 "application/x-www-form-urlencoded", 2)
         Catch ex As Exception
-            If ex.Message.Contains("must sign in again") OrElse (ex.Message.Contains("refresh_token") AndAlso ex.Message.Contains("is not valid")) Then '#269
+            If ex.Message.ContainsF("must sign in again", True) OrElse ex.Message.ContainsF("password expired", True) OrElse
+               (ex.Message.Contains("refresh_token") AndAlso ex.Message.Contains("is not valid")) Then '#269
                 Return {"Relogin", ""}
             Else
                 Throw
@@ -1196,6 +1154,11 @@ Retry:
             '1.5.2-：最高 Java 12
             MaxVer = New Version(1, 12, 999, 999)
         End If
+        If McVersionCurrent.JsonVersion?("java_version") IsNot Nothing Then
+            Dim RecommendedJava As Integer = McVersionCurrent.JsonVersion("java_version").ToObject(Of Integer)
+            McLaunchLog("Mojang 推荐使用 Java " & RecommendedJava)
+            If RecommendedJava >= 22 Then MinVer = New Version(1, RecommendedJava, 0, 0) '潜在的向后兼容
+        End If
 
         'OptiFine 检测
         If McVersionCurrent.Version.HasOptiFine Then
@@ -1269,7 +1232,10 @@ Retry:
             If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
             McLaunchLog("无合适的 Java，需要确认是否自动下载")
             Dim JavaCode As String
-            If MinVer >= New Version(1, 21, 0, 0) Then
+            If MinVer >= New Version(1, 22, 0, 0) Then '潜在的向后兼容
+                JavaCode = MinVer.Minor
+                If Not JavaDownloadConfirm("Java " & JavaCode) Then Throw New Exception("$$")
+            ElseIf MinVer >= New Version(1, 21, 0, 0) Then
                 JavaCode = 21
                 If Not JavaDownloadConfirm("Java 21") Then Throw New Exception("$$")
             ElseIf MinVer >= New Version(1, 9, 0, 0) Then
@@ -1363,15 +1329,14 @@ Retry:
         McLaunchLog("开始获取 Minecraft 启动参数")
         '获取基准字符串与参数信息
         Dim Arguments As String
-        Arguments = If(McLaunchJavaSelected.VersionCode > 8, "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 ", Nothing) '#4700
         If McVersionCurrent.JsonObject("arguments") IsNot Nothing AndAlso McVersionCurrent.JsonObject("arguments")("jvm") IsNot Nothing Then
             McLaunchLog("获取新版 JVM 参数")
-            Arguments += McLaunchArgumentsJvmNew(McVersionCurrent)
+            Arguments = McLaunchArgumentsJvmNew(McVersionCurrent)
             McLaunchLog("新版 JVM 参数获取成功：")
             McLaunchLog(Arguments)
         Else
             McLaunchLog("获取旧版 JVM 参数")
-            Arguments += McLaunchArgumentsJvmOld(McVersionCurrent)
+            Arguments = McLaunchArgumentsJvmOld(McVersionCurrent)
             McLaunchLog("旧版 JVM 参数获取成功：")
             McLaunchLog(Arguments)
         End If
@@ -1384,6 +1349,12 @@ Retry:
             McLaunchLog("获取新版 Game 参数")
             Arguments += " " & McLaunchArgumentsGameNew(McVersionCurrent)
             McLaunchLog("新版 Game 参数获取成功")
+        End If
+        '编码参数（#5818、#5892）
+        If McLaunchJavaSelected.VersionCode > 8 Then
+            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments += " -Dstdout.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments += " -Dstderr.encoding=UTF-8"
         End If
         '替换参数
         Dim ReplaceArguments = McLaunchArgumentsReplace(McVersionCurrent, Loader)
@@ -1455,7 +1426,7 @@ Retry:
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
                 "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
-                Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
+                Setup.Get("VersionServerAuthServer", McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
                 DataList.Insert(0, "-javaagent:""" & PathPure & "authlib-injector.jar""=" & Server &
@@ -1467,11 +1438,12 @@ Retry:
         End If
 
         '添加 Java Wrapper 作为主 Jar
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+        If Not Setup.Get("LaunchAdvanceDisableJLW") AndAlso Not Setup.Get("VersionAdvanceDisableJLW", McVersionCurrent) Then
+            If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
+
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 json 中没有 mainClass 项！")
@@ -1535,11 +1507,12 @@ NextVersion:
         End If
 
         '添加 Java Wrapper 作为主 Jar
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+        If Not Setup.Get("LaunchAdvanceDisableJLW") AndAlso Not Setup.Get("VersionAdvanceDisableJLW", McVersionCurrent) Then
+            If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
+
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
         Dim DeDuplicateDataList As New List(Of String)
@@ -1829,6 +1802,29 @@ NextVersion:
 
     Private Sub McLaunchPrerun()
 
+        '要求 Java 使用高性能显卡
+        If Setup.Get("LaunchAdvanceGraphicCard") Then
+            Try
+                SetGPUPreference(McLaunchJavaSelected.PathJavaw)
+                SetGPUPreference(PathWithName)
+            Catch ex As Exception
+                If IsAdmin() Then
+                    Log(ex, "直接调整显卡设置失败")
+                Else
+                    Log(ex, "直接调整显卡设置失败，将以管理员权限重启 PCL 再次尝试")
+                    Try
+                        If RunAsAdmin($"--gpu ""{McLaunchJavaSelected.PathJavaw}""") = ProcessReturnValues.TaskDone Then
+                            McLaunchLog("以管理员权限重启 PCL 并调整显卡设置成功")
+                        Else
+                            Throw New Exception("调整过程中出现异常")
+                        End If
+                    Catch exx As Exception
+                        Log(exx, "调整显卡设置失败，Minecraft 可能会使用默认显卡运行", LogLevel.Hint)
+                    End Try
+                End If
+            End Try
+        End If
+
         '更新 launcher_profiles.json
         Try
             '确保可用
@@ -2099,15 +2095,15 @@ IgnoreCustomSkin:
         '输出 bat
         Try
             Dim CmdString As String =
-                $"{If(McLaunchJavaSelected.VersionCode > 8, "chcp 65001>nul" & vbCrLf, Nothing)}" &
+                $"{If(McLaunchJavaSelected.VersionCode > 8, "chcp 65001>nul" & vbCrLf, "")}" &
                 "@echo off" & vbCrLf &
-                "title 启动 - " & McVersionCurrent.Name & vbCrLf &
+                $"title 启动 - {McVersionCurrent.Name}" & vbCrLf &
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
-                "set APPDATA=""" & ShortenPath(McVersionCurrent.PathIndie) & """" & vbCrLf &
-                "cd /D """ & ShortenPath(McVersionCurrent.PathIndie) & """" & vbCrLf &
+                $"set APPDATA=""{ShortenPath(McVersionCurrent.PathIndie)}""" & vbCrLf &
+                $"cd /D ""{ShortenPath(McVersionCurrent.PathIndie)}""" & vbCrLf &
                 CustomCommandGlobal & vbCrLf &
                 CustomCommandVersion & vbCrLf &
-                """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
+                $"""{McLaunchJavaSelected.PathJava}"" {McLaunchArgument}" & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
             WriteFile(If(CurrentLaunchOptions.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString, "F"),
@@ -2182,14 +2178,10 @@ IgnoreCustomSkin:
         Dim StartInfo As New ProcessStartInfo(McLaunchJavaSelected.PathJavaw)
 
         '设置环境变量
-        If StartInfo.EnvironmentVariables.ContainsKey("appdata") Then
-            StartInfo.EnvironmentVariables("appdata") = ShortenPath(PathMcFolder)
-        Else
-            StartInfo.EnvironmentVariables.Add("appdata", ShortenPath(PathMcFolder))
-        End If
         Dim Paths As New List(Of String)(StartInfo.EnvironmentVariables("Path").Split(";"))
         Paths.Add(ShortenPath(McLaunchJavaSelected.PathFolder))
         StartInfo.EnvironmentVariables("Path") = Join(Paths.Distinct.ToList, ";")
+        StartInfo.EnvironmentVariables("appdata") = ShortenPath(PathMcFolder)
 
         '设置其他参数
         StartInfo.StandardErrorEncoding = If(McLaunchJavaSelected.VersionCode > 8, Encoding.UTF8, Nothing)

@@ -10,6 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 355 Then 'Release 2.9.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：使用新的版本隔离策略"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：添加了在全局启动设置与版本独立设置之间互相跳转的按钮"))
+            FeatureCount += 20
+            BugCount += 28
+        End If
         If LastVersion < 352 Then 'Release 2.9.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：导出整合包功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：支持在超长路径下安装、启动游戏"))
@@ -58,6 +66,23 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 354 Then 'Snapshot 2.9.3
+            If LastVersion = 352 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：低版本 MC 没有声音"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：若不安装 Mod 加载器，则无法安装 OptiFine 1.14+"))
+            End If
+            FeatureCount += 8
+            BugCount += 8
+        End If
+        If LastVersion < 353 Then 'Snapshot 2.9.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：使用新的版本隔离策略"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：添加了在全局启动设置与版本独立设置之间互相跳转的按钮"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：使用快照版导出带 PCL 的整合包可能失败"))
+            FeatureCount += 12
+            BugCount += 20
+        End If
         If LastVersion < 351 Then 'Snapshot 2.9.1
             If LastVersion = 350 Then
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化：对导出整合包功能进行了 7 项优化，详见完整更新日志"))
@@ -119,7 +144,7 @@ Public Class FormMain
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
-        Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
+        Dim SortedFeatures = FeatureList.OrderByDescending(Function(f) f.Key).ToList
         If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
@@ -157,6 +182,19 @@ Public Class FormMain
         ElseIf LastVersion > VersionCode Then
             '触发降级
             DowngradeSub(LastVersion)
+        End If
+        '版本隔离设置迁移
+        If Setup.IsUnset("LaunchArgumentIndieV2") Then
+            If Not Setup.IsUnset("LaunchArgumentIndie") Then
+                Log("[Start] 从老 PCL 迁移版本隔离")
+                Setup.Set("LaunchArgumentIndieV2", Setup.Get("LaunchArgumentIndie"))
+            ElseIf Not Setup.IsUnset("WindowHeight") Then
+                Log("[Start] 从老 PCL 升级，但此前未调整版本隔离，使用老的版本隔离默认值")
+                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndie"))
+            Else
+                Log("[Start] 全新的 PCL，使用新的版本隔离默认值")
+                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndieV2"))
+            End If
         End If
         '刷新主题
         ThemeCheckAll(False)
@@ -377,6 +415,11 @@ Public Class FormMain
             Setup.Set("CacheMsV2Name", Setup.Get("CacheMsName"))
             Log("[Start] 已从老版本迁移微软登录结果")
         End If
+        'Mod 命名设置迁移
+        If Not Setup.IsUnset("ToolDownloadTranslate") AndAlso Setup.IsUnset("ToolDownloadTranslateV2") Then
+            Setup.Set("ToolDownloadTranslateV2", Setup.Get("ToolDownloadTranslate") + 1)
+            Log("[Start] 已从老版本迁移 Mod 命名设置")
+        End If
         '输出更新日志
         If LastVersionCode <= 0 Then Exit Sub
         If LowerVersionCode >= VersionCode Then Exit Sub
@@ -449,14 +492,14 @@ Public Class FormMain
         End Sub)
     End Sub
     Private Shared IsLogShown As Boolean = False
-    Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
+    Public Shared Sub EndProgramForce(Optional ReturnCode As ProcessReturnValues = ProcessReturnValues.Success)
         On Error Resume Next
         IsProgramEnded = True
         AniControlEnabled += 1
         PageLinkIoi.IoiStop(False)
         PageLinkHiper.HiperStop(False)
         If IsUpdateWaitingRestart Then UpdateRestart(False)
-        If ReturnCode = Result.Exception Then
+        If ReturnCode = ProcessReturnValues.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
                 Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
@@ -467,7 +510,7 @@ Public Class FormMain
         End If
         Log("[System] 程序已退出，返回值：" & GetStringFromEnum(CType(ReturnCode, [Enum])))
         LogFlush()
-        If ReturnCode = Result.Success Then
+        If ReturnCode = ProcessReturnValues.Success Then
             Process.GetCurrentProcess.Kill()
         Else
             Environment.Exit(ReturnCode)
