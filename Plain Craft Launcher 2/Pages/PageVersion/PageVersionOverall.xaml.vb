@@ -235,21 +235,21 @@
         OpenVersionFolder(PageVersionLeft.Version)
     End Sub
     Public Shared Sub OpenVersionFolder(Version As McVersion)
-        OpenExplorer("""" & Version.Path & """")
+        OpenExplorer(Version.Path)
     End Sub
 
     '存档文件夹
     Private Sub BtnFolderSaves_Click() Handles BtnFolderSaves.Click
         Dim FolderPath As String = PageVersionLeft.Version.PathIndie & "saves\"
         Directory.CreateDirectory(FolderPath)
-        OpenExplorer("""" & FolderPath & """")
+        OpenExplorer(FolderPath)
     End Sub
 
     'Mod 文件夹
     Private Sub BtnFolderMods_Click() Handles BtnFolderMods.Click
         Dim FolderPath As String = PageVersionLeft.Version.PathIndie & "mods\"
         Directory.CreateDirectory(FolderPath)
-        OpenExplorer("""" & FolderPath & """")
+        OpenExplorer(FolderPath)
     End Sub
 
 #End Region
@@ -260,7 +260,7 @@
     Private Sub BtnManageScript_Click() Handles BtnManageScript.Click
         Try
             '弹窗要求指定脚本的保存位置
-            Dim SavePath As String = SelectAs("选择脚本保存位置", "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
+            Dim SavePath As String = SelectSaveFile("选择脚本保存位置", "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
             If SavePath = "" Then Exit Sub
             '检查中断（等玩家选完弹窗指不定任务就结束了呢……）
             If McLaunchLoader.State = LoadState.Loading Then
@@ -283,6 +283,11 @@
     '补全文件
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
+            '忽略文件检查提示
+            If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
+                Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
+                Exit Sub
+            End If
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar
                 If OngoingLoader.Name <> PageVersionLeft.Version.Name & " 文件补全" Then Continue For
@@ -290,7 +295,7 @@
                 Exit Sub
             Next
             '启动
-            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
+            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload))
             Loader.OnStateChanged =
             Sub()
                 Select Case Loader.State

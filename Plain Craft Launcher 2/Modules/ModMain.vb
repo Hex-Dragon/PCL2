@@ -69,14 +69,14 @@ Public Module ModMain
                 Dim Percent As Double = 0.3
                 Select Case CurrentHint.Type
                     Case HintType.Info
-                        TargetColor0 = New MyColor(37, 155, 252)
-                        TargetColor1 = New MyColor(10, 142, 252)
+                        TargetColor0 = New MyColor(215, 37, 155, 252)
+                        TargetColor1 = New MyColor(215, 10, 142, 252)
                     Case HintType.Finish
-                        TargetColor0 = New MyColor(33, 177, 33)
-                        TargetColor1 = New MyColor(29, 160, 29)
+                        TargetColor0 = New MyColor(215, 33, 177, 33)
+                        TargetColor1 = New MyColor(215, 29, 160, 29)
                     Case Else 'HintType.Critical
-                        TargetColor0 = New MyColor(255, 53, 11)
-                        TargetColor1 = New MyColor(255, 43, 0)
+                        TargetColor0 = New MyColor(215, 255, 53, 11)
+                        TargetColor1 = New MyColor(215, 255, 43, 0)
                 End Select
                 If Not IsNothing(DoubleStack) Then
                     '有重复提示，且该提示的进入动画已播放
@@ -176,15 +176,17 @@ EndHint:
         Public Title As String
         Public Text As String
         ''' <summary>
-        ''' 输入框模式：文本框的文本；选择模式：需要放进去的 List(Of MyListItem)。
+        ''' 输入模式：文本框的文本。
+        ''' 选择模式：需要放进去的 List(Of MyListItem)。
+        ''' 登录模式：登录步骤 1 中返回的 JSON。
         ''' </summary>
         Public Content As Object
         ''' <summary>
-        ''' 仅输入框模式：输入验证规则。
+        ''' 输入模式：输入验证规则。
         ''' </summary>
         Public ValidateRules As ObjectModel.Collection(Of Validate)
         ''' <summary>
-        ''' 仅输入框模式：提示文本。
+        ''' 输入模式：提示文本。
         ''' </summary>
         Public HintText As String = ""
         ''' <summary>
@@ -214,7 +216,9 @@ EndHint:
         ''' </summary>
         Public IsExited As Boolean = False
         ''' <summary>
-        ''' 点击的按钮编号或输入的文本。若输入弹窗点击了非第一个按钮，则为 Nothing。
+        ''' 输入模式：输入的文本。若点击了 非 第一个按钮，则为 Nothing。
+        ''' 选择模式：点击的按钮编号，从 1 开始。
+        ''' 登录模式：字符串数组 {AccessToken, RefreshToken} 或一个 Exception。
         ''' </summary>
         Public Result As Object
     End Class
@@ -222,6 +226,7 @@ EndHint:
         Text
         [Select]
         Input
+        Login
     End Enum
 
     ''' <summary>
@@ -352,6 +357,8 @@ EndHint:
                         FrmMain.PanMsg.Children.Add(New MyMsgSelect(WaitingMyMsgBox(0)))
                     Case MyMsgBoxType.Text
                         FrmMain.PanMsg.Children.Add(New MyMsgText(WaitingMyMsgBox(0)))
+                    Case MyMsgBoxType.Login
+                        FrmMain.PanMsg.Children.Add(New MyMsgLogin(WaitingMyMsgBox(0)))
                 End Select
                 WaitingMyMsgBox.RemoveAt(0)
             Else
@@ -428,6 +435,7 @@ EndHint:
     Public FrmVersionMod As PageVersionMod
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionExport As PageVersionExport
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail
@@ -437,6 +445,10 @@ EndHint:
 #Region "帮助"
 
     Public Class HelpEntry
+        ''' <summary>
+        ''' 原始信息路径。用于刷新。
+        ''' </summary>
+        Public RawPath As String
 
         '基础
 
@@ -495,6 +507,7 @@ EndHint:
         ''' 从文件初始化 HelpEntry 对象，失败会抛出异常。
         ''' </summary>
         Public Sub New(FilePath As String)
+            RawPath = FilePath
             Dim JsonData As JObject = GetJson(HelpArgumentReplace(ReadFile(FilePath)))
             If JsonData Is Nothing Then Throw New FileNotFoundException("未找到帮助文件：" & FilePath, FilePath)
             '加载常规信息
@@ -592,7 +605,7 @@ EndHint:
                                     '加载忽略列表
                                     Log("[Help] 发现 .helpignore 文件：" & File.FullName)
                                     For Each Line In ReadFile(File.FullName).Split(vbCrLf.ToCharArray)
-                                        Dim RealString As String = Line.Before("#").Trim
+                                        Dim RealString As String = Line.BeforeFirst("#").Trim
                                         If String.IsNullOrWhiteSpace(RealString) Then Continue For
                                         IgnoreList.Add(RealString)
                                         If ModeDebug Then Log("[Help]  > " & RealString)
@@ -665,8 +678,8 @@ NextFile:
     ''' </summary>
     Public Function HelpArgumentReplace(Xaml As String) As String
         Dim Result = Xaml.Replace("{path}", EscapeXML(Path))
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomHint()), "\{hint\}")
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomCave()), "\{cave\}")
+        Result = Result.RegexReplaceEach("\{hint\}", Function() EscapeXML(PageOtherTest.GetRandomHint()))
+        Result = Result.RegexReplaceEach("\{cave\}", Function() EscapeXML(PageOtherTest.GetRandomCave()))
         Return Result
     End Function
 
@@ -798,6 +811,90 @@ NextFile:
     Public Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ClassName As String, WindowName As String) As IntPtr
     Public Declare Function SetForegroundWindow Lib "user32" (hWnd As IntPtr) As Integer
     Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As Boolean
+
+    ''' <summary>
+    ''' 将特定程序设置为使用高性能显卡启动。
+    ''' 如果失败，则抛出异常。
+    ''' </summary>
+    Public Sub SetGPUPreference(Executeable As String)
+        Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
+        Const REG_VALUE As String = "GpuPreference=2;"
+        '查看现有设置
+        Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
+            If ReadOnlyKey IsNot Nothing Then
+                Dim CurrentValue = ReadOnlyKey.GetValue(Executeable)
+                If REG_VALUE = CurrentValue?.ToString() Then
+                    Log($"[System] 无需调整显卡设置：{Executeable}")
+                    Return
+                End If
+            Else
+                '创建父级键
+                Log($"[System] 需要创建显卡设置的父级键")
+                My.Computer.Registry.CurrentUser.CreateSubKey(REG_KEY)
+            End If
+        End Using
+        '写入新设置
+        Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, True)
+            WriteKey.SetValue(Executeable, REG_VALUE)
+            Log($"[System] 已调整显卡设置：{Executeable}")
+        End Using
+    End Sub
+
+#End Region
+
+#Region "任务缓存"
+
+    Private IsTaskTempCleared As Boolean = False
+    Private IsTaskTempClearing As Boolean = False
+
+    ''' <summary>
+    ''' 尝试清理任务缓存文件夹。
+    ''' 在整次运行中只会实际清理一次。
+    ''' </summary>
+    Public Sub TryClearTaskTemp()
+        If Not IsTaskTempCleared Then
+            IsTaskTempCleared = True
+            IsTaskTempClearing = True
+            Try
+                Log("[System] 开始清理任务缓存文件夹")
+                DeleteDirectory($"{OsDrive}ProgramData\PCL\TaskTemp\")
+                DeleteDirectory($"{PathTemp}TaskTemp\")
+                Log("[System] 已清理任务缓存文件夹")
+            Catch ex As Exception
+                Log(ex, "清理任务缓存文件夹失败")
+            Finally
+                IsTaskTempClearing = False
+            End Try
+        ElseIf IsTaskTempClearing Then
+            '等待另一个清理步骤完成
+            Do While IsTaskTempClearing
+                Thread.Sleep(1)
+            Loop
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。这些文件夹无需进行后续清理。
+    ''' 若所有缓存位置均没有权限，会抛出异常。
+    ''' </summary>
+    ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
+    Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
+        TryClearTaskTemp()
+        Dim ResultFolder As String
+        Try
+            ResultFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+            If RequireNonSpace AndAlso ResultFolder.Contains(" ") Then Exit Try '带空格
+            Directory.CreateDirectory(ResultFolder)
+            CheckPermissionWithException(ResultFolder)
+            Return ResultFolder
+        Catch
+        End Try
+        '使用备用路径
+        ResultFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        Directory.CreateDirectory(ResultFolder)
+        CheckPermission(ResultFolder)
+        Return ResultFolder
+    End Function
 
 #End Region
 

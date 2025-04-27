@@ -1,4 +1,5 @@
 ﻿Public Class PageDownloadLeft
+    Implements IRefreshable
 
 #Region "页面切换"
 
@@ -64,7 +65,7 @@
             PageChangeRun(PageGet(ID))
             PageID = ID
         Catch ex As Exception
-            Log(ex, "切换设置分页面失败（ID " & ID & "）", LogLevel.Feedback)
+            Log(ex, "切换分页面失败（ID " & ID & "）", LogLevel.Feedback)
         Finally
             AniControlEnabled -= 1
         End Try
@@ -94,7 +95,13 @@
 
     '强制刷新
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        Select Case Val(sender.Tag)
+        Refresh(Val(sender.Tag))
+    End Sub
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        Refresh(FrmMain.PageCurrentSub)
+    End Sub
+    Public Sub Refresh(SubType As FormMain.PageSubType)
+        Select Case SubType
             Case FormMain.PageSubType.DownloadInstall
                 DlClientListLoader.Start(IsForceRestart:=True)
                 DlOptiFineListLoader.Start(IsForceRestart:=True)
@@ -109,12 +116,14 @@
                 PageDownloadMod.Storage = New CompProjectStorage
                 PageDownloadMod.Page = 0
                 CompProjectCache.Clear()
+                CompFilesCache.Clear()
                 If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
                 PageDownloadPack.Storage = New CompProjectStorage
                 PageDownloadPack.Page = 0
                 CompProjectCache.Clear()
+                CompFilesCache.Clear()
                 If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadResourcePack

@@ -30,7 +30,7 @@
                             <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
                             <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
                             <local:MyComboBoxItem Content="草方块" Tag="pack://application:,,,/images/Blocks/Grass.png" />
-                            <local:MyComboBoxItem Content="草径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
+                            <local:MyComboBoxItem Content="土径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
                             <local:MyComboBoxItem Content="铁砧" Tag="pack://application:,,,/images/Blocks/Anvil.png" />
                             <local:MyComboBoxItem Content="红石块" Tag="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
                             <local:MyComboBoxItem Content="红石灯（开）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOn.png" />

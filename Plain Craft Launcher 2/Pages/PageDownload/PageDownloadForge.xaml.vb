@@ -10,12 +10,10 @@
     Private Sub Load_OnFinish()
         '结果数据化
         Try
-            '排序
-            Dim Versions = Sort(DlForgeListLoader.Output.Value, AddressOf VersionSortBoolean)
             '清空当前
             PanMain.Children.Clear()
             '转化为 UI
-            For Each Version As String In Versions
+            For Each Version As String In DlForgeListLoader.Output.Value.Sort(AddressOf VersionSortBoolean)
                 '增加卡片
                 Dim NewCard As New MyCard With {.Title = Version.Replace("_p", " P"), .Margin = New Thickness(0, 0, 0, 15), .SwapType = 5}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Version}

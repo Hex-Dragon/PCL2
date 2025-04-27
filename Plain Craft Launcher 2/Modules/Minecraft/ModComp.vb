@@ -247,7 +247,13 @@
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
-                    If Data("logo").Count > 0 Then LogoUrl = Data("logo")("thumbnailUrl")
+                    If Data("logo").Count > 0 Then
+                        If Data("logo")("thumbnailUrl") Is Nothing OrElse Data("logo")("thumbnailUrl") = "" Then
+                            LogoUrl = Data("logo")("url")
+                        Else
+                            LogoUrl = Data("logo")("thumbnailUrl")
+                        End If
+                    End If
                     'FileIndexes / GameVersions / ModLoaders
                     ModLoaders = New List(Of CompModLoaderType)
                     Dim Files As New List(Of KeyValuePair(Of Integer, List(Of String))) 'FileId, GameVersions
@@ -265,7 +271,7 @@
                     Next
                     CurseForgeFileIds = Files.Select(Function(f) f.Key).Distinct.ToList
                     GameVersions = Files.SelectMany(Function(f) f.Value).Where(Function(v) v.StartsWithF("1.")).
-                        Select(Function(v) CInt(Val(v.Split(".")(1).Before("-")))).Where(Function(v) v > 0).
+                        Select(Function(v) CInt(Val(v.Split(".")(1).BeforeFirst("-")))).Where(Function(v) v > 0).
                         Distinct.OrderByDescending(Function(v) v).ToList
                     ModLoaders = ModLoaders.Distinct.OrderBy(Of Integer)(Function(t) t).ToList
                     'Type
@@ -360,7 +366,7 @@
                     '搜索结果的键为 versions，获取特定工程的键为 game_versions
                     GameVersions = If(CType(If(Data("game_versions"), Data("versions")), JArray), New JArray).
                                        Select(Function(v) v.ToString).Where(Function(v) v.StartsWithF("1.")).
-                                       Select(Of Integer)(Function(v) Val(v.Split(".")(1).Before("-"))).Where(Function(v) v > 0).
+                                       Select(Of Integer)(Function(v) Val(v.Split(".")(1).BeforeFirst("-"))).Where(Function(v) v > 0).
                                        Distinct.OrderByDescending(Function(v) v).ToList
                     'Type
                     Select Case Data("project_type").ToString
@@ -371,6 +377,16 @@
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
+                    If Data.ContainsKey("loaders") Then
+                        For Each Category In Data("loaders").Select(Function(t) t.ToString)
+                            Select Case Category
+                                Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                                Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                                Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                                Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                            End Select
+                        Next
+                    End If
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
                             '加载器
@@ -403,7 +419,7 @@
                             Case "technology" : Tags.Add("科技")
                             Case "magic" : Tags.Add("魔法")
                             Case "adventure" : Tags.Add("冒险")
-                            Case "kitchen-sink" : Tags.Add("大杂烩")
+                            Case "kitchen-sink" : Tags.Add("水槽包/大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
                             '资源包
                             Case "8x-" : Tags.Add("8x-")
@@ -463,7 +479,7 @@
             Json("DownloadCount") = DownloadCount
             If ModLoaders IsNot Nothing AndAlso ModLoaders.Any Then Json("ModLoaders") = New JArray(ModLoaders.Select(Function(m) CInt(m)))
             Json("Tags") = New JArray(Tags)
-            If LogoUrl IsNot Nothing Then Json("LogoUrl") = LogoUrl
+            If Not String.IsNullOrEmpty(LogoUrl) Then Json("LogoUrl") = LogoUrl
             If GameVersions.Any Then Json("GameVersions") = New JArray(GameVersions)
             Json("CacheTime") = Date.Now '用于检查缓存时间
             Return Json
@@ -475,7 +491,7 @@
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
-                GameVersionDescription = "未知"
+                GameVersionDescription = "仅快照版本" '#5412
             Else
                 Dim SpaVersions As New List(Of String)
                 Dim IsOld As Boolean = False
@@ -498,14 +514,14 @@
                     If StartVersion = EndVersion Then
                         SpaVersions.Add("1." & StartVersion)
                     ElseIf McVersionHighest > -1 AndAlso StartVersion >= McVersionHighest Then
-                        If EndVersion <= 10 Then
+                        If EndVersion < 10 Then
                             SpaVersions.Clear()
                             SpaVersions.Add("全版本")
                             Exit For
                         Else
                             SpaVersions.Add("1." & EndVersion & "+")
                         End If
-                    ElseIf EndVersion <= 10 Then
+                    ElseIf EndVersion < 10 Then
                         SpaVersions.Add("1." & StartVersion & "-")
                         Exit For
                     ElseIf StartVersion - EndVersion = 1 Then
@@ -518,25 +534,32 @@
             End If
             '获取 Mod 加载器描述
             Dim ModLoaderDescriptionFull As String, ModLoaderDescriptionPart As String
-            Select Case ModLoaders.Count
+            Dim ModLoadersForDesc As New List(Of CompModLoaderType)(ModLoaders)
+            If Setup.Get("ToolDownloadIgnoreQuilt") Then ModLoadersForDesc.Remove(CompModLoaderType.Quilt)
+            Select Case ModLoadersForDesc.Count
                 Case 0
-                    ModLoaderDescriptionFull = "未知"
-                    ModLoaderDescriptionPart = ""
+                    If ModLoaders.Count = 1 Then
+                        ModLoaderDescriptionFull = "仅 " & ModLoaders.Single.ToString
+                        ModLoaderDescriptionPart = ModLoaders.Single.ToString
+                    Else
+                        ModLoaderDescriptionFull = "未知"
+                        ModLoaderDescriptionPart = ""
+                    End If
                 Case 1
-                    ModLoaderDescriptionFull = "仅 " & ModLoaders.Single.ToString
-                    ModLoaderDescriptionPart = ModLoaders.Single.ToString
-                Case 2, 3
-                    If Setup.Get("ToolDownloadIgnoreQuilt") AndAlso
-                       ModLoaders.Contains(CompModLoaderType.Forge) AndAlso ModLoaders.Contains(CompModLoaderType.Fabric) Then
+                    ModLoaderDescriptionFull = "仅 " & ModLoadersForDesc.Single.ToString
+                    ModLoaderDescriptionPart = ModLoadersForDesc.Single.ToString
+                Case Else
+                    Dim MaxVersion As Integer = If(GameVersions.Any, GameVersions.Max, 99)
+                    If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
+                       (MaxVersion < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
                         ModLoaderDescriptionFull = "任意"
                         ModLoaderDescriptionPart = ""
                     Else
-                        ModLoaderDescriptionFull = ModLoaders.Join(" / ")
-                        ModLoaderDescriptionPart = ModLoaders.Join(" / ")
+                        ModLoaderDescriptionFull = ModLoadersForDesc.Join(" / ")
+                        ModLoaderDescriptionPart = ModLoadersForDesc.Join(" / ")
                     End If
-                Case Else
-                    ModLoaderDescriptionFull = "任意"
-                    ModLoaderDescriptionPart = ""
             End Select
             '实例化 UI
             Dim NewItem As New MyCompItem With {.Tag = Me, .Logo = GetControlLogo()}
@@ -582,7 +605,7 @@
             Return NewItem
         End Function
         Public Function GetControlLogo() As String
-            If LogoUrl Is Nothing Then
+            If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
             Else
                 Return LogoUrl
@@ -623,9 +646,9 @@
                 '有中文翻译
                 '尝试将文本分为三段：Title (EnglishName) - Suffix
                 '检查时注意 Carpet：它没有中文译名，但有 Suffix
-                Title = TranslatedName.Before(" (").Before(" - ")
+                Title = TranslatedName.BeforeFirst(" (").BeforeFirst(" - ")
                 Dim Suffix As String = ""
-                If TranslatedName.After(")").Contains(" - ") Then Suffix = TranslatedName.After(")").After(" - ")
+                If TranslatedName.AfterLast(")").Contains(" - ") Then Suffix = TranslatedName.AfterLast(")").AfterLast(" - ")
                 Dim EnglishName As String = TranslatedName
                 If Suffix <> "" Then EnglishName = EnglishName.Replace(" - " & Suffix, "")
                 EnglishName = EnglishName.Replace(Title, "").Trim("("c, ")"c, " "c)
@@ -689,6 +712,9 @@ NoSubtitle:
             If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Any() Then Return False
             'MC 版本一致
             If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Any() Then Return False
+            '最近更新时间差距在一周以内
+            If LastUpdate IsNot Nothing AndAlso Project.LastUpdate IsNot Nothing AndAlso
+               Math.Abs((LastUpdate - Project.LastUpdate).Value.TotalDays) > 7 Then Return False
             'MCMOD 翻译名 / 原名 / 描述文本 / Slug 的英文部分相同
             If TranslatedName = Project.TranslatedName OrElse
                RawName = Project.RawName OrElse Description = Project.Description OrElse
@@ -798,7 +824,7 @@ NoSubtitle:
                 Case CompType.ResourcePack
                     Address += "&classId=12"
             End Select
-            Address += "&categoryId=" & If(Tag = "", "0", Tag.Before("/"))
+            Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
             If Not String.IsNullOrEmpty(GameVersion) Then Address += "&gameVersion=" & GameVersion
             If Not String.IsNullOrEmpty(SearchText) Then Address += "&searchFilter=" & Net.WebUtility.UrlEncode(SearchText)
@@ -819,7 +845,7 @@ NoSubtitle:
             'facets=[["categories:'game-mechanics'"],["categories:'forge'"],["versions:1.19.3"],["project_type:mod"]]
             Dim Facets As New List(Of String)
             Facets.Add($"[""project_type:{GetStringFromEnum(Type).ToLower}""]")
-            If Not String.IsNullOrEmpty(Tag) Then Facets.Add($"[""categories:'{Tag.After("/")}'""]")
+            If Not String.IsNullOrEmpty(Tag) Then Facets.Add($"[""categories:'{Tag.AfterLast("/")}'""]")
             If ModLoader <> CompModLoaderType.Any Then Facets.Add($"[""categories:'{GetStringFromEnum(ModLoader).ToLower}'""]")
             If Not String.IsNullOrEmpty(GameVersion) Then Facets.Add($"[""versions:'{GameVersion}'""]")
             Address += "&facets=[" & String.Join(",", Facets) & "]"
@@ -927,7 +953,7 @@ NoSubtitle:
                 If Not SearchResults(i).AbsoluteRight AndAlso i >= Math.Min(2, SearchResults.Count - 1) Then Exit For '把 3 个结果拼合以提高准确度
                 If SearchResults(i).Item.CurseForgeSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.CurseForgeSlug.Replace("-", " ").Replace("/", " ") & " "
                 If SearchResults(i).Item.ModrinthSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.ModrinthSlug.Replace("-", " ").Replace("/", " ") & " "
-                SearchResult += SearchResults(i).Item.ChineseName.After(" (").TrimEnd(") ").Before(" - ").
+                SearchResult += SearchResults(i).Item.ChineseName.AfterLast(" (").TrimEnd(") ").BeforeFirst(" - ").
                     Replace(":", "").Replace("(", "").Replace(")", "").ToLower.Replace("/", " ") & " "
             Next
             Log("[Comp] 中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
@@ -943,7 +969,7 @@ NoSubtitle:
         End If
 
         '驼峰英文请求关键字处理
-        Dim SpacedKeywords = RegexReplace(Task.Input.SearchText, "$& ", "([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)")
+        Dim SpacedKeywords = Task.Input.SearchText.RegexReplace("([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)", "$& ")
         Dim ConnectedKeywords = Task.Input.SearchText.Replace(" ", "")
         Dim AllPossibleKeywords = (SpacedKeywords & " " & If(IsChineseSearch, Task.Input.SearchText, ConnectedKeywords & " " & RawFilter)).ToLower
 
@@ -990,30 +1016,30 @@ Retry:
             Dim CurseForgeFailed As Boolean = False
             If CurseForgeUrl IsNot Nothing Then
                 CurseForgeThread = RunInNewThread(
-                    Sub()
-                        Try
-                            '获取工程列表
-                            Log("[Comp] 开始从 CurseForge 获取工程列表：" & CurseForgeUrl)
-                            Dim RequestResult As JObject = DlModRequest(CurseForgeUrl, IsJson:=True)
-                            Task.Progress += 0.2
-                            Dim ProjectList As New List(Of CompProject)
-                            For Each JsonEntry As JObject In RequestResult("data")
-                                ProjectList.Add(New CompProject(JsonEntry))
-                            Next
-                            '更新结果
-                            SyncLock ResultsLock
-                                RawResults.AddRange(ProjectList)
-                            End SyncLock
-                            Storage.CurseForgeOffset += ProjectList.Count
-                            Storage.CurseForgeTotal = RequestResult("pagination")("totalCount").ToObject(Of Integer)
-                            Log($"[Comp] 从 CurseForge 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.CurseForgeOffset} 个，共 {Storage.CurseForgeTotal} 个）")
-                        Catch ex As Exception
-                            Log(ex, "从 CurseForge 获取工程列表失败")
-                            Storage.CurseForgeTotal = -1 'Storage.CurseForgeOffset
-                            [Error] = ex
-                            CurseForgeFailed = True
-                        End Try
-                    End Sub, "CurseForge Project Request")
+                Sub()
+                    Try
+                        '获取工程列表
+                        Log("[Comp] 开始从 CurseForge 获取工程列表：" & CurseForgeUrl)
+                        Dim RequestResult As JObject = DlModRequest(CurseForgeUrl, IsJson:=True)
+                        Task.Progress += 0.2
+                        Dim ProjectList As New List(Of CompProject)
+                        For Each JsonEntry As JObject In RequestResult("data")
+                            ProjectList.Add(New CompProject(JsonEntry))
+                        Next
+                        '更新结果
+                        SyncLock ResultsLock
+                            RawResults.AddRange(ProjectList)
+                        End SyncLock
+                        Storage.CurseForgeOffset += ProjectList.Count
+                        Storage.CurseForgeTotal = RequestResult("pagination")("totalCount").ToObject(Of Integer)
+                        Log($"[Comp] 从 CurseForge 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.CurseForgeOffset} 个，共 {Storage.CurseForgeTotal} 个）")
+                    Catch ex As Exception
+                        Log(ex, "从 CurseForge 获取工程列表失败")
+                        Storage.CurseForgeTotal = -1 'Storage.CurseForgeOffset
+                        [Error] = ex
+                        CurseForgeFailed = True
+                    End Try
+                End Sub, "CurseForge Project Request")
             End If
 
             '启动 Modrinth 线程
@@ -1021,32 +1047,32 @@ Retry:
             Dim ModrinthFailed As Boolean = False
             If ModrinthUrl IsNot Nothing Then
                 ModrinthThread = RunInNewThread(
-                    Sub()
-                        Try
-                            Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
-                            Dim RequestResult As JObject = DlModRequest(ModrinthUrl, IsJson:=True)
-                            Task.Progress += 0.2
-                            Dim ProjectList As New List(Of CompProject)
-                            For Each JsonEntry As JObject In RequestResult("hits")
-                                ProjectList.Add(New CompProject(JsonEntry))
+                Sub()
+                    Try
+                        Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
+                        Dim RequestResult As JObject = DlModRequest(ModrinthUrl, IsJson:=True)
+                        Task.Progress += 0.2
+                        Dim ProjectList As New List(Of CompProject)
+                        For Each JsonEntry As JObject In RequestResult("hits")
+                            ProjectList.Add(New CompProject(JsonEntry))
+                        Next
+                        '更新结果
+                        SyncLock ResultsLock
+                            For Each Project In ProjectList
+                                If Task.Input.Type = CompType.Mod AndAlso Not Project.ModLoaders.Any() Then Continue For '过滤插件（#2458）
+                                RawResults.Add(Project)
                             Next
-                            '更新结果
-                            SyncLock ResultsLock
-                                For Each Project In ProjectList
-                                    If Task.Input.Type = CompType.Mod AndAlso Not Project.ModLoaders.Any() Then Continue For '过滤插件（#2458）
-                                    RawResults.Add(Project)
-                                Next
-                            End SyncLock
-                            Storage.ModrinthOffset += ProjectList.Count
-                            Storage.ModrinthTotal = RequestResult("total_hits").ToObject(Of Integer)
-                            Log($"[Comp] 从 Modrinth 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.ModrinthOffset} 个，共 {Storage.ModrinthTotal} 个）")
-                        Catch ex As Exception
-                            Log(ex, "从 Modrinth 获取工程列表失败")
-                            Storage.ModrinthTotal = -1 'Storage.ModrinthOffset
-                            [Error] = ex
-                            ModrinthFailed = True
-                        End Try
-                    End Sub, "Modrinth Project Request")
+                        End SyncLock
+                        Storage.ModrinthOffset += ProjectList.Count
+                        Storage.ModrinthTotal = RequestResult("total_hits").ToObject(Of Integer)
+                        Log($"[Comp] 从 Modrinth 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.ModrinthOffset} 个，共 {Storage.ModrinthTotal} 个）")
+                    Catch ex As Exception
+                        Log(ex, "从 Modrinth 获取工程列表失败")
+                        Storage.ModrinthTotal = -1 'Storage.ModrinthOffset
+                        [Error] = ex
+                        ModrinthFailed = True
+                    End Try
+                End Sub, "Modrinth Project Request")
             End If
 
             '等待线程结束
@@ -1090,7 +1116,7 @@ Retry:
 #Region "提取非重复项，存储于 RealResults"
 
         '将 Modrinth 排在 CurseForge 的前面，避免加载结束顺序不同导致排名不同
-        '这样做的话，去重后将优先保留 CurseForge 内容（考虑到 CurseForge 热度更高）
+        '这样做的话，去重后将优先保留 CurseForge 内容
         RawResults = RawResults.Where(Function(x) Not x.FromCurseForge).Concat(RawResults.Where(Function(x) x.FromCurseForge)).ToList
         'RawResults 去重
         RawResults = RawResults.Distinct(Function(a, b) a.IsLike(b))
@@ -1107,7 +1133,7 @@ Retry:
 
         If RealResults.Count + Storage.Results.Count < Task.Input.TargetResultCount Then
             Log($"[Comp] 总结果数需求最少 {Task.Input.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
-            If Task.Input.CanContinue Then
+            If Task.Input.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
                 Log("[Comp] 将继续尝试加载下一页")
                 GoTo Retry
             Else
@@ -1123,7 +1149,7 @@ Retry:
         If String.IsNullOrEmpty(Task.Input.SearchText) Then
             '如果没有搜索文本，按下载量将结果排序
             For Each Result As CompProject In RealResults
-                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 30))
+                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 5))
             Next
         Else
             '如果有搜索文本，按关联度将结果排序
@@ -1131,7 +1157,7 @@ Retry:
             Dim Entry As New List(Of SearchEntry(Of CompProject))
             For Each Result As CompProject In RealResults
                 Scores.Add(Result, If(Result.WikiId > 0, 0.2, 0) +
-                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 30)) / 9)
+                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 5)) / 9)
                 Entry.Add(New SearchEntry(Of CompProject) With {.Item = Result, .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
                           New KeyValuePair(Of String, Double)(If(IsChineseSearch, Result.TranslatedName, Result.RawName), 1),
                           New KeyValuePair(Of String, Double)(Result.Description, 0.05)}})
@@ -1143,7 +1169,7 @@ Retry:
         End If
         '根据排序分得出结果并添加
         Storage.Results.AddRange(
-            Sort(Scores.ToList, Function(a, b) a.Value > b.Value).Select(Function(r) r.Key).ToList)
+            Scores.OrderByDescending(Function(s) s.Value).Select(Function(r) r.Key))
 
 #End Region
 
@@ -1196,7 +1222,7 @@ Retry:
         ''' </summary>
         Public ReadOnly ModLoaders As List(Of CompModLoaderType)
         ''' <summary>
-        ''' 支持的游戏版本列表。类型包括："1.18.5"，"1.18"，"1.18 快照"，"21w15a"，"未知版本"。
+        ''' 支持的游戏版本列表。类型包括："1.18.5"，"1.18"，"1.18 预览版"，"21w15a"，"未知版本"。
         ''' </summary>
         Public ReadOnly GameVersions As List(Of String)
         ''' <summary>
@@ -1297,10 +1323,7 @@ Retry:
                     Dim Url = Data("downloadUrl").ToString
                     If Url = "" Then Url = $"https://media.forgecdn.net/files/{CInt(Id.ToString.Substring(0, 4))}/{CInt(Id.ToString.Substring(4))}/{FileName}"
                     Url = Url.Replace(FileName, Net.WebUtility.UrlEncode(FileName)) '对文件名进行编码
-                    DownloadUrls = (New List(Of String) From {Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
-                                       Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
-                                       Url.Replace("://edge", "://media"),
-                                       Url}).Distinct.ToList '对脑残 CurseForge 的下载地址进行多种修正
+                    DownloadUrls = HandleCurseForgeDownloadUrls(Url) '对脑残 CurseForge 的下载地址进行多种修正
                     DownloadUrls.AddRange(DownloadUrls.Select(Function(u) DlSourceModGet(u)).ToList) '添加镜像源，这个写法是为了让镜像源排在后面
                     DownloadUrls = DownloadUrls.Distinct.ToList '最终去重
                     'Dependencies
@@ -1312,9 +1335,9 @@ Retry:
                     End If
                     'GameVersions
                     Dim RawVersions As List(Of String) = Data("gameVersions").Select(Function(t) t.ToString.Trim.ToLower).ToList
-                    GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " 快照")).ToList
+                    GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " 预览版")).ToList
                     If GameVersions.Count > 1 Then
-                        GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
+                        GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                     ElseIf GameVersions.Count = 1 Then
                         GameVersions = GameVersions.ToList
@@ -1353,9 +1376,9 @@ Retry:
                     'GameVersions
                     Dim RawVersions As List(Of String) = Data("game_versions").Select(Function(t) t.ToString.Trim.ToLower).ToList
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.") OrElse v.StartsWithF("b1.")).
-                                               Select(Function(v) If(v.Contains("-"), v.Before("-") & " 快照", If(v.StartsWithF("b1."), "远古版本", v))).ToList
+                                               Select(Function(v) If(v.Contains("-"), v.BeforeFirst("-") & " 预览版", If(v.StartsWithF("b1."), "远古版本", v))).ToList
                     If GameVersions.Count > 1 Then
-                        GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
+                        GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                     ElseIf GameVersions.Count = 1 Then
                         '无需处理
@@ -1375,6 +1398,19 @@ Retry:
                 End If
             End If
         End Sub
+
+        ''' <summary>
+        ''' 重新整理 CurseForge 的下载地址。
+        ''' </summary>
+        Public Shared Function HandleCurseForgeDownloadUrls(Url As String) As List(Of String)
+            Return {
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
+                Url.Replace("://edge", "://media"),
+                Url
+            }.Distinct.ToList
+        End Function
+
         ''' <summary>
         ''' 将当前实例转为可用于保存缓存的 Json。
         ''' </summary>
@@ -1402,28 +1438,26 @@ Retry:
                                    Optional BadDisplayName As Boolean = False) As MyListItem
 
             '获取描述信息
-            Dim Info As String = ""
+            Dim Title As String = If(BadDisplayName, FileName, DisplayName)
+            Dim Info As New List(Of String)
+            If Title <> FileName.BeforeLast(".") Then Info.Add(FileName.BeforeLast("."))
             Select Case Type
                 Case CompType.Mod
-                    Info += If(ModLoaders.Any,
-                        "适用于 " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " 个前置 Mod，", "")
+                    If Dependencies.Any Then Info.Add(Dependencies.Count & " 个前置 Mod")
                 Case CompType.ModPack
-                    If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += $"游戏版本 {Join(GameVersions, "、")}，"
-                    End If
+                    If GameVersions.All(Function(v) v.Contains("w")) Then Info.Add($"游戏版本 {Join(GameVersions, "、")}")
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载，", DownloadCount & " 次下载，")
+                Info.Add("下载 " & If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次", DownloadCount & " 次"))
             End If
-            Info += GetTimeSpanString(ReleaseDate - Date.Now, False) & "更新"
-            Info += If(Status = CompFileStatus.Release, "", "，" & StatusDescription)
+            Info.Add("更新于 " & GetTimeSpanString(ReleaseDate - Date.Now, False))
+            If Status <> CompFileStatus.Release Then Info.Add(StatusDescription)
 
             '建立控件
             Dim NewItem As New MyListItem With {
-                .Title = If(BadDisplayName, FileName, DisplayName),
+                .Title = Title,
                 .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Me,
-                .Info = Info
+                .Info = Info.Join("，")
             }
             Select Case Status
                 Case CompFileStatus.Release
@@ -1462,14 +1496,12 @@ Retry:
     ''' <summary>
     ''' 已知文件信息的缓存。
     ''' </summary>
-    Private CompFilesCache As New Dictionary(Of String, List(Of CompFile))
+    Public CompFilesCache As New Dictionary(Of String, List(Of CompFile))
     ''' <summary>
     ''' 获取某个工程下的全部文件列表。
     ''' 必须在工作线程执行，失败会抛出异常。
     ''' </summary>
     Public Function CompFilesGet(ProjectId As String, FromCurseForge As Boolean) As List(Of CompFile)
-        '使用缓存
-        If CompFilesCache.ContainsKey(ProjectId) Then Return CompFilesCache(ProjectId)
         '获取工程对象
         Dim TargetProject As CompProject
         If CompProjectCache.ContainsKey(ProjectId) Then '存在缓存
@@ -1480,25 +1512,29 @@ Retry:
             TargetProject = New CompProject(DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True))
         End If
         '获取工程对象的文件列表
-        Log("[Comp] 开始获取文件列表：" & ProjectId)
-        Dim ResultJsonArray As JArray
-        If FromCurseForge Then
-            'CurseForge
-            If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
-                ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
-            Else '否则使用全部文件
-                ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", IsJson:=True)("data")
+        If Not CompFilesCache.ContainsKey(ProjectId) Then '有缓存也不能直接返回，这时候前置 Mod 可能没获取（#5173）
+            Log("[Comp] 开始获取文件列表：" & ProjectId)
+            Dim ResultJsonArray As JArray
+            If FromCurseForge Then
+                'CurseForge
+                'HMCL 一次性请求了 10000 个文件，虽然不知道会不会出问题但先这样吧……（#5522）
+                ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=10000", IsJson:=True)("data")
+                '之前只请求一部分文件的方法备份如下：
+                'If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
+                '    ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
+                'Else '否则使用全部文件
+                '    ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", IsJson:=True)("data")
+                'End If
+            Else
+                'Modrinth
+                ResultJsonArray = DlModRequest($"https://api.modrinth.com/v2/project/{ProjectId}/version", IsJson:=True)
             End If
-        Else
-            'Modrinth
-            ResultJsonArray = DlModRequest($"https://api.modrinth.com/v2/project/{ProjectId}/version", IsJson:=True)
+            CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
+                Where(Function(a) a.Available).ToList.Distinct(Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
         End If
-        CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
-            Where(Function(a) a.Available).ToList.Distinct(Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
         '获取前置 Mod 列表
         If TargetProject.Type <> CompType.Mod Then Return CompFilesCache(ProjectId)
-        Dim Deps As List(Of String) = CompFilesCache(ProjectId).
-            SelectMany(Function(f) f.RawDependencies).Distinct().ToList
+        Dim Deps As List(Of String) = CompFilesCache(ProjectId).SelectMany(Function(f) f.RawDependencies).Distinct().ToList
         Dim UndoneDeps = Deps.Where(Function(f) Not CompProjectCache.ContainsKey(f)).ToList
         '获取前置 Mod 工程信息
         If UndoneDeps.Any Then
@@ -1516,10 +1552,10 @@ Retry:
         End If
         '更新前置 Mod 信息
         If Deps.Any Then
-            For Each DepProject In Deps.Select(Function(id) CompProjectCache(id))
+            For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
                     If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
-                        File.Dependencies.Add(DepProject.Id)
+                        If Not File.Dependencies.Contains(DepProject.Id) Then File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
             Next
@@ -1536,10 +1572,11 @@ Retry:
         Dim Deps As List(Of String) = Files.SelectMany(Function(f) f.Dependencies).Distinct.ToList()
         Deps.Sort()
         If Not Deps.Any() Then Exit Sub
-        Deps = Deps.Where(Function(dep)
-                              If Not CompProjectCache.ContainsKey(dep) Then Log($"[Comp] 未找到 ID {dep} 的前置 Mod 信息", LogLevel.Debug)
-                              Return CompProjectCache.ContainsKey(dep)
-                          End Function).ToList
+        Deps = Deps.Where(
+        Function(dep)
+            If Not CompProjectCache.ContainsKey(dep) Then Log($"[Comp] 未找到 ID {dep} 的前置 Mod 信息", LogLevel.Debug)
+            Return CompProjectCache.ContainsKey(dep)
+        End Function).ToList
         '添加开头间隔
         Stack.Children.Add(New TextBlock With {.Text = "前置 Mod", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表

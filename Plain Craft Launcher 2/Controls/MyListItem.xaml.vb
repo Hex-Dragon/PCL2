@@ -1,4 +1,7 @@
-﻿Public Class MyListItem
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyListItem
     Implements IMyRadio
 
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -161,12 +164,17 @@
     End Property
 
     '标题
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabTitle.Inlines
+        End Get
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)
         End Get
         Set(value As String)
-            SetValue(TitleProperty, value)
+            SetValue(TitleProperty, value.Replace(vbCr, "").Replace(vbLf, ""))
         End Set
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyListItem))
@@ -212,33 +220,26 @@
             If Not _Logo = "" Then
                 If _Logo.StartsWithF("http", True) Then
                     '网络图片
-                    PathLogo = New Image With {
+                    PathLogo = New MyImage With {
                             .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
-                            .Source = New ImageSourceConverter().ConvertFromString(_Logo),
+                            .Source = _Logo,
                             .RenderTransformOrigin = New Point(0.5, 0.5),
                             .RenderTransform = New ScaleTransform With {.ScaleX = LogoScale, .ScaleY = LogoScale},
                             .SnapsToDevicePixels = True, .UseLayoutRounding = False}
                     RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
-                ElseIf _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) Then
+                ElseIf _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) OrElse _Logo.EndsWithF(".webp", True) Then
                     '位图
-                    Dim Bitmap = New MyBitmap(_Logo)
                     PathLogo = New Canvas With {
                             .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
-                            .Background = Bitmap,
+                            .Background = New MyBitmap(_Logo),
                             .RenderTransformOrigin = New Point(0.5, 0.5),
                             .RenderTransform = New ScaleTransform With {.ScaleX = LogoScale, .ScaleY = LogoScale},
-                            .SnapsToDevicePixels = True, .UseLayoutRounding = False}
-                    'If Bitmap.Pic.Width = 16 AndAlso Bitmap.Pic.Height = 16 Then
-                    '    '使用最适合 16x16 物品图片显示的大小
-                    '    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.NearestNeighbor)
-                    '    PathLogo.HorizontalAlignment = HorizontalAlignment.Center : PathLogo.VerticalAlignment = VerticalAlignment.Center
-                    '    PathLogo.Width = GetWPFSize(Math.Floor(GetPixelSize(32) / 16) * 16) : PathLogo.Height = PathLogo.Width
-                    'Else
-                    PathLogo.HorizontalAlignment = HorizontalAlignment.Stretch : PathLogo.VerticalAlignment = VerticalAlignment.Stretch
-                    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.HighQuality)
-                    'End If
+                            .SnapsToDevicePixels = True, .UseLayoutRounding = False,
+                            .HorizontalAlignment = HorizontalAlignment.Stretch, .VerticalAlignment = VerticalAlignment.Stretch
+                    }
+                    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
                 Else
                     '矢量图
                     PathLogo = New Shapes.Path With {
@@ -327,8 +328,8 @@
     Private Sub OnSizeChanged() Handles Me.SizeChanged
         ColumnCheck.Width = New GridLength(If(_Type = CheckType.None OrElse _Type = CheckType.Clickable, If(Height < 40, 4, 2), 6))
         ColumnLogo.Width = New GridLength(If(_Logo = "", 0, 34) + If(Height < 40, 0, 4))
-        If Not IsNothing(PathLogo) Then
-            If _Logo.EndsWithF(".png", True) Then
+        If PathLogo IsNot Nothing Then
+            If _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) OrElse _Logo.EndsWithF(".webp", True) Then
                 PathLogo.Margin = New Thickness(4, 5, 3, 5)
             Else
                 PathLogo.Margin = New Thickness(If(Height < 40, 6, 8), 8, If(Height < 40, 4, 6), 8)
@@ -661,6 +662,8 @@
                 Dim Unused = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)
             Catch ex As Exception
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
+                EventType = Nothing
+                EventData = Nothing
             End Try
         End If
     End Sub
