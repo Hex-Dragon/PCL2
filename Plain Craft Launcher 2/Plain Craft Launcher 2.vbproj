@@ -266,9 +266,6 @@
     <Compile Include="Pages\PageDownload\PageDownloadShader.xaml.vb">
       <DependentUpon>PageDownloadShader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLaunch\FormLoginOAuth.xaml.vb">
-      <DependentUpon>FormLoginOAuth.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageLaunch\MyMsgLogin.xaml.vb">
       <DependentUpon>MyMsgLogin.xaml</DependentUpon>
     </Compile>
@@ -539,10 +536,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageDownload\PageDownloadShader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\PageLaunch\FormLoginOAuth.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
