@@ -29,23 +29,8 @@
             '启动参数
             TextArgumentTitle.Text = Setup.Get("VersionArgumentTitle", Version:=PageVersionLeft.Version)
             TextArgumentInfo.Text = Setup.Get("VersionArgumentInfo", Version:=PageVersionLeft.Version)
-            Dim Indie As Integer = Setup.Get("VersionArgumentIndie", Version:=PageVersionLeft.Version)
-            If Indie = -1 Then
-                Dim ModFolder As New DirectoryInfo(PageVersionLeft.Version.Path & "mods\")
-                Dim SaveFolder As New DirectoryInfo(PageVersionLeft.Version.Path & "saves\")
-                If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
-                    '自动开启
-                    Setup.Set("VersionArgumentIndie", 1, Version:=PageVersionLeft.Version)
-                    Log("[Setup] 已自动开启单版本隔离：" & PageVersionLeft.Version.Name)
-                    Indie = 1
-                Else
-                    '使用全局设置
-                    Setup.Set("VersionArgumentIndie", 0, Version:=PageVersionLeft.Version)
-                    Log("[Setup] 版本隔离使用全局设置：" & PageVersionLeft.Version.Name)
-                    Indie = 0
-                End If
-            End If
-            ComboArgumentIndie.SelectedIndex = Indie
+            Dim _unused = PageVersionLeft.Version.PathIndie '触发自动判定
+            ComboArgumentIndieV2.SelectedIndex = If(Setup.Get("VersionArgumentIndieV2", Version:=PageVersionLeft.Version), 0, 1)
             RefreshJavaComboBox()
 
             '游戏内存
@@ -75,6 +60,7 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            CheckAdvanceDisableJLW.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -93,7 +79,7 @@
             Setup.Reset("VersionServerAuthName", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionArgumentTitle", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionArgumentInfo", Version:=PageVersionLeft.Version)
-            Setup.Set("VersionArgumentIndie", 0, Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionArgumentIndieV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamType", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamCustom", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamOptimize", Version:=PageVersionLeft.Version)
@@ -104,6 +90,7 @@
             Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
 
             Setup.Reset("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
             JavaSearchLoader.Start(IsForceRestart:=True)
@@ -132,10 +119,13 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
+    Private Shared Sub CheckBoxLikeComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged
+        If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex = 0, Version:=PageVersionLeft.Version)
+    End Sub
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJLW.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 
@@ -152,12 +142,12 @@
     Public Sub RefreshRam(ShowAnim As Boolean)
         If LabRamGame Is Nothing OrElse LabRamUsed Is Nothing OrElse FrmMain.PageCurrent <> FormMain.PageType.VersionSetup OrElse FrmVersionLeft.PageID <> FormMain.PageSubType.VersionSetup Then Exit Sub
         '获取内存情况
-        Dim RamGame As Double = GetRam(PageVersionLeft.Version)
-        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamGameActual As Double = Math.Min(RamGame, RamAvailable)
-        Dim RamUsed As Double = RamTotal - RamAvailable
-        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000) * 10) / 10
+        Dim RamGame As Double = Math.Round(GetRam(PageVersionLeft.Version), 5)
+        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamGameActual As Double = Math.Round(Math.Min(RamGame, RamAvailable), 5)
+        Dim RamUsed As Double = Math.Round(RamTotal - RamAvailable, 5)
+        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000), 1)
         '设置最大可用内存
         If RamTotal <= 1.5 Then
             SliderRamCustom.MaxValue = Math.Max(Math.Floor((RamTotal - 0.3) / 0.1), 1)
@@ -166,14 +156,14 @@
         ElseIf RamTotal <= 16 Then
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 8) / 1) + 25
         Else
-            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 16) / 2) + 33, 41)
+            SliderRamCustom.MaxValue = Math.Floor((RamTotal - 16) / 2) + 33
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
                           If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
-        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
+        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)
         If ShowAnim Then
             '宽度动画
             AniStart({
@@ -278,10 +268,15 @@
     ''' 获取当前设置的 RAM 值。单位为 GB。
     ''' </summary>
     Public Shared Function GetRam(Version As McVersion, Optional Is32BitJava As Boolean? = Nothing) As Double
-        '使用全局设置
+        '跟随全局设置
         If Setup.Get("VersionRamType", Version:=Version) = 2 Then
             Return PageSetupLaunch.GetRam(Version, True, Is32BitJava)
         End If
+
+        '------------------------------------------
+        ' 修改下方代码时需要一并修改 PageSetupLaunch
+        '------------------------------------------
+
         '使用当前版本的设置
         Dim RamGive As Double
         If Setup.Get("VersionRamType", Version:=Version) = 0 Then
@@ -297,19 +292,19 @@
                 '可安装 Mod 的版本
                 Dim ModDir As New DirectoryInfo(Version.PathIndie & "mods\")
                 Dim ModCount As Integer = If(ModDir.Exists, ModDir.GetFiles.Length, 0)
-                RamMininum = 0.4 + ModCount / 150
-                RamTarget1 = 1.5 + ModCount / 100
-                RamTarget2 = 3 + ModCount / 60
-                RamTarget3 = 6 + ModCount / 30
+                RamMininum = 0.5 + ModCount / 150
+                RamTarget1 = 1.5 + ModCount / 90
+                RamTarget2 = 2.7 + ModCount / 50
+                RamTarget3 = 4.5 + ModCount / 25
             ElseIf Version IsNot Nothing AndAlso Version.Version.HasOptiFine Then
                 'OptiFine 版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 3
-                RamTarget3 = 6
+                RamTarget3 = 5
             Else
                 '普通版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 2.5
                 RamTarget3 = 4
@@ -317,27 +312,23 @@
             Dim RamDelta As Double
             '预分配内存，阶段一，0 ~ T1，100%
             RamDelta = RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 1, RamDelta)
-            RamAvailable -= RamDelta / 1 + 0.1
+            RamGive += Math.Min(RamAvailable, RamDelta)
+            RamAvailable -= RamDelta
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段二，T1 ~ T2，80%
+            '预分配内存，阶段二，T1 ~ T2，70%
             RamDelta = RamTarget2 - RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 0.8, RamDelta)
-            RamAvailable -= RamDelta / 0.8 + 0.1
+            RamGive += Math.Min(RamAvailable * 0.7, RamDelta)
+            RamAvailable -= RamDelta / 0.7
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段三，T2 ~ T3，60%
+            '预分配内存，阶段三，T2 ~ T3，40%
             RamDelta = RamTarget3 - RamTarget2
-            RamAvailable = Math.Max(0, RamAvailable - 0.2)
-            RamGive += Math.Min(RamAvailable * 0.6, RamDelta)
-            RamAvailable -= RamDelta / 0.6 + 0.2
-            If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段四，T3 ~ T3 * 2，40%
-            RamDelta = RamTarget3
-            RamAvailable = Math.Max(0, RamAvailable - 0.3)
             RamGive += Math.Min(RamAvailable * 0.4, RamDelta)
-            RamAvailable -= RamDelta / 0.4 + 0.3
+            RamAvailable -= RamDelta / 0.4
+            If RamAvailable < 0.1 Then GoTo PreFin
+            '预分配内存，阶段四，T3 ~ T3 * 2，15%
+            RamDelta = RamTarget3
+            RamGive += Math.Min(RamAvailable * 0.15, RamDelta)
+            RamAvailable -= RamDelta / 0.15
             If RamAvailable < 0.1 Then GoTo PreFin
 PreFin:
             '不低于最低值
@@ -357,8 +348,7 @@ PreFin:
         End If
         '若使用 32 位 Java，则限制为 1G
         If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
-        '封顶 32G
-        Return Math.Min(32, RamGive)
+        Return RamGive
     End Function
 
 #End Region
@@ -371,8 +361,8 @@ PreFin:
         If AniControlEnabled <> 0 Then Exit Sub
         ServerLogin(ComboServerLogin.SelectedIndex)
         '检查是否输入正确，正确才触发设置改变
-        If ComboServerLogin.SelectedIndex = 3 AndAlso TextServerNide.ValidateResult <> "" Then Exit Sub
-        If ComboServerLogin.SelectedIndex = 4 AndAlso TextServerAuthServer.ValidateResult <> "" Then Exit Sub
+        If ComboServerLogin.SelectedIndex = 3 AndAlso Not TextServerNide.IsValidated Then Exit Sub
+        If ComboServerLogin.SelectedIndex = 4 AndAlso Not TextServerAuthServer.IsValidated Then Exit Sub
         '检查结果是否发生改变，未改变则不触发设置改变
         If ComboServerLoginLast = ComboServerLogin.SelectedIndex Then Exit Sub
         '触发
@@ -418,13 +408,13 @@ PreFin:
         If ComboArgumentJava Is Nothing Then Exit Sub
         '初始化列表
         ComboArgumentJava.Items.Clear()
-        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = "使用全局设置", .Tag = "使用全局设置"})
+        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = "跟随全局设置", .Tag = "使用全局设置"})
         ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = "自动选择合适的 Java", .Tag = "自动选择"})
         '更新列表
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
         Try
-            For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
+            For Each Java In JavaList.Clone().OrderByDescending(Function(v) v.VersionCode)
                 Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
                 ToolTipService.SetHorizontalOffset(ListItem, 400)
                 ComboArgumentJava.Items.Add(ListItem)
@@ -441,7 +431,7 @@ PreFin:
             If SelectedBySetup = "" Then
                 SelectedItem = ComboArgumentJava.Items(1) '选中 “自动选择”
             Else
-                SelectedItem = ComboArgumentJava.Items(0) '选中 “使用全局设置”
+                SelectedItem = ComboArgumentJava.Items(0) '选中 “跟随全局设置”
             End If
         End If
         ComboArgumentJava.SelectedItem = SelectedItem
@@ -469,7 +459,7 @@ PreFin:
         If "使用全局设置".Equals(SelectedJava) Then
             '选择 “自动”
             Setup.Set("VersionArgumentJavaSelect", "使用全局设置", Version:=PageVersionLeft.Version)
-            Log("[Java] 修改版本 Java 选择设置：使用全局设置")
+            Log("[Java] 修改版本 Java 选择设置：跟随全局设置")
         ElseIf "自动选择".Equals(SelectedJava) Then
             '选择 “自动”
             Setup.Set("VersionArgumentJavaSelect", "", Version:=PageVersionLeft.Version)
@@ -484,6 +474,25 @@ PreFin:
 
 #End Region
 
+#Region "其他设置"
+
+    '版本隔离警告
+    Private IsReverting As Boolean = False
+    Private Sub ComboArgumentIndieV2_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentIndieV2.SelectionChanged
+        If AniControlEnabled <> 0 Then Exit Sub
+        If IsReverting Then Exit Sub
+        If MyMsgBox("调整版本隔离后，你可能得把游戏存档、Mod 等文件手动迁移到新的游戏文件夹中。" & vbCrLf &
+                    "如果修改后发现存档消失，把这项设置改回来就能恢复。" & vbCrLf &
+                    "如果你不会迁移存档，不建议修改这项设置！",
+                    "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            IsReverting = True
+            ComboArgumentIndieV2.SelectedItem = e.RemovedItems(0)
+            IsReverting = False
+        End If
+    End Sub
+
+#End Region
+
 #Region "高级设置"
 
     Private Sub TextAdvanceRun_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextAdvanceRun.TextChanged
@@ -491,5 +500,10 @@ PreFin:
     End Sub
 
 #End Region
+
+    '切换到全局设置
+    Private Sub BtnSwitch_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSwitch.Click
+        FrmMain.PageChange(FormMain.PageType.Setup, FormMain.PageSubType.SetupLaunch)
+    End Sub
 
 End Class

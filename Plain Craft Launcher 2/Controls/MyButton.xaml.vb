@@ -1,22 +1,30 @@
-﻿Public Class MyButton
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyButton
 
     '声明
     Public Event Click(sender As Object, e As MouseButtonEventArgs) '自定义事件
 
     '自定义属性
     Public Uuid As Integer = GetUuid()
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
-            Return LabText.Text
+            Return GetValue(TextProperty)
         End Get
         Set(value As String)
-            LabText.Text = value
+            SetValue(TextProperty, value)
         End Set
     End Property '显示文本
     Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyButton), New PropertyMetadata(New PropertyChangedCallback(
-                                                                                                                                                               Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
-                                                                                                                                                                   If Not IsNothing(sender) Then CType(sender, MyButton).LabText.Text = e.NewValue
-                                                                                                                                                               End Sub)))
+    Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        If sender IsNot Nothing Then CType(sender, MyButton).LabText.Text = e.NewValue
+    End Sub)))
     Public Property TextPadding As Thickness
         Get
             Return LabText.Padding

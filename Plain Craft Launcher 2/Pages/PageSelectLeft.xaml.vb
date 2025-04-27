@@ -1,4 +1,5 @@
 ﻿Public Class PageSelectLeft
+    Implements IRefreshable
 
     Private Sub PageSelectLeft_Initialized(sender As Object, e As EventArgs) Handles Me.Initialized
         AddHandler McFolderListLoader.PreviewFinish, Sub() If FrmSelectLeft IsNot Nothing Then RunInUiWait(AddressOf McFolderListUI)
@@ -170,6 +171,9 @@
             Log(ex, "添加文件夹失败（" & NewFolder & "）", LogLevel.Feedback)
         End Try
     End Sub
+    ''' <summary>
+    ''' 将指定文件夹添加到 Minecraft 文件夹列表，并选中它。
+    ''' </summary>
     Public Shared Sub AddFolder(FolderPath As String, DisplayName As String, ShowHint As Boolean)
         RunInThread(
         Sub()
@@ -223,7 +227,7 @@
                 '提示
                 If IsReplace Then Exit Sub
                 If ShowHint Then Hint("文件夹 " & DisplayName & " 已添加！", HintType.Finish)
-                '自动关闭版本隔离
+                '检查是否为根目录整合包，自动关闭版本隔离
                 '1. 根目录中存在数个 Mod
                 Dim ModFolder As New DirectoryInfo(FolderPath & "mods\")
                 If Not (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Count >= 3) Then Exit Sub
@@ -240,6 +244,7 @@
                     If ModIndieFolder.Exists AndAlso ModIndieFolder.EnumerateFiles.Any Then Exit Sub
                     '满足以上全部条件则视为根目录整合包
                     Setup.Set("VersionArgumentIndie", 2, Version:=Version)
+                    Setup.Set("VersionArgumentIndieV2", False, Version:=Version)
                     Log("[Setup] 已自动关闭单版本隔离：" & Version.Name, LogLevel.Debug)
                 Next
             Catch ex As Exception
@@ -295,7 +300,7 @@
             For i = 0 To Folders.Count - 1
                 If Folders(i) = "" Then Exit For
                 If Folders(i).ToString.EndsWith(Folder.Path) Then
-                    Name = Folders(i).ToString.Before(">")
+                    Name = Folders(i).ToString.BeforeFirst(">")
                     Folders.RemoveAt(i)
                     Exit For
                 End If
@@ -327,28 +332,35 @@
             Next
             Setup.Set("LaunchFolders", If(Not Folders.Any(), "", Join(Folders.ToArray, "|")))
         End If
-        RunInNewThread(Sub()
-                           '删除文件夹
-                           Try
-                               Hint("正在" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Info)
-                               DeleteDirectory(Folder.Path)
-                               If DeleteText = "清空" Then Directory.CreateDirectory(Folder.Path)
-                               Hint("已" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Finish)
-                           Catch ex As Exception
-                               Log(ex, DeleteText & "文件夹 " & Folder.Name & " 失败", LogLevel.Hint)
-                           Finally
-                               '刷新列表
-                               McFolderListLoader.Start(IsForceRestart:=True)
-                           End Try
-                       End Sub, "Folder Delete " & GetUuid(), ThreadPriority.BelowNormal)
+        RunInNewThread(
+        Sub()
+            '删除文件夹
+            Try
+                Hint("正在" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Info)
+                DeleteDirectory(Folder.Path)
+                If DeleteText = "清空" Then Directory.CreateDirectory(Folder.Path)
+                Hint("已" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Finish)
+            Catch ex As Exception
+                Log(ex, DeleteText & "文件夹 " & Folder.Name & " 失败", LogLevel.Hint)
+            Finally
+                '刷新列表
+                McFolderListLoader.Start(IsForceRestart:=True)
+            End Try
+        End Sub, "Folder Delete " & GetUuid(), ThreadPriority.BelowNormal)
     End Sub
     Public Sub Open_Click(sender As Object, e As RoutedEventArgs)
-        OpenExplorer("""" & CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Info & """")
+        OpenExplorer(CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Info)
     End Sub
     Public Sub Refresh_Click(sender As Object, e As RoutedEventArgs)
         Dim Data As McFolder = CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Tag
-        WriteIni(Data.Path & "PCL.ini", "VersionCache", "") '删除缓存以强制要求下一次加载时更新列表
-        If Data.Path = PathMcFolder Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
+        RefreshCurrent(Data.Path)
+    End Sub
+    Public Sub RefreshCurrent() Implements IRefreshable.Refresh
+        RefreshCurrent(PathMcFolder)
+    End Sub
+    Public Shared Sub RefreshCurrent(Folder As String)
+        WriteIni(Folder & "PCL.ini", "VersionCache", "") '删除缓存以强制要求下一次加载时更新列表
+        If Folder = PathMcFolder Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
     Public Sub Rename_Click(sender As Object, e As RoutedEventArgs)
         Dim Folder As McFolder = CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Tag
