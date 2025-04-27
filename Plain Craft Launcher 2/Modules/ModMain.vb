@@ -405,6 +405,7 @@ EndHint:
     Public FrmDownloadFabric As PageDownloadFabric
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadShader As PageDownloadShader
     Public FrmDownloadResourcePack As PageDownloadResourcePack
 
     '设置页面声明

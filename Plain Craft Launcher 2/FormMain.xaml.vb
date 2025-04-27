@@ -928,6 +928,7 @@ Public Class FormMain
         DownloadMod = 11
         DownloadPack = 12
         DownloadResourcePack = 13
+        DownloadShader = 14
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -966,7 +967,7 @@ Public Class FormMain
                         Return "整合包下载 - " & Project.TranslatedName
                     Case CompType.ResourcePack
                         Return "资源包下载 - " & Project.TranslatedName
-                    Case Else 'CompType.ShaderPack
+                    Case Else 'CompType.Shader
                         Return "光影包下载 - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail

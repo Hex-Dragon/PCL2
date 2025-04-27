@@ -294,6 +294,7 @@
                     Case CompType.ModPack : Desc = "整合包"
                     Case CompType.Mod : Desc = "Mod "
                     Case CompType.ResourcePack : Desc = "资源包"
+                    Case CompType.Shader : Desc = "光影包"
                 End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
