@@ -1,6 +1,6 @@
 name: "优化建议"
-description: "对已有功能的小幅度优化或改进建议"
-labels: [· 优化, 新提交]
+description: "对已有功能的小幅度优化或改进建议。但根据情况，社区版很可能不会处理这个 Issue，而是会将其转交给官方版进一步评估。"
+type: "优化"
 body:
 - type: checkboxes
   id: "yml-1"
@@ -8,19 +8,27 @@ body:
     label: "检查项"
     description: "请逐个检查下列项目，并勾选确认。"
     options:
-    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一建议未被提交过。"
+    - label: "我已在 [官方版 Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [官方版功能投票页面](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/) 中搜索，已确认官方版不计划处理或正在为这个内容投票。"
       required: true
-    - label: "我已查看 [功能投票页面](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/)，确认了这一建议未在投票列表中。"
+    - label: "我已在 [社区版 Issues 页面](https://github.com/PCL-Community/PCL2-CE/issues?q=is%3Aissue+) 中搜索，确但认了这一建议未在社区版被提交过。"
       required: true
-- type: textarea
+    - label: "我仍想要提交，是因为我确认这个 Issue 是从官方版转交过来，或是希望由社区版处理的。"
+      required: true
+- type: input
   id: "yml-2"
+  attributes:
+    label: "官方版原 Issue 编号"
+    description: "如果这个 Issue 是从官方版转交过来的，请将原 Issue 标题旁的**编号**输入到下方预设文本的`#`后，不要输入任何其他非数字字符。若不是，请清空下方输入框。"
+    value: "- Hex-Dragon/PCL2#"
+- type: textarea
+  id: "yml-3"
   attributes:
     label: 描述
     description: "详细描述具体需要优化哪些地方，要改成怎样的。"
   validations:
     required: true
 - type: textarea
-  id: "yml-3"
+  id: "yml-4"
   attributes:
     label: 原因
     description: "详细描述你为什么需要这项优化，这有助于开发者评估它的优先度。"

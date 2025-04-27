@@ -89,9 +89,14 @@ End Class
 ''' </summary>
 Public Class ValidateHttp
     Inherits Validate
+    Public Property AllowsNullOrEmpty As Boolean = False
     Public Sub New()
     End Sub '用于 XAML 初始化
+    Public Sub New(Optional AllowsNullOrEmpty As Boolean = False)
+        Me.AllowsNullOrEmpty = AllowsNullOrEmpty
+    End Sub
     Public Overrides Function Validate(Str As String) As String
+        If AllowsNullOrEmpty AndAlso String.IsNullOrEmpty(Str) Then Return ""
         If Str.EndsWithF("/") Then Str = Str.Substring(0, Str.Length - 1)
         If Not RegexCheck(Str, "^(http[s]?)\://") Then Return "输入的网址无效！"
         Return ""
@@ -221,14 +226,16 @@ Public Class ValidateFolderName
     Public Property UseMinecraftCharCheck As Boolean = True
     Public Property IgnoreCase As Boolean = True
     Private ReadOnly PathIgnore As IEnumerable(Of DirectoryInfo)
+    Private IsIgnoreSameName As Boolean = False
     Public Sub New()
     End Sub
-    Public Sub New(Path As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True)
+    Public Sub New(Path As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True, Optional IgnoreSameName As Boolean = False)
         Me.Path = Path
         Me.IgnoreCase = IgnoreCase
         Me.UseMinecraftCharCheck = UseMinecraftCharCheck
         On Error Resume Next
         PathIgnore = New DirectoryInfo(Path).EnumerateDirectories
+        IsIgnoreSameName = IgnoreSameName
     End Sub
     Public Overrides Function Validate(Str As String) As String
         Try
@@ -258,8 +265,10 @@ Public Class ValidateFolderName
                     Arr.Add(Folder.Name)
                 Next
             End If
-            Dim SameNameCheck = New ValidateExceptSame(Arr, "不可与现有文件夹重名！", IgnoreCase).Validate(Str)
-            If Not SameNameCheck = "" Then Return SameNameCheck
+            If Not IsIgnoreSameName Then
+                Dim SameNameCheck = New ValidateExceptSame(Arr, "不可与现有文件夹重名！", IgnoreCase).Validate(Str)
+                If Not SameNameCheck = "" Then Return SameNameCheck
+            End If
             Return ""
         Catch ex As Exception
             Log(ex, "检查文件夹名出错")

@@ -133,22 +133,6 @@
                 <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="69.28 %" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingProgress" />
                 <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="下载速度" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Opacity="0" Name="LabLaunchingDownloadLeft" Visibility="Collapsed" />
                 <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="5.2 M/s" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingDownload" Opacity="0" Visibility="Collapsed" />
-                <Grid x:Name="PanLaunchingHint" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan="2" Width="260" Margin="0,16,0,2" Visibility="Collapsed" Opacity="0">
-                    <Border Margin="0,8,0,0" BorderThickness="1" CornerRadius="3" BorderBrush="{StaticResource ColorBrushGray1}" Opacity="0.5">
-                        <Border.Clip>
-                            <CombinedGeometry GeometryCombineMode="Exclude">
-                                <CombinedGeometry.Geometry1>
-                                    <RectangleGeometry Rect="0,0,1000,1000" />
-                                </CombinedGeometry.Geometry1>
-                                <CombinedGeometry.Geometry2>
-                                    <RectangleGeometry Rect="94,0,72,10" />
-                                </CombinedGeometry.Geometry2>
-                            </CombinedGeometry>
-                        </Border.Clip>
-                    </Border>
-                    <TextBlock FontSize="12.5" Text="你知道吗" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="{StaticResource ColorBrushGray1}" Opacity="0.5" />
-                    <TextBlock x:Name="LabLaunchingHint" FontSize="12.5" Text="这是一段测试用的小提示文本，它应该足够长以让它有两行。" Margin="11,21,11,10" TextWrapping="Wrap" HorizontalAlignment="Center" />
-                </Grid>
             </Grid>
         </StackPanel>
         <local:MyButton Grid.Row="4" x:Name="BtnCancel" Height="35" Margin="20,0,20,20" VerticalAlignment="Bottom" Text="取消" />

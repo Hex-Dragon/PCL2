@@ -33,6 +33,10 @@
         ''' 是否为用户手动导入的 Java。
         ''' </summary>
         Public IsUserImport As Boolean
+        ''' <summary>
+        ''' 是否使用此 Java
+        ''' </summary>
+        Public IsEnabled As Boolean = True
 
         '版本信息
         ''' <summary>
@@ -68,10 +72,19 @@
 
         '序列化
         Public Function ToJson() As JObject
-            Return New JObject({New JProperty("Path", PathFolder), New JProperty("VersionString", Version.ToString), New JProperty("IsJre", IsJre), New JProperty("Is64Bit", Is64Bit), New JProperty("IsUserImport", IsUserImport)})
+            Return New JObject({New JProperty("Path", PathFolder),
+                               New JProperty("VersionString", Version.ToString),
+                               New JProperty("IsJre", IsJre),
+                               New JProperty("Is64Bit", Is64Bit),
+                               New JProperty("IsUserImport", IsUserImport),
+                               New JProperty("IsEnabled", IsEnabled)})
         End Function
         Public Shared Function FromJson(Data As JObject) As JavaEntry
-            Return New JavaEntry(Data("Path"), Data("IsUserImport")) With {.Version = New Version(Data("VersionString")), .IsJre = Data("IsJre"), .Is64Bit = Data("Is64Bit")}
+            Return New JavaEntry(Data("Path"),
+                                 Data("IsUserImport")) With {.Version = New Version(Data("VersionString")),
+                                 .IsJre = Data("IsJre"),
+                                 .Is64Bit = Data("Is64Bit"),
+                                 .IsEnabled = If(Data("IsEnabled"), True)}
         End Function
         ''' <summary>
         ''' 转化为用户友好的字符串输出。
@@ -140,6 +153,8 @@
                 Throw ex
             Catch ex As ThreadInterruptedException
                 Throw ex
+            Catch ex As System.ComponentModel.Win32Exception
+                Throw New ApplicationException($"与系统交互时出现错误。来自：{ex.Source}，错误代码：{ex.HResult}", ex)
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
@@ -295,6 +310,9 @@ RetryGet:
             Dim AllJavaList As New List(Of JavaEntry)
             AllJavaList.AddRange(TargetJavaList)
             AllJavaList.AddRange(JavaList)
+
+            '禁用用户不希望使用的 Java
+            AllJavaList = AllJavaList.Where(Function(i) i.IsEnabled).ToList()
 
             '根据选定条件进行过滤
             For Each Java In AllJavaList
@@ -522,14 +540,20 @@ NoUserJava:
                 '粗略检查有效性
                 If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
             Next
-            '查找磁盘中的 Java
-            For Each Disk As DriveInfo In DriveInfo.GetDrives()
-                If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
-                JavaSearchFolder(Disk.Name, JavaPreList, False)
-            Next
-            '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            '细致搜索
+            If Setup.Get("LaunchArgumentJavaTraversal") Then
+                '查找磁盘中的 Java
+                For Each Disk As DriveInfo In DriveInfo.GetDrives()
+                    If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
+                    JavaSearchFolder(Disk.Name, JavaPreList, False)
+                Next
+
+                '查找 AppData 文件夹中的 Java
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            End If
+            '查找 AppData 中 .minecraft 目录下的 Java
+            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\", JavaPreList, False)
             '查找启动器目录中的 Java
             JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:=True)
             '查找所选 Minecraft 文件夹中的 Java
@@ -577,7 +601,7 @@ NoUserJava:
                     If Entry.IsUserImport Then JavaPreList(Entry.PathFolder) = True
                 Next
             Catch ex As Exception
-                Log(ex, "Java 列表已损坏", LogLevel.Feedback)
+                Log(ex, "Java 列表已损坏，无法获取用户导入的 Java", LogLevel.Feedback)
                 Setup.Set("LaunchArgumentJavaAll", "[]")
             End Try
 
@@ -589,6 +613,20 @@ NoUserJava:
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
             NewJavaList = JavaCheckList(NewJavaList).Sort(AddressOf JavaSorter)
+
+#Region "同步原有的启用信息"
+            Try
+                For Each JavaJsonObject In GetJson(ImportedJava)
+                    Dim Target = NewJavaList.Find(Function(j) j.PathFolder = JavaEntry.FromJson(JavaJsonObject).PathFolder)
+                    If Target IsNot Nothing Then
+                        Target.IsEnabled = JavaEntry.FromJson(JavaJsonObject).IsEnabled
+                    End If
+                Next
+            Catch ex As Exception
+                Log(ex, "Java 列表已损坏，无法获取原有 Java 启用情况", LogLevel.Feedback)
+                Setup.Set("LaunchArgumentJavaAll", "[]")
+            End Try
+#End Region
 
             '修改设置项
             Dim AllList As New JArray

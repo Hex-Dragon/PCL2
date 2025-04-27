@@ -18,7 +18,7 @@
             </Ellipse.RenderTransform>
         </Ellipse>
         <Popup Name="Popup" AllowsTransparency="True" IsHitTestVisible="False" PopupAnimation="Fade" VerticalOffset="38" HorizontalOffset="{Binding Margin.Left, ElementName=ShapeDot}" Placement="Center" PlacementRectangle="8,0,0,0">
-            <Border BorderBrush="{DynamicResource ColorBrush1}" BorderThickness="1.5" CornerRadius="3" MaxWidth="500" Background="White" Margin="0,0,4,4" SnapsToDevicePixels="True">
+            <Border BorderBrush="{DynamicResource ColorBrush1}" BorderThickness="1.5" CornerRadius="3" MaxWidth="500" Background="{DynamicResource ColorBrushWhite}" Margin="0,0,4,4" SnapsToDevicePixels="True">
                 <Border.Effect>
                     <DropShadowEffect Opacity="0.4" BlurRadius="4" ShadowDepth="2" />
                 </Border.Effect>

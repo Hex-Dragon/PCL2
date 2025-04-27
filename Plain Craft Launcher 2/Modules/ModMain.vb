@@ -181,6 +181,9 @@ EndHint:
         ''' 登录模式：登录步骤 1 中返回的 JSON。
         ''' </summary>
         Public Content As Object
+
+        '设置轮询 Url
+        Public AuthUrl = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
         ''' <summary>
         ''' 输入模式：输入验证规则。
         ''' </summary>
@@ -382,6 +385,8 @@ EndHint:
     '页面声明（出于单元测试考虑，初始化页面已转入 FormMain 中）
     Public FrmLaunchLeft As PageLaunchLeft
     Public FrmLaunchRight As PageLaunchRight
+    Public FrmLogLeft As PageLogLeft
+    Public FrmLogRight As PageLogRight
     Public FrmSelectLeft As PageSelectLeft
     Public FrmSelectRight As PageSelectRight
     Public FrmSpeedLeft As PageSpeedLeft
@@ -390,9 +395,10 @@ EndHint:
     '联机页面声明
     Public FrmLinkLeft As PageLinkLeft
     Public FrmLinkIoi As PageLinkIoi
-    Public FrmLinkHiper As PageLinkHiper
+    Public FrmLinkLobby As PageLinkLobby
     Public FrmLinkHelp As PageOtherHelpDetail
     Public FrmLinkFeedback As PageLinkFeedback
+    Public FrmLinkNetStatus As PageLinkNetStatus
 
     '下载页面声明
     Public FrmDownloadLeft As PageDownloadLeft
@@ -402,9 +408,14 @@ EndHint:
     Public FrmDownloadLiteLoader As PageDownloadLiteLoader
     Public FrmDownloadForge As PageDownloadForge
     Public FrmDownloadNeoForge As PageDownloadNeoForge
+    Public FrmDownloadCleanroom As PageDownloadCleanroom
     Public FrmDownloadFabric As PageDownloadFabric
+    Public FrmDownloadQuilt As PageDownloadQuilt
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadResourcePack As PageDownloadResourcePack
+    Public FrmDownloadShader As PageDownloadShader
+    Public FrmDownloadCompFavorites As PageDownloadCompFavorites
 
     '设置页面声明
     Public FrmSetupLeft As PageSetupLeft
@@ -418,6 +429,8 @@ EndHint:
     Public FrmOtherHelp As PageOtherHelp
     Public FrmOtherAbout As PageOtherAbout
     Public FrmOtherTest As PageOtherTest
+    Public FrmOtherFeedback As PageOtherFeedback
+    Public FrmOtherVote As PageOtherVote
 
     '登录页面声明
     Public FrmLoginLegacy As PageLoginLegacy
@@ -431,9 +444,14 @@ EndHint:
     '版本设置页面声明
     Public FrmVersionLeft As PageVersionLeft
     Public FrmVersionOverall As PageVersionOverall
-    Public FrmVersionMod As PageVersionMod
+    Public FrmVersionMod As PageVersionCompResource
     Public FrmVersionModDisabled As PageVersionModDisabled
+    Public FrmVersionScreenshot As PageVersionScreenshot
+    Public FrmVersionWorld As PageVersionWorld
+    Public FrmVersionShader As PageVersionCompResource
+    Public FrmVersionResourcePack As PageVersionCompResource
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionInstall As PageVersionInstall
     Public FrmVersionExport As PageVersionExport
 
     '资源信息分页声明
@@ -590,7 +608,7 @@ EndHint:
             Try
 
                 '解压内置文件
-                HelpTryExtract()
+                HelpExtract()
 
                 '遍历文件
                 Dim FileList As New List(Of String)
@@ -617,7 +635,7 @@ EndHint:
                     Log("[Help] 已扫描 PCL 文件夹下的帮助文件，目前总计 " & FileList.Count & " 条")
                     '读取自带文件
                     For Each File In EnumerateFiles(PathTemp & "Help")
-                        '跳过非 json 文件与以 . 开头的文件夹
+                        '跳过非 Json 文件与以 . 开头的文件夹
                         If File.Extension.ToLower <> ".json" OrElse File.Directory.FullName.Replace(PathTemp & "Help", "").Contains("\.") Then Continue For
                         '检查忽略列表
                         Dim RealPath As String = File.FullName.Replace(PathTemp & "Help\", "")
@@ -660,17 +678,14 @@ NextFile:
         End SyncLock
     End Sub
     ''' <summary>
-    ''' 尝试解压内置帮助文件。
+    ''' 解压内置帮助文件。
     ''' </summary>
-    Public Sub HelpTryExtract()
-        If Setup.Get("SystemHelpVersion") <> VersionCode OrElse Not File.Exists(PathTemp & "Help\启动器\备份设置.xaml") Then
-            DeleteDirectory(PathTemp & "Help")
-            Directory.CreateDirectory(PathTemp & "Help")
-            WriteFile(PathTemp & "Cache\Help.zip", GetResources("Help"))
-            ExtractFile(PathTemp & "Cache\Help.zip", PathTemp & "Help", Encoding.UTF8)
-            Setup.Set("SystemHelpVersion", VersionCode)
-            Log("[Help] 已解压内置帮助文件，目前状态：" & File.Exists(PathTemp & "Help\启动器\备份设置.xaml"), LogLevel.Debug)
-        End If
+    Public Sub HelpExtract()
+        DeleteDirectory(PathTemp & "Help")
+        Directory.CreateDirectory(PathTemp & "Help")
+        WriteFile(PathTemp & "Cache\Help.zip", GetResources("Help"))
+        ExtractFile(PathTemp & "Cache\Help.zip", PathTemp & "Help", Encoding.UTF8)
+        Log("[Help] 已解压内置帮助文件，目前状态：" & File.Exists(PathTemp & "Help\启动器\备份设置.xaml"), LogLevel.Debug)
     End Sub
     ''' <summary>
     ''' 对帮助文件约定的替换标记进行处理，如果遇到需要转义的字符会进行转义。

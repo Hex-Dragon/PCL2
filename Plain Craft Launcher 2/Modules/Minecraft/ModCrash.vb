@@ -165,7 +165,7 @@ Extracted:
                    MatchName = "游戏崩溃前的输出.txt" OrElse MatchName = "rawoutput.log" Then
                 TargetType = AnalyzeFileType.MinecraftLog
                 If DirectFile Is Nothing Then DirectFile = LogFile
-            ElseIf MatchName = "启动器日志.txt" OrElse MatchName = "PCL2 启动器日志.txt" OrElse MatchName = "PCL 启动器日志.txt" OrElse MatchName = "log1.txt" Then
+            ElseIf MatchName = "启动器日志.txt" OrElse MatchName = "PCL2 启动器日志.txt" OrElse MatchName = "PCL 启动器日志.txt" OrElse MatchName = "log1.txt" OrElse MatchName = "log-ce1.log" Then
                 If LogFile.Value.Any(Function(s) s.Contains("以下为游戏输出的最后一段内容")) Then
                     TargetType = AnalyzeFileType.MinecraftLog
                     If DirectFile Is Nothing Then DirectFile = LogFile
@@ -231,7 +231,7 @@ Extracted:
                             Log("[Crash] 输出报告：" & SelectedFile.Key & "，作为 Minecraft 或启动器日志")
                         Next
                         '选择一份最佳的来自启动器的游戏日志
-                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt", "PCL 启动器日志.txt"}
+                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "log-ce1.log", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt", "PCL 启动器日志.txt"}
                             If FileNameDict.ContainsKey(FileName) Then
                                 Dim CurrentLog = FileNameDict(FileName)
                                 '截取 “以下为游戏输出的最后一段内容” 后的内容
@@ -891,7 +891,7 @@ NextStack:
                         Select Case FileName
                             Case "LatestLaunch.bat"
                                 FileName = "启动脚本.bat"
-                            Case "Log1.txt"
+                            Case "Log-CE1.log"
                                 FileName = "PCL 启动器日志.txt"
                                 FileEncoding = Encoding.UTF8
                             Case "RawOutput.log"

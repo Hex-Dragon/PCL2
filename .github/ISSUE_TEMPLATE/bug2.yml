@@ -1,6 +1,6 @@
 name: "下载或登录时卡住或失败"
 description: "下载游戏、Mod 或整合包，或登录正版账号时出现问题"
-labels: [· Bug, 新提交]
+type: "网络"
 body:
 - type: checkboxes
   id: "yml-1"
@@ -12,7 +12,7 @@ body:
       required: false
     - label: "我知晓大多数此类问题都是网络环境不佳导致的，但我确实认为我的问题可能是 PCL 导致的，和网络环境无关。"
       required: true
-    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一 Bug 未被提交过。"
+    - label: "我已在 [Issues 页面](https://github.com/PCL-Community/PCL2-CE/issues?q=is%3Aissue+) 中搜索，确认了这一 Bug 未被提交过。"
       required: true
 - type: textarea
   id: "yml-2"
@@ -35,7 +35,7 @@ body:
   id: "yml-4"
   attributes:
     label: 日志与附件
-    description: "上传 PCL 文件夹中的 Log1~5.txt。[日志在哪？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-fvZW)"
+    description: "上传 PCL 文件夹中的 Log-CE1~5.log。"
     placeholder: "先点击这个文本框，然后再将文件直接拖拽到文本框中以上传。"
   validations:
     required: true

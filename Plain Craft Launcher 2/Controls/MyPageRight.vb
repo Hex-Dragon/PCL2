@@ -5,14 +5,16 @@
     '“返回顶部” 按钮检测的滚动区域
     Public Property PanScroll As MyScrollViewer
         Get
-            Return GetValue(PanScrollProperty)
+            Dim res = GetValue(PanScrollProperty)
+            If res Is Nothing Then Log($"[MyPageRight] 获取到 PanScroll 的值为 null", LogLevel.Debug)
+            Return res
         End Get
         Set(value As MyScrollViewer)
             SetValue(PanScrollProperty, value)
         End Set
     End Property
-    Private Shared ReadOnly PanScrollProperty =
-        DependencyProperty.Register("PanScroll", GetType(MyScrollViewer), GetType(MyPageRight), New PropertyMetadata(Nothing))
+    Private Shared PanScrollProperty =
+        DependencyProperty.Register("PanScroll", GetType(MyScrollViewer), GetType(MyPageRight))
 
     '当前状态
     Public Enum PageStates
@@ -130,7 +132,7 @@
         Select Case PageState
             Case PageStates.Empty
                 If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Waiting OrElse PageLoader.State = LoadState.Aborted Then
-                    '如果加载器在进入页面时不启动（例如 HiPer 联机），那么在此时就会有 State = Waiting
+                    '如果加载器在进入页面时不启动（例如联机），那么在此时就会有 State = Waiting
                     PageState = PageStates.ContentEnter
                     TriggerEnterAnimation(PanAlways, If(PanContent, Child))
                 ElseIf PageLoader.State = LoadState.Loading Then
