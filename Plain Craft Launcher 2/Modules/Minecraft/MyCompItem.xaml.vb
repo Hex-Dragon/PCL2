@@ -120,7 +120,7 @@
                 Case CompType.Shader
                     TargetVersion = If(PageDownloadShader.Loader.Input.GameVersion, "")
                 Case Else 'CompType.ResourcePack
-                    TargetVersion = If(PageDownloadResource.Loader.Input.GameVersion, "")
+                    TargetVersion = If(PageDownloadResourcePack.Loader.Input.GameVersion, "")
             End Select
         End If
         If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompModLoaderType.Any
