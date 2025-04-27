@@ -10,6 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 355 Then 'Release 2.9.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：使用新的版本隔离策略"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：添加了在全局启动设置与版本独立设置之间互相跳转的按钮"))
+            FeatureCount += 20
+            BugCount += 28
+        End If
         If LastVersion < 352 Then 'Release 2.9.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：导出整合包功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：支持在超长路径下安装、启动游戏"))
@@ -58,7 +66,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 352 Then 'Snapshot 2.9.2
+        If LastVersion < 354 Then 'Snapshot 2.9.3
+            If LastVersion = 352 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：低版本 MC 没有声音"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：若不安装 Mod 加载器，则无法安装 OptiFine 1.14+"))
+            End If
+            FeatureCount += 8
+            BugCount += 8
+        End If
+        If LastVersion < 353 Then 'Snapshot 2.9.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：使用新的版本隔离策略"))

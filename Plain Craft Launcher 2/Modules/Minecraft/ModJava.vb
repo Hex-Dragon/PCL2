@@ -372,6 +372,8 @@ ExitUserJavaCheck:
             For Each Java In AllowedJavaList
                 '如果在官启文件夹启动，会将官启自带 Java 错误视作 MC 文件夹指定 Java，导致了 #2054 的第二例
                 If Java.PathFolder.Contains(".minecraft\cache\java") Then Continue For
+                '#5780
+                If Java.PathFolder.Contains("PCL\MyDownload") Then Continue For
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
                     AllowedJavaList = New List(Of JavaEntry) From {Java}
@@ -555,7 +557,7 @@ NoUserJava:
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") OrElse Pair.Key.ContainsF("system32") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                 Else
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
@@ -674,13 +676,14 @@ Wait:
             '若该目录有 Java，则加入结果
             If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
+            '不应使用网易的 Java：https://github.com/Hex-Dragon/PCL2/issues/1279#issuecomment-2761489121
             Dim Keywords = {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc", "dragon",
                             "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
                             "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
                             "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
                             "runtime", "x86", "x64", "forge", "原版", "optifine", "官方", "启动", "hmcl", "mod", "高清",
                             "download", "launch", "程序", "path", "version", "baka", "pcl", "zulu", "local", "packages",
-                            "4297127d64ec6", "国服", "网易", "ext", "netease", "1.", "启动"}
+                            "4297127d64ec6", "1.", "启动"}
             For Each FolderInfo As DirectoryInfo In OriginalPath.EnumerateDirectories
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串

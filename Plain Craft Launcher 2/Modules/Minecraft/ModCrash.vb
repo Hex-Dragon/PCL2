@@ -563,8 +563,9 @@ Done:
             If LogCrash.Contains("has mods that were not found") AndAlso RegexCheck(LogCrash, "The Mod File [^\n]+optifine\\OptiFine[^\n]+ has mods that were not found") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             'Mod 导致的崩溃
             If LogCrash.Contains("-- MOD ") Then
-                If LogCrash.Between("-- MOD ", "Failure message:").ContainsF(".jar", True) Then
-                    AppendReason(CrashReason.确定Mod导致游戏崩溃, If(RegexSeek(LogCrash, "(?<=Mod File: ).+"), "").TrimEnd((vbCrLf & " ").ToCharArray))
+                Dim LogCrashMod As String = LogCrash.Between("-- MOD ", "Failure message:")
+                If LogCrashMod.ContainsF(".jar", True) Then
+                    AppendReason(CrashReason.确定Mod导致游戏崩溃, If(RegexSeek(LogCrashMod, "(?<=Mod File: ).+"), "").TrimEnd((vbCrLf & " ").ToCharArray))
                 Else
                     AppendReason(CrashReason.Mod加载器报错, If(RegexSeek(LogCrash, "(?<=Failure message: )[\w\W]+?(?=\tMod)"), "").Replace(vbTab, " ").TrimEnd((vbCrLf & " ").ToCharArray))
                 End If
@@ -857,6 +858,7 @@ NextStack:
             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
             Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing,
             Sub()
+            Try
                 '弹窗选择：查看日志
                 If File.Exists(DirectFile.Value.Key) Then
                     ShellOnly(DirectFile.Value.Key)
@@ -865,6 +867,9 @@ NextStack:
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
                     ShellOnly(FilePath)
                 End If
+            Catch ex As Exception
+                Log(ex,"尝试打开文件失败",LogLevel.Hint)
+            End Try
             End Sub))
             Case 3
                 '弹窗选择：导出错误报告
