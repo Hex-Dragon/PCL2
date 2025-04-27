@@ -328,7 +328,24 @@
                             Case 4480 : Tags.Add("基于地图")
                             Case 4481 : Tags.Add("轻量")
                             Case 4482 : Tags.Add("大型")
-                                'FUTURE: Res
+                        '资源包
+                            Case 5244 : Tags.Add("字体包")
+                            Case 5193 : Tags.Add("数据包")
+                            Case 399 : Tags.Add("蒸汽朋克")
+                            Case 396 : Tags.Add("128x")
+                            Case 398 : Tags.Add("512x 或更高")
+                            Case 397 : Tags.Add("256x")
+                            Case 405 : Tags.Add("其他")
+                            Case 395 : Tags.Add("64x")
+                            Case 400 : Tags.Add("仿真")
+                            Case 393 : Tags.Add("16x")
+                            Case 403 : Tags.Add("传统")
+                            Case 394 : Tags.Add("32x")
+                            Case 404 : Tags.Add("动态效果")
+                            Case 4465 : Tags.Add("模组支持")
+                            Case 402 : Tags.Add("中世纪")
+                            Case 401 : Tags.Add("现代")
+
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -404,7 +421,36 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("水槽包/大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            '资源包
+                            Case "8x-" : Tags.Add("8x-")
+                            Case "16x" : Tags.Add("16x")
+                            Case "32x" : Tags.Add("32x")
+                            Case "48x" : Tags.Add("48x")
+                            Case "64x" : Tags.Add("64x")
+                            Case "128x" : Tags.Add("128x")
+                            Case "256x" : Tags.Add("256x")
+                            Case "512x+" : Tags.Add("512x+")
+                            Case "audio" : Tags.Add("声音")
+                            Case "blocks" : Tags.Add("方块")
+                            Case "combat" : Tags.Add("战斗")
+                            Case "core-shaders" : Tags.Add("核心着色器")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "entities" : Tags.Add("实体")
+                            Case "environment" : Tags.Add("环境")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "fonts" : Tags.Add("字体")
+                            Case "gui" : Tags.Add("GUI")
+                            Case "items" : Tags.Add("物品")
+                            Case "locale" : Tags.Add("本地化")
+                            Case "modded" : Tags.Add("Modded")
+                            Case "models" : Tags.Add("模型")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "simplistic" : Tags.Add("扁平")
+                            Case "themed" : Tags.Add("主题")
+                            Case "tweaks" : Tags.Add("优化")
+                            Case "utility" : Tags.Add("实用")
+                            Case "vanilla-like" : Tags.Add("类原生")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -776,7 +822,7 @@ NoSubtitle:
                 Case CompType.ModPack
                     Address += "&classId=4471"
                 Case CompType.ResourcePack
-                    'FUTURE: Res
+                    Address += "&classId=12"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
