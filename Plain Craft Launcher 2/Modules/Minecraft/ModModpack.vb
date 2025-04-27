@@ -113,8 +113,10 @@ Public Module ModModpack
         '解压文件
         Dim RetryCount As Integer = 1
         Dim Encode = Encoding.GetEncoding("GB18030")
+        Dim InitialProgress = Loader.Progress
         Try
 Retry:
+            Loader.Progress = InitialProgress
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之多试试
             DeleteDirectory(InstallTemp)
             ExtractFile(FileAddress, InstallTemp, Encode, ProgressIncrementHandler:=Sub(Delta) Loader.Progress += Delta * LoaderProgressDelta)
@@ -203,7 +205,8 @@ Retry:
                 End If
                 Task.Progress = 0.95
                 '开启版本隔离
-                WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+                WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+                WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
             End Sub) With {
             .ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         End If
@@ -397,7 +400,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '获取下载文件列表
         Dim FileList As New List(Of NetFile)
@@ -513,7 +517,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("gameVersion") Is Nothing Then Throw New Exception("该 HMCL 整合包未提供游戏版本信息，无法安装！")
@@ -598,6 +603,7 @@ Retry:
             Task.Progress = 0.95
             '开启版本隔离
             WriteIni(SetupFile, "VersionArgumentIndie", 1)
+            WriteIni(SetupFile, "VersionArgumentIndieV2", True)
             '读取 MMC 设置文件（#2655）
             Try
                 Dim MMCSetupFile As String = InstallTemp & ArchiveBaseFolder & "instance.cfg"
@@ -738,7 +744,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("addons") Is Nothing Then Throw New Exception("该 MCBBS 整合包未提供游戏版本附加信息，无法安装！")
@@ -823,9 +830,13 @@ Retry:
                     Log("[Modpack] 找到压缩包中附带的启动器：" & Launcher)
                     If MyMsgBox($"整合包里似乎自带了启动器，是否换用它继续安装？{vbCrLf}即将打开：{Launcher}", "换用整合包启动器？", "换用", "不换用") = 1 Then
                         OpenExplorer(TargetFolder)
-                        ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
-                        Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
-                        FrmMain.EndProgram(False)
+                        Try
+                            ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
+                            Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
+                            FrmMain.EndProgram(False)
+                        Catch ex As Exception
+                            Log(ex, "打开文件失败", LogLevel.Msgbox)
+                        End Try
                         Return
                     End If
                 Else
