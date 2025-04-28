@@ -13,6 +13,14 @@
         ''' 资源包。
         ''' </summary>
         ResourcePack = 2
+        ''' <summary>
+        ''' 光影包。
+        ''' </summary>
+        Shader = 3
+        ''' <summary>
+        ''' 数据包。
+        ''' </summary>
+        DataPack = 4
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -113,6 +121,10 @@
         ''' 工程的种类。
         ''' </summary>
         Public ReadOnly Type As CompType
+        ''' <summary>
+        ''' 是否为 Mod / 数据包融合工程。
+        ''' </summary>
+        Public ReadOnly IsMix As Boolean
         ''' <summary>
         ''' 工程的短名。例如 technical-enchant。
         ''' </summary>
@@ -279,8 +291,14 @@
                         Type = CompType.Mod
                     ElseIf Website.Contains("/modpacks/") Then
                         Type = CompType.ModPack
-                    Else
+                    ElseIf Website.Contains("/resourcepacks/") Then
                         Type = CompType.ResourcePack
+                    ElseIf Website.Contains("/texture-packs/") Then
+                        Type = CompType.ResourcePack
+                    ElseIf Website.Contains("/shaders/")
+                        Type = CompType.Shader
+                    Else
+                        Type = CompType.DataPack
                     End If
                     'Tags
                     Tags = New List(Of String)
@@ -328,7 +346,36 @@
                             Case 4480 : Tags.Add("基于地图")
                             Case 4481 : Tags.Add("轻量")
                             Case 4482 : Tags.Add("大型")
-                                'FUTURE: Res
+                        '数据包
+                            Case 6946 : Tags.Add("Mod 支持")
+                            Case 6947 : Tags.Add("杂项")
+                            Case 6948 : Tags.Add("冒险")
+                            Case 6949 : Tags.Add("幻想")
+                            Case 6950 : Tags.Add("支持库")
+                            Case 6951 : Tags.Add("科技")
+                            Case 6952 : Tags.Add("魔法")
+                            Case 6953 : Tags.Add("实用工具")
+                        '光影包
+                            Case 6553 : Tags.Add("写实")
+                            Case 6554 : Tags.Add("幻想")
+                            Case 6555 : Tags.Add("原版风")
+                        '资源包
+                            Case 5244 : Tags.Add("字体包")
+                            Case 5193 : Tags.Add("数据包")
+                            Case 399 : Tags.Add("蒸汽朋克")
+                            Case 396 : Tags.Add("128x")
+                            Case 398 : Tags.Add("512x 或更高")
+                            Case 397 : Tags.Add("256x")
+                            Case 405 : Tags.Add("其他")
+                            Case 395 : Tags.Add("64x")
+                            Case 400 : Tags.Add("仿真")
+                            Case 393 : Tags.Add("16x")
+                            Case 403 : Tags.Add("传统")
+                            Case 394 : Tags.Add("32x")
+                            Case 404 : Tags.Add("动态效果")
+                            Case 4465 : Tags.Add("模组支持")
+                            Case 402 : Tags.Add("中世纪")
+                            Case 401 : Tags.Add("现代")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -356,7 +403,13 @@
                         Case "mod" : Type = CompType.Mod
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
+                        Case "datapack" : Type = CompType.DataPack
+                        Case "shader" : Type = CompType.Shader
                     End Select
+                    If Data("categories").ToArray.Contains("datapack") Then 'Modrinth 上的数据包由于未知原因，返回的 project_type 为 mod，这里做兜底处理
+                        Type = CompType.DataPack
+                        IsMix = Data("categories").ToArray.Contains("forge") OrElse Data("categories").ToArray.Contains("fabric") OrElse Data("categories").ToArray.Contains("neoforge") OrElse Data("categories").ToArray.Contains("quilt")
+                    End If
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
@@ -404,7 +457,83 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("水槽包/大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            '数据包
+                            Case "adventure" : Tags.Add("冒险")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "economy" : Tags.Add("经济")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "food" : Tags.Add("食物")
+                            Case "game-mechanics" : Tags.Add("游戏机制")
+                            Case "library" : Tags.Add("支持库")
+                            Case "magic" : Tags.Add("魔法")
+                            Case "management" : Tags.Add("管理")
+                            Case "minigame" : Tags.Add("小游戏")
+                            Case "mobs" : Tags.Add("生物")
+                            Case "optimization" : Tags.Add("优化")
+                            Case "social" : Tags.Add("社交")
+                            Case "storage" : Tags.Add("存储")
+                            Case "technology" : Tags.Add("科技")
+                            Case "transportation" : Tags.Add("交通")
+                            Case "utility" : Tags.Add("实用工具")
+                            Case "worldgen" : Tags.Add("世界生成")
+                            '光影包
+                            Case "cartoon" : Tags.Add("卡通")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "fantasy" : Tags.Add("幻想")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "semi-realistic" : Tags.Add("半写实")
+                            Case "vanilla-like" : Tags.Add("原版风")
+
+                            Case "atmosphere" : Tags.Add("大气环境")
+                            Case "bloom" : Tags.Add("植被")
+                            Case "colored-lighting" : Tags.Add("光源着色")
+                            Case "foliage" : Tags.Add("树叶")
+                            Case "path-tracing" : Tags.Add("路径追踪")
+                            Case "pbr" : Tags.Add("PBR")
+                            Case "reflections" : Tags.Add("反射")
+                            Case "shadows" : Tags.Add("阴影")
+
+                            Case "potato" : Tags.Add("土豆画质")
+                            Case "low" : Tags.Add("低性能影响")
+                            Case "medium" : Tags.Add("中性能影响")
+                            Case "high" : Tags.Add("高性能影响")
+                            Case "screenshot" : Tags.Add("极致画质")
+
+                            Case "canvas" : Tags.Add("Canvas")
+                            Case "iris" : Tags.Add("Iris")
+                            Case "optifine" : Tags.Add("OptiFine")
+                            Case "vanilla" : Tags.Add("原版光影")
+                            '资源包
+                            Case "8x-" : Tags.Add("8x-")
+                            Case "16x" : Tags.Add("16x")
+                            Case "32x" : Tags.Add("32x")
+                            Case "48x" : Tags.Add("48x")
+                            Case "64x" : Tags.Add("64x")
+                            Case "128x" : Tags.Add("128x")
+                            Case "256x" : Tags.Add("256x")
+                            Case "512x+" : Tags.Add("512x+")
+                            Case "audio" : Tags.Add("声音")
+                            Case "blocks" : Tags.Add("方块")
+                            Case "combat" : Tags.Add("战斗")
+                            Case "core-shaders" : Tags.Add("核心着色器")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "entities" : Tags.Add("实体")
+                            Case "environment" : Tags.Add("环境")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "fonts" : Tags.Add("字体")
+                            Case "gui" : Tags.Add("GUI")
+                            Case "items" : Tags.Add("物品")
+                            Case "locale" : Tags.Add("本地化")
+                            Case "modded" : Tags.Add("Modded")
+                            Case "models" : Tags.Add("模型")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "simplistic" : Tags.Add("扁平")
+                            Case "themed" : Tags.Add("主题")
+                            Case "tweaks" : Tags.Add("优化")
+                            Case "utility" : Tags.Add("实用")
+                            Case "vanilla-like" : Tags.Add("类原生")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -775,8 +904,12 @@ NoSubtitle:
                     Address += "&classId=6"
                 Case CompType.ModPack
                     Address += "&classId=4471"
+                Case CompType.DataPack
+                    Address += "&classId=6945"
+                Case CompType.Shader
+                    Address += "&classId=6552"
                 Case CompType.ResourcePack
-                    'FUTURE: Res
+                    Address += "&classId=12"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
