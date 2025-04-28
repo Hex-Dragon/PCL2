@@ -299,9 +299,9 @@ EndHint:
     ''' <param name="Button1">显示的第一个按钮，默认为“确定”。</param>
     ''' <param name="Button2">显示的第二个按钮，默认为“取消”。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
-    Public Function MyMsgBoxInput(Title As String, Optional Text As String = "", Optional DefaultInput As String = "", Optional ValidateRules As ObjectModel.Collection(Of Validate) = Nothing, Optional HintText As String = "", Optional Button1 As String = "确定", Optional Button2 As String = "取消", Optional IsWarn As Boolean = False) As String
+    Public Function MyMsgBoxInput(Title As String, Optional Text As String = "", Optional DefaultInput As String = "", Optional ValidateRules As ObjectModel.Collection(Of Validate) = Nothing, Optional HintText As String = "", Optional Button1 As String = "确定", Optional Button1Action As Action = Nothing, Optional Button2 As String = "", Optional Button2Action As Action = Nothing, Optional Button3 As String = "取消", Optional Button3Action As Action = Nothing, Optional IsWarn As Boolean = False) As String
         '将弹窗列入队列
-        Dim Converter As New MyMsgBoxConverter With {.Text = Text, .HintText = HintText, .Type = MyMsgBoxType.Input, .ValidateRules = If(ValidateRules, New ObjectModel.Collection(Of Validate)), .Button1 = Button1, .Button2 = Button2, .Content = DefaultInput, .IsWarn = IsWarn, .Title = Title}
+        Dim Converter As New MyMsgBoxConverter With {.Text = Text, .HintText = HintText, .Type = MyMsgBoxType.Input, .ValidateRules = If(ValidateRules, New ObjectModel.Collection(Of Validate)), .Button1 = Button1, .Button1Action = Button1Action, .Button2 = Button2, .Button2Action = Button2Action, .Button3 = Button3, .Button3Action = Button3Action, .Content = DefaultInput, .IsWarn = IsWarn, .Title = Title}
         WaitingMyMsgBox.Add(Converter)
         '虽然我也不知道这是啥但是能用就成了 :)
         Try
