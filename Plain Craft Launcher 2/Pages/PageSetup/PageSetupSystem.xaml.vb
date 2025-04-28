@@ -36,7 +36,7 @@
     End Sub
 
     Private Sub HelpTranslate(sender As Object, e As EventArgs) Handles BtnHelpTranslate.Click
-        OpenWebsite("https://weblate.tangge233.cn/engage/PCL/")
+        OpenWebsite("https://weblate.tangge233.top/engage/PCL/")
     End Sub
 #End Region
 
