@@ -27,8 +27,8 @@
         <local:MyImage x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" FallbackSource="pack://application:,,,/images/Icons/NoIcon.png" />
     </Border>
     <!-- 标题 -->
-    <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0" Orientation="Horizontal" 
-                IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False">
+    <StackPanel x:Name="PanTitles" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0" Orientation="Horizontal" 
+                SnapsToDevicePixels="False" UseLayoutRounding="False">
         <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" Foreground="{DynamicResource ColorBrush1}" />
         <TextBlock x:Name="LabTitleRaw" TextTrimming="WordEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
     </StackPanel>

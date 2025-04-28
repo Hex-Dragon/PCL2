@@ -417,8 +417,4 @@
     Private Sub BtnIntroWiki_Click(sender As Object, e As EventArgs) Handles BtnIntroWiki.Click
         OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
     End Sub
-    Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
-        ClipboardSet(CompItem.LabTitle.Text & CompItem.LabTitleRaw.Text)
-    End Sub
-
 End Class
