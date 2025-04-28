@@ -462,6 +462,13 @@ Install:
         Unavailable = 4
     End Enum
 
+    ''' <returns>
+    ''' True - 当前显示的模组列表视图需要在从网络获取模组详细信息（例如是否有更新版本）后同步
+    ''' </returns>
+    Public Function CurrentViewNeedSyncOnModDetailLoaded() As Boolean
+        Return Filter = FilterType.CanUpdate
+    End Function
+
     ''' <summary>
     ''' 检查该 Mod 项是否符合当前筛选的类别。
     ''' </summary>
