@@ -423,6 +423,7 @@
     <s:String x:Key="LangDownloadChangelog">更新履歴</s:String>
     <s:String x:Key="LangDownloadSaveAs">名前を付けて保存</s:String>
     <s:String x:Key="LangDownloadReleaseOn">{0} に投稿しました</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">{0} に投稿しました</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Forge 互換性なし</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Forge バージョン対応：{0}</s:String>
     <s:String x:Key="LangDownloadShowAll">全てのバージョンを表示</s:String>
@@ -701,10 +702,10 @@
     <s:String x:Key="LangPageLoginMsAddAccount">新しいアカウントを追加</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">ゲームを起動する前にアカウントをログインしてください！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">ログインをキャンセルしました！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正規版ログインの認証に失敗しました。[設定 → ランチャー] で [SSL 証明書の検証] をオフにしてから再度お試しください。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">正規版ログインの認証に失敗しました。[設定 → ランチャー] で [SSL 証明書の検証] をオフにしてから再度お試しください。
 
 元のエラーメッセージ：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正規版ログインの検証に失敗しました。[設定 → その他] で [正規版ログイン時にSSL証明書を検証する] を無効にしてから、再度お試しください。</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">正規版ログインの検証に失敗しました。[設定 → その他] で [正規版ログイン時にSSL証明書を検証する] を無効にしてから、再度お試しください。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">読み込み中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">スキンとマント</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">スキンを変更</s:String>

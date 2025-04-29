@@ -422,6 +422,7 @@
     <s:String x:Key="LangDownloadChangelog">Журнал изменений</s:String>
     <s:String x:Key="LangDownloadSaveAs">Сохранить как</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Дата выхода</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Дата выхода</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Не совместимо с Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Рекомендуемая версия Forge: </s:String>
     <s:String x:Key="LangDownloadShowAll">Показать все версии</s:String>
@@ -701,10 +702,10 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageLoginMsAddAccount">Новый аккаунт</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Пожалуйста, войдите в свой аккаунт перед запуском игры!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">Вход отменён!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Не удалось пройти верификацию входа Microsoft. Пожалуйста, попробуйте отключить "Проверку SSL-сертификатов" в "Настройки → Запускатель" и попробуйте снова.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Не удалось пройти верификацию входа Microsoft. Пожалуйста, попробуйте отключить "Проверку SSL-сертификатов" в "Настройки → Запускатель" и попробуйте снова.
 
     Оригинальное сообщение об ошибке: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Вход отменён!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">Вход отменён!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Загрузка...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Кожа и плащи</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Изменить кожу</s:String>

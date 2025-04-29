@@ -422,6 +422,7 @@ Press 'F11' again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadChangelog">Changelog</s:String>
     <s:String x:Key="LangDownloadSaveAs">Save as</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Released on</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Released on {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Compatible Forge Version: {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
@@ -701,10 +702,10 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginMsAddAccount">New Account</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Please login to your account before launching the game!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">The login has been cancelled!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Microsoft login authentication failed. Please try to disable the 'Verify SSL Certificates' option in 'Settings → Launcher' and try again.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Microsoft login authentication failed. Please try to disable the 'Verify SSL Certificates' option in 'Settings → Launcher' and try again.
 
 Original error message: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login process has been cancelled!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">The login process has been cancelled!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Loading...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Skins and Capes</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Change Skin</s:String>

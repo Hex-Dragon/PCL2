@@ -421,6 +421,7 @@
     <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存为</s:String>
     <s:String x:Key="LangDownloadReleaseOn">发布于 {0}</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">发布于 {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容 Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">兼容 Forge {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
@@ -494,10 +495,15 @@
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">手动安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">社区资源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -695,10 +701,10 @@
     <s:String x:Key="LangPageLoginMsAddAccount">添加新账号</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">请在登录账号后再启动游戏！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登录！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登录验证失败，请尝试在 [设置 → 启动器] 中关闭 [验证 SSL 证书] 然后再试。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">正版登录验证失败，请尝试在 [设置 → 启动器] 中关闭 [验证 SSL 证书] 然后再试。
 
 原始错误信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">正版登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">皮肤与披风</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改皮肤</s:String>
@@ -942,10 +948,10 @@
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">文件名格式</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载社区资源时，其默认文件名的格式</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[机械动力] create-1.21.1-6.0.4</s:String>

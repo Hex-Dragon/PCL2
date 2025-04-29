@@ -422,6 +422,7 @@ Stlačte znovu "F11" na opustenie režimu zobrazenia skrytých inštancií.</s:S
     <s:String x:Key="LangDownloadChangelog">Zoznam zmien</s:String>
     <s:String x:Key="LangDownloadSaveAs">Uložiť ako</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Vydané dňa</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Vydané dňa</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Nekompatibilný s Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Odporúčaná verzia Forge: </s:String>
     <s:String x:Key="LangDownloadShowAll">Zobraziť všetky verzie</s:String>
@@ -701,10 +702,10 @@ Prosím, skontrolujte internet a potom sa znovu pokúste.</s:String>
     <s:String x:Key="LangPageLoginMsAddAccount">Nový účet</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Pred spustením hry, prosím, prihláste sa do vášho účtu!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">Prihlásenie bolo zrušené!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Overenie prihlásenia Microsoft zlyhalo. Prosím, skúste deaktivovať "Overenie SSL Certifikátov" v "Nastaveniach → Spustiteľ" a skúste to znova.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Overenie prihlásenia Microsoft zlyhalo. Prosím, skúste deaktivovať "Overenie SSL Certifikátov" v "Nastaveniach → Spustiteľ" a skúste to znova.
 
 Originálna chybová správa: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Prihlásenie bolo zrušené!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">Prihlásenie bolo zrušené!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Načítavanie...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Koža a Plášte</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Zmeniť kožu</s:String>

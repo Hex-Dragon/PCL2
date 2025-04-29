@@ -422,6 +422,7 @@
     <s:String x:Key="LangDownloadChangelog">更新之志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存為</s:String>
     <s:String x:Key="LangDownloadReleaseOn">發布於</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">發布於</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不相容於Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">推薦之Forge版：</s:String>
     <s:String x:Key="LangDownloadShowAll">觀全版</s:String>
@@ -701,10 +702,10 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginMsAddAccount">添賬</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請登賬號，方可始遊戲！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">登已废！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登之驗證敗，請試于 [設 → 啟動器] 中關 [驗證 SSL 證書]。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">正版登之驗證敗，請試于 [設 → 啟動器] 中關 [驗證 SSL 證書]。
 
 原始之告：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">登已废！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">登已废！</s:String>
     <s:String x:Key="LangPageLoginMsLoading">方載中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外觀與披風</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">易外觀</s:String>
