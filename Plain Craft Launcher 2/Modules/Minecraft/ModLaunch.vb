@@ -1134,23 +1134,22 @@ Retry:
         Dim MinVer As New Version(0, 0, 0, 0), MaxVer As New Version(999, 999, 999, 999)
 
         'MC 大版本检测
-        If (McVersionCurrent.ReleaseTime >= New Date(2024, 4, 2) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
-            (McVersionCurrent.Version.McCodeMain > 20 AndAlso McVersionCurrent.Version.McCodeMain <> 99) OrElse
-            (McVersionCurrent.Version.McCodeMain = 20 AndAlso McVersionCurrent.Version.McCodeSub >= 5) Then
+        If (Not McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.ReleaseTime >= New Date(2024, 4, 2)) OrElse
+           (McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.Version.McVersion >= New Version(1, 20, 5)) Then
             '1.20.5+（24w14a+）：至少 Java 21
             MinVer = New Version(1, 21, 0, 0)
-        ElseIf (McVersionCurrent.ReleaseTime >= New Date(2021, 11, 16) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
-            (McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain <> 99) Then
+        ElseIf (Not McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.ReleaseTime >= New Date(2021, 11, 16)) OrElse
+            (McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.Version.McVersion >= New Version(1, 18)) Then
             '1.18 pre2+：至少 Java 17
             MinVer = New Version(1, 17, 0, 0)
-        ElseIf (McVersionCurrent.ReleaseTime >= New Date(2021, 5, 11) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
-           (McVersionCurrent.Version.McCodeMain >= 17 AndAlso McVersionCurrent.Version.McCodeMain <> 99) Then
+        ElseIf (Not McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.ReleaseTime >= New Date(2021, 5, 11)) OrElse
+           (McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.Version.McVersion >= New Version(1, 17)) Then
             '1.17+ (21w19a+)：至少 Java 16
             MinVer = New Version(1, 16, 0, 0)
         ElseIf McVersionCurrent.ReleaseTime.Year >= 2017 Then 'Minecraft 1.12 与 1.11 的分界线正好是 2017 年，太棒了
             '1.12+：至少 Java 8
             MinVer = New Version(1, 8, 0, 0)
-        ElseIf McVersionCurrent.ReleaseTime <= New Date(2013, 5, 1) AndAlso McVersionCurrent.ReleaseTime.Year >= 2001 Then '避免某些版本的 1960 癌
+        ElseIf McVersionCurrent.ReleaseTime <= New Date(2013, 5, 1) AndAlso McVersionCurrent.ReleaseTime.Year >= 2001 Then '避免某些版本写个 1960 年
             '1.5.2-：最高 Java 12
             MaxVer = New Version(1, 12, 999, 999)
         End If
@@ -1161,11 +1160,11 @@ Retry:
         End If
 
         'OptiFine 检测
-        If McVersionCurrent.Version.HasOptiFine Then
-            If McVersionCurrent.Version.McCodeMain <= 7 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+        If McVersionCurrent.Version.HasOptiFine AndAlso McVersionCurrent.Version.IsStandardVersion Then '不管非标准版本
+            If McVersionCurrent.Version.McVersion < New Version(1, 7) Then
                 '<1.7：至多 Java 8
                 MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain >= 8 AndAlso McVersionCurrent.Version.McCodeMain <= 11 Then
+            ElseIf McVersionCurrent.Version.McVersion >= New Version(1, 8) AndAlso McVersionCurrent.Version.McVersion < New Version(1, 12) Then
                 '1.8 - 1.11：必须恰好 Java 8
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 8, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain = 12 Then
@@ -1176,14 +1175,14 @@ Retry:
 
         'Forge 检测
         If McVersionCurrent.Version.HasForge Then
-            If McVersionCurrent.Version.McName = "1.7.2" Then
-                '1.7.2：必须 Java 7
+            If McVersionCurrent.Version.McVersion >= New Version(1, 6, 1) AndAlso McVersionCurrent.Version.McVersion <= New Version(1, 7, 2) Then
+                '1.6.1 - 1.7.2：必须 Java 7
                 MinVer = If(New Version(1, 7, 0, 0) > MinVer, New Version(1, 7, 0, 0), MinVer)
                 MaxVer = If(New Version(1, 7, 999, 999) < MaxVer, New Version(1, 7, 999, 999), MaxVer)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+            ElseIf McVersionCurrent.Version.McCodeMain <= 12 OrElse Not McVersionCurrent.Version.IsStandardVersion Then '非标准版本
                 '<=1.12：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain >= 13 Then
+            ElseIf McVersionCurrent.Version.McCodeMain <= 14 Then
                 '1.13 - 1.14：Java 8 - 10
                 MinVer = If(New Version(1, 8, 0, 0) > MinVer, New Version(1, 8, 0, 0), MinVer)
                 MaxVer = If(New Version(1, 10, 999, 999) < MaxVer, New Version(1, 10, 999, 999), MaxVer)
@@ -1201,11 +1200,11 @@ Retry:
         End If
 
         'Fabric 检测
-        If McVersionCurrent.Version.HasFabric Then
-            If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
+        If McVersionCurrent.Version.HasFabric AndAlso McVersionCurrent.Version.IsStandardVersion Then '不管非标准版本
+            If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 Then
                 '1.15 - 1.16：Java 8+
                 MinVer = If(New Version(1, 8, 0, 0) > MinVer, New Version(1, 8, 0, 0), MinVer)
-            ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
+            ElseIf McVersionCurrent.Version.McCodeMain >= 18 Then
                 '1.18+：Java 17+
                 MinVer = If(New Version(1, 17, 0, 0) > MinVer, New Version(1, 17, 0, 0), MinVer)
             End If
@@ -1232,18 +1231,22 @@ Retry:
             If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
             McLaunchLog("无合适的 Java，需要确认是否自动下载")
             Dim JavaCode As String
-            If MinVer >= New Version(1, 22, 0, 0) Then '潜在的向后兼容
+            If MinVer >= New Version(1, 22) Then '潜在的向后兼容
                 JavaCode = MinVer.Minor
                 If Not JavaDownloadConfirm("Java " & JavaCode) Then Throw New Exception("$$")
-            ElseIf MinVer >= New Version(1, 21, 0, 0) Then
+            ElseIf MinVer >= New Version(1, 21) Then
                 JavaCode = 21
                 If Not JavaDownloadConfirm("Java 21") Then Throw New Exception("$$")
-            ElseIf MinVer >= New Version(1, 9, 0, 0) Then
+            ElseIf MinVer >= New Version(1, 9) Then
                 JavaCode = 17
                 If Not JavaDownloadConfirm("Java 17") Then Throw New Exception("$$")
-            ElseIf MaxVer < New Version(1, 8, 0, 0) Then
+            ElseIf MaxVer < New Version(1, 8) Then
                 JavaCode = 7
-                If Not JavaDownloadConfirm("Java 7", True) Then Throw New Exception("$$")
+                If McVersionCurrent.Version.HasForge Then
+                    MyMsgBox("你需要先安装 LegacyJavaFixer Mod，或自行安装 Java 7，然后才能启动该版本。", "未找到 Java")
+                Else
+                    If Not JavaDownloadConfirm("Java 7", True) Then Throw New Exception("$$")
+                End If
             ElseIf MinVer > New Version(1, 8, 0, 140) AndAlso MaxVer < New Version(1, 8, 0, 321) Then
                 JavaCode = "8u141"
                 If Not JavaDownloadConfirm("Java 8.0.141 ~ 8.0.320", True) Then Throw New Exception("$$")
@@ -1350,11 +1353,13 @@ Retry:
             Arguments += " " & McLaunchArgumentsGameNew(McVersionCurrent)
             McLaunchLog("新版 Game 参数获取成功")
         End If
-        '编码参数（#5818、#5892）
+        '编码参数（#4700、#5892、#5909）
         If McLaunchJavaSelected.VersionCode > 8 Then
-            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=UTF-8"
             If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments += " -Dstdout.encoding=UTF-8"
             If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments += " -Dstderr.encoding=UTF-8"
+        End If
+        If McLaunchJavaSelected.VersionCode >= 18 Then
+            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=COMPAT"
         End If
         '替换参数
         Dim ReplaceArguments = McLaunchArgumentsReplace(McVersionCurrent, Loader)
@@ -1675,16 +1680,16 @@ NextVersion:
         '窗口尺寸参数
         Dim GameSize As Size
         Select Case Setup.Get("LaunchArgumentWindowType")
-            Case 2
+            Case 2 '与启动器尺寸一致
                 Dim Result As Size
                 RunInUiWait(Sub() Result = New Size(GetPixelSize(FrmMain.PanForm.ActualWidth), GetPixelSize(FrmMain.PanForm.ActualHeight)))
                 GameSize = Result
-            Case 3
-                GameSize = New Size(Math.Max(100, Setup.Get("LaunchArgumentWindowWidth") - 2), Math.Max(100, Setup.Get("LaunchArgumentWindowHeight") - 2))
+                GameSize.Height -= 29.5 * DPI / 96 '标题栏高度
+            Case 3 '自定义
+                GameSize = New Size(Math.Max(100, Setup.Get("LaunchArgumentWindowWidth")), Math.Max(100, Setup.Get("LaunchArgumentWindowHeight")))
             Case Else
-                GameSize = New Size(875 - 2, 540 - 2)
+                GameSize = New Size(875, 540)
         End Select
-        GameSize.Height -= 29.5 * DPI / 96 '标题栏高度
         If McVersionCurrent.Version.McCodeMain <= 12 AndAlso
             McLaunchJavaSelected.VersionCode <= 8 AndAlso McLaunchJavaSelected.Version.Revision >= 200 AndAlso McLaunchJavaSelected.Version.Revision <= 321 AndAlso
             Not McVersionCurrent.Version.HasOptiFine AndAlso Not McVersionCurrent.Version.HasForge Then
@@ -1713,7 +1718,7 @@ NextVersion:
                 CpStrings.Add(Library.LocalPath)
             End If
         Next
-        If OptiFineCp IsNot Nothing Then CpStrings.Insert(CpStrings.Count - 2, OptiFineCp)
+        If OptiFineCp IsNot Nothing Then CpStrings.Insert(CpStrings.Count - 2, OptiFineCp) 'OptiFine 的总是需要放到倒数第二位
         GameArguments.Add("${classpath}", Join(CpStrings.Select(Function(c) ShortenPath(c)), ";"))
 
         Return GameArguments

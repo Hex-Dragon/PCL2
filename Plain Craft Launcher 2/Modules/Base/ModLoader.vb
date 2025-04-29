@@ -625,8 +625,8 @@ Restart:
     End Sub
     Public Function LoaderTaskbarProgressGet() As Double
         Try
-            If Not LoaderTaskbar.Any Then Return 1
-            Return MathClamp(LoaderTaskbar.Where(Function(lb As LoaderBase) lb.Show).Select(Function(lb As LoaderBase) lb.Progress).Average(), 0, 1)
+            If Not LoaderTaskbar.Where(Function(l) l.Show).Any Then Return 1
+            Return MathClamp(LoaderTaskbar.Where(Function(l) l.Show).Select(Function(l) l.Progress).Average(), 0, 1)
         Catch ex As Exception
             Log(ex, "获取任务栏进度出错", LogLevel.Feedback)
             Return 0.5

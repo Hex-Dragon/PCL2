@@ -345,7 +345,7 @@ Public Class MyListItem
             Return _Checked
         End Get
         Set(value As Boolean)
-            SetChecked(value, False, value <> _Checked) '仅在值发生变化时触发动画，否则会导致UI显示不正确 (#4596)
+            SetChecked(value, False, value <> _Checked) '仅在值发生变化时触发动画 (#4596)
         End Set
     End Property
     ''' <summary>

@@ -380,7 +380,7 @@ Install:
     ''' 下载 Mod。
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
-        PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        PageComp.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
         FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
     End Sub
 
@@ -432,7 +432,7 @@ Install:
 #Region "筛选"
 
     Private _Filter As FilterType = FilterType.All
-    Private Property Filter As FilterType
+    Public Property Filter As FilterType
         Get
             Return _Filter
         End Get
@@ -454,20 +454,13 @@ Install:
             RefreshUI()
         End Set
     End Property
-    Private Enum FilterType As Integer
+    Public Enum FilterType As Integer
         All = 0
         Enabled = 1
         Disabled = 2
         CanUpdate = 3
         Unavailable = 4
     End Enum
-
-    ''' <returns>
-    ''' True - 当前显示的模组列表视图需要在从网络获取模组详细信息（例如是否有更新版本）后同步
-    ''' </returns>
-    Public Function CurrentViewNeedSyncOnModDetailLoaded() As Boolean
-        Return Filter = FilterType.CanUpdate
-    End Function
 
     ''' <summary>
     ''' 检查该 Mod 项是否符合当前筛选的类别。
@@ -815,7 +808,8 @@ Install:
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
                         If(PageVersionLeft.Version.Version.HasForge, CompModLoaderType.Forge,
                         If(PageVersionLeft.Version.Version.HasNeoForge, CompModLoaderType.NeoForge,
-                        If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any)))}})
+                        If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any))),
+                        CompType.Mod}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)

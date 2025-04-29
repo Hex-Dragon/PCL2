@@ -311,6 +311,5 @@ Public Class MyResizer
     End Sub
 
     Private Declare Function GetCursorPos Lib "user32.dll" (<Out()> ByRef lpPoint As PointAPI) As Boolean
-
     Private Declare Function GetAsyncKeyState Lib "user32.dll" (vKey As Integer) As Short
 End Class
