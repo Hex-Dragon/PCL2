@@ -245,7 +245,12 @@
             RunInThread(
             Sub()
                 Log("[Music] 已恢复播放")
-                MusicNAudio?.Play()
+                Try
+                    MusicNAudio?.Play()
+                Catch 'https://github.com/Hex-Dragon/PCL2/pull/5415#issuecomment-2751135223
+                    MusicNAudio?.Stop()
+                    MusicNAudio?.Play()
+                End Try
                 MusicRefreshUI()
             End Sub)
             Return True
@@ -255,7 +260,7 @@
 #End Region
 
     ''' <summary>
-    ''' 当前正在播放的 NAudio.Wave.WaveOut。
+    ''' 当前正在播放的 NAudio.Wave.WaveOutEvent。
     ''' </summary>
     Public MusicNAudio = Nothing
     ''' <summary>
@@ -267,12 +272,13 @@
     ''' 在 MusicUuid 不变的前提下，持续播放某地址的音乐，且在播放结束后随机播放下一曲。
     ''' </summary>
     Private Sub MusicLoop(Optional IsFirstLoad As Boolean = False)
-        Dim CurrentWave As NAudio.Wave.WaveOut = Nothing
+        Dim CurrentWave As NAudio.Wave.WaveOutEvent = Nothing
         Dim Reader As NAudio.Wave.WaveStream = Nothing
         Try
             '开始播放
-            CurrentWave = New NAudio.Wave.WaveOut()
+            CurrentWave = New NAudio.Wave.WaveOutEvent()
             MusicNAudio = CurrentWave
+            CurrentWave.DeviceNumber = -1
             Reader = New NAudio.Wave.AudioFileReader(MusicCurrent)
             CurrentWave.Init(Reader)
             CurrentWave.Play()
@@ -296,6 +302,10 @@
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Any Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
             Log(ex, "播放音乐出现内部错误（" & MusicCurrent & "）", LogLevel.Developer)
+            If TypeOf ex Is NAudio.MmException AndAlso ex.Message.Contains("AlreadyAllocated") Then
+                Hint("你的音频设备正被其他程序占用。请在关闭占用的程序后重启 PCL，才能恢复音乐播放功能！", HintType.Critical)
+                Thread.Sleep(1000000000)
+            End If
             If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
                 Hint("由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！", HintType.Critical)
                 Thread.Sleep(1000000000)

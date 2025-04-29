@@ -87,22 +87,22 @@
     </StackPanel>
 </local:MyCard>
 
-<local:MyCard Title="事件 3：打开文件" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+<local:MyCard Title="事件 3：执行命令" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
     <StackPanel Margin="25,40,23,15">
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                    Text="将 EventType 设置为 打开文件，EventData 设置为文件路径，即可点击打开特定文件或启动程序。" />
+                    Text="将 EventType 设置为 执行命令（或 打开文件），EventData 设置为文件路径，即可点击打开特定文件或启动程序。" />
         <local:MyButton Margin="0,4,0,8" Width="200" Height="35"
-                    Text="打开记事本" EventType="打开文件" EventData="notepad.exe" />
+                    Text="打开记事本" EventType="执行命令" EventData="notepad.exe" />
         <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
                     Text="如果能在 PCL 文件夹中找到该文件，则会优先打开 PCL 文件夹中的文件。当然，你可以使用例如 C:\ 开头的绝对路径。" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="此外，PCL 会将文件中的 “花括号 path” 替换为 PCL 可执行文件所在文件夹（{path}），可以用于执行特定程序或加载图片。" />
         <local:MyButton Margin="0,4,0,10" Width="200" Height="35"
-                    Text="打开 PCL 日志" EventType="打开文件" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
+                    Text="打开 PCL 日志" EventType="执行命令" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="就像为游戏指定服务器 IP 一样，你也可以在 EventData 的竖线后为程序添加启动参数。" />
         <local:MyButton Margin="0,4,0,0" Width="200" Height="35"
-                    Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xA;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
+                    Text="定位游戏启动脚本" EventType="执行命令" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xA;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
     </StackPanel>
 </local:MyCard>
 
@@ -192,7 +192,7 @@
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GoldBlock.png"/>
             <!-- 草方块 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Grass.png"/>
-            <!-- 草径 -->
+            <!-- 土径 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GrassPath.png"/>
             <!-- 铁砧 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Anvil.png"/>
@@ -299,11 +299,11 @@
     </StackPanel>
 </local:MyCard>
 
-<local:MyCard Title="进阶：联网自定义主页" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+<local:MyCard Title="进阶：联网主页" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
     <StackPanel Margin="25,40,23,15">
         <local:MyHint Margin="0,0,0,10" Text="以下特性于 PCL 2.6.5 (299) 加入，不适用于更早版本的 PCL。" IsWarn="False" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"
-                    Text="如果你在尝试制作联网更新的自定义主页，可以查看下方的 GitHub 讨论页。&#xa;你可以根据其中的介绍为主页添加版本号检查以节省流量，也可以通过检查 Referer 和 User Agent 来确定对方的 PCL 版本。" />
+                    Text="如果你在尝试制作联网更新的主页，可以查看下方的 GitHub 讨论页。&#xa;你可以根据其中的介绍为主页添加版本号检查以节省流量，也可以通过检查 Referer 和 User Agent 来确定对方的 PCL 版本。" />
         <local:MyButton Margin="0,0,0,8" Height="35" HorizontalAlignment="Center" Padding="20,0,20,0"
                     Text="打开 GitHub 讨论页" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2/discussions/2528" />
     </StackPanel>
@@ -373,5 +373,12 @@ local:MyIconButton（图标按钮）：
  - LogoScale：设置图标的缩放，默认为 1
  - Theme：设置颜色主题，Color（默认）为当前启动器的主题颜色，也可设置为 White、Black、Red
  - EventType、EventData：触发特定事件
+
+默认会声明以下命名空间：
+ - xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ - xmlns:sys="clr-namespace:System;assembly=mscorlib"
+ - xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ - xmlns:local="clr-namespace:PCL;assembly=Plain Craft Launcher 2"
+除此之外，不能声明其他命名空间。
 
 -->

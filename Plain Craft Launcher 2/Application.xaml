@@ -13,6 +13,13 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh_CN.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh_CN.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converter -->
+            <local:AdditionConverter x:Key="AdditionConverter"/>
+            <local:MultiplicationConverter x:Key="MultiplicationConverter"/>
+            <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
             <!-- 颜色表 -->
             <SolidColorBrush x:Key="ColorBrush1">#343d4a</SolidColorBrush>
@@ -202,7 +209,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style TargetType="local:MyScrollViewer">
+            <Style TargetType="local:MyScrollViewer" x:Name="StyleMyScrollViewer">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="CanContentScroll" Value="False" />
                 <Setter Property="PanningMode" Value="VerticalOnly" />
@@ -218,6 +225,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style TargetType="local:PageComp" BasedOn="{StaticResource {x:Type local:MyScrollViewer}}" />
             <Style TargetType="ScrollViewer" x:Key="ScrollViewerFullMargin">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="CanContentScroll" Value="False" />
@@ -281,21 +289,21 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource ColorBrushBg0}" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="TextBox">
+                        <ControlTemplate TargetType="local:MyTextBox">
                             <Grid SnapsToDevicePixels="True" ToolTip="{TemplateBinding ToolTip}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition MinHeight="28" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="3">
+                                <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
                                     <ScrollViewer x:Name="PART_ContentHost" Style="{StaticResource ScrollViewerNoMargin}" RenderOptions.ClearTypeHint="Enabled" BorderThickness="0"
                                            Margin="5,0,0,0" Cursor="IBeam" />
                                     <!-- 由于未知原因，TextView 会有 2,0 的 Margin -->
                                 </Border>
                                 <Border Margin="{TemplateBinding Padding}" IsHitTestVisible="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" BorderThickness="0">
-                                    <TextBlock x:Name="labHint" Foreground="{DynamicResource ColorBrush1}" Opacity="0.25" Margin="7,0,0,0" Padding="{TemplateBinding BorderThickness}" FontSize="{TemplateBinding FontSize}" FontFamily="Resources/#PCL English, Microsoft YaHei UI" />
+                                    <TextBlock x:Name="labHint" Foreground="{StaticResource ColorBrushGray4}" Margin="7,0,0,0" Padding="{TemplateBinding BorderThickness}" FontSize="{TemplateBinding FontSize}" FontFamily="Resources/#PCL English, Microsoft YaHei UI" />
                                 </Border>
-                                <TextBlock Grid.Row="1" x:Name="labWrong" Height="0" Foreground="{TemplateBinding BorderBrush}" Padding="0,4,0,0" />
+                                <TextBlock Grid.Row="1" x:Name="labWrong" Height="0" Foreground="{TemplateBinding BorderBrush}" Padding="0,4,0,0" Margin="0,0,0,-3" />
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>

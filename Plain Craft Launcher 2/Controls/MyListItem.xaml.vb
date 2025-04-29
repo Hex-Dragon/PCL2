@@ -1,4 +1,7 @@
-﻿Public Class MyListItem
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyListItem
     Implements IMyRadio
 
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -161,12 +164,17 @@
     End Property
 
     '标题
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabTitle.Inlines
+        End Get
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)
         End Get
         Set(value As String)
-            SetValue(TitleProperty, value)
+            SetValue(TitleProperty, value.Replace(vbCr, "").Replace(vbLf, ""))
         End Set
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyListItem))
@@ -337,7 +345,7 @@
             Return _Checked
         End Get
         Set(value As Boolean)
-            SetChecked(value, False, True)
+            SetChecked(value, False, value <> _Checked) '仅在值发生变化时触发动画 (#4596)
         End Set
     End Property
     ''' <summary>

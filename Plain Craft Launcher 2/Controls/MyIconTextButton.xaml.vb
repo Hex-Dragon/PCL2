@@ -1,4 +1,7 @@
-﻿Public Class MyIconTextButton
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyIconTextButton
 
     '基础
 
@@ -30,6 +33,11 @@
         End Set
     End Property
 
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
             Return GetValue(TextProperty)
@@ -39,9 +47,9 @@
         End Set
     End Property '内容
     Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyIconTextButton), New PropertyMetadata(New PropertyChangedCallback(
-                                                                                                                                                               Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
-                                                                                                                                                                   If Not IsNothing(sender) Then CType(sender, MyIconTextButton).LabText.Text = e.NewValue
-                                                                                                                                                               End Sub)))
+    Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        If Not IsNothing(sender) Then CType(sender, MyIconTextButton).LabText.Text = e.NewValue
+    End Sub)))
     Public Enum ColorState
         Black
         Highlight

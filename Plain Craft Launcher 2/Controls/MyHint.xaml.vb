@@ -1,4 +1,7 @@
-﻿Public Class MyHint
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyHint
 
     Public Uuid As Integer = GetUuid()
 
@@ -30,14 +33,24 @@
         End Set
     End Property
 
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
-            Return LabText.Text
+            Return GetValue(TextProperty)
         End Get
         Set(value As String)
-            LabText.Text = value
+            SetValue(TextProperty, value)
         End Set
     End Property
+    Public Shared ReadOnly TextProperty As DependencyProperty =
+        DependencyProperty.Register("Text", GetType(String), GetType(MyHint), New PropertyMetadata("",
+        Sub(d As MyHint, e As DependencyPropertyChangedEventArgs)
+            d.LabText.Text = e.NewValue
+        End Sub))
 
     Public Property CanClose As Boolean
         Get
@@ -48,7 +61,7 @@
         End Set
     End Property
 
-    Public RelativeSetup As String = ""
+    Public Property RelativeSetup As String = ""
     Private Sub MyHint_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If CanClose AndAlso Setup.Get(RelativeSetup) Then
             Visibility = Visibility.Collapsed

@@ -1,6 +1,7 @@
-﻿Imports PCL.PageLinkHiper
+Imports PCL.PageLinkHiper
 
 Public Class PageVersionLeft
+    Implements IRefreshable
 
     ''' <summary>
     ''' 当前显示设置的 MC 版本。
@@ -27,7 +28,7 @@ Public Class PageVersionLeft
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check, ItemExport.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -60,6 +61,9 @@ Public Class PageVersionLeft
             Case FormMain.PageSubType.VersionShader
                 If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionCompResource(CompType.Shader)
                 Return FrmVersionShader
+            Case FormMain.PageSubType.VersionExport
+                If FrmVersionExport Is Nothing Then FrmVersionExport = New PageVersionExport
+                Return FrmVersionExport
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
@@ -102,9 +106,18 @@ Public Class PageVersionLeft
 #End Region
 
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        Select Case Val(sender.Tag)
+        Refresh(Val(sender.Tag))
+    End Sub
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        Refresh(FrmMain.PageCurrentSub)
+    End Sub
+    Public Sub Refresh(SubType As FormMain.PageSubType)
+        Select Case SubType
+            Case FormMain.PageSubType.VersionMod
+                Select Case Val(sender.Tag)
             Case FormMain.PageSubType.VersionMod
                 PageVersionCompResource.Refresh(CompType.Mod)
+                ItemMod.Checked = True
             Case FormMain.PageSubType.VersionScreenshot
                 PageVersionScreenshot.Refresh()
             Case FormMain.PageSubType.VersionWorld
@@ -113,6 +126,9 @@ Public Class PageVersionLeft
                 PageVersionCompResource.Refresh(CompType.ResourcePack)
             Case FormMain.PageSubType.VersionShader
                 PageVersionCompResource.Refresh(CompType.Shader)
+            Case FormMain.PageSubType.VersionExport
+                If FrmVersionExport IsNot Nothing Then FrmVersionExport.RefreshAll()
+                ItemExport.Checked = True
         End Select
     End Sub
 

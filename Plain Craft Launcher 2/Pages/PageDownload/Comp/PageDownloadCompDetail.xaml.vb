@@ -4,23 +4,29 @@
 #Region "加载器"
 
     Private CompFileLoader As New LoaderTask(Of Integer, List(Of CompFile))(
-        "Comp File", Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet(Project.Id, Project.FromCurseForge))
+        "Comp File",
+        Sub(Task)
+            LoadTargetFromAdditional()
+            Task.Output = CompFilesGet(Project.Id, Project.FromCurseForge)
+        End Sub)
 
     '初始化加载器信息
     Private Sub PageDownloadCompDetail_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
-        Project = FrmMain.PageCurrent.Additional(0)
-        TargetVersion = FrmMain.PageCurrent.Additional(2)
-        TargetLoader = FrmMain.PageCurrent.Additional(3)
+        LoadTargetFromAdditional()
         PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
-    Private Sub PageDownloadCompDetail_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
-        'Initialized 只会执行一次
+    Public Sub LoadTargetFromAdditional() Handles Me.Loaded
         Project = FrmMain.PageCurrent.Additional(0)
         TargetVersion = FrmMain.PageCurrent.Additional(2)
         TargetLoader = FrmMain.PageCurrent.Additional(3)
+        PageType = FrmMain.PageCurrent.Additional(4)
     End Sub
     Private Project As CompProject
-    Private TargetVersion As String, TargetLoader As CompLoaderType
+    Private TargetVersion As String, TargetLoader As CompModLoaderType
+    ''' <summary>
+    ''' 当前页面应展示的内容类别。可能为 Any。
+    ''' </summary>
+    Private PageType As CompType
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
         Select Case CompFileLoader.State
@@ -62,18 +68,30 @@
 
     Private VersionFilter As String
     Private IsMajorVersionFilter As Boolean '是否按大版本号筛选（1.21 / 1.20 / 1.19 / ...）而非小版本号（1.21.1 / 1.21 / 1.20.4 / ...）
+    '筛选类型相同的结果（Modrinth 会返回 Mod、服务端插件、数据包混合的列表）
+    Private Function GetResults() As List(Of CompFile)
+        Dim Results As List(Of CompFile) = CompFileLoader.Output
+        If PageType = CompType.Any Then
+            Results = Results.Where(Function(r) r.Type <> CompType.Plugin).ToList
+        Else
+            Results = Results.Where(Function(r) r.Type = PageType).ToList
+        End If
+        Return Results
+    End Function
     Private Sub Load_OnFinish()
+        Dim Results = GetResults()
+
         '初始化筛选器
         Dim VersionFilters As List(Of String)
 
         '按小版本号筛选？
         IsMajorVersionFilter = False
-        VersionFilters = CompFileLoader.Output.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
+        VersionFilters = Results.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
             Distinct.OrderByDescending(Function(s) s, New VersionComparer).ToList
         '按大版本号筛选？
         If VersionFilters.Count >= 9 Then
             IsMajorVersionFilter = True
-            VersionFilters = CompFileLoader.Output.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
+            VersionFilters = Results.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
                 Distinct.OrderByDescending(Function(s) s, New VersionComparer).ToList
         End If
 
@@ -92,7 +110,6 @@
                 NewButton.LabText.Margin = New Thickness(-2, 0, 8, 0)
                 AddHandler NewButton.Check,
                 Sub(sender As MyRadioButton, raiseByMouse As Boolean)
-                    PanScroll.ScrollToHome()
                     VersionFilter = If(sender.Text = "全部", Nothing, sender.Text)
                     UpdateFilterResult()
                 End Sub
@@ -101,7 +118,7 @@
             '自动选择
             Dim ToCheck As MyRadioButton = Nothing
             If TargetVersion <> "" Then
-                Dim TargetFile = CompFileLoader.Output.FirstOrDefault(Function(v) v.GameVersions.Contains(TargetVersion))
+                Dim TargetFile = Results.FirstOrDefault(Function(v) v.GameVersions.Contains(TargetVersion))
                 If TargetFile IsNot Nothing Then
                     Dim TargetGroup = GetGroupedVersionName(TargetVersion, IsMajorVersionFilter, True)
                     For Each Button As MyRadioButton In PanFilter.Children
@@ -119,24 +136,26 @@
         UpdateFilterResult()
     End Sub
     Private Sub UpdateFilterResult()
-        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompLoaderType.Any,
-            $"所选版本：{If(TargetLoader <> CompLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
+        Dim Results = GetResults()
+
+        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
+            $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
         '归类到卡片下
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
         Dict.Add("其他版本", New List(Of CompFile))
-        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompLoaderType)))
-        For Each Version As CompFile In CompFileLoader.Output
+        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
+        For Each Version As CompFile In Results
             For Each GameVersion In Version.GameVersions
                 '检查是否符合版本筛选器
                 If VersionFilter IsNot Nothing AndAlso
                     GetGroupedVersionName(GameVersion, IsMajorVersionFilter, True) <> VersionFilter Then Continue For
                 '决定添加到哪个卡片
-                Dim Ver As String = GetGroupedVersionName(GameVersion, False, False)
+                Dim VerName As String = GetGroupedVersionName(GameVersion, False, False)
                 '遍历加入的加载器列表
                 Dim Loaders As New List(Of String)
-                If Project.ModLoaders.Count > 1 AndAlso '至少有两个加载器
-                    Project.Type = CompType.Mod AndAlso '是 Mod
-                    Ver.StartsWith("1.") Then '不是 “快照版本” 之类的
+                If Project.ModLoaders.Count > 1 AndAlso '工程至少有两个加载器
+                    Version.Type = CompType.Mod AndAlso '是 Mod
+                    VerName.StartsWith("1.") Then '不是 “快照版本” 之类的
                     For Each Loader In Version.ModLoaders
                         If Loader = CompLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
                         If SupportedLoaders.Contains(Loader) Then Loaders.Add(Loader.ToString & " ")
@@ -145,16 +164,16 @@
                 If Not Loaders.Any() Then Loaders.Add("") '保底加一个空的，确保它在一张卡片里
                 '实际添加
                 For Each Loader In Loaders
-                    Dim TargetCard As String = Loader & Ver
+                    Dim TargetCard As String = Loader & VerName
                     If Not Dict.ContainsKey(TargetCard) Then Dict.Add(TargetCard, New List(Of CompFile))
                     If Not Dict(TargetCard).Contains(Version) Then Dict(TargetCard).Add(Version)
                 Next
             Next
         Next
         '添加筛选的版本的卡片
-        If TargetCardName <> "" Then
+        If TargetCardName <> "" AndAlso (VersionFilter Is Nothing OrElse GetGroupedVersionName(TargetVersion, IsMajorVersionFilter, True).StartsWithF(VersionFilter)) Then
             Dict.Add(TargetCardName, New List(Of CompFile))
-            For Each Version As CompFile In CompFileLoader.Output
+            For Each Version As CompFile In Results
                 If Version.GameVersions.Contains(TargetVersion) AndAlso
                    (TargetLoader = CompLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
                     '检查是否符合版本筛选器
@@ -170,7 +189,7 @@
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(PageType = CompType.ModPack, 9, 8)} '9 是安装，8 是另存为
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
@@ -179,7 +198,7 @@
                 If Pair.Key = TargetCardName OrElse
                    (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
                    CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
+                    MyCard.StackInstall(NewStack, If(PageType = CompType.ModPack, 9, 8), Pair.Key) '9 是安装，8 是另存为
                 Else
                     NewCard.IsSwaped = True
                 End If
@@ -238,7 +257,7 @@
         AniControlEnabled -= 1
     End Sub
 
-    '整合包下载（安装）
+    '整合包安装
     Public Sub Install_Click(sender As MyListItem, e As EventArgs)
         Try
 
@@ -283,17 +302,24 @@
             Log(ex, "下载资源整合包失败", LogLevel.Feedback)
         End Try
     End Sub
-    'Mod、资源包下载；整合包另存为
+    '资源下载；整合包另存为
     Public Shared CachedFolder As String = Nothing '仅在本次缓存的下载文件夹
     Public Sub Save_Click(sender As Object, e As EventArgs)
         Dim File As CompFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = Nothing
+                Select Case File.Type
+                    Case CompType.ModPack : Desc = "整合包"
+                    Case CompType.Mod : Desc = "Mod "
+                    Case CompType.ResourcePack : Desc = "资源包"
+                    Case CompType.Shader : Desc = "光影包"
+                    Case CompType.DataPack : Desc = "数据包"
+                End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
-                If Project.Type = CompType.Mod Then
+                If File.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Any Then '从文件中获取
@@ -364,12 +390,14 @@
                 Else
                     Dim ChineseName As String = Project.TranslatedName.BeforeFirst(" (").BeforeFirst(" - ").
                         Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
-                    Select Case Setup.Get("ToolDownloadTranslate")
+                    Select Case Setup.Get("ToolDownloadTranslateV2")
                         Case 0
-                            FileName = $"[{ChineseName}] {File.FileName}"
+                            FileName = $"【{ChineseName}】{File.FileName}"
                         Case 1
-                            FileName = $"{ChineseName}-{File.FileName}"
+                            FileName = $"[{ChineseName}] {File.FileName}"
                         Case 2
+                            FileName = $"{ChineseName}-{File.FileName}"
+                        Case 3
                             FileName = $"{File.FileName}-{ChineseName}"
                         Case Else
                             FileName = File.FileName
@@ -379,19 +407,19 @@
                 Sub()
                     '弹窗要求选择保存位置
                     Dim Target As String
-                    Target = SelectAs("选择保存位置", FileName,
+                    Target = SelectSaveFile("选择保存位置", FileName,
                         Desc & "文件|" &
-                        If(Project.Type = CompType.Mod,
+                        If(File.Type = CompType.Mod,
                             If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
                             If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
                     Dim LoaderName As String = Desc & "下载：" & GetFileNameWithoutExtentionFromPath(Target) & " "
-                    If Target <> DefaultFolder AndAlso Project.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
+                    If Target <> DefaultFolder AndAlso File.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
                     Dim Loaders As New List(Of LoaderBase)
                     Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
                     '启动
-                    Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+                    Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
                     Loader.Start(1)
                     LoaderTaskbarAdd(Loader)
                     FrmMain.BtnExtraDownload.ShowRefresh()
@@ -410,7 +438,7 @@
         OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
-        ClipboardSet(CompItem.LabTitle.Text)
+        ClipboardSet(CompItem.LabTitle.Text & CompItem.LabTitleRaw.Text)
     End Sub
 
 End Class

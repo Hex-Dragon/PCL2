@@ -845,8 +845,8 @@ Finished:
                     If File.DirectoryName.ToLower & "\" <> RawName Then
                         '仅当 Forge 1.13- 且文件夹名与版本号相同时，才加载该子文件夹下的 Mod
                         If Not (PageVersionLeft.Version IsNot Nothing AndAlso PageVersionLeft.Version.Version.HasForge AndAlso
-                                    PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
-                                    File.Directory.Name = "1." & PageVersionLeft.Version.Version.McCodeMain & "." & PageVersionLeft.Version.Version.McCodeSub) Then
+                                PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
+                                File.Directory.Name = $"1.{PageVersionLeft.Version.Version.McCodeMain}.{PageVersionLeft.Version.Version.McCodeSub}") Then
                             Continue For
                         End If
                     End If
@@ -911,7 +911,7 @@ Finished:
             Log($"[Mod] 共有 {ModList.Count} 个 Mod，其中 {ModUpdateList.Where(Function(m) m.Comp Is Nothing).Count} 个需要联网获取信息，{ModUpdateList.Where(Function(m) m.Comp IsNot Nothing).Count} 个需要更新信息")
 
             '排序
-            ModList = Sort(ModList,
+            ModList = ModList.Sort(
                 Function(Left As LocalCompFile, Right As LocalCompFile) As Boolean
                     If (Left.State = LocalCompFile.LocalFileStatus.Unavailable) <> (Right.State = LocalCompFile.LocalFileStatus.Unavailable) Then
                         Return Left.State = LocalCompFile.LocalFileStatus.Unavailable
@@ -942,17 +942,9 @@ Finished:
         Dim Mods As List(Of LocalCompFile) = Loader.Input.DetailInfo.Key
         Dim Cache As JObject = Loader.Input.DetailInfo.Value
         '获取作为检查目标的加载器和版本
+        '此处不应向下扩展检查的 MC 小版本，例如 Mod 在更新 1.16.5 后，对早期的 1.16.2 版本发布了修补补丁，这会导致 PCL 将 1.16.5 版本的 Mod 降级到 1.16.2
         Dim ModLoaders = Loader.Input.Loaders
         Dim McVersion = Loader.Input.GameVersion.Version.McName
-        '暂不向下扩展检查的 MC 小版本
-        '例如：Mod 在更新 1.16.5 后，对早期的 1.16.2 版本发布了修补补丁，这会导致 PCL 将 1.16.5 版本的 Mod 降级到 1.16.2
-        'If TargetMcVersion.McCodeMain > 0 AndAlso TargetMcVersion.McCodeMain < 99 Then
-        '    McVersions.Add($"1.{TargetMcVersion.McCodeMain}")
-        '    For i = 1 To TargetMcVersion.McCodeSub
-        '        McVersions.Add($"1.{TargetMcVersion.McCodeMain}.{i}")
-        '    Next
-        'End If
-        'McVersions = McVersions.Distinct().ToList()
         '开始网络获取
         Log($"[Mod] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
         Dim EndedThreadCount As Integer = 0, IsFailed As Boolean = False
@@ -1071,7 +1063,7 @@ Finished:
                             Entry.Comp = Project
                         Next
                         '查找或许版本更新的文件列表
-                        If ModLoaders.Count = 1 Then 'TODO: 结果有多个 ModLoader 时提示无法检测更新
+                        If ModLoaders.Count = 1 Then
                             Dim NewestVersion As String = Nothing
                             Dim NewestFileIds As New List(Of Integer)
                             For Each IndexEntry In ProjectJson("latestFilesIndexes")
@@ -1144,7 +1136,11 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalComp.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
-        RunInUi(Sub() Loader.Input.Frm.RefreshBars())
+        If FrmVersionMod?.Filter = PageVersionMod.FilterType.CanUpdate Then
+            RunInUi(Sub() Loader.Input.Frm?.RefreshUI()) '同步 “可更新” 列表 (#4677)
+        Else
+            RunInUi(Sub() Loader.Input.Frm?.RefreshBars())
+        End If
     End Sub
 
     Public Function GetCurrentVersionModLoader() As List(Of CompLoaderType)

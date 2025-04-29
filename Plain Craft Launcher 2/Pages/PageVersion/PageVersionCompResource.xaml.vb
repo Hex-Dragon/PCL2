@@ -339,7 +339,7 @@
         Try
             Dim CompFilePath = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
             Directory.CreateDirectory(CompFilePath)
-            OpenExplorer("""" & CompFilePath & """")
+            OpenExplorer(CompFilePath)
         Catch ex As Exception
             Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
         End Try
@@ -411,12 +411,12 @@
 Install:
             Try
                 For Each ModFile In FilePathList
-                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "").Replace(".old", "")
                     If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
                     CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
-                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
+                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "").Replace(".old", "")}！", HintType.Finish)
                 Else
                     Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
                 End If
@@ -437,8 +437,8 @@ Install:
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
         Select Case CurrentCompType
             Case CompType.Mod : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
-                'Case CompType.ResourcePack : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadResourcePack)
-                'Case CompType.Shader : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadShader)
+            Case CompType.ResourcePack : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadResourcePack)
+            Case CompType.Shader : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadShader)
         End Select
     End Sub
 
@@ -446,7 +446,7 @@ Install:
 
 #Region "选择"
 
-    '选择的 Mod 的路径（不含 .disabled）
+    '选择的 Mod 的路径（不含 .disabled 和 .old）
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
@@ -490,7 +490,7 @@ Install:
 #Region "筛选"
 
     Private _Filter As FilterType = FilterType.All
-    Private Property Filter As FilterType
+    Public Property Filter As FilterType
         Get
             Return _Filter
         End Get
@@ -512,7 +512,7 @@ Install:
             RefreshUI()
         End Set
     End Property
-    Private Enum FilterType As Integer
+    Public Enum FilterType As Integer
         All = 0
         Enabled = 1
         Disabled = 2
@@ -659,12 +659,20 @@ Install:
                 Dim CurrentSegs = CurrentReplaceName.Split("-"c).ToList()
                 Dim NewestSegs = NewestReplaceName.Split("-"c).ToList()
                 Dim Shortened As Boolean = False
-                For Each Seg In CurrentSegs.ToList()
-                    If Not NewestSegs.Contains(Seg) Then Continue For
-                    CurrentSegs.Remove(Seg)
-                    NewestSegs.Remove(Seg)
+                Do While True '移除前导相同部分（不能移除所有相同项，这会导致例如 1.2-forge-2 和 1.3-forge-3 中间的 forge 被去掉，导致尝试替换 1.2-2）
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.First <> NewestSegs.First Then Exit Do
+                    CurrentSegs.RemoveAt(0)
+                    NewestSegs.RemoveAt(0)
                     Shortened = True
-                Next
+                Loop
+                Do While True '移除后导相同部分
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.Last <> NewestSegs.Last Then Exit Do
+                    CurrentSegs.RemoveAt(CurrentSegs.Count - 1)
+                    NewestSegs.RemoveAt(NewestSegs.Count - 1)
+                    Shortened = True
+                Loop
                 If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
                     CurrentReplaceName = Join(CurrentSegs, "-")
                     NewestReplaceName = Join(NewestSegs, "-")
@@ -858,7 +866,8 @@ Install:
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
                         If(PageVersionLeft.Version.Version.HasForge, CompLoaderType.Forge,
                         If(PageVersionLeft.Version.Version.HasNeoForge, CompLoaderType.NeoForge,
-                        If(PageVersionLeft.Version.Version.HasFabric, CompLoaderType.Fabric, CompLoaderType.Any)))}})
+                        If(PageVersionLeft.Version.Version.HasFabric, CompLoaderType.Fabric, CompLoaderType.Any))),
+                        CompType.Mod}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)
@@ -914,10 +923,8 @@ Install:
     '打开文件所在的位置
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
-
             Dim ListItem As MyLocalCompItem = sender.Tag
-            OpenExplorer("/select,""" & ListItem.Entry.Path & """")
-
+            OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
         End Try

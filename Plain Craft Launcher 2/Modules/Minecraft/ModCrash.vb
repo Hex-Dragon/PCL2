@@ -1,24 +1,10 @@
 ﻿Public Class CrashAnalyzer
-    Private Shared IsAnalyzeCacheCleared As Boolean = False
-    Private Shared IsAnalyzeCacheClearedLock As New Object
 
     '构造函数
     Private TempFolder As String
     Public Sub New(UUID As Integer)
-        '清理缓存
-        SyncLock IsAnalyzeCacheClearedLock
-            If Not IsAnalyzeCacheCleared Then
-                Try
-                    DeleteDirectory(PathTemp & "CrashAnalyzer\")
-                Catch ex As Exception
-                    Log(ex, "清理崩溃分析缓存失败")
-                End Try
-                IsAnalyzeCacheCleared = True
-            End If
-        End SyncLock
         '构建文件结构
-        TempFolder = PathTemp & "CrashAnalyzer\" & UUID & RandomInteger(0, 99999999) & "\"
-        DeleteDirectory(TempFolder)
+        TempFolder = RequestTaskTempFolder()
         Directory.CreateDirectory(TempFolder & "Temp\")
         Directory.CreateDirectory(TempFolder & "Report\")
         Log("[Crash] 崩溃分析暂存文件夹：" & TempFolder)
@@ -577,8 +563,9 @@ Done:
             If LogCrash.Contains("has mods that were not found") AndAlso RegexCheck(LogCrash, "The Mod File [^\n]+optifine\\OptiFine[^\n]+ has mods that were not found") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             'Mod 导致的崩溃
             If LogCrash.Contains("-- MOD ") Then
-                If LogCrash.Between("-- MOD ", "Failure message:").ContainsF(".jar", True) Then
-                    AppendReason(CrashReason.确定Mod导致游戏崩溃, If(RegexSeek(LogCrash, "(?<=Mod File: ).+"), "").TrimEnd((vbCrLf & " ").ToCharArray))
+                Dim LogCrashMod As String = LogCrash.Between("-- MOD ", "Failure message:")
+                If LogCrashMod.ContainsF(".jar", True) Then
+                    AppendReason(CrashReason.确定Mod导致游戏崩溃, If(RegexSeek(LogCrashMod, "(?<=Mod File: ).+"), "").TrimEnd((vbCrLf & " ").ToCharArray))
                 Else
                     AppendReason(CrashReason.Mod加载器报错, If(RegexSeek(LogCrash, "(?<=Failure message: )[\w\W]+?(?=\tMod)"), "").Replace(vbTab, " ").TrimEnd((vbCrLf & " ").ToCharArray))
                 End If
@@ -873,7 +860,7 @@ NextStack:
             Sub()
                 '弹窗选择：查看日志
                 If File.Exists(DirectFile.Value.Key) Then
-                    ShellOnly("notepad", DirectFile.Value.Key)
+                    ShellOnly(DirectFile.Value.Key)
                 Else
                     Dim FilePath As String = PathTemp & "Crash.txt"
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
@@ -885,7 +872,7 @@ NextStack:
                 Dim FileAddress As String = Nothing
                 Try
                     '获取文件路径
-                    RunInUiWait(Sub() FileAddress = SelectAs("选择保存位置", "错误报告-" & Date.Now.ToString("G").Replace("/", "-").Replace(":", ".").Replace(" ", "_") & ".zip", "Minecraft 错误报告(*.zip)|*.zip"))
+                    RunInUiWait(Sub() FileAddress = SelectSaveFile("选择保存位置", "错误报告-" & Date.Now.ToString("G").Replace("/", "-").Replace(":", ".").Replace(" ", "_") & ".zip", "Minecraft 错误报告(*.zip)|*.zip"))
                     If String.IsNullOrEmpty(FileAddress) Then Exit Sub
                     Directory.CreateDirectory(GetPathFromFullPath(FileAddress))
                     If File.Exists(FileAddress) Then File.Delete(FileAddress)
@@ -923,7 +910,7 @@ NextStack:
                     Log(ex, "导出错误报告失败", LogLevel.Feedback)
                     Exit Sub
                 End Try
-                OpenExplorer("/select,""" & FileAddress & """")
+                OpenExplorer(FileAddress)
         End Select
     End Sub
     ''' <summary>
