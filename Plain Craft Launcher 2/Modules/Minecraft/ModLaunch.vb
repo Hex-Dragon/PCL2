@@ -1476,6 +1476,12 @@ Retry:
             End Try
         End If
 
+        '设置代理
+        If Setup.Get("VersionAdvanceUseProxyV2", Version:=McVersionCurrent) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Setup.Get("SystemHttpProxy")) Then
+            Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
+        End If
         '添加 Java Wrapper 作为主 Jar
         If Not Setup.Get("LaunchAdvanceDisableJLW") AndAlso Not Setup.Get("VersionAdvanceDisableJLW", McVersionCurrent) Then
             If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
@@ -1545,6 +1551,12 @@ NextVersion:
             End Try
         End If
 
+        '设置代理
+        If Setup.Get("VersionAdvanceUseProxyV2", Version:=McVersionCurrent) IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(Setup.Get("SystemHttpProxy")) Then
+            Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
+        End If
         '添加 Java Wrapper 作为主 Jar
         If Not Setup.Get("LaunchAdvanceDisableJLW") AndAlso Not Setup.Get("VersionAdvanceDisableJLW", McVersionCurrent) Then
             If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
