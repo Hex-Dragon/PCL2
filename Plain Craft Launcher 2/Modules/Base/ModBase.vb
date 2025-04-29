@@ -181,10 +181,6 @@ Public Module ModBase
         ''' </summary>
         Public Const IconButtonServer As String = "M224 160a64 64 0 0 0-64 64v576a64 64 0 0 0 64 64h576a64 64 0 0 0 64-64V224a64 64 0 0 0-64-64H224z m0 384h576v256H224v-256z m192 96v64h320v-64H416z m-128 0v64h64v-64H288zM224 224h576v256H224V224z m192 96v64h320v-64H416z m-128 0v64h64v-64H288z"
         ''' <summary>
-        ''' 图标按钮，复制
-        ''' </summary>
-        Public Const IconButtonCopy As String = "M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
-        ''' <summary>
         ''' 图标，音符，1x
         ''' </summary>
         Public Const IconMusic As String = "M348.293565 716.53287V254.797913c0-41.672348 28.004174-78.358261 68.919652-90.37913L815.994435 40.826435c62.775652-18.610087 125.907478 26.579478 125.907478 89.933913v539.158261c8.013913 42.25113-8.94887 89.177043-47.014956 127.109565a232.848696 232.848696 0 0 1-170.785392 65.758609c-61.885217-2.938435-111.081739-33.435826-129.113043-80.050087-18.031304-46.614261-2.137043-102.177391 41.672348-145.853218a232.848696 232.848696 0 0 1 170.785391-65.80313c21.014261 1.024 40.514783 5.164522 57.878261 12.065391V233.338435c0-12.109913-10.551652-20.034783-20.569044-20.034783a24.620522 24.620522 0 0 0-5.787826 0.934957L439.785739 338.18713a19.545043 19.545043 0 0 0-14.825739 19.144348v438.984348H423.846957c11.53113 43.987478-5.164522 94.208-45.412174 134.322087a232.848696 232.848696 0 0 1-170.785392 65.758609c-61.885217-2.938435-111.081739-33.435826-129.113043-80.050087-18.031304-46.614261-2.137043-102.177391 41.672348-145.853218a232.848696 232.848696 0 0 1 170.785391-65.80313c20.791652 1.024 40.069565 5.075478 57.299478 11.842783z"
@@ -2582,10 +2578,6 @@ NextElement:
         End Try
     End Sub
 
-    Public Sub OpenExplorerAndSelect(Path As String)
-        OpenExplorer("/select,""" & Path & """")
-    End Sub
-
     ''' <summary>
     ''' 设置剪贴板。将在另一线程运行，且不会抛出异常。
     ''' </summary>
@@ -2612,60 +2604,6 @@ Retry:
             If ShowSuccessHint Then Hint("已成功复制！", HintType.Finish)
         End Sub)
     End Sub
-
-    ''' <summary>
-    ''' 从剪切板粘贴文件或文件夹
-    ''' </summary>
-    ''' <param name="dest">目标文件夹</param>
-    ''' <param name="copyFile">是否粘贴文件</param>
-    ''' <param name="copyDir">是否粘贴文件夹</param>
-    ''' <returns>总共粘贴的数量</returns>
-    Public Function PasteFileFromClipboard(dest As String, Optional copyFile As Boolean = True, Optional copyDir As Boolean = True) As Integer
-        Log("[System] 从剪贴板粘贴文件到：" & dest)
-        Try
-            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
-            If files.Count.Equals(0) Then
-                Log("[System] 剪贴板内无文件可粘贴")
-                Return 0
-            End If
-            Dim CopiedFiles = 0
-            Dim CopiedFolders = 0
-            For Each i In files
-                If copyFile AndAlso File.Exists(i) Then '文件
-                    Try
-                        Dim thisDest = dest & GetFileNameFromPath(i)
-                        If File.Exists(thisDest) Then
-                            Log("[System] 已存在同名文件：" & thisDest)
-                        Else
-                            File.Copy(i, thisDest)
-                            CopiedFiles += 1
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "[System] 复制文件时出错")
-                        Continue For
-                    End Try
-                End If
-                If copyDir AndAlso Directory.Exists(i) Then '文件夹
-                    Try
-                        Dim thisDest = dest & GetFolderNameFromPath(i)
-                        If Directory.Exists(thisDest) Then
-                            Log("[System] 已存在同名文件夹：" & thisDest)
-                        Else
-                            CopyDirectory(i, thisDest)
-                            CopiedFolders += 1
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "[System] 复制文件时出错")
-                        Continue For
-                    End Try
-                End If
-            Next
-            Hint("[System] 已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
-        Catch ex As Exception
-            Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
-        End Try
-    End Function
-
 
     ''' <summary>
     ''' 以 Byte() 形式获取程序中的资源。

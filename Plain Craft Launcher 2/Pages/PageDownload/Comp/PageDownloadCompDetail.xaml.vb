@@ -157,7 +157,7 @@
                     Version.Type = CompType.Mod AndAlso '是 Mod
                     VerName.StartsWith("1.") Then '不是 “快照版本” 之类的
                     For Each Loader In Version.ModLoaders
-                        If Loader = CompLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
+                        If Loader = CompModLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
                         If SupportedLoaders.Contains(Loader) Then Loaders.Add(Loader.ToString & " ")
                     Next
                 End If
@@ -175,7 +175,7 @@
             Dict.Add(TargetCardName, New List(Of CompFile))
             For Each Version As CompFile In Results
                 If Version.GameVersions.Contains(TargetVersion) AndAlso
-                   (TargetLoader = CompLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
+                   (TargetLoader = CompModLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
                     '检查是否符合版本筛选器
                     If VersionFilter IsNot Nothing AndAlso
                         Not Version.GameVersions.Any(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True) = VersionFilter) Then Continue For
@@ -323,11 +323,11 @@
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Any Then '从文件中获取
-                        AllowForge = File.ModLoaders.Contains(CompLoaderType.Forge) OrElse File.ModLoaders.Contains(CompLoaderType.NeoForge)
-                        AllowFabric = File.ModLoaders.Contains(CompLoaderType.Fabric)
+                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
+                        AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
                     ElseIf Project.ModLoaders.Any Then '从工程中获取
-                        AllowForge = Project.ModLoaders.Contains(CompLoaderType.Forge) OrElse File.ModLoaders.Contains(CompLoaderType.NeoForge)
-                        AllowFabric = Project.ModLoaders.Contains(CompLoaderType.Fabric)
+                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
+                        AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
                     End If
                     If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
                        AllowFabric IsNot Nothing AndAlso Not AllowFabric Then

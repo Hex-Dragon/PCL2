@@ -195,12 +195,15 @@
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
       <DependentUpon>MyIconTextButton.xaml</DependentUpon>
     </Compile>
+
+
+
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
-    <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
+    <Compile Include="Modules\Minecraft\ModMod.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
-    <Compile Include="Pages\PageVersion\MyLocalCompItem.xaml.vb">
-      <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
+    <Compile Include="Pages\PageVersion\MyLocalModItem.xaml.vb">
+      <DependentUpon>MyLocalModItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
@@ -308,17 +311,11 @@
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionCompResource.xaml.vb">
-      <DependentUpon>PageVersionCompResource.xaml</DependentUpon>
+    <Compile Include="Pages\PageVersion\PageVersionMod.xaml.vb">
+      <DependentUpon>PageVersionMod.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionModDisabled.xaml.vb">
       <DependentUpon>PageVersionModDisabled.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionWorld.xaml.vb">
-      <DependentUpon>PageVersionWorld.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionScreenshot.xaml.vb">
-      <DependentUpon>PageVersionScreenshot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionOverall.xaml.vb">
       <DependentUpon>PageVersionOverall.xaml</DependentUpon>
@@ -504,7 +501,8 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\PageVersion\MyLocalCompItem.xaml">
+
+    <Page Include="Pages\PageVersion\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -598,14 +596,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageLink\PageLinkLeft.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\PageVersion\PageVersionWorld.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\PageVersion\PageVersionScreenshot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -717,7 +707,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageVersion\PageVersionCompResource.xaml">
+    <Page Include="Pages\PageVersion\PageVersionMod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -967,6 +957,7 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
+
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />

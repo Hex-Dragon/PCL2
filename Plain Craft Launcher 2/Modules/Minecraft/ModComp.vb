@@ -31,22 +31,14 @@
         ''' </summary>
         Plugin = 5
     End Enum
-    Public Enum CompLoaderType
+    Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
-        ' 模组
         Any = 0
         Forge = 1
         LiteLoader = 3
         Fabric = 4
         Quilt = 5
         NeoForge = 6
-        ' 材质包
-        Minecraft = 7
-        ' 光影包
-        OptiFine = 8
-        Iris = 9
-        Canvas = 10
-        Vanilla = 11
     End Enum
     <Flags> Public Enum CompSourceType
         CurseForge = 1
@@ -179,7 +171,7 @@
         ''' <summary>
         ''' 支持的 Mod 加载器列表。可能为空。
         ''' </summary>
-        Public ReadOnly ModLoaders As List(Of CompLoaderType)
+        Public ReadOnly ModLoaders As List(Of CompModLoaderType)
         ''' <summary>
         ''' 描述性标签的内容。已转换为中文。
         ''' </summary>
@@ -251,9 +243,9 @@
                 If Data.ContainsKey("LastUpdate") Then LastUpdate = Data("LastUpdate")
                 DownloadCount = Data("DownloadCount")
                 If Data.ContainsKey("ModLoaders") Then
-                    ModLoaders = CType(Data("ModLoaders"), JArray).Select(Function(t) CType(t.ToObject(Of Integer), CompLoaderType)).ToList
+                    ModLoaders = CType(Data("ModLoaders"), JArray).Select(Function(t) CType(t.ToObject(Of Integer), CompModLoaderType)).ToList
                 Else
-                    ModLoaders = New List(Of CompLoaderType)
+                    ModLoaders = New List(Of CompModLoaderType)
                 End If
                 Tags = CType(Data("Tags"), JArray).Select(Function(t) t.ToString).ToList
                 If Data.ContainsKey("LogoUrl") Then LogoUrl = Data("LogoUrl")
@@ -297,7 +289,7 @@
                         Type = CompType.DataPack
                     End If
                     'FileIndexes / GameVersions / ModLoaders
-                    ModLoaders = New List(Of CompLoaderType)
+                    ModLoaders = New List(Of CompModLoaderType)
                     Dim Files As New List(Of KeyValuePair(Of Integer, List(Of String))) 'FileId, GameVersions
                     For Each File In If(Data("latestFiles"), New JArray)
                         Dim NewFile As New CompFile(File, Type)
@@ -583,8 +575,8 @@
             End If
             '获取 Mod 加载器描述
             Dim ModLoaderDescriptionFull As String, ModLoaderDescriptionPart As String
-            Dim ModLoadersForDesc As New List(Of CompLoaderType)(ModLoaders)
-            If Setup.Get("ToolDownloadIgnoreQuilt") Then ModLoadersForDesc.Remove(CompLoaderType.Quilt)
+            Dim ModLoadersForDesc As New List(Of CompModLoaderType)(ModLoaders)
+            If Setup.Get("ToolDownloadIgnoreQuilt") Then ModLoadersForDesc.Remove(CompModLoaderType.Quilt)
             Select Case ModLoadersForDesc.Count
                 Case 0
                     If ModLoaders.Count = 1 Then
@@ -832,7 +824,7 @@ NoSubtitle:
         ''' <summary>
         ''' 筛选 Mod 加载器类别。
         ''' </summary>
-        Public ModLoader As CompLoaderType = CompLoaderType.Any
+        Public ModLoader As CompModLoaderType = CompModLoaderType.Any
         ''' <summary>
         ''' 筛选 MC 版本。
         ''' </summary>
@@ -878,7 +870,7 @@ NoSubtitle:
                     Address += "&classId=12"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
-            If ModLoader <> CompLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
+            If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
             If Not String.IsNullOrEmpty(GameVersion) Then Address += "&gameVersion=" & GameVersion
             If Not String.IsNullOrEmpty(SearchText) Then Address += "&searchFilter=" & Net.WebUtility.UrlEncode(SearchText)
             If Storage.CurseForgeOffset > 0 Then Address += "&index=" & Storage.CurseForgeOffset
@@ -899,7 +891,7 @@ NoSubtitle:
             Dim Facets As New List(Of String)
             Facets.Add($"[""project_type:{GetStringFromEnum(Type).ToLower}""]")
             If Not String.IsNullOrEmpty(Tag) Then Facets.Add($"[""categories:'{Tag.AfterLast("/")}'""]")
-            If ModLoader <> CompLoaderType.Any Then Facets.Add($"[""categories:'{GetStringFromEnum(ModLoader).ToLower}'""]")
+            If ModLoader <> CompModLoaderType.Any Then Facets.Add($"[""categories:'{GetStringFromEnum(ModLoader).ToLower}'""]")
             If Not String.IsNullOrEmpty(GameVersion) Then Facets.Add($"[""versions:'{GameVersion}'""]")
             Address += "&facets=[" & String.Join(",", Facets) & "]"
             Return Address
@@ -971,7 +963,7 @@ NoSubtitle:
 
 #Region "拒绝 1.13- Quilt（这个版本根本没有 Quilt）"
 
-        If Task.Input.ModLoader = CompLoaderType.Quilt AndAlso VersionSortInteger(If(Task.Input.GameVersion, "1.15"), "1.14") = -1 Then
+        If Task.Input.ModLoader = CompModLoaderType.Quilt AndAlso VersionSortInteger(If(Task.Input.GameVersion, "1.15"), "1.14") = -1 Then
             Throw New Exception("Quilt 不支持 Minecraft " & Task.Input.GameVersion)
         End If
 
@@ -1287,7 +1279,7 @@ Retry:
         ''' <summary>
         ''' 支持的 Mod 加载器列表。可能为空。
         ''' </summary>
-        Public ReadOnly ModLoaders As List(Of CompLoaderType)
+        Public ReadOnly ModLoaders As List(Of CompModLoaderType)
         ''' <summary>
         ''' 支持的游戏版本列表。类型包括："1.18.5"，"1.18"，"1.18 预览版"，"21w15a"，"未知版本"。
         ''' </summary>
@@ -1367,7 +1359,7 @@ Retry:
                 Status = CType(Data("Status").ToObject(Of Integer), CompFileStatus)
                 If Data.ContainsKey("FileName") Then FileName = Data("FileName").ToString
                 If Data.ContainsKey("DownloadUrls") Then DownloadUrls = Data("DownloadUrls").ToObject(Of List(Of String))
-                If Data.ContainsKey("ModLoaders") Then ModLoaders = Data("ModLoaders").ToObject(Of List(Of CompLoaderType))
+                If Data.ContainsKey("ModLoaders") Then ModLoaders = Data("ModLoaders").ToObject(Of List(Of CompModLoaderType))
                 If Data.ContainsKey("Hash") Then Hash = Data("Hash").ToString
                 If Data.ContainsKey("GameVersions") Then GameVersions = Data("GameVersions").ToObject(Of List(Of String))
                 If Data.ContainsKey("RawDependencies") Then RawDependencies = Data("RawDependencies").ToObject(Of List(Of String))
@@ -1412,11 +1404,11 @@ Retry:
                         GameVersions = New List(Of String) From {"未知版本"}
                     End If
                     'ModLoaders
-                    ModLoaders = New List(Of CompLoaderType)
-                    If RawVersions.Contains("forge") Then ModLoaders.Add(CompLoaderType.Forge)
-                    If RawVersions.Contains("fabric") Then ModLoaders.Add(CompLoaderType.Fabric)
-                    If RawVersions.Contains("quilt") Then ModLoaders.Add(CompLoaderType.Quilt)
-                    If RawVersions.Contains("neoforge") Then ModLoaders.Add(CompLoaderType.NeoForge)
+                    ModLoaders = New List(Of CompModLoaderType)
+                    If RawVersions.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge)
+                    If RawVersions.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric)
+                    If RawVersions.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
+                    If RawVersions.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge)
 #End Region
                 Else
 #Region "Modrinth"

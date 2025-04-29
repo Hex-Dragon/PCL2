@@ -640,7 +640,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.ReloadCompFileList()
+                FrmVersionMod.ReloadModList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -774,42 +774,7 @@ Public Class FormMain
                 Exit Sub
             End If
             '安装 Mod
-            If FrmVersionMod.InstallMods(FilePathList) Then Exit Sub
-            '处理资源安装
-            If PageCurrent = PageType.VersionSetup AndAlso {"zip"}.Any(Function(i) i = Extension) Then
-                Select Case PageCurrentSub
-                    Case PageSubType.VersionWorld
-                        Dim DestFolder = PageVersionLeft.Version.PathIndie + "saves\" + GetFileNameWithoutExtentionFromPath(FilePath)
-                        If Directory.Exists(DestFolder) Then
-                            Hint("发现同名文件夹，无法粘贴：" + DestFolder, HintType.Critical)
-                            Exit Sub
-                        End If
-                        ExtractFile(FilePath, DestFolder)
-                        Hint($"已导入 {GetFileNameWithoutExtentionFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionWorld IsNot Nothing Then RunInUi(Sub() FrmVersionWorld.Reload())
-                        Exit Sub
-                    Case PageSubType.VersionResourcePack
-                        Dim DestFile = PageVersionLeft.Version.PathIndie + "resourcepacks\" + GetFileNameFromPath(FilePath)
-                        If File.Exists(DestFile) Then
-                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
-                            Exit Sub
-                        End If
-                        CopyFile(FilePath, DestFile)
-                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.ReloadCompFileList())
-                        Exit Sub
-                    Case PageSubType.VersionShader
-                        Dim DestFile = PageVersionLeft.Version.PathIndie + "shaderpacks\" + GetFileNameFromPath(FilePath)
-                        If File.Exists(DestFile) Then
-                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
-                            Exit Sub
-                        End If
-                        CopyFile(FilePath, DestFile)
-                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.ReloadCompFileList())
-                        Exit Sub
-                End Select
-            End If
+            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
@@ -991,12 +956,8 @@ Public Class FormMain
         OtherTest = 2
         VersionOverall = 0
         VersionSetup = 1
-        VersionWorld = 3
-        VersionScreenshot = 4
-        VersionMod = 5
-        VersionModDisabled = 6
-        VersionResourcePack = 7
-        VersionShader = 8
+        VersionMod = 2
+        VersionModDisabled = 3
         VersionExport = 4
     End Enum
     ''' <summary>

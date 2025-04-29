@@ -112,8 +112,8 @@ Public Class PageComp
         If PageType = CompType.Mod Then '只有 Mod 考虑加载器
             ModLoader = Val(ComboSearchLoader.SelectedItem.Tag)
             If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
-                ModLoader = CompLoaderType.Forge Then '选择了 Forge
-                ModLoader = CompLoaderType.Any '此时，视作没有筛选 Mod Loader（因为部分老 Mod 没有设置自己支持的加载器）
+                ModLoader = CompModLoaderType.Forge Then '选择了 Forge
+                ModLoader = CompModLoaderType.Any '此时，视作没有筛选 Mod Loader（因为部分老 Mod 没有设置自己支持的加载器）
             End If
         End If
         With Request
