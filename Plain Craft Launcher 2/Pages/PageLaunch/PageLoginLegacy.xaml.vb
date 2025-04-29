@@ -45,7 +45,7 @@ Public Class PageLoginLegacy
         If LoginData.UserName.Trim = "" Then Return GetLang("LangPageLoginLegacyNoEmptyID")
         If LoginData.UserName.Contains("""") Then Return GetLang("LangPageLoginLegacyNoQuotationInID")
         If McVersionCurrent IsNot Nothing AndAlso
-           ((McVersionCurrent.Version.McCodeMain = 20 AndAlso McVersionCurrent.Version.McCodeSub >= 3) OrElse McVersionCurrent.Version.McCodeMain > 20) AndAlso
+           (McVersionCurrent.Version.IsStandardVersion AndAlso McVersionCurrent.Version.McVersion >= New Version(1, 20, 3)) AndAlso
            LoginData.UserName.Trim.Length > 16 Then
             Return GetLang("LangPageLoginLegacyLengthLimit")
         End If

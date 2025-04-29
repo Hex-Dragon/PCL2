@@ -111,7 +111,7 @@
                                     <local:ExportOption 
                                 Title="{StaticResource LangPageVersionExportMapRecord}"
                                 Description="{StaticResource LangPageVersionExportMapRecordDesc}"
-                                Rules="journeymap/data/|xaero/"
+                                Rules="journeymap/data/|xaero/|XaeroWaypoints/|XaeroWorldMap/"
                                 DefaultChecked="False" />
                                 </local:MyCheckBox.Tag>
                             </local:MyCheckBox>

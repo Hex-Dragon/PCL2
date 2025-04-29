@@ -9,6 +9,7 @@ Public Module ModValidate
         Dim Result As String = ""
         For Each ValidateRule As Validate In ValidateRules
             Result = ValidateRule.Validate(Text)
+            If Result Is Nothing Then Return ""
             If Result <> "" Then Return Result
         Next
         Return Result
@@ -21,7 +22,7 @@ End Module
 ''' </summary>
 Public MustInherit Class Validate
     ''' <summary>
-    ''' 验证某字符串是否符合验证要求。若符合，返回空字符串；若不符合，返回错误原因。
+    ''' 验证某字符串是否符合验证要求。若符合，返回空字符串；若不符合，返回错误原因；若需要中断检查并直接通过，返回 Nothing。
     ''' </summary>
     Public MustOverride Function Validate(Str As String) As String
 End Class
@@ -239,21 +240,21 @@ Public Class ValidateFolderName
         Try
             '检查是否为空
             Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
-            If Not LengthCheck = "" Then Return LengthCheck
+            If LengthCheck <> "" Then Return LengthCheck
             '检查空格
             If Str.StartsWithF(" ") Then Return GetLang("LangModValidateNoStartWithSpaceFolderName")
             If Str.EndsWithF(" ") Then Return GetLang("LangModValidateNoEndWithSpaceFolderName")
             '检查长度
             LengthCheck = New ValidateLength(1, 100).Validate(Str)
-            If Not LengthCheck = "" Then Return LengthCheck
+            If LengthCheck <> "" Then Return LengthCheck
             '检查尾部小数点
             If Str.EndsWithF(".") Then Return GetLang("LangModValidateNoEndWithDotFolderName")
             '检查特殊字符
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), GetLang("LangModValidateNoEndWithSpecialCharFolderName")).Validate(Str)
-            If Not CharactCheck = "" Then Return CharactCheck
+            If CharactCheck <> "" Then Return CharactCheck
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, GetLang("LangModValidateNoSpacialFolderName"), True).Validate(Str)
-            If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            If InvalidStrCheck <> "" Then Return InvalidStrCheck
             '检查 NTFS 8.3 文件名（#4505）
             If RegexCheck(Str, ".{2,}~\d") Then Return GetLang("LangModValidateFileNoSpecialName")
             '检查文件夹重名
@@ -300,15 +301,15 @@ Public Class ValidateFileName
             If Str.EndsWithF(" ") Then Return GetLang("LangModValidateFileNoEndWithSpace")
             '检查长度
             LengthCheck = New ValidateLength(1, 253).Validate(Str & If(ParentFolder, ""))
-            If Not LengthCheck = "" Then Return LengthCheck
+            If LengthCheck <> "" Then Return LengthCheck
             '检查尾部小数点
             If Str.EndsWithF(".") Then Return GetLang("LangModValidateFileNoEndWithDot")
             '检查特殊字符
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), GetLang("LangModValidateFileNoContain")).Validate(Str)
-            If Not CharactCheck = "" Then Return CharactCheck
+            If CharactCheck <> "" Then Return CharactCheck
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, GetLang("LangModValidateFileNoContent"), True).Validate(Str)
-            If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            If InvalidStrCheck <> "" Then Return InvalidStrCheck
             '检查 NTFS 8.3 文件名（#4505）
             If RegexCheck(Str, ".{2,}~\d") Then Return GetLang("LangModValidateFileNoSpecialName")
             '检查文件重名
@@ -347,10 +348,10 @@ Public Class ValidateFolderPath
         If Not Str.TrimEnd("\").EndsWithF(":") Then Str = Str.TrimEnd("\")
         '检查是否为空
         Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
-        If Not LengthCheck = "" Then Return LengthCheck
+        If LengthCheck <> "" Then Return LengthCheck
         '检查长度
         LengthCheck = New ValidateLength(1, 254).Validate(Str)
-        If Not LengthCheck = "" Then Return LengthCheck
+        If LengthCheck <> "" Then Return LengthCheck
         '检查开头
         If Str.StartsWithF("\\Mac\") Then GoTo Fin
         For Each Drive As DriveInfo In My.Computer.FileSystem.Drives

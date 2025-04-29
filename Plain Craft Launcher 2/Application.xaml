@@ -212,7 +212,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style TargetType="local:MyScrollViewer">
+            <Style TargetType="local:MyScrollViewer" x:Name="StyleMyScrollViewer">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="CanContentScroll" Value="False" />
                 <Setter Property="PanningMode" Value="VerticalOnly" />
@@ -228,6 +228,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style TargetType="local:PageComp" BasedOn="{StaticResource {x:Type local:MyScrollViewer}}" />
             <Style TargetType="ScrollViewer" x:Key="ScrollViewerFullMargin">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="CanContentScroll" Value="False" />

@@ -12,8 +12,7 @@
                 (GetType(ComboBox).IsAssignableFrom(SourceType) AndAlso CType(e.Source, ComboBox).IsDropDownOpen) OrElse
                 (GetType(TextBox).IsAssignableFrom(SourceType) AndAlso CType(e.Source, TextBox).AcceptsReturn) OrElse
                 GetType(ComboBoxItem).IsAssignableFrom(SourceType) OrElse
-                TypeOf e.Source Is CheckBox
-           ) Then
+                TypeOf e.Source Is CheckBox) Then
             '如果当前是在对有滚动条的下拉框或文本框执行，则不接管操作
             Exit Sub
         End If

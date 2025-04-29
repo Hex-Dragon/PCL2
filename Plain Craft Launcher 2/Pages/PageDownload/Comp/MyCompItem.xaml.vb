@@ -100,7 +100,7 @@
             Log("[Control] 按下资源工程列表项：" & LabTitle.Text)
         End If
     End Sub
-    Private Sub ProjectClick(sender As MyCompItem, e As EventArgs) Handles Me.Click
+    Private Sub MyCompItem_Click(sender As MyCompItem, e As EventArgs) Handles Me.Click
         '记录当前展开的卡片标题（#2712）
         Dim Titles As New List(Of String)
         If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
@@ -111,26 +111,37 @@
             FrmMain.PageCurrent.Additional(1) = Titles
         End If
         '打开详情页
-        Dim TargetVersion As String
-        Dim TargetLoader As CompModLoaderType
-        If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
+        Dim TargetType As CompType
+        Dim TargetVersion As String = Nothing
+        Dim TargetLoader As CompModLoaderType = CompModLoaderType.Any
+        If FrmMain.PageCurrent.Page = FormMain.PageType.Download Then
+            '从下载页进入
+            Select Case FrmMain.PageCurrentSub
+                Case FormMain.PageSubType.DownloadMod
+                    TargetType = CompType.Mod
+                    TargetVersion = FrmDownloadMod.Content.Loader.Input.GameVersion
+                    TargetLoader = FrmDownloadMod.Content.Loader.Input.ModLoader
+                Case FormMain.PageSubType.DownloadPack
+                    TargetType = CompType.ModPack
+                    TargetVersion = FrmDownloadPack.Content.Loader.Input.GameVersion
+                Case FormMain.PageSubType.DownloadDataPack
+                    TargetType = CompType.DataPack
+                    TargetVersion = FrmDownloadDataPack.Content.Loader.Input.GameVersion
+                Case FormMain.PageSubType.DownloadResourcePack
+                    TargetType = CompType.ResourcePack
+                    TargetVersion = FrmDownloadResourcePack.Content.Loader.Input.GameVersion
+                Case FormMain.PageSubType.DownloadShader
+                    TargetType = CompType.Shader
+                    TargetVersion = FrmDownloadShader.Content.Loader.Input.GameVersion
+            End Select
+        Else
+            '从详情页进入（查看前置）
+            TargetType = CompType.Any '允许任意类别
             TargetVersion = FrmMain.PageCurrent.Additional(2)
             TargetLoader = FrmMain.PageCurrent.Additional(3)
-        Else
-            Select Case CType(sender.Tag, CompProject).Type
-                Case CompType.Mod
-                    TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
-                    TargetLoader = PageDownloadMod.Loader.Input.ModLoader
-                Case CompType.ModPack
-                    TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
-                Case Else 'CompType.ResourcePack
-                    'FUTURE: Res
-                    TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
-            End Select
         End If
-        If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompModLoaderType.Any
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-                           .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader}})
+                           .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader, TargetType}})
     End Sub
 
     '鼠标点击判定
