@@ -24,13 +24,13 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="文件下载源" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadVersionDownloadSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadSource" Grid.ColumnSpan="2" Tag="ToolDownloadSource" Grid.Column="1">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceA}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceB}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceC}" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="版本列表源" Margin="0,0,25,0" Grid.Row="2" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadVersionListSource}" Margin="0,0,25,0" Grid.Row="2" />
                         <local:MyComboBox x:Name="ComboDownloadVersion" Grid.ColumnSpan="2" Tag="ToolDownloadVersion" Grid.Column="1" Grid.Row="2">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceA}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceB}" />

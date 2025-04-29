@@ -68,7 +68,7 @@
     <s:String x:Key="LangHintWindowDropFileNotFound">拖入的文件不存在：{0}</s:String>
     <s:String x:Key="LangHintWindowDropFileOneFileAtATime">一次请只拖入一个文件！</s:String>
     <s:String x:Key="LangCrashReport">请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！</s:String>
-    <s:String x:Key="LangDialogCustomHomePageReplaceContent">已存在一个自定义主页文件，是否要将它覆盖？</s:String>
+    <s:String x:Key="LangDialogCustomHomePageReplaceContent">已存在一个主页文件，是否要将它覆盖？</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceTitle">覆盖确认</s:String>
     <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">覆盖</s:String>
     <s:String x:Key="LangHintLoadedCustomHomePage">已加载主页自定义文件！</s:String>
@@ -89,9 +89,7 @@
     <s:String x:Key="LangPageNameDownloadManagement">下载管理</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">版本设置</s:String>
     <s:String x:Key="LangPageNameVersionConfigurationUnknownVersion">未知版本</s:String>
-    <s:String x:Key="LangPageNameModDownload">Mod 下载</s:String>
-    <s:String x:Key="LangPageNameModpacksDownload">整合包下载</s:String>
-    <s:String x:Key="LangPageNameResourcePacksDownload">资源包下载</s:String>
+    <s:String x:Key="LangPageNameCompDownload">资源下载</s:String>
     <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再尝试安装！</s:String>
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
@@ -146,7 +144,7 @@
 2. 使用记事本等工具打开这个文件并进行修改，修改完记得保存。
 3. 点击 刷新主页 按钮，查看主页现在长啥样了。
 你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。
-直接将自定义主页文件拖进 PCL 窗口也可以快捷加载。</s:String>
+直接将主页文件拖进 PCL 窗口也可以快捷加载。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主页自定义教程</s:String>
     <s:String x:Key="LangThemeBackUnlock">隐藏主题 玄素黑 已解锁！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。
@@ -272,7 +270,7 @@
     <s:String x:Key="LangSetFuncHiddenSettingsSubPage">设置 子页面</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsGame">游戏</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsPersonalize">个性化</s:String>
-    <s:String x:Key="LangSetFuncHiddenSettingsLaunch">启动器</s:String>
+    <s:String x:Key="LangSetFuncHiddenSettingsLaunch">其它</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsLink">联机</s:String>
     <s:String x:Key="LangSetFuncHiddenMoreSubPage">更多 子页面</s:String>
     <s:String x:Key="LangSetFuncHiddenMoreHelp">帮助</s:String>
@@ -497,6 +495,9 @@
     <s:String x:Key="LangDownloadPageLeftResource">社区资源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -509,29 +510,29 @@
     <s:String x:Key="LangDownloadLiteloaderDesc">与 Forge 类似，LiteLoader 可以用于加载老版本 Minecraft 中的 LiteLoader Mod。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">正在获取 LiteLoader 列表</s:String>
-    <s:String x:Key="LangDownloadModSearchTitle">搜索 Mod</s:String>
-    <s:String x:Key="LangDownloadModSearchName">名称</s:String>
-    <s:String x:Key="LangDownloadModSearchSource">来源</s:String>
-    <s:String x:Key="LangDownloadModSearchSourceAll">全部</s:String>
-    <s:String x:Key="LangDownloadModSearchVersion">版本</s:String>
-    <s:String x:Key="LangDownloadModSearchVersionAll">全部 (也可自行输入)</s:String>
-    <s:String x:Key="LangDownloadModSearchLoader">任意 Mod 加载器</s:String>
-    <s:String x:Key="LangDownloadModSearch">搜索</s:String>
+    <s:String x:Key="LangDownloadCompSearchTitle">搜索{0}</s:String>
+    <s:String x:Key="LangDownloadCompSearchName">名称</s:String>
+    <s:String x:Key="LangDownloadCompSearchSource">来源</s:String>
+    <s:String x:Key="LangDownloadCompSearchSourceAll">全部</s:String>
+    <s:String x:Key="LangDownloadCompSearchVersion">版本</s:String>
+    <s:String x:Key="LangDownloadCompSearchVersionAll">全部 (也可自行输入)</s:String>
+    <s:String x:Key="LangDownloadCompSearchLoader">任意 Mod 加载器</s:String>
+    <s:String x:Key="LangDownloadCompSearch">搜索</s:String>
     <s:String x:Key="LangDownloadModReset">重置条件</s:String>
-    <s:String x:Key="LangDownloadModGettingList">正在获取 Mod 列表</s:String>
+    <s:String x:Key="LangDownloadCompGettingList">正在获取{0}列表</s:String>
     <s:String x:Key="LangDownloadModType">类型</s:String>
     <s:String x:Key="LangDownloadModTypeAll">全部</s:String>
     <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
     <s:String x:Key="LangDownloadModTypeBiome">生物群系</s:String>
     <s:String x:Key="LangDownloadModTypeDimension">维度</s:String>
-    <s:String x:Key="LangDownloadModTypeMineral">矿物 / 资源</s:String>
+    <s:String x:Key="LangDownloadModTypeMineral">矿物与资源</s:String>
     <s:String x:Key="LangDownloadModTypeStructure">天然结构</s:String>
     <s:String x:Key="LangDownloadModTypeTech">科技</s:String>
-    <s:String x:Key="LangDownloadModTypePipe">管道 / 物流</s:String>
+    <s:String x:Key="LangDownloadModTypePipe">管道与物流</s:String>
     <s:String x:Key="LangDownloadModTypeAuto">自动化</s:String>
     <s:String x:Key="LangDownloadModTypeEnergy">能源</s:String>
     <s:String x:Key="LangDownloadModTypeRedstone">红石</s:String>
-    <s:String x:Key="LangDownloadModTypeFood">食物 / 烹饪</s:String>
+    <s:String x:Key="LangDownloadModTypeFood">食物与烹饪</s:String>
     <s:String x:Key="LangDownloadModTypeAgriculture">农业</s:String>
     <s:String x:Key="LangDownloadModTypeGameMechanics">游戏机制</s:String>
     <s:String x:Key="LangDownloadModTypeTransportation">运输</s:String>
@@ -540,11 +541,11 @@
     <s:String x:Key="LangDownloadModTypeAdventure">冒险</s:String>
     <s:String x:Key="LangDownloadModTypeDecoration">装饰</s:String>
     <s:String x:Key="LangDownloadModTypeMobs">生物</s:String>
-    <s:String x:Key="LangDownloadModTypeEquipment">装备 / 工具</s:String>
+    <s:String x:Key="LangDownloadModTypeEquipment">装备与工具</s:String>
     <s:String x:Key="LangDownloadModTypeOptimization">性能优化</s:String>
     <s:String x:Key="LangDownloadModTypeDisplay">信息显示</s:String>
     <s:String x:Key="LangDownloadModTypeServer">服务器</s:String>
-    <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
+    <s:String x:Key="LangDownloadModTypeUtility">实用</s:String>
     <s:String x:Key="LangDownloadModTypeLib">支持库</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。
 请尝试使用 VPN 或加速器以改善网络。</s:String>
@@ -557,15 +558,6 @@
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 又称为高清修复，以允许安装光影、使用高清材质、提高游戏性能，但与 Mod 的兼容性不佳。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 OptiFine 列表</s:String>
-    <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
-    <s:String x:Key="LangDownloadModpackSearchName">名称</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSource">来源</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSourceAll">全部</s:String>
-    <s:String x:Key="LangDownloadModpackSearchVersion">版本</s:String>
-    <s:String x:Key="LangDownloadModpackSearchVersionAll">全部 (也可自行输入)</s:String>
-    <s:String x:Key="LangDownloadModpackSearch">搜索</s:String>
-    <s:String x:Key="LangDownloadModpackReset">重置条件</s:String>
-    <s:String x:Key="LangDownloadModpackGettingList">正在获取整合包列表</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">安装已有整合包</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在当前选择的 Minecraft 文件夹下安装整合包</s:String>
     <s:String x:Key="LangDownloadModpackType">类型</s:String>
@@ -578,7 +570,7 @@
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒险</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">水槽包/大杂烩</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">水槽包</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小游戏</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
@@ -589,7 +581,7 @@
     <s:String x:Key="LangDownloadModpackTypeMapBased">基于地图</s:String>
     <s:String x:Key="LangDownloadModpackTypeLightWeight">轻量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeHeavyWeight">大型整合</s:String>
-    <s:String x:Key="LangDownloadModpackTypeMisc">杂项</s:String>
+    <s:String x:Key="LangDownloadModpackTypeOther">其它</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。
 请尝试使用 VPN 或加速器以改善网络。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。
@@ -636,6 +628,7 @@
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameYearn">渴望披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">无披风</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">版本选择</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -944,7 +937,7 @@
     <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">是否要初始化游戏页的所有设置？该操作不可撤销。</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLaunchConfirmContent">是否要初始化启动器页的所有设置？该操作不可撤销。</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">是否要初始化个性化页的所有设置？该操作不可撤销。
-（背景图片与音乐、自定义主页等外部文件不会被删除）</s:String>
+（背景图片与音乐、主页等外部文件不会被删除）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">是否要初始化联机页的所有设置？该操作不可撤销。</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>
@@ -952,13 +945,14 @@
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">文件名格式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名格式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[遗物] relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">遗物-relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载社区资源时，其默认文件名的格式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[机械动力] create-1.21.1-6.0.4</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">机械动力-create-1.21.1-6.0.4</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">create-1.21.1-6.0.4-机械动力</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">create-1.21.1-6.0.4</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【机械动力】create-1.21.1-6.0.4</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大线程数</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">线程数越多，限速的文件下载越快，但过高的线程数会造成下载时非常严重的卡顿。
 一般而言，64 线程已可以保证足够的下载速度。</s:String>
@@ -969,7 +963,7 @@
 在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安装整合包时保留原始压缩包</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">在显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">在正版登录时验证 SSL 证书</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证可以提高安全性，但可能会导致正版登录失败（见 #3018）。
 若登录因为 “未能为 SSL/TLS 安全通道建立信任关系” 失败，请考虑关闭此选项。</s:String>
@@ -1390,18 +1384,18 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">该版本不存在资源文件索引信息</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">未找到 Asset Index</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非预期的结果（{0}）</s:String>
-    <s:String x:Key="LangModCompModDependentCount">{0} 个前置 Mod</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">{0} 个前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDependentCount">{0} 项前置</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">{0} 项前置</s:String>
     <s:String x:Key="LangModCompModDownload">下载 {0} 次</s:String>
     <s:String x:Key="LangModCompModDownloadP">下载 {0} 次</s:String>
     <s:String x:Key="LangModCompModGameVersion">游戏版本</s:String>
     <s:String x:Key="LangModCompModUpdateTime">更新于 {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存为</s:String>
-    <s:String x:Key="LangModCompModDependent">前置 Mod</s:String>
-    <s:String x:Key="LangModCompModAlternateVersion">可选版本</s:String>
+    <s:String x:Key="LangModCompModDependent">前置资源</s:String>
+    <s:String x:Key="LangModCompModAlternateVersion">版本列表</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">测试版</s:String>
-    <s:String x:Key="LangModCompModStatusDescAlpha">测试版</s:String>
+    <s:String x:Key="LangModCompModStatusDescAlpha">早期测试版</s:String>
     <s:String x:Key="LangModCompModDigit1">万</s:String>
     <s:String x:Key="LangModCompModDigit2">亿</s:String>
     <s:String x:Key="LangModCompModDigit3">兆</s:String>
@@ -1508,7 +1502,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCompVersionAny">任意</s:String>
     <s:String x:Key="LangModCompVersionOnly">仅 {0}</s:String>
     <s:String x:Key="LangModCompEdition">{0} 版</s:String>
-    <s:String x:Key="LangModCompSearchInEnglish">当前资源仅支持使用英文搜索</s:String>
+    <s:String x:Key="LangModCompSearchInEnglish">没有搜索结果，请尝试使用英文搜索</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge 不兼容所选的类型</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth 不兼容所选的类型</s:String>
     <s:String x:Key="LangModCompSearchNoResult">没有搜索结果</s:String>
@@ -1563,9 +1557,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModJavaTaskSearchJava">查找 Java</s:String>
     <s:String x:Key="LangModJavaDialogContentJavaNotFound">PCL 未找到 {0}。
 请自行搜索并安装 {1}，安装后在 设置 → 启动选项 → 游戏 Java 中重新搜索或导入。</s:String>
-    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">未找到 Java</s:String>
+    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">自动下载 Java？</s:String>
     <s:String x:Key="LangModJavaDialogContentDownloadJava">PCL 未找到 {0}，是否需要 PCL 自动下载？
-如果你已经安装了 {1}，请在 设置 → 启动选项 → 游戏 Java 中手动导入。</s:String>
+如果你已经安装了 {1}，可以在 设置 → 启动选项 → 游戏 Java 中手动导入。</s:String>
     <s:String x:Key="LangModJavaDialogBtn1DownloadJava">自动下载</s:String>
     <s:String x:Key="LangModJavaTaskDownloadJavaFile">下载 Java 文件</s:String>
     <s:String x:Key="LangModJavaTaskDownloadJava">下载 Java {0}</s:String>

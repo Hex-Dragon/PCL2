@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" x:Class="PageDownloadShader"
     PanScroll="{Binding ElementName=Content}">
-    <local:PageComp x:Name="Content" PageType="Shader" TypeName="光影包" TypeNameSpaced="光影包">
+    <local:PageComp x:Name="Content" PageType="Shader" TypeName="{StaticResource LangDownloadPageLeftShader}" TypeNameSpaced="{StaticResource LangDownloadPageLeftShader}">
         <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
         
         <local:MyComboBoxItem Content="风格" IsEnabled="False" />
