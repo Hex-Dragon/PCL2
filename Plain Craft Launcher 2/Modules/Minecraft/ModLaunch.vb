@@ -1351,6 +1351,13 @@ Retry:
     End Function
     Private ExtractJavaWrapperLock As New Object
 
+    ''' <summary>
+    ''' 判断是否使用 RetroWrapper。
+    ''' </summary>
+    Private Function McLaunchNeedsRetroWrapper() As Boolean
+        Return (McVersionCurrent.ReleaseTime >= New Date(2013, 6, 25) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse (McVersionCurrent.Version.McCodeMain < 6 AndAlso McVersionCurrent.Version.McCodeMain <> 99) AndAlso Not Setup.Get("LaunchAdvanceDisableRW") AndAlso Not Setup.Get("VersionAdvanceDisableRW", McVersionCurrent) '<1.6
+    End Function
+
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
         McLaunchLog("开始获取 Minecraft 启动参数")
@@ -1545,6 +1552,12 @@ NextVersion:
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
 
+        '添加 RetroWrapper 相关参数
+        If McLaunchNeedsRetroWrapper() Then
+            'https://github.com/NeRdTheNed/RetroWrapper/wiki/RetroWrapper-flags
+            DataList.Add("-Dretrowrapper.doUpdateCheck=false")
+        End If
+
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
         Dim DeDuplicateDataList As New List(Of String)
@@ -1582,6 +1595,11 @@ NextVersion:
     'Game 部分（第二段）
     Private Function McLaunchArgumentsGameOld(Version As McVersion) As String
         Dim DataList As New List(Of String)
+
+        '添加 RetroWrapper 相关参数
+        If McLaunchNeedsRetroWrapper() Then
+            DataList.Add("--tweakClass com.zero.retrowrapper.RetroTweaker")
+        End If
 
         '本地化 Minecraft 启动信息
         Dim BasicString As String = Version.JsonObject("minecraftArguments").ToString
@@ -1737,6 +1755,18 @@ NextVersion:
         Loader.Output = LibList
         Dim CpStrings As New List(Of String)
         Dim OptiFineCp As String = Nothing
+
+        'RetroWrapper 释放
+        If McLaunchNeedsRetroWrapper() Then
+            Dim WrapperPath As String = PathMcFolder & "libraries\retrowrapper\RetroWrapper.jar"
+            Try
+                WriteFile(WrapperPath, GetResources("RetroWrapper"))
+                CpStrings.Add(WrapperPath)  
+            Catch ex As Exception
+                Log(ex, "RetroWrapper 释放失败")
+            End Try
+        End If
+
         For Each Library As McLibToken In LibList
             If Library.IsNatives Then Continue For
             If Library.Name IsNot Nothing AndAlso Library.Name.Contains("com.cleanroommc:cleanroom") Then 'Cleanroom 的主 Jar 必须放在 ClassPath 第一位
