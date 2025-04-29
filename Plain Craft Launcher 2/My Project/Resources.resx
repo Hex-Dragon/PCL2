@@ -130,6 +130,9 @@
   <data name="JavaWrapper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\java-wrapper.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="RetroWrapper" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RetroWrapper-1.7.8.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="libwebp64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\libwebp64.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

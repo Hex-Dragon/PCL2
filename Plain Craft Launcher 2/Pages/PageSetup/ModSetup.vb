@@ -116,6 +116,7 @@ Public Class ModSetup
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
         {"LaunchAdvanceDisableJLW", New SetupEntry(False)},
+        {"LaunchAdvanceDisableRW", New SetupEntry(False)},
         {"LaunchAdvanceGraphicCard", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
@@ -195,6 +196,7 @@ Public Class ModSetup
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceDisableJLW", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceUseProxyV2", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableRW", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
         {"VersionRamCustom", New SetupEntry(15, Source:=SetupSource.Version)},
         {"VersionRamOptimize", New SetupEntry(0, Source:=SetupSource.Version)},
@@ -450,8 +452,8 @@ Public Class ModSetup
                             If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                             LocalRegisterData.Set(Key, OldSourceData)
                             DeleteReg(Key)
-                            SourceValue = OldSourceData
                         End If
+                        SourceValue = OldSourceData
                     Else
                         SourceValue = LocalRegisterData.Get(Key)
                     End If

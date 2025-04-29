@@ -234,6 +234,9 @@
                         <local:MyCheckBox Height="28" Text="使用代理" x:Name="CheckAdvanceUseProxyV2" Tag="VersionAdvanceUseProxyV2"
                                           ToolTipService.Placement="Right"
                                           ToolTip="使用 [设置-其他-网络-HTTP 代理] 中填写的代理来启动游戏。&#xa;错误的全局配置将会导致无法登录！" />
+                        <local:MyCheckBox Height="28" Text="禁用 RetroWrapper" x:Name="CheckAdvanceDisableRW" Tag="VersionAdvanceDisableRW"
+                                          ToolTipService.Placement="Right"
+                                          ToolTip="PCL 会在启动 1.5.x 及以下版本时使用 RetroWrapper 来改善老版本游戏体验和修复兼容性问题。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
