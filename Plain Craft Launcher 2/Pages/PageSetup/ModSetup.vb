@@ -448,8 +448,8 @@ Public Class ModSetup
                             If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                             LocalRegisterData.Set(Key, OldSourceData)
                             DeleteReg(Key)
-                            SourceValue = OldSourceData
                         End If
+                        SourceValue = OldSourceData
                     Else
                         SourceValue = LocalRegisterData.Get(Key)
                     End If
