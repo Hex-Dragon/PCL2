@@ -1,4 +1,4 @@
-Public Class MyMsgInput
+﻿Public Class MyMsgInput
 
     Private ReadOnly MyConverter As MyMsgBoxConverter
     Private ReadOnly Uuid As Integer = GetUuid()
@@ -72,7 +72,7 @@ Public Class MyMsgInput
     End Sub
 
     Public Sub Btn1_Click() Handles Btn1.Click
-        TextArea.Validate()
+        TextArea.Validate() '#5773
         If MyConverter.IsExited OrElse Not TextArea.IsValidated Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = TextArea.Text
