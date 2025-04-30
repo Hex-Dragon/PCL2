@@ -59,6 +59,7 @@ Public Module ModProfile
         Log("[Profile] 开始获取本地档案")
         ProfileList.Clear()
         Try
+            If Not Directory.Exists(PathAppdataConfig) Then Directory.CreateDirectory(PathAppdataConfig)
             If Not File.Exists(PathAppdataConfig & "Profiles.json") Then
                 File.Create(PathAppdataConfig & "Profiles.json").Close()
                 WriteFile(PathAppdataConfig & "Profiles.json", "{""lastUsed"":0,""profiles"":[]}", False) '创建档案列表文件
