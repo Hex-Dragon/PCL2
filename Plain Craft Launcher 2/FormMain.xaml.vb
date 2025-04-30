@@ -417,16 +417,6 @@ Public Class FormMain
             Setup.Set("UiHiddenOtherHelp", False)
             Log("[Start] 已解除帮助页面的隐藏")
         End If
-        '单向迁移微软登录结果（#4836）
-        If Not Setup.Get("CacheMsV2Migrated") Then
-            Setup.Set("CacheMsV2Migrated", True)
-            Setup.Set("CacheMsV2OAuthRefresh", Setup.Get("CacheMsOAuthRefresh"))
-            Setup.Set("CacheMsV2Access", Setup.Get("CacheMsAccess"))
-            Setup.Set("CacheMsV2ProfileJson", Setup.Get("CacheMsProfileJson"))
-            Setup.Set("CacheMsV2Uuid", Setup.Get("CacheMsUuid"))
-            Setup.Set("CacheMsV2Name", Setup.Get("CacheMsName"))
-            Log("[Start] 已从老版本迁移微软登录结果")
-        End If
         'Mod 命名设置迁移
         If Not Setup.IsUnset("ToolDownloadTranslate") AndAlso Setup.IsUnset("ToolDownloadTranslateV2") Then
             Setup.Set("ToolDownloadTranslateV2", Setup.Get("ToolDownloadTranslate") + 1)
@@ -471,6 +461,8 @@ Public Class FormMain
                 Exit Sub
             End If
         End If
+        '存储上次使用的档案编号
+        SaveProfile()
         '关闭
         RunInUiWait(
         Sub()
@@ -674,39 +666,17 @@ Public Class FormMain
                             Hint($"输入的 Authlib 验证服务器不符合网址格式（{AuthlibServer}）！", HintType.Critical)
                             Exit Sub
                         End If
-                        Dim TargetVersion = If(PageCurrent = PageType.VersionSetup, PageVersionLeft.Version, McVersionCurrent)
-                        If TargetVersion Is Nothing Then
-                            Hint("请先下载游戏，再设置第三方登录！", HintType.Critical)
-                            Exit Sub
-                        End If
-                        If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
-                            'LittleSkin
-                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启 LittleSkin 登录？" & vbCrLf &
-                                        "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
-                                Exit Sub
-                            End If
-                            Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthServer", "https://littleskin.cn/api/yggdrasil", Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthRegister", "https://littleskin.cn/auth/register", Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=TargetVersion)
-                        Else
-                            '第三方 Authlib 服务器
-                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启第三方登录？" & vbCrLf &
-                                        $"登录服务器：{AuthlibServer}" & vbCrLf & vbCrLf &
-                                        "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
-                                Exit Sub
-                            End If
-                            Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthServer", AuthlibServer, Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthRegister", AuthlibServer.Replace("api/yggdrasil", "auth/register"), Version:=TargetVersion)
-                            Setup.Set("VersionServerAuthName", "", Version:=TargetVersion)
-                        End If
+                        If MyMsgBox($"是否要创建新的第三方验证档案？{vbCrLf}验证服务器地址：{AuthlibServer}", "创建新的第三方验证档案", "确定", "取消") = 2 Then Exit Sub
+                        RunInUi(Sub()
+                                    PageLoginAuth.DraggedAuthServer = AuthlibServer
+                                    FrmLaunchLeft.RefreshPage(True, True, McLoginType.Auth)
+                                End Sub)
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionSetup Then
                             '正在服务器选项页，需要刷新设置项显示
                             FrmVersionSetup.Reload()
                         ElseIf PageCurrent = PageType.Launch Then
                             '正在主页，需要刷新左边栏
-                            FrmLaunchLeft.RefreshPage(True, False)
+                            FrmLaunchLeft.RefreshPage(True)
                         End If
                     ElseIf Str.StartsWithF("file:///") Then
                         '文件拖拽（例如从浏览器下载窗口拖入）

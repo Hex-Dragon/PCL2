@@ -423,13 +423,10 @@ EndHint:
     Public FrmOtherTest As PageOtherTest
 
     '登录页面声明
-    Public FrmLoginLegacy As PageLoginLegacy
-    Public FrmLoginNide As PageLoginNide
-    Public FrmLoginNideSkin As PageLoginNideSkin
     Public FrmLoginAuth As PageLoginAuth
-    Public FrmLoginAuthSkin As PageLoginAuthSkin
     Public FrmLoginMs As PageLoginMs
-    Public FrmLoginMsSkin As PageLoginMsSkin
+    Public FrmLoginProfile As PageLoginProfile
+    Public FrmLoginProfileSkin As PageLoginProfileSkin
 
     '版本设置页面声明
     Public FrmVersionLeft As PageVersionLeft

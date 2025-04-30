@@ -1,9 +1,10 @@
-﻿Imports System.IO.Compression
+Imports System.IO.Compression
 
 Public Module ModLaunch
 
 #Region "开始"
 
+    Public IsLaunching As Boolean = False
     Public CurrentLaunchOptions As McLaunchOptions = Nothing
     Public Class McLaunchOptions
         ''' <summary>
@@ -31,11 +32,13 @@ Public Module ModLaunch
     ''' 返回是否实际开始了启动（如果没有，则一定弹出了错误提示）。
     ''' </summary>
     Public Function McLaunchStart(Optional Options As McLaunchOptions = Nothing) As Boolean
+        IsLaunching = True
         CurrentLaunchOptions = If(Options, New McLaunchOptions)
         '预检查
         If Not RunInUi() Then Throw New Exception("McLaunchStart 必须在 UI 线程调用！")
         If McLaunchLoader.State = LoadState.Loading Then
             Hint("已有游戏正在启动中！", HintType.Critical)
+            IsLaunching = False
             Return False
         End If
         '强制切换需要启动的版本
@@ -45,13 +48,14 @@ Public Module ModLaunch
             CurrentLaunchOptions.Version.Load()
             If CurrentLaunchOptions.Version.State = McVersionState.Error Then
                 Hint("无法启动 Minecraft：" & CurrentLaunchOptions.Version.Info, HintType.Critical)
+                IsLaunching = False
                 Return False
             End If
             '切换版本
             McVersionCurrent = CurrentLaunchOptions.Version
             Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
             FrmLaunchLeft.RefreshButtonsUI()
-            FrmLaunchLeft.RefreshPage(False, False)
+            FrmLaunchLeft.RefreshPage(False)
         End If
         FrmMain.AprilGiveup()
         '禁止进入版本选择页面（否则就可以在启动中切换 McVersionCurrent 了）
@@ -156,6 +160,7 @@ Public Module ModLaunch
                 Case Else
                     Throw New Exception("错误的状态改变：" & GetStringFromEnum(CType(LaunchLoader.State, [Enum])))
             End Select
+            IsLaunching = False
         Catch ex As Exception
             Dim CurrentEx = ex
 NextInner:
@@ -216,7 +221,26 @@ NextInner:
         If McVersionCurrent.State = McVersionState.Error Then Throw New Exception("Minecraft 存在问题：" & McVersionCurrent.Info)
         '检查输入信息
         Dim CheckResult As String = ""
-        RunInUiWait(Sub() CheckResult = McLoginAble(McLoginInput()))
+        RunInUiWait(Sub() CheckResult = IsProfileVaild())
+        If SelectedProfile Is Nothing Then '没选档案
+            CheckResult = "请先选择一个档案再启动游戏！"
+        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 1 Then '要求正版验证
+            If Not SelectedProfile.Type = McLoginType.Ms Then
+                CheckResult = "当前实例要求使用正版验证，请使用正版验证档案启动游戏！"
+            End If
+        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 2 Then '要求第三方验证
+            If Not SelectedProfile.Type = McLoginType.Auth Then
+                CheckResult = "当前实例要求使用第三方验证，请使用第三方验证档案启动游戏！"
+            ElseIf Not SelectedProfile.Server.BeforeLast("/authserver") = Setup.Get("VersionServerAuthServer", McVersionCurrent) Then
+                CheckResult = "当前档案使用的第三方验证服务器与实例要求使用的不一致，请使用符合要求的档案启动游戏！"
+            End If
+        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 3 Then '要求正版验证或第三方验证
+            If SelectedProfile.Type = McLoginType.Legacy Then
+                CheckResult = "当前实例要求使用正版验证或第三方验证，请使用符合要求的档案启动游戏！"
+            ElseIf SelectedProfile.Type = McLoginType.Auth AndAlso Not SelectedProfile.Server.BeforeLast("/authserver") = Setup.Get("VersionServerAuthServer", McVersionCurrent) Then
+                CheckResult = "当前档案使用的第三方验证服务器与实例要求使用的不一致，请使用符合要求的档案启动游戏！"
+            End If
+        End If
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
 #If BETA Then
         '求赞助
@@ -237,7 +261,7 @@ NextInner:
 #End If
         '正版购买提示
         If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
-           Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+           Not Setup.Get("HintBuy") AndAlso SelectedProfile.Type <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -251,8 +275,8 @@ NextInner:
                             End If
                     End Select
                 End Sub, "Buy Minecraft")
-            ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
-                Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
+            ElseIf SelectedProfile.Type = McLoginType.Legacy Then
+                Select Case MyMsgBox("你必须先登录正版账号，才能使用离线验证！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
                         Hint("游戏将以试玩模式启动！", HintType.Critical)
@@ -271,7 +295,6 @@ NextInner:
     '登录方式
     Public Enum McLoginType
         Legacy = 0
-        Nide = 2
         Auth = 3
         Ms = 5
     End Enum
@@ -302,10 +325,6 @@ NextInner:
         ''' </summary>
         Public BaseUrl As String
         ''' <summary>
-        ''' 登录所使用的标识符，目前只可能为 “Auth” 或 “Nide”，用于存储缓存等。
-        ''' </summary>
-        Public Token As String
-        ''' <summary>
         ''' 登录方式的描述字符串，如 “正版”、“统一通行证”。
         ''' </summary>
         Public Description As String
@@ -313,12 +332,16 @@ NextInner:
         ''' 是否在本次登录中强制要求玩家重新选择角色，目前仅对 Authlib-Injector 生效。
         ''' </summary>
         Public ForceReselectProfile As Boolean = False
+        ''' <summary>
+        ''' 是否已经存在该验证信息，用于判断是否为新增档案。
+        ''' </summary>
+        Public IsExist As Boolean = False
 
         Public Sub New(Type As McLoginType)
             Me.Type = Type
         End Sub
         Public Overrides Function GetHashCode() As Integer
-            Return GetHash(UserName & Password & BaseUrl & Token & Type) Mod Integer.MaxValue
+            Return GetHash(UserName & Password & BaseUrl & Type) Mod Integer.MaxValue
         End Function
 
     End Class
@@ -355,6 +378,10 @@ NextInner:
         ''' 若采用正版皮肤，则为该皮肤名。
         ''' </summary>
         Public SkinName As String
+        ''' <summary>
+        ''' UUID。
+        ''' </summary>
+        Public Uuid As String
 
         Public Sub New()
             Type = McLoginType.Legacy
@@ -377,112 +404,21 @@ NextInner:
         Public ProfileJson As String
     End Structure
 
-    ''' <summary>
-    ''' 根据登录信息获取玩家的 MC 用户名。如果无法获取则返回 Nothing。
-    ''' </summary>
-    Public Function McLoginName() As String
-        '根据当前登录方式优先返回
-        Select Case Setup.Get("LoginType")
-            Case McLoginType.Ms
-                If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
-            Case McLoginType.Legacy
-                If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
-            Case McLoginType.Nide
-                If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
-            Case McLoginType.Auth
-                If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
-        End Select
-        '查找所有可能的项
-        If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
-        If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
-        If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
-        If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
-        Return Nothing
-    End Function
-    ''' <summary>
-    ''' 当前是否可以进行登录。若不可以则会返回错误原因。
-    ''' </summary>
-    Public Function McLoginAble() As String
-        Select Case Setup.Get("LoginType")
-            Case McLoginType.Ms
-                If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
-                    Return FrmLoginMs.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case McLoginType.Legacy
-                Return FrmLoginLegacy.IsVaild()
-            Case McLoginType.Nide
-                If Setup.Get("CacheNideAccess") = "" Then
-                    Return FrmLoginNide.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case McLoginType.Auth
-                If Setup.Get("CacheAuthAccess") = "" Then
-                    Return FrmLoginAuth.IsVaild()
-                Else
-                    Return ""
-                End If
-            Case Else
-                Return "未知的登录方式"
-        End Select
-    End Function
-    ''' <summary>
-    ''' 登录输入是否可以进行登录。若不可以则会返回错误原因。
-    ''' </summary>
-    Public Function McLoginAble(LoginData As McLoginData) As String
-        Select Case LoginData.Type
-            Case McLoginType.Ms
-                Return PageLoginMs.IsVaild(LoginData)
-            Case McLoginType.Legacy
-                Return PageLoginLegacy.IsVaild(LoginData)
-            Case McLoginType.Nide
-                Return PageLoginNide.IsVaild(LoginData)
-            Case McLoginType.Auth
-                Return PageLoginAuth.IsVaild(LoginData)
-            Case Else
-                Return "未知的登录方式"
-        End Select
-    End Function
-
     '登录主模块加载器
     Public McLoginLoader As New LoaderTask(Of McLoginData, McLoginResult)("登录", AddressOf McLoginStart, AddressOf McLoginInput, ThreadPriority.BelowNormal) With {.ReloadTimeout = 1, .ProgressWeight = 15, .Block = False}
     Public Function McLoginInput() As McLoginData
         Dim LoginData As McLoginData = Nothing
-        Dim LoginType As McLoginType = Setup.Get("LoginType")
         Try
-            Select Case LoginType
-                Case McLoginType.Legacy
-                    LoginData = PageLoginLegacy.GetLoginData()
-                Case McLoginType.Ms
-                    If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
-                        LoginData = PageLoginMs.GetLoginData()
-                    Else
-                        LoginData = PageLoginMsSkin.GetLoginData()
-                    End If
-                Case McLoginType.Nide
-                    If Setup.Get("CacheNideAccess") = "" Then
-                        LoginData = PageLoginNide.GetLoginData()
-                    Else
-                        LoginData = PageLoginNideSkin.GetLoginData()
-                    End If
-                Case McLoginType.Auth
-                    If Setup.Get("CacheAuthAccess") = "" Then
-                        LoginData = PageLoginAuth.GetLoginData()
-                    Else
-                        LoginData = PageLoginAuthSkin.GetLoginData()
-                    End If
-            End Select
+            LoginData = GetLoginData()
         Catch ex As Exception
-            Log(ex, "获取登录输入信息失败（" & GetStringFromEnum(LoginType) & "）", LogLevel.Feedback)
+            Log(ex, "获取登录输入信息失败", LogLevel.Feedback)
         End Try
         Return LoginData
     End Function
     Private Sub McLoginStart(Data As LoaderTask(Of McLoginData, McLoginResult))
         McLaunchLog("登录加载已开始")
         '校验登录信息
-        Dim CheckResult As String = McLoginAble(Data.Input)
+        Dim CheckResult As String = IsProfileVaild()
         If Not CheckResult = "" Then Throw New ArgumentException(CheckResult)
         '获取对应加载器
         Dim Loader As LoaderBase = Nothing
@@ -491,33 +427,34 @@ NextInner:
                 Loader = McLoginMsLoader
             Case McLoginType.Legacy
                 Loader = McLoginLegacyLoader
-            Case McLoginType.Nide
-                Loader = McLoginNideLoader
             Case McLoginType.Auth
                 Loader = McLoginAuthLoader
         End Select
         '尝试加载
         Loader.WaitForExit(Data.Input, McLoginLoader, Data.IsForceRestarting)
         Data.Output = CType(Loader, Object).Output
-        RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, False)) '刷新自动填充列表
+        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False)) '刷新自动填充列表
         McLaunchLog("登录加载已结束")
     End Sub
 
 #End Region
+
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
     Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart) With {.ReloadTimeout = 1}
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
-    Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
     Public McLoginAuthLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Auth", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
 
     '主加载函数，返回所有需要的登录信息
     Private McLoginMsRefreshTime As Long = 0 '上次刷新登录的时间
+
+#Region "正版验证"
     Private Sub McLoginMsStart(Data As LoaderTask(Of McLoginMs, McLoginResult))
         Dim Input As McLoginMs = Data.Input
         Dim LogUsername As String = Input.UserName
-        McLaunchLog("登录方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
+        Dim IsNewProfile As Boolean = True
+        McLaunchLog("验证方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
         Data.Progress = 0.05
         '检查是否已经登录完成
         If Not Data.IsForceRestarting AndAlso '不要求强行重启
@@ -528,15 +465,19 @@ NextInner:
             GoTo SkipLogin
         End If
         '尝试登录
+        Dim IsSkipAuth As Boolean = False
         Dim OAuthTokens As String()
         If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
+            IsNewProfile = True
 Relogin:
             OAuthTokens = MsLoginStep1New(Data)
         Else
             '有 RefreshToken
+            IsNewProfile = False
             OAuthTokens = MsLoginStep1Refresh(Input.OAuthRefreshToken)
             If OAuthTokens(0) = "Relogin" Then GoTo Relogin '要求重新打开登录网页认证
+            If OAuthTokens(1) = "Ignore" Then GoTo SkipLogin
         End If
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Data.Progress = 0.25
@@ -544,29 +485,49 @@ Relogin:
         Dim OAuthAccessToken As String = OAuthTokens(0)
         Dim OAuthRefreshToken As String = OAuthTokens(1)
         Dim XBLToken As String = MsLoginStep2(OAuthAccessToken)
+        If XBLToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.4
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim Tokens = MsLoginStep3(XBLToken)
+        If Tokens(1) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.55
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim AccessToken As String = MsLoginStep4(Tokens)
+        If AccessToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.7
         If Data.IsAborted Then Throw New ThreadInterruptedException
         MsLoginStep5(AccessToken)
         Data.Progress = 0.85
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim Result = MsLoginStep6(AccessToken)
+        If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
+        For Each Profile In ProfileList
+            If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
+                MyMsgBox("已经存在该档案，无需再次创建了哦.....", "档案已存在")
+                GoTo SkipLogin
+            End If
+        Next
         '输出登录结果
-        Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
-        Setup.Set("CacheMsV2Access", AccessToken)
-        Setup.Set("CacheMsV2Uuid", Result(0))
-        Setup.Set("CacheMsV2Name", Result(1))
-        Setup.Set("CacheMsV2ProfileJson", Result(2))
-        Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
-        MsJson.Remove(Input.UserName) '如果更改了玩家名……
-        MsJson(Result(1)) = OAuthRefreshToken
-        Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
+        If IsNewProfile Then
+            Dim NewProfile = New McProfile With {
+                .Type = McLoginType.Ms,
+                .Uuid = Result(0),
+                .Username = Result(1),
+                .AccessToken = AccessToken,
+                .RefreshToken = OAuthRefreshToken,
+                .Expires = 1743779140286,
+                .Desc = "",
+                .RawJson = Result(2)
+            }
+            ProfileList.Add(NewProfile)
+        Else
+            Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+            ProfileList(ProfileIndex).Username = Result(1)
+            ProfileList(ProfileIndex).AccessToken = AccessToken
+            ProfileList(ProfileIndex).RefreshToken = OAuthRefreshToken
+        End If
+        SaveProfile()
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '结束
         McLoginMsRefreshTime = GetTimeTick()
@@ -574,287 +535,14 @@ Relogin:
 SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
-    End Sub
-    Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
-        Dim Input As McLoginServer = Data.Input
-        Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
-        Dim LogUsername As String = Input.UserName
-        If LogUsername.Contains("@") AndAlso Setup.Get("UiLauncherEmail") Then
-            LogUsername = AccountFilter(LogUsername)
+        If IsSkipAuth Then
+            Data.Progress = 0.99
+            Data.Output = New McLoginResult With {.AccessToken = SelectedProfile.AccessToken,
+                    .Name = SelectedProfile.Username, .Uuid = SelectedProfile.Uuid,
+                    .Type = "Microsoft"}
+            Exit Sub
         End If
-        McLaunchLog("登录方式：" & Input.Description & "（" & LogUsername & "）")
-        Data.Progress = 0.05
-        '尝试登录
-        If (Not Data.Input.ForceReselectProfile) AndAlso
-            Setup.Get("Cache" & Input.Token & "Username") = Data.Input.UserName AndAlso
-            Setup.Get("Cache" & Input.Token & "Pass") = Data.Input.Password AndAlso
-            Setup.Get("Cache" & Input.Token & "Access") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Client") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Uuid") <> "" AndAlso
-            Setup.Get("Cache" & Input.Token & "Name") <> "" Then
-            '尝试验证登录
-            Try
-                If Data.IsAborted Then Throw New ThreadInterruptedException
-                McLoginRequestValidate(Data)
-                GoTo LoginFinish
-            Catch ex As Exception
-                Dim AllMessage = GetExceptionDetail(ex)
-                McLaunchLog("验证登录失败：" & AllMessage)
-                If (AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout")) AndAlso Not AllMessage.Contains("403") Then
-                    McLaunchLog("已触发超时登录失败")
-                    Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
-                End If
-            End Try
-            Data.Progress = 0.25
-            '尝试刷新登录
-Refresh:
-            Try
-                If Data.IsAborted Then Throw New ThreadInterruptedException
-                McLoginRequestRefresh(Data, NeedRefresh)
-                GoTo LoginFinish
-            Catch ex As Exception
-                McLaunchLog("刷新登录失败：" & GetExceptionDetail(ex))
-                If WasRefreshed Then Throw New Exception("二轮刷新登录失败", ex)
-            End Try
-            Data.Progress = If(NeedRefresh, 0.85, 0.45)
-        End If
-        '尝试普通登录
-        Try
-            If Data.IsAborted Then Throw New ThreadInterruptedException
-            NeedRefresh = McLoginRequestLogin(Data)
-        Catch ex As Exception
-            McLaunchLog("登录失败：" & GetExceptionDetail(ex))
-            Throw
-        End Try
-        If NeedRefresh Then
-            McLaunchLog("重新进行刷新登录")
-            WasRefreshed = True
-            Data.Progress = 0.65
-            GoTo Refresh
-        End If
-LoginFinish:
-        Data.Progress = 0.95
-        '保存启动记录
-        Dim Dict As New Dictionary(Of String, String)
-        Dim Emails As New List(Of String)
-        Dim Passwords As New List(Of String)
-        Try
-            If Not Setup.Get("Login" & Input.Token & "Email") = "" Then Emails.AddRange(Setup.Get("Login" & Input.Token & "Email").ToString.Split("¨"))
-            If Not Setup.Get("Login" & Input.Token & "Pass") = "" Then Passwords.AddRange(Setup.Get("Login" & Input.Token & "Pass").ToString.Split("¨"))
-            For i = 0 To Emails.Count - 1
-                Dict.Add(Emails(i), Passwords(i))
-            Next
-            Dict.Remove(Input.UserName)
-            Emails = New List(Of String)(Dict.Keys)
-            Emails.Insert(0, Input.UserName)
-            Passwords = New List(Of String)(Dict.Values)
-            Passwords.Insert(0, Input.Password)
-            Setup.Set("Login" & Input.Token & "Email", Join(Emails, "¨"))
-            Setup.Set("Login" & Input.Token & "Pass", Join(Passwords, "¨"))
-        Catch ex As Exception
-            Log(ex, "保存启动记录失败", LogLevel.Hint)
-            Setup.Set("Login" & Input.Token & "Email", "")
-            Setup.Set("Login" & Input.Token & "Pass", "")
-        End Try
     End Sub
-    Private Sub McLoginLegacyStart(Data As LoaderTask(Of McLoginLegacy, McLoginResult))
-        Dim Input As McLoginLegacy = Data.Input
-        McLaunchLog("登录方式：离线（" & Input.UserName & "）")
-        Data.Progress = 0.1
-        With Data.Output
-            .Name = Input.UserName
-            .Uuid = McLoginLegacyUuidWithCustomSkin(Input.UserName, Input.SkinType, Input.SkinName)
-            .Type = "Legacy"
-        End With
-        '将结果扩展到所有项目中
-        Data.Output.AccessToken = Data.Output.Uuid
-        Data.Output.ClientToken = Data.Output.Uuid
-        '保存启动记录
-        Dim Names As New List(Of String)
-        If Not Setup.Get("LoginLegacyName") = "" Then Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
-        Names.Remove(Input.UserName)
-        Names.Insert(0, Input.UserName)
-        Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
-    End Sub
-
-    'Server 登录：三种验证方式的请求
-    Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
-        McLaunchLog("验证登录开始（Validate, " & Data.Input.Token & "）")
-        '提前缓存信息，否则如果在登录请求过程中退出登录，设置项目会被清空，导致输出存在空值
-        Dim AccessToken As String = Setup.Get("Cache" & Data.Input.Token & "Access")
-        Dim ClientToken As String = Setup.Get("Cache" & Data.Input.Token & "Client")
-        Dim Uuid As String = Setup.Get("Cache" & Data.Input.Token & "Uuid")
-        Dim Name As String = Setup.Get("Cache" & Data.Input.Token & "Name")
-        '发送登录请求
-        Dim RequestData As New JObject(
-            New JProperty("accessToken", AccessToken), New JProperty("clientToken", ClientToken), New JProperty("requestUser", True))
-        NetRequestRetry(
-            Url:=Data.Input.BaseUrl & "/validate",
-            Method:="POST",
-            Data:=RequestData.ToString(0),
-            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-            ContentType:="application/json; charset=utf-8") '没有返回值的
-        '将登录结果输出
-        Data.Output.AccessToken = AccessToken
-        Data.Output.ClientToken = ClientToken
-        Data.Output.Uuid = Uuid
-        Data.Output.Name = Name
-        Data.Output.Type = Data.Input.Token
-        '不更改缓存，直接结束
-        McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
-    End Sub
-    Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
-        McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
-        Dim LoginJson As JObject = GetJson(NetRequestRetry(
-               Url:=Data.Input.BaseUrl & "/refresh",
-               Method:="POST",
-               Data:=New JObject(
-                   New JProperty("selectedProfile", New JObject(
-                       New JProperty("name", Setup.Get($"Cache{Data.Input.Token}Name")),
-                       New JProperty("id", Setup.Get($"Cache{Data.Input.Token}Uuid"))
-                   )),
-                   New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")),
-                   New JProperty("requestUser", True)
-               ).ToString(Newtonsoft.Json.Formatting.None),
-               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-               ContentType:="application/json; charset=utf-8"))
-        '将登录结果输出
-        If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
-        Data.Output.AccessToken = LoginJson("accessToken").ToString
-        Data.Output.ClientToken = LoginJson("clientToken").ToString
-        Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
-        Data.Output.Name = LoginJson("selectedProfile")("name").ToString
-        Data.Output.Type = Data.Input.Token
-        '保存缓存
-        Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
-        Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
-        Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
-        Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
-        Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
-        Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
-        McLaunchLog("刷新登录成功（Refresh, " & Data.Input.Token & "）")
-    End Sub
-    Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
-        Try
-            Dim NeedRefresh As Boolean = False
-            McLaunchLog("登录开始（Login, " & Data.Input.Token & "）")
-            Dim RequestData As New JObject(
-                New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
-                New JProperty("username", Data.Input.UserName),
-                New JProperty("password", Data.Input.Password),
-                New JProperty("requestUser", True))
-            Dim LoginJson As JObject = GetJson(NetRequestRetry(
-                Url:=Data.Input.BaseUrl & "/authenticate",
-                Method:="POST",
-                Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-                ContentType:="application/json; charset=utf-8"))
-            '检查登录结果
-            If LoginJson("availableProfiles").Count = 0 Then
-                If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
-                Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
-            ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
-                Hint("你的账户中只有一个角色，无法更换！", HintType.Critical)
-            End If
-            Dim SelectedName As String = Nothing
-            Dim SelectedId As String = Nothing
-            If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
-                '要求选择档案；优先从缓存读取
-                NeedRefresh = True
-                Dim CacheId As String = Setup.Get("Cache" & Data.Input.Token & "Uuid")
-                For Each Profile In LoginJson("availableProfiles")
-                    If Profile("id").ToString = CacheId Then
-                        SelectedName = Profile("name").ToString
-                        SelectedId = Profile("id").ToString
-                        McLaunchLog("根据缓存选择的角色：" & SelectedName)
-                    End If
-                Next
-                '缓存无效，要求玩家选择
-                If SelectedName Is Nothing Then
-                    McLaunchLog("要求玩家选择角色")
-                    RunInUiWait(
-                    Sub()
-                        Dim SelectionControl As New List(Of IMyRadio)
-                        Dim SelectionJson As New List(Of JToken)
-                        For Each Profile In LoginJson("availableProfiles")
-                            SelectionControl.Add(New MyRadioBox With {.Text = Profile("name").ToString})
-                            SelectionJson.Add(Profile)
-                        Next
-                        Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, "选择使用的角色")
-                        SelectedName = SelectionJson(SelectedIndex)("name").ToString
-                        SelectedId = SelectionJson(SelectedIndex)("id").ToString
-                    End Sub)
-                    McLaunchLog("玩家选择的角色：" & SelectedName)
-                End If
-            Else
-                SelectedName = LoginJson("selectedProfile")("name").ToString
-                SelectedId = LoginJson("selectedProfile")("id").ToString
-            End If
-            '将登录结果输出
-            Data.Output.AccessToken = LoginJson("accessToken").ToString
-            Data.Output.ClientToken = LoginJson("clientToken").ToString
-            Data.Output.Name = SelectedName
-            Data.Output.Uuid = SelectedId
-            Data.Output.Type = Data.Input.Token
-            '保存缓存
-            Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
-            Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
-            Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
-            Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
-            Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
-            Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
-            McLaunchLog("登录成功（Login, " & Data.Input.Token & "）")
-            Return NeedRefresh
-        Catch ex As Exception
-            Dim AllMessage As String = GetExceptionSummary(ex)
-            Log(ex, "登录失败原始错误信息", LogLevel.Normal)
-            '读取服务器返回的错误
-            If TypeOf ex Is ResponsedWebException Then
-                Dim ErrorMessage As String = Nothing
-                Try
-                    ErrorMessage = GetJson(DirectCast(ex, ResponsedWebException).Response)("errorMessage")
-                Catch
-                End Try
-                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then
-                    If ErrorMessage.Contains("密码错误") OrElse ErrorMessage.ContainsF("Incorrect username or password", True) Then
-                        '密码错误，退出登录 (#5090)
-                        McLaunchLog("密码错误，退出登录")
-                        Select Case Data.Input.Type
-                            Case McLoginType.Auth
-                                RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
-                            Case McLoginType.Nide
-                                RunInUi(AddressOf PageLoginNideSkin.ExitLogin)
-                        End Select
-                    End If
-                    Throw New Exception("$登录失败：" & ErrorMessage)
-                End If
-            End If
-            '通用关键字检测
-            If AllMessage.Contains("403") Then
-                Select Case Data.Input.Type
-                    Case McLoginType.Auth
-                        Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
-                                            " - 输入的账号或密码错误。" & vbCrLf &
-                                            " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
-                                            " - 只注册了账号，但没有在皮肤站新建角色。")
-                    Case McLoginType.Nide
-                        Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
-                                            " - 输入的账号或密码错误。" & vbCrLf &
-                                            " - 密码错误次数过多，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
-                                            If(Data.Input.UserName.Contains("@"), "", " - 登录账号应为邮箱或统一通行证账号，而非游戏角色 ID。" & vbCrLf) &
-                                            " - 只注册了账号，但没有加入对应服务器。")
-                End Select
-            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
-                Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
-            ElseIf ex.Message.StartsWithF("$") Then
-                Throw
-            Else
-                Throw New Exception("登录失败：" & ex.Message, ex)
-            End If
-            Return False
-        End Try
-    End Function
-
     '微软登录步骤 1，原始登录：获取 DeviceCode 并开启登录网页
     Private Function MsLoginStep1New(Data As LoaderTask(Of McLoginMs, McLoginResult)) As String()
         '参考：https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-device-code
@@ -900,10 +588,18 @@ Retry:
                (ex.Message.Contains("refresh_token") AndAlso ex.Message.Contains("is not valid")) Then '#269
                 Return {"Relogin", ""}
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {SelectedProfile.AccessToken, "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
-
         Dim ResultJson As JObject = GetJson(Result)
         Dim AccessToken As String = ResultJson("access_token").ToString
         Dim RefreshToken As String = ResultJson("refresh_token").ToString
@@ -922,7 +618,20 @@ Retry:
            ""RelyingParty"": ""http://auth.xboxlive.com"",
            ""TokenType"": ""JWT""
         }"
-        Dim Result As String = NetRequestMultiple("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
+        Dim Result As String = Nothing
+        Try
+            Result = NetRequestMultiple("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
+        Catch ex As Exception
+            Dim IsIgnore As Boolean = False
+            RunInUiWait(Sub()
+                            If Not IsLaunching Then Exit Sub
+                            If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                        End Sub)
+            If IsIgnore Then
+                Return "Ignore"
+                Exit Function
+            End If
+        End Try
 
         Dim ResultJson As JObject = GetJson(Result)
         Dim XBLToken As String = ResultJson("Token").ToString
@@ -971,6 +680,15 @@ Retry:
                 End If
                 Throw New Exception("$$")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {SelectedProfile.AccessToken, "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
@@ -997,6 +715,15 @@ Retry:
                 Log(ex, "微软登录第 5 步汇报 403")
                 Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return "Ignore"
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
@@ -1047,6 +774,15 @@ Retry:
                 End Sub, "Login Failed: Create Profile")
                 Throw New Exception("$$")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {SelectedProfile.Uuid, SelectedProfile.Username, "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
@@ -1055,6 +791,287 @@ Retry:
         Dim UserName As String = ResultJson("name").ToString
         Return {UUID, UserName, Result}
     End Function
+#End Region
+
+#Region "第三方验证"
+    Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
+        Dim Input As McLoginServer = Data.Input
+        Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
+        Dim LogUsername As String = Input.UserName
+        If LogUsername.Contains("@") Then LogUsername = AccountFilter(LogUsername)
+        McLaunchLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
+        Data.Progress = 0.05
+        '尝试登录
+        If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) Then
+            '尝试验证登录
+            Try
+                If Data.IsAborted Then Throw New ThreadInterruptedException
+                McLoginRequestValidate(Data)
+                GoTo LoginFinish
+            Catch ex As Exception
+                Dim AllMessage = GetExceptionDetail(ex)
+                McLaunchLog("验证登录失败：" & AllMessage)
+                If (AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout")) AndAlso Not AllMessage.Contains("403") Then
+                    McLaunchLog("已触发超时登录失败")
+                    Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
+                End If
+            End Try
+            Data.Progress = 0.25
+            '尝试刷新登录
+Refresh:
+            Try
+                If Data.IsAborted Then Throw New ThreadInterruptedException
+                McLoginRequestRefresh(Data, NeedRefresh)
+                GoTo LoginFinish
+            Catch ex As Exception
+                McLaunchLog("刷新登录失败：" & GetExceptionDetail(ex))
+                If WasRefreshed Then Throw New Exception("二轮刷新登录失败", ex)
+            End Try
+            Data.Progress = If(NeedRefresh, 0.85, 0.45)
+        End If
+        '尝试普通登录
+        Try
+            If Data.IsAborted Then Throw New ThreadInterruptedException
+            NeedRefresh = McLoginRequestLogin(Data)
+        Catch ex As Exception
+            McLaunchLog("验证失败：" & GetExceptionDetail(ex))
+            Throw
+        End Try
+        If NeedRefresh Then
+            McLaunchLog("重新进行刷新登录")
+            WasRefreshed = True
+            Data.Progress = 0.65
+            GoTo Refresh
+        End If
+LoginFinish:
+        Data.Progress = 0.95
+        '保存启动记录
+        Dim Dict As New Dictionary(Of String, String)
+        Dim Emails As New List(Of String)
+        Dim Passwords As New List(Of String)
+        Try
+            For i = 0 To Emails.Count - 1
+                Dict.Add(Emails(i), Passwords(i))
+            Next
+            Dict.Remove(Input.UserName)
+            Emails = New List(Of String)(Dict.Keys)
+            Emails.Insert(0, Input.UserName)
+            Passwords = New List(Of String)(Dict.Values)
+            Passwords.Insert(0, Input.Password)
+        Catch ex As Exception
+            Log(ex, "保存启动记录失败", LogLevel.Hint)
+        End Try
+    End Sub
+    'Server 登录：三种验证方式的请求
+    Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
+        McLaunchLog("验证登录开始（Validate, Authlib")
+        '提前缓存信息，否则如果在登录请求过程中退出登录，设置项目会被清空，导致输出存在空值
+        Dim AccessToken As String = ""
+        Dim ClientToken As String = ""
+        Dim Uuid As String = ""
+        Dim Name As String = ""
+        If SelectedProfile IsNot Nothing Then
+            AccessToken = SelectedProfile.AccessToken
+            ClientToken = SelectedProfile.ClientToken
+            Uuid = SelectedProfile.Uuid
+            Name = SelectedProfile.Username
+        End If
+        '发送登录请求
+        Dim RequestData As New JObject(
+            New JProperty("accessToken", AccessToken), New JProperty("clientToken", ClientToken), New JProperty("requestUser", True))
+        NetRequestRetry(
+            Url:=Data.Input.BaseUrl & "/validate",
+            Method:="POST",
+            Data:=RequestData.ToString(0),
+            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
+            ContentType:="application/json; charset=utf-8") '没有返回值的
+        '将登录结果输出
+        Data.Output.AccessToken = AccessToken
+        Data.Output.ClientToken = ClientToken
+        Data.Output.Uuid = Uuid
+        Data.Output.Name = Name
+        Data.Output.Type = "Auth"
+        '不更改缓存，直接结束
+        McLaunchLog("验证登录成功（Validate, Authlib")
+    End Sub
+    Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
+        Dim RefreshInfo As New JObject
+        Dim SelectProfile As New JObject From {
+            {"name", SelectedProfile.Username},
+            {"id", SelectedProfile.Uuid}
+        }
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", SelectedProfile.AccessToken))
+        RefreshInfo.Add(New JProperty("requestUser", True))
+        McLaunchLog("刷新登录开始（Refresh, Authlib")
+        Dim LoginJson As JObject = GetJson(NetRequestRetry(
+               Url:=Data.Input.BaseUrl & "/refresh",
+               Method:="POST",
+               Data:=RefreshInfo.ToString(0),
+               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
+               ContentType:="application/json; charset=utf-8"))
+        '将登录结果输出
+        If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & SelectedProfile.Username & " 无效！")
+        Data.Output.AccessToken = LoginJson("accessToken").ToString
+        Data.Output.ClientToken = LoginJson("clientToken").ToString
+        Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
+        Data.Output.Name = LoginJson("selectedProfile")("name").ToString
+        Data.Output.Type = "Auth"
+        '保存缓存
+        Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+        ProfileList(ProfileIndex).Username = Data.Output.Name
+        ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
+        ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
+        ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
+        ProfileList(ProfileIndex).Name = Data.Input.UserName
+        ProfileList(ProfileIndex).Password = Data.Input.Password
+        McLaunchLog("刷新登录成功（Refresh, Authlib）")
+    End Sub
+    Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
+        Try
+            Dim NeedRefresh As Boolean = False
+            McLaunchLog("登录开始（Login, Authlib）")
+            Dim RequestData As New JObject(
+                New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
+                New JProperty("username", Data.Input.UserName),
+                New JProperty("password", Data.Input.Password),
+                New JProperty("requestUser", True))
+            Dim LoginJson As JObject = GetJson(NetRequestRetry(
+                Url:=Data.Input.BaseUrl & "/authenticate",
+                Method:="POST",
+                Data:=RequestData.ToString(0),
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
+                ContentType:="application/json; charset=utf-8"))
+            '检查登录结果
+            If LoginJson("availableProfiles").Count = 0 Then
+                If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
+                Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
+            ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
+                Hint("你的账户中只有一个角色，无法更换！", HintType.Critical)
+            End If
+            Dim SelectedName As String = Nothing
+            Dim SelectedId As String = Nothing
+            If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
+                '要求选择档案；优先从缓存读取
+                NeedRefresh = True
+                Dim CacheId As String = If(SelectedProfile IsNot Nothing, SelectedProfile.Uuid, "")
+                For Each Profile In LoginJson("availableProfiles")
+                    If Profile("id").ToString = CacheId Then
+                        SelectedName = Profile("name").ToString
+                        SelectedId = Profile("id").ToString
+                        McLaunchLog("根据缓存选择的角色：" & SelectedName)
+                    End If
+                Next
+                '缓存无效，要求玩家选择
+                If SelectedName Is Nothing Then
+                    McLaunchLog("要求玩家选择角色")
+                    RunInUiWait(
+                                            Sub()
+                                                Dim SelectionControl As New List(Of IMyRadio)
+                                                Dim SelectionJson As New List(Of JToken)
+                                                For Each Profile In LoginJson("availableProfiles")
+                                                    SelectionControl.Add(New MyRadioBox With {.Text = Profile("name").ToString})
+                                                    SelectionJson.Add(Profile)
+                                                Next
+                                                Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, "选择使用的角色")
+                                                SelectedName = SelectionJson(SelectedIndex)("name").ToString
+                                                SelectedId = SelectionJson(SelectedIndex)("id").ToString
+                                            End Sub)
+
+                    McLaunchLog("玩家选择的角色：" & SelectedName)
+                End If
+            Else
+                SelectedName = LoginJson("selectedProfile")("name").ToString
+                SelectedId = LoginJson("selectedProfile")("id").ToString
+            End If
+            '将登录结果输出
+            Data.Output.AccessToken = LoginJson("accessToken").ToString
+            Data.Output.ClientToken = LoginJson("clientToken").ToString
+            Data.Output.Name = SelectedName
+            Data.Output.Uuid = SelectedId
+            Data.Output.Type = "Auth"
+            '获取服务器信息
+            Dim Response As String = NetGetCodeByRequestRetry(Data.Input.BaseUrl.Replace("/authserver", ""), Encoding.UTF8)
+            Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
+            '保存缓存
+            If Data.Input.IsExist Then
+                Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
+                ProfileList(ProfileIndex).Username = Data.Output.Name
+                ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
+                ProfileList(ProfileIndex).ServerName = ServerName
+                ProfileList(ProfileIndex).AccessToken = Data.Output.AccessToken
+                ProfileList(ProfileIndex).ClientToken = Data.Output.ClientToken
+            Else
+                Dim NewProfile As New McProfile With {
+                    .Type = McLoginType.Auth,
+                    .Uuid = Data.Output.Uuid,
+                    .Username = Data.Output.Name,
+                    .Server = Data.Input.BaseUrl,
+                    .ServerName = ServerName,
+                    .Name = Data.Input.UserName,
+                    .Password = Data.Input.Password,
+                    .AccessToken = Data.Output.AccessToken,
+                    .ClientToken = Data.Output.ClientToken,
+                    .Expires = 1743779140286,
+                    .Desc = ""
+                }
+                ProfileList.Add(NewProfile)
+                SelectedProfile = NewProfile
+            End If
+            SaveProfile()
+            McLaunchLog("登录成功（Login, Authlib）")
+            Return NeedRefresh
+        Catch ex As Exception
+            Dim AllMessage As String = GetExceptionSummary(ex)
+            Log(ex, "登录失败原始错误信息", LogLevel.Normal)
+            '读取服务器返回的错误
+            If TypeOf ex Is ResponsedWebException Then
+                Dim ErrorMessage As String = Nothing
+                Try
+                    ErrorMessage = GetJson(DirectCast(ex, ResponsedWebException).Response)("errorMessage")
+                Catch
+                End Try
+                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then
+                    If ErrorMessage.Contains("密码错误") OrElse ErrorMessage.ContainsF("Incorrect username or password", True) Then
+                        '密码错误，退出登录 (#5090)
+                        McLaunchLog("密码错误")
+                    End If
+                    Throw New Exception("$登录失败：" & ErrorMessage)
+                End If
+            End If
+            '通用关键字检测
+            If AllMessage.Contains("403") Then
+                Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
+                                            " - 输入的账号或密码错误。" & vbCrLf &
+                                            " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
+                                            " - 只注册了账号，但没有在皮肤站新建角色。")
+            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
+                Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
+            ElseIf ex.Message.StartsWithF("$") Then
+                Throw
+            Else
+                Throw New Exception("登录失败：" & ex.Message, ex)
+            End If
+            Return False
+        End Try
+    End Function
+#End Region
+
+#Region "离线验证"
+    Private Sub McLoginLegacyStart(Data As LoaderTask(Of McLoginLegacy, McLoginResult))
+        Dim Input As McLoginLegacy = Data.Input
+        McLaunchLog("验证方式：离线（" & Input.UserName & "）")
+        Data.Progress = 0.1
+        With Data.Output
+            .Name = Input.UserName
+            .Uuid = SelectedProfile.Uuid
+            .Type = "Legacy"
+        End With
+        '将结果扩展到所有项目中
+        Data.Output.AccessToken = Data.Output.Uuid
+        Data.Output.ClientToken = Data.Output.Uuid
+    End Sub
+#End Region
 
     '返回符合离线皮肤设置的 UUID
     Private Function McLoginLegacyUuidWithCustomSkin(UserName As String, SkinType As Integer, SkinName As String) As String
@@ -1119,10 +1136,6 @@ Retry:
         If Not Len(Uuid) = 32 Then Throw New Exception("获取的正版 Uuid 长度不足（" & Uuid & "）")
         WriteIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, Uuid)
         Return Uuid
-    End Function
-    Public Function McLoginLegacyUuid(Name As String)
-        Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
-        Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
     End Function
 
 #End Region
@@ -1208,12 +1221,6 @@ Retry:
                 '1.18+：Java 17+
                 MinVer = If(New Version(1, 17, 0, 0) > MinVer, New Version(1, 17, 0, 0), MinVer)
             End If
-        End If
-
-        '统一通行证检测
-        If Setup.Get("LoginType") = McLoginType.Nide Then
-            '至少 Java 8u101
-            MinVer = If(New Version(1, 8, 0, 141) > MinVer, New Version(1, 8, 0, 141), MinVer)
         End If
 
         SyncLock JavaLock
@@ -1423,10 +1430,6 @@ Retry:
         DataList.Add("""-Djava.library.path=" & GetNativesFolder() & """")
         DataList.Add("-cp ${classpath}") '把支持库添加进启动参数表
 
-        '统一通行证
-        If McLoginLoader.Output.Type = "Nide" Then
-            DataList.Insert(0, "-Dnide8auth.client=true -javaagent:""" & PathAppdata & "nide8auth.jar""=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
-        End If
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
@@ -1492,10 +1495,6 @@ NextVersion:
         '内存、Log4j 防御参数等
         SecretLaunchJvmArgs(DataList)
 
-        '统一通行证
-        If McLoginLoader.Output.Type = "Nide" Then
-            DataList.Insert(0, "-javaagent:""" & PathAppdata & "nide8auth.jar""=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
-        End If
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
@@ -2329,8 +2328,6 @@ IgnoreCustomSkin:
                 End If
             Case McLoginType.Ms
                 Raw = Raw.Replace("{login}", "正版")
-            Case McLoginType.Nide
-                Raw = Raw.Replace("{login}", "统一通行证")
             Case McLoginType.Auth
                 Raw = Raw.Replace("{login}", "Authlib-Injector")
         End Select
@@ -2347,3 +2344,4 @@ IgnoreCustomSkin:
 #End Region
 
 End Module
+

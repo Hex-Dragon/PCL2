@@ -164,7 +164,7 @@
                     JsonObject("id") = NewName
                     WriteFile(NewPath & NewName & ".json", JsonObject.ToString)
                 Catch ex As Exception
-                    Log(ex, "重命名版本 json 失败")
+                    Log(ex, "重命名版本 Json 失败")
                 End Try
             End If
             '刷新与提示
@@ -269,7 +269,7 @@
             End If
             '生成脚本
             If McLaunchStart(New McLaunchOptions With {.SaveBatch = SavePath, .Version = PageVersionLeft.Version}) Then
-                If Setup.Get("LoginType") = McLoginType.Legacy Then
+                If SelectedProfile.Type = McLoginType.Legacy Then
                     Hint("正在导出启动脚本……")
                 Else
                     Hint("正在导出启动脚本……（注意，使用脚本启动可能会导致登录失效！）")
