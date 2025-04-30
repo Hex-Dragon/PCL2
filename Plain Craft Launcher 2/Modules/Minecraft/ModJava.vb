@@ -372,8 +372,7 @@ ExitUserJavaCheck:
             For Each Java In AllowedJavaList
                 '如果在官启文件夹启动，会将官启自带 Java 错误视作 MC 文件夹指定 Java，导致了 #2054 的第二例
                 If Java.PathFolder.Contains(".minecraft\cache\java") Then Continue For
-                '#5780
-                If Java.PathFolder.Contains("PCL\MyDownload") Then Continue For
+                If Java.PathFolder.Contains("PCL\MyDownload\") Then Continue For '#5780
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
                     AllowedJavaList = New List(Of JavaEntry) From {Java}
@@ -558,9 +557,8 @@ NoUserJava:
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
                 If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") OrElse Pair.Key.ContainsF("system32") Then
-                    Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
+                    Log("[Java] 位于 " & Pair.Key & " 的 Java 位于特殊路径，不应优先使用")
                 Else
-                    Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
                     JavaWithoutInherit.Add(Pair.Key, Pair.Value)
                 End If
             Next
@@ -714,8 +712,8 @@ Wait:
             Return False
         Else
             Return MyMsgBox($"PCL 未找到 {VersionDescription}，是否需要 PCL 自动下载？" & vbCrLf &
-                            $"如果你已经安装了 {VersionDescription}，请在 设置 → 启动选项 → 游戏 Java 中手动导入。",
-                            "未找到 Java", "自动下载", "取消") = 1
+                            $"如果你已经安装了 {VersionDescription}，可以在 设置 → 启动选项 → 游戏 Java 中手动导入。",
+                            "自动下载 Java？", "自动下载", "取消") = 1
         End If
     End Function
 
@@ -744,10 +742,10 @@ Wait:
     Private LastJavaBaseDir As String = Nothing '用于在下载中断或失败时删除未完成下载的 Java 文件夹，防止残留只下了一半但 -version 能跑的 Java
     Private Sub JavaFileList(Loader As LoaderTask(Of Integer, List(Of NetFile)))
         Log("[Java] 开始获取 Java 下载信息")
-        Dim IndexFileStr As String = NetGetCodeByLoader(
-            {"https://bmclapi2.bangbang93.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json",
-             "https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json"},
-        IsJson:=True)
+        Dim IndexFileStr As String = NetGetCodeByLoader(DlVersionListOrder(
+            {"https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json"},
+            {"https://bmclapi2.bangbang93.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json"}
+        ), IsJson:=True)
         '获取下载地址
         Dim MainEntry As JObject = CType(GetJson(IndexFileStr), JObject)($"windows-x{If(Is32BitSystem, "86", "64")}")
         Dim Entries = MainEntry.Children.Reverse. '选择最靠后的一项（最新）
@@ -756,7 +754,7 @@ Wait:
         Dim Address As String = TargetEntry.Value("manifest")("url")
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表
-        Dim ListFileStr As String = NetGetCodeByLoader({Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"), Address}, IsJson:=True)
+        Dim ListFileStr As String = NetGetCodeByLoader(DlSourceOrder({Address}, {Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com")}), IsJson:=True)
         LastJavaBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
         Dim Results As New List(Of NetFile)
         For Each File As JProperty In CType(GetJson(ListFileStr), JObject)("files")
@@ -769,7 +767,7 @@ Wait:
             End If
             If Checker.Check(LastJavaBaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
             Dim Url As String = Info("url")
-            Results.Add(New NetFile({Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"), Url}, LastJavaBaseDir & File.Name, Checker))
+            Results.Add(New NetFile(DlSourceOrder({Url}, {Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com")}), LastJavaBaseDir & File.Name, Checker))
         Next
         Loader.Output = Results
         Log($"[Java] 需要下载 {Results.Count} 个文件，目标文件夹：{LastJavaBaseDir}")
