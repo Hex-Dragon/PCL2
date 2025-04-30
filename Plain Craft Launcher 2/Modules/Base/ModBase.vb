@@ -13,13 +13,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.3" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.0." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
-    Public Const VersionCode As Integer = 355 'Release
+    Public Const VersionCode As Integer = 357 'Release
 #Else
-    Public Const VersionCode As Integer = 354 'Snapshot
+    Public Const VersionCode As Integer = 356 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -745,7 +745,6 @@ Public Module ModBase
             Dim IsRight As Boolean = FilePath.EndsWithF("\")
             FilePath = Left(FilePath, Len(FilePath) - 1)
             GetPathFromFullPath = Left(FilePath, FilePath.LastIndexOfAny({"\", "/"})) & If(IsRight, "\", "/")
-            If GetPathFromFullPath = "" Then Throw New Exception("不包含路径：" & FilePath)
         Else
             '是文件路径
             GetPathFromFullPath = Left(FilePath, FilePath.LastIndexOfAny({"\", "/"}) + 1)
@@ -2333,13 +2332,17 @@ NextElement:
     ''' <param name="FileName">文件名。可以为“notepad”等缩写。</param>
     ''' <param name="Arguments">运行参数。</param>
     Public Sub ShellOnly(FileName As String, Optional Arguments As String = "")
-        FileName = ShortenPath(FileName)
-        Using Program As New Process
-            Program.StartInfo.Arguments = Arguments
-            Program.StartInfo.FileName = FileName
-            Log("[System] 执行外部命令：" & FileName & " " & Arguments)
-            Program.Start()
-        End Using
+        Try
+            FileName = ShortenPath(FileName)
+            Using Program As New Process
+                Program.StartInfo.Arguments = Arguments
+                Program.StartInfo.FileName = FileName
+                Log("[System] 执行外部命令：" & FileName & " " & Arguments)
+                Program.Start()
+            End Using
+        Catch ex As Exception
+            Log(ex, "打开文件或程序失败：" & FileName, LogLevel.Msgbox)
+        End Try
     End Sub
     ''' <summary>
     ''' 前台运行文件并返回返回值。
