@@ -125,6 +125,9 @@
                 ElseIf ex.Message.Contains("expired_token") Then
                     Finished(New Exception("$登录用时太长啦，重新试试吧！"))
                     Return
+                ElseIf ex.Message.Contains("service abuse") Then
+                    Finished(New Exception("$非常抱歉，该账号已被微软封禁，无法登录。"))
+                    Return
                 ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                     Finished(New RestartException)
                     Return
