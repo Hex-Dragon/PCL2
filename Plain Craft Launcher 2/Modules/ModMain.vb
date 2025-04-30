@@ -433,8 +433,6 @@ EndHint:
     Public FrmOtherVote As PageOtherVote
 
     '登录页面声明
-    Public FrmLoginNide As PageLoginNide
-    Public FrmLoginNideSkin As PageLoginNideSkin
     Public FrmLoginAuth As PageLoginAuth
     Public FrmLoginMs As PageLoginMs
     Public FrmLoginProfile As PageLoginProfile

@@ -21,7 +21,7 @@
         End If
         BtnLogin.IsEnabled = False
         BtnBack.IsEnabled = False
-        Dim LoginData As New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = If(TextServer.Text.EndsWithF("/"),
+        Dim LoginData As New McLoginServer(McLoginType.Auth) With {.BaseUrl = If(TextServer.Text.EndsWithF("/"),
             TextServer.Text & "authserver", TextServer.Text & "/authserver"), .UserName = TextName.Text, .Password = TextPass.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         RunInNewThread(Sub()
                            Try

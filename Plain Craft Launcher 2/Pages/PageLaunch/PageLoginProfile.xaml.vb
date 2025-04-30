@@ -44,7 +44,7 @@
                 End Sub)
     End Sub
     Public Function ProfileListItem(Profile As McProfile, OnClick As MyListItem.ClickEventHandler)
-        Dim LogoPath As String = PathTemp & $"Cache\Skin\Head\{If(Profile.Type = McLoginType.Auth, Profile.Server.Between("://", "/api/yggdrasil"), Profile.Type)}_{Profile.Username}_{Profile.Uuid}.png"
+        Dim LogoPath As String = PathTemp & $"Cache\Skin\Head\{Profile.SkinHeadId}.png"
         If Not (File.Exists(LogoPath) AndAlso Not New FileInfo(LogoPath).Length = 0) Then
             LogoPath = Logo.IconButtonUser
         End If

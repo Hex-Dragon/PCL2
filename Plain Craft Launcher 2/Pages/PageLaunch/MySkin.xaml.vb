@@ -117,7 +117,11 @@ Public Class MySkin
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
-            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{If(SelectedProfile.Type = McLoginType.Auth, SelectedProfile.Server.Between("://", "/api/yggdrasil"), SelectedProfile.Type)}_{SelectedProfile.Username}_{SelectedProfile.Uuid}.png"
+            '用于显示档案列表头像的图片
+            Dim SkinHeadId As String = Address.Between({If(Address.Contains("Images/Skins/"), "Skins/", "Skin\")}(0), ".png")
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{SkinHeadId}.png"
+            SelectedProfile.SkinHeadId = SkinHeadId
+            SaveProfile()
             If SkinHead Is Nothing Then
                 SkinHead.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)
             Else
@@ -190,7 +194,6 @@ Public Class MySkin
                     If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
                     If Directory.Exists(PathTemp & "Cache\Uuid") Then DeleteDirectory(PathTemp & "Cache\Uuid")
                     IniClearCache(PathTemp & "Cache\Skin\IndexMs.ini")
-                    IniClearCache(PathTemp & "Cache\Skin\IndexNide.ini")
                     IniClearCache(PathTemp & "Cache\Skin\IndexAuth.ini")
                     IniClearCache(PathTemp & "Cache\Uuid\Mojang.ini")
                     '刷新控件

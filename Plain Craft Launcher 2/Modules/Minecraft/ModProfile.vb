@@ -44,6 +44,10 @@ Public Module ModProfile
         Public Desc As String
         Public ClientToken As String
         Public RawJson As String
+        ''' <summary>
+        ''' 用于档案列表头像显示的皮肤 ID
+        ''' </summary>
+        Public SkinHeadId As String
     End Class
 #End Region
 
@@ -52,7 +56,7 @@ Public Module ModProfile
     ''' 重新获取已有档案列表
     ''' </summary>
     Public Sub GetProfile()
-        Log("[Profile] 开始获取档案列表")
+        Log("[Profile] 开始获取本地档案")
         ProfileList.Clear()
         Try
             If Not File.Exists(PathAppdataConfig & "Profiles.json") Then
@@ -73,7 +77,8 @@ Public Module ModProfile
                         .RefreshToken = SecretDecrypt(Profile("refreshToken")),
                         .Expires = Profile("expires"),
                         .Desc = Profile("desc"),
-                        .RawJson = SecretDecrypt(Profile("rawJson"))
+                        .RawJson = SecretDecrypt(Profile("rawJson")),
+                        .SkinHeadId = Profile("skinHeadId")
                     }
                 ElseIf Profile("type") = "authlib" Then
                     NewProfile = New McProfile With {
@@ -88,19 +93,21 @@ Public Module ModProfile
                         .Name = SecretDecrypt(Profile("name")),
                         .Password = SecretDecrypt(Profile("password")),
                         .ClientToken = SecretDecrypt(Profile("clientToken")),
-                        .Desc = Profile("desc")
+                        .Desc = Profile("desc"),
+                        .SkinHeadId = Profile("skinHeadId")
                     }
                 Else
                     NewProfile = New McProfile With {
                         .Type = McLoginType.Legacy,
                         .Uuid = Profile("uuid"),
                         .Username = Profile("username"),
-                        .Desc = Profile("desc")
+                        .Desc = Profile("desc"),
+                        .SkinHeadId = Profile("skinHeadId")
                     }
                 End If
                 ProfileList.Add(NewProfile)
             Next
-            Log($"[Profile] 获取档案完成，获取到 {ProfileList.Count} 个档案")
+            Log($"[Profile] 获取到 {ProfileList.Count} 个档案")
             If IsFirstLoad Then
                 If Not ProfileList.Count = 0 Then SelectedProfile = ProfileList(LastUsedProfile)
                 IsFirstLoad = False
@@ -115,7 +122,6 @@ Public Module ModProfile
     ''' </summary>
     Public Sub SaveProfile(Optional ListJson As JArray = Nothing)
         Try
-            Log("[Profile] 写入档案列表")
             Dim Json As New JObject
             If ListJson IsNot Nothing Then
                 Json = New JObject From {
@@ -135,7 +141,8 @@ Public Module ModProfile
                             {"refreshToken", SecretEncrypt(Profile.RefreshToken)},
                             {"expires", Profile.Expires},
                             {"desc", Profile.Desc},
-                            {"rawJson", SecretEncrypt(Profile.RawJson)}
+                            {"rawJson", SecretEncrypt(Profile.RawJson)},
+                            {"skinHeadId", Profile.SkinHeadId}
                         }
                     ElseIf Profile.Type = McLoginType.Auth Then
                         ProfileJobj = New JObject From {
@@ -150,25 +157,28 @@ Public Module ModProfile
                             {"name", SecretEncrypt(Profile.Name)},
                             {"password", SecretEncrypt(Profile.Password)},
                             {"clientToken", SecretEncrypt(Profile.ClientToken)},
-                            {"desc", Profile.Desc}
+                            {"desc", Profile.Desc},
+                            {"skinHeadId", Profile.SkinHeadId}
                         }
                     Else
                         ProfileJobj = New JObject From {
                             {"type", "offline"},
                             {"uuid", Profile.Uuid},
                             {"username", Profile.Username},
-                            {"desc", Profile.Desc}
+                            {"desc", Profile.Desc},
+                            {"skinHeadId", Profile.SkinHeadId}
                         }
                     End If
                     List.Add(ProfileJobj)
                 Next
-                Log($"[Profile] 开始写入档案，共 {List.Count} 个")
+                Log($"[Profile] 开始保存档案，共 {List.Count} 个")
                 Json = New JObject From {
                 {"lastUsed", LastUsedProfile},
                 {"profiles", List}
             }
             End If
             WriteFile(PathAppdataConfig & "Profiles.json", Json.ToString, False)
+            Log($"[Profile] 档案已保存")
         Catch ex As Exception
             Log(ex, "写入档案列表失败", LogLevel.Feedback)
         End Try
@@ -504,7 +514,7 @@ Write:
                 AuthType = McLoginType.Legacy
             End If
             If AuthType = McLoginType.Auth Then
-                Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth",
+                Return New McLoginServer(McLoginType.Auth) With {
                     .Description = "Authlib-Injector",
                     .Type = McLoginType.Auth,
                     .IsExist = (FrmLoginAuth Is Nothing)
@@ -517,7 +527,7 @@ Write:
         Else '已有档案
             AuthType = SelectedProfile.Type
             If AuthType = McLoginType.Auth Then
-                Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth",
+                Return New McLoginServer(McLoginType.Auth) With {
                     .BaseUrl = SelectedProfile.Server,
                     .UserName = SelectedProfile.Name,
                     .Password = SelectedProfile.Password,
