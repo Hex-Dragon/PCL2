@@ -25,6 +25,7 @@ Public Module ModComp
         Other = 4
     End Enum
     Public Enum CompLoaderType
+        'https://docs.curseforge.com/?http#tocS_ModLoaderType
         ''' <summary>
         ''' 模组加载器
         ''' </summary>
