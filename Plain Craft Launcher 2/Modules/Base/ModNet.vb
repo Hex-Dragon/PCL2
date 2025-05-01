@@ -1,28 +1,29 @@
 ﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
-    Private Property _Proxy As WebProxy
+    Private Property _Proxy As IWebProxy = WebRequest.GetSystemWebProxy()
     ''' <summary>
-    ''' 获取 Proxy 代理
+    ''' 确定是否使用代理。
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
-        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+        Dim SystemProxy As New WebProxy(_Proxy.GetProxy(New Uri("https://www.example.com")))
+        If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
-            Return _Proxy
+            Return SystemProxy
         End If
-        If Not String.IsNullOrWhiteSpace(proxy) Then
+        If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
             _Proxy = New WebProxy(proxy, True)
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
-                If ProxyUri.IsLoopBack OrElse
+                If ProxyUri.IsLoopback OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
-                ProxyUri.Host.StartswithF("fe80") OrElse
+                ProxyUri.Host.StartsWithF("fe80") OrElse
                 (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
-            '视作非本地地址
+                '视作非本地地址
             Catch
             End Try
             Return _Proxy
@@ -1039,7 +1040,7 @@ Capture:
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
                     If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("bmclapi") OrElse TargetUrl.Contains("github.com") OrElse
-                       TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") OrElse TargetUrl.Contains("1821946486") Then Return Nothing
+                       TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") OrElse TargetUrl.Contains("gitcode") Then Return Nothing
                     '寻找最大碎片
                     'FUTURE: 下载引擎重做，计算下载源平均链接时间和线程下载速度，按最高时间节省来开启多线程
                     Dim FilePieceMax As NetThread = Threads

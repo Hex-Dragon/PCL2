@@ -495,7 +495,9 @@ Install:
 
 #Region "选择"
 
-    '选择的 Mod 的路径（不含 .disabled 和 .old）
+    ''' <summary>
+    ''' 选择的 Mod 的路径（不含 .disabled 和 .old）。
+    ''' </summary>
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
@@ -953,11 +955,11 @@ Install:
                         My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                     End If
                 Catch ex As OperationCanceledException
-                    Log(ex, "删除 Mod 被主动取消")
+                    Log(ex, "删除资源被主动取消")
                     ReloadCompFileList(True)
                     Return
                 Catch ex As Exception
-                    Log(ex, $"删除 Mod 失败（{ModEntity.Path}）", LogLevel.Msgbox)
+                    Log(ex, $"删除资源失败（{ModEntity.Path}）", LogLevel.Msgbox)
                     IsSuccessful = False
                 End Try
                 '取消选中
@@ -994,10 +996,10 @@ Install:
                 End If
             End If
         Catch ex As OperationCanceledException
-            Log(ex, "删除 Mod 被主动取消")
+            Log(ex, "删除资源被主动取消")
             ReloadCompFileList(True)
         Catch ex As Exception
-            Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
+            Log(ex, "删除资源出现未知错误", LogLevel.Feedback)
             ReloadCompFileList(True)
         End Try
         LoaderRun(LoaderFolderRunType.UpdateOnly)
@@ -1008,6 +1010,13 @@ Install:
         ChangeAllSelected(False)
     End Sub
 
+    '收藏
+    Private Sub BtnSelectFavorites_Click(sender As Object, e As RouteEventArgs) Handles BtnSelectFavorites.Click
+        Dim Selected As List(Of CompProject) = CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.Comp IsNot Nothing).Select(Function(i) i.Comp).ToList
+        CompFavorites.ShowMenu(Selected, sender)
+    End Sub
+
+    '分享
     Private Sub BtnSelectShare_Click() Handles BtnSelectShare.Click
         Dim ShareList As List(Of String) = CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.Comp IsNot Nothing).Select(Function(i) i.Comp.Id).ToList()
         ClipboardSet(CompFavorites.GetShareCode(ShareList))
@@ -1025,7 +1034,7 @@ Install:
             Dim ModEntry As LocalCompFile = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalCompItem).Entry
             '加载失败信息
             If ModEntry.State = LocalCompFile.LocalFileStatus.Unavailable Then
-                MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
+                MyMsgBox("无法读取此资源的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "资源读取失败")
                 Return
             End If
             If ModEntry.Comp IsNot Nothing Then
@@ -1084,7 +1093,7 @@ Install:
                 End If
             End If
         Catch ex As Exception
-            Log(ex, "获取 Mod 详情失败", LogLevel.Feedback)
+            Log(ex, "获取资源详情失败", LogLevel.Feedback)
         End Try
     End Sub
     '打开文件所在的位置
@@ -1093,7 +1102,7 @@ Install:
             Dim ListItem As MyLocalCompItem = sender.Tag
             OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
-            Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
+            Log(ex, "打开资源文件位置失败", LogLevel.Feedback)
         End Try
     End Sub
     '删除

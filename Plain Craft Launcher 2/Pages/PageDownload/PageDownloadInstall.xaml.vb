@@ -999,6 +999,7 @@ Public Class PageDownloadInstall
     Private Sub OptiFine_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnOptiFineClear.MouseLeftButtonUp
         SelectedOptiFine = Nothing
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         CardOptiFine.IsSwaped = True
         e.Handled = True
         Forge_Loaded()
@@ -1337,7 +1338,9 @@ Public Class PageDownloadInstall
     Private Sub Fabric_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricClear.MouseLeftButtonUp
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
+        AutoSelectedFabricApi = False
         SelectedOptiFabric = Nothing
+        AutoSelectedOptiFabric = False
         SelectedLoaderName = Nothing
         SelectedAPIName = Nothing
         CardFabric.IsSwaped = True

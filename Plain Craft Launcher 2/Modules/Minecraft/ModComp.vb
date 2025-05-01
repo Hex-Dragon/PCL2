@@ -1764,10 +1764,39 @@ Retry:
                                                    Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
                                                Else
                                                    i.Favs.Add(Project.Id)
-                                                   i.Favs.Distinct()
+                                                   i.Favs = i.Favs.Distinct()
                                                    Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
                                                End If
                                                Save()
+                                           Catch ex As Exception
+                                               Log(ex, "[CompFavorites] 改变收藏项出错")
+                                           End Try
+                                       End Sub
+                Body.Items.Add(Item)
+            Next
+            Body.Placement = Primitives.PlacementMode.Bottom
+            Body.PlacementTarget = Pos
+            Body.IsOpen = True
+        End Sub
+        ''' <summary>
+        ''' 显示收藏菜单。
+        ''' </summary>
+        Public Shared Sub ShowMenu(Project As List(Of CompProject), Pos As UIElement)
+            Dim Body As New ContextMenu
+            For Each i In FavoritesList
+                Dim Item As New MyMenuItem With {
+                    .MaxWidth = 240,
+                    .Header = $"收藏到 {i.Name}"
+                }
+                AddHandler Item.Click, Sub()
+                                           Try
+                                               Dim Count As Integer = i.Favs.Count
+                                               i.Favs.AddRange(Project.Select(Function(p) p.Id).AsEnumerable)
+                                               i.Favs = i.Favs.Distinct.ToList
+                                               Save()
+                                               Dim SuccessCount As Integer = i.Favs.Count - Count
+                                               Dim FailedCount As Integer = Project.Count - SuccessCount
+                                               Hint($"已将 {SuccessCount} 个资源添加到 {i.Name} 中{If(FailedCount > 0, $"，{FailedCount} 个资源已添加", "")}！", HintType.Finish)
                                            Catch ex As Exception
                                                Log(ex, "[CompFavorites] 改变收藏项出错")
                                            End Try
