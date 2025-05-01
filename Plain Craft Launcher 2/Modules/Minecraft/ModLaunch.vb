@@ -1954,7 +1954,6 @@ NextVersion:
 
         '离线皮肤资源包
         Try
-            Directory.CreateDirectory(McVersionCurrent.PathIndie & "resourcepacks\")
             Dim ZipFileAddress As String = McVersionCurrent.PathIndie & "resourcepacks\PCL2 Skin.zip"
             Dim NewTypeSetup As Boolean = McVersionCurrent.Version.McCodeMain >= 13 OrElse McVersionCurrent.Version.McCodeMain < 6
             If McLoginLoader.Input.Type = McLoginType.Legacy AndAlso Setup.Get("LaunchSkinType") = 4 AndAlso File.Exists(PathAppdata & "CustomSkin.png") Then
