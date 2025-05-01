@@ -655,6 +655,11 @@ Public Class FormMain
         If WindowState = WindowState.Maximized Then WindowState = WindowState.Normal '修复 #1938
     End Sub
 
+    '标题栏改变大小
+    Private Sub PanTitle_SizeChanged() Handles PanTitleLeft.SizeChanged
+        PanTitleLeft.ColumnDefinitions(0).MaxWidth = PanTitleMain.ColumnDefinitions(0).ActualWidth - 30
+    End Sub
+
     '最小化
     Private Sub BtnTitleMin_Click() Handles BtnTitleMin.Click
         WindowState = WindowState.Minimized

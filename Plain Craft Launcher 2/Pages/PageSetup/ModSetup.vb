@@ -45,6 +45,7 @@ Public Class ModSetup
         {"SystemSystemServer", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
         {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemUseDefaultProxy", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
@@ -78,6 +79,7 @@ Public Class ModSetup
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
         {"LaunchAdvanceDisableJLW", New SetupEntry(False)},
+        {"LaunchAdvanceDisableRW", New SetupEntry(False)},
         {"LaunchAdvanceGraphicCard", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
@@ -156,6 +158,8 @@ Public Class ModSetup
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceDisableJLW", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceUseProxyV2", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableRW", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
         {"VersionRamCustom", New SetupEntry(15, Source:=SetupSource.Version)},
         {"VersionRamOptimize", New SetupEntry(0, Source:=SetupSource.Version)},
@@ -411,8 +415,8 @@ Public Class ModSetup
                             If E.Encoded Then OldSourceData = SecretEncrypt(SecretDecrptyOld(OldSourceData))
                             LocalRegisterData.Set(Key, OldSourceData)
                             DeleteReg(Key)
-                            SourceValue = OldSourceData
                         End If
+                        SourceValue = OldSourceData
                     Else
                         SourceValue = LocalRegisterData.Get(Key)
                     End If
