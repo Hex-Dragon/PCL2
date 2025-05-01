@@ -2124,7 +2124,6 @@ Retry:
             '下载
             'TODO: BMCLAPI 不支持 Quilt Installer 下载
             Dim Address As New List(Of String)
-            Dim sdasda = 0
             Address.Add(Url)
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
             '启动
