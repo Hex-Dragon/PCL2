@@ -20,7 +20,7 @@
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
             <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="False" Margin="0,0,0,10" IsHitTestVisible="False"/>
             <TextBlock Name="TextName" Text="Username" Margin="8,0" FontSize="16" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-            <TextBlock Name="TextType" Text="AuthType" Margin="8,4,8,5" FontSize="12" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ColorBrushGray3}" />
+            <TextBlock Name="TextType" Text="AuthType" Margin="8,4,8,5" FontSize="12" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource ColorBrushGray4}" />
         </StackPanel>
         <Border Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="0"
                 CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,9,3" Margin="0,8,0,0">

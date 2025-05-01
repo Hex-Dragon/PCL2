@@ -299,7 +299,9 @@ NextInner:
 
 #End Region
 
-#Region "主登录模块"
+#Region "档案验证"
+
+#Region "主模块"
 
     '登录方式
     Public Enum McLoginType
@@ -318,6 +320,8 @@ NextInner:
             Return obj IsNot Nothing AndAlso obj.GetHashCode() = GetHashCode()
         End Function
     End Class
+
+#Region "第三方验证类型"
     Public Class McLoginServer
         Inherits McLoginData
 
@@ -354,6 +358,9 @@ NextInner:
         End Function
 
     End Class
+#End Region
+
+#Region "正版验证类型"
     Public Class McLoginMs
         Inherits McLoginData
 
@@ -373,6 +380,9 @@ NextInner:
             Return GetHash(OAuthRefreshToken & AccessToken & Uuid & UserName & ProfileJson) Mod Integer.MaxValue
         End Function
     End Class
+#End Region
+
+#Region "离线验证类型"
     Public Class McLoginLegacy
         Inherits McLoginData
         ''' <summary>
@@ -399,6 +409,7 @@ NextInner:
             Return GetHash(UserName & SkinType & SkinName & Type) Mod Integer.MaxValue
         End Function
     End Class
+#End Region
 
     '登录返回结果
     Public Structure McLoginResult
@@ -425,7 +436,7 @@ NextInner:
         Return LoginData
     End Function
     Private Sub McLoginStart(Data As LoaderTask(Of McLoginData, McLoginResult))
-        McLaunchLog("登录加载已开始")
+        Log("[Profile] 开始加载选定档案")
         '校验登录信息
         Dim CheckResult As String = IsProfileVaild()
         If Not CheckResult = "" Then Throw New ArgumentException(CheckResult)
@@ -443,12 +454,10 @@ NextInner:
         Loader.WaitForExit(Data.Input, McLoginLoader, Data.IsForceRestarting)
         Data.Output = CType(Loader, Object).Output
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False)) '刷新自动填充列表
-        McLaunchLog("登录加载已结束")
+        Log("[Profile] 选定档案加载完成")
     End Sub
 
 #End Region
-
-#Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
     Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart) With {.ReloadTimeout = 1}
@@ -463,7 +472,7 @@ NextInner:
         Dim Input As McLoginMs = Data.Input
         Dim LogUsername As String = Input.UserName
         Dim IsNewProfile As Boolean = True
-        McLaunchLog("验证方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
+        ProfileLog("验证方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
         Data.Progress = 0.05
         '检查是否已经登录完成
         If Not Data.IsForceRestarting AndAlso '不要求强行重启
@@ -540,7 +549,7 @@ Relogin:
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '结束
         McLoginMsRefreshTime = GetTimeTick()
-        McLaunchLog("微软登录完成")
+        ProfileLog("正版验证完成")
 SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
@@ -552,16 +561,16 @@ SkipLogin:
             Exit Sub
         End If
     End Sub
-    '微软登录步骤 1，原始登录：获取 DeviceCode 并开启登录网页
+    '正版验证步骤 1，原始登录：获取 DeviceCode 并开启登录网页
     Private Function MsLoginStep1New(Data As LoaderTask(Of McLoginMs, McLoginResult)) As String()
         '参考：https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-device-code
 
         '初始请求
 Retry:
-        McLaunchLog("开始微软登录步骤 1/6（原始登录）")
+        ProfileLog("开始正版验证步骤 1/6（原始登录）")
         Dim PrepareJson As JObject = GetJson(NetRequestRetry("https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode", "POST",
             $"client_id={OAuthClientId}&tenant=/consumers&scope=XboxLive.signin%20offline_access", "application/x-www-form-urlencoded"))
-        McLaunchLog("网页登录地址：" & PrepareJson("verification_uri").ToString)
+        ProfileLog("网页登录地址：" & PrepareJson("verification_uri").ToString)
 
         '弹窗
         Dim Converter As New MyMsgBoxConverter With {.Content = PrepareJson, .ForceWait = True, .Type = MyMsgBoxType.Login}
@@ -583,9 +592,9 @@ Retry:
             Return Converter.Result
         End If
     End Function
-    '微软登录步骤 1，刷新登录：从 OAuth Code 或 OAuth RefreshToken 获取 {OAuth AccessToken, OAuth RefreshToken}
+    '正版验证步骤 1，刷新登录：从 OAuth Code 或 OAuth RefreshToken 获取 {OAuth AccessToken, OAuth RefreshToken}
     Private Function MsLoginStep1Refresh(Code As String) As String()
-        McLaunchLog("开始微软登录步骤 1/6（刷新登录）")
+        ProfileLog("开始正版验证步骤 1/6（刷新登录）")
 
         Dim Result As String
         Try
@@ -614,9 +623,9 @@ Retry:
         Dim RefreshToken As String = ResultJson("refresh_token").ToString
         Return {AccessToken, RefreshToken}
     End Function
-    '微软登录步骤 2：从 OAuth AccessToken 获取 XBLToken
+    '正版验证步骤 2：从 OAuth AccessToken 获取 XBLToken
     Private Function MsLoginStep2(AccessToken As String) As String
-        McLaunchLog("开始微软登录步骤 2/6")
+        ProfileLog("开始正版验证步骤 2/6: 获取 XBLToken")
 
         Dim Request As String = "{
            ""Properties"": {
@@ -646,9 +655,9 @@ Retry:
         Dim XBLToken As String = ResultJson("Token").ToString
         Return XBLToken
     End Function
-    '微软登录步骤 3：从 XBLToken 获取 {XSTSToken, UHS}
+    '正版验证步骤 3：从 XBLToken 获取 {XSTSToken, UHS}
     Private Function MsLoginStep3(XBLToken As String) As String()
-        McLaunchLog("开始微软登录步骤 3/6")
+        ProfileLog("开始正版验证步骤 3/6: 获取 XSTSToken")
 
         Dim Request As String = "{
                                     ""Properties"": {
@@ -707,9 +716,9 @@ Retry:
         Dim UHS As String = ResultJson("DisplayClaims")("xui")(0)("uhs").ToString
         Return {XSTSToken, UHS}
     End Function
-    '微软登录步骤 4：从 {XSTSToken, UHS} 获取 Minecraft AccessToken
+    '正版验证步骤 4：从 {XSTSToken, UHS} 获取 Minecraft AccessToken
     Private Function MsLoginStep4(Tokens As String()) As String
-        McLaunchLog("开始微软登录步骤 4/6")
+        ProfileLog("开始正版验证步骤 4/6: 获取 Minecraft AccessToken")
 
         Dim Request As String = New JObject(New JProperty("identityToken", $"XBL3.0 x={Tokens(1)};{Tokens(0)}")).ToString(0)
         Dim Result As String
@@ -718,10 +727,10 @@ Retry:
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
-                Log(ex, "微软登录第 5 步汇报 429")
+                Log(ex, "正版验证第 4 步汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(403)") Then
-                Log(ex, "微软登录第 5 步汇报 403")
+                Log(ex, "正版验证第 4 步汇报 403")
                 Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
             Else
                 Dim IsIgnore As Boolean = False
@@ -741,9 +750,9 @@ Retry:
         Dim AccessToken As String = ResultJson("access_token").ToString
         Return AccessToken
     End Function
-    '微软登录步骤 5：验证微软账号是否持有 MC，这也会刷新 XGP
+    '正版验证步骤 5：验证微软账号是否持有 MC，这也会刷新 XGP
     Private Sub MsLoginStep5(AccessToken As String)
-        McLaunchLog("开始微软登录步骤 5/6")
+        ProfileLog("开始正版验证步骤 5/6: 验证账户是否持有 MC")
 
         Dim Result As String = NetRequestMultiple("https://api.minecraftservices.com/entitlements/mcstore", "GET", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
         Try
@@ -756,13 +765,13 @@ Retry:
                 Throw New Exception("$$")
             End If
         Catch ex As Exception
-            Log(ex, "微软登录第 6 步异常：" & Result)
+            Log(ex, "正版验证第 5 步异常：" & Result)
             Throw
         End Try
     End Sub
-    '微软登录步骤 6：从 Minecraft AccessToken 获取 {UUID, UserName, ProfileJson}
+    '正版验证步骤 6：从 Minecraft AccessToken 获取 {UUID, UserName, ProfileJson}
     Private Function MsLoginStep6(AccessToken As String) As String()
-        McLaunchLog("开始微软登录步骤 6/6")
+        ProfileLog("开始正版验证步骤 6/6: 获取玩家 ID 与 UUID 等相关信息")
 
         Dim Result As String
         Try
@@ -770,10 +779,10 @@ Retry:
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
-                Log(ex, "微软登录第 7 步汇报 429")
+                Log(ex, "微软登录第 6 步汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(404)") Then
-                Log(ex, "微软登录第 7 步汇报 404")
+                Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(
                 Sub()
                     Select Case MyMsgBox("请先创建 Minecraft 玩家档案，然后再重新登录。", "登录失败", "创建档案", "取消")
@@ -808,7 +817,7 @@ Retry:
         Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
         Dim LogUsername As String = Input.UserName
         If LogUsername.Contains("@") Then LogUsername = AccountFilter(LogUsername)
-        McLaunchLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
+        ProfileLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
         Data.Progress = 0.05
         '尝试登录
         If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) Then
@@ -819,9 +828,9 @@ Retry:
                 GoTo LoginFinish
             Catch ex As Exception
                 Dim AllMessage = GetExceptionDetail(ex)
-                McLaunchLog("验证登录失败：" & AllMessage)
+                ProfileLog("验证登录失败：" & AllMessage)
                 If (AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout")) AndAlso Not AllMessage.Contains("403") Then
-                    McLaunchLog("已触发超时登录失败")
+                    ProfileLog("已触发超时登录失败")
                     Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
                 End If
             End Try
@@ -833,7 +842,7 @@ Refresh:
                 McLoginRequestRefresh(Data, NeedRefresh)
                 GoTo LoginFinish
             Catch ex As Exception
-                McLaunchLog("刷新登录失败：" & GetExceptionDetail(ex))
+                ProfileLog("刷新登录失败：" & GetExceptionDetail(ex))
                 If WasRefreshed Then Throw New Exception("二轮刷新登录失败", ex)
             End Try
             Data.Progress = If(NeedRefresh, 0.85, 0.45)
@@ -843,11 +852,11 @@ Refresh:
             If Data.IsAborted Then Throw New ThreadInterruptedException
             NeedRefresh = McLoginRequestLogin(Data)
         Catch ex As Exception
-            McLaunchLog("验证失败：" & GetExceptionDetail(ex))
+            ProfileLog("验证失败：" & GetExceptionDetail(ex))
             Throw
         End Try
         If NeedRefresh Then
-            McLaunchLog("重新进行刷新登录")
+            ProfileLog("重新进行刷新登录")
             WasRefreshed = True
             Data.Progress = 0.65
             GoTo Refresh
@@ -873,7 +882,7 @@ LoginFinish:
     End Sub
     'Server 登录：三种验证方式的请求
     Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
-        McLaunchLog("验证登录开始（Validate, Authlib")
+        ProfileLog("验证登录开始（Validate, Authlib")
         '提前缓存信息，否则如果在登录请求过程中退出登录，设置项目会被清空，导致输出存在空值
         Dim AccessToken As String = ""
         Dim ClientToken As String = ""
@@ -901,7 +910,7 @@ LoginFinish:
         Data.Output.Name = Name
         Data.Output.Type = "Auth"
         '不更改缓存，直接结束
-        McLaunchLog("验证登录成功（Validate, Authlib")
+        ProfileLog("验证登录成功（Validate, Authlib")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         Dim RefreshInfo As New JObject
@@ -912,7 +921,7 @@ LoginFinish:
         RefreshInfo.Add("selectedProfile", SelectProfile)
         RefreshInfo.Add(New JProperty("accessToken", SelectedProfile.AccessToken))
         RefreshInfo.Add(New JProperty("requestUser", True))
-        McLaunchLog("刷新登录开始（Refresh, Authlib")
+        ProfileLog("刷新登录开始（Refresh, Authlib")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
@@ -934,12 +943,12 @@ LoginFinish:
         ProfileList(ProfileIndex).Uuid = Data.Output.Uuid
         ProfileList(ProfileIndex).Name = Data.Input.UserName
         ProfileList(ProfileIndex).Password = Data.Input.Password
-        McLaunchLog("刷新登录成功（Refresh, Authlib）")
+        ProfileLog("刷新登录成功（Refresh, Authlib）")
     End Sub
     Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
         Try
             Dim NeedRefresh As Boolean = False
-            McLaunchLog("登录开始（Login, Authlib）")
+            ProfileLog("登录开始（Login, Authlib）")
             Dim RequestData As New JObject(
                 New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
                 New JProperty("username", Data.Input.UserName),
@@ -968,12 +977,12 @@ LoginFinish:
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
                         SelectedId = Profile("id").ToString
-                        McLaunchLog("根据缓存选择的角色：" & SelectedName)
+                        ProfileLog("根据缓存选择的角色：" & SelectedName)
                     End If
                 Next
                 '缓存无效，要求玩家选择
                 If SelectedName Is Nothing Then
-                    McLaunchLog("要求玩家选择角色")
+                    ProfileLog("要求玩家选择角色")
                     RunInUiWait(
                                             Sub()
                                                 Dim SelectionControl As New List(Of IMyRadio)
@@ -987,7 +996,7 @@ LoginFinish:
                                                 SelectedId = SelectionJson(SelectedIndex)("id").ToString
                                             End Sub)
 
-                    McLaunchLog("玩家选择的角色：" & SelectedName)
+                    ProfileLog("玩家选择的角色：" & SelectedName)
                 End If
             Else
                 SelectedName = LoginJson("selectedProfile")("name").ToString
@@ -1028,7 +1037,7 @@ LoginFinish:
                 SelectedProfile = NewProfile
             End If
             SaveProfile()
-            McLaunchLog("登录成功（Login, Authlib）")
+            ProfileLog("登录成功（Login, Authlib）")
             Return NeedRefresh
         Catch ex As Exception
             Dim AllMessage As String = GetExceptionSummary(ex)
@@ -1043,7 +1052,7 @@ LoginFinish:
                 If Not String.IsNullOrWhiteSpace(ErrorMessage) Then
                     If ErrorMessage.Contains("密码错误") OrElse ErrorMessage.ContainsF("Incorrect username or password", True) Then
                         '密码错误，退出登录 (#5090)
-                        McLaunchLog("密码错误")
+                        ProfileLog("第三方验证档案密码错误")
                     End If
                     Throw New Exception("$登录失败：" & ErrorMessage)
                 End If
@@ -1069,7 +1078,7 @@ LoginFinish:
 #Region "离线验证"
     Private Sub McLoginLegacyStart(Data As LoaderTask(Of McLoginLegacy, McLoginResult))
         Dim Input As McLoginLegacy = Data.Input
-        McLaunchLog("验证方式：离线（" & Input.UserName & "）")
+        ProfileLog("验证方式：离线（" & Input.UserName & "）")
         Data.Progress = 0.1
         With Data.Output
             .Name = Input.UserName
@@ -1081,71 +1090,6 @@ LoginFinish:
         Data.Output.ClientToken = Data.Output.Uuid
     End Sub
 #End Region
-
-    '返回符合离线皮肤设置的 UUID
-    Private Function McLoginLegacyUuidWithCustomSkin(UserName As String, SkinType As Integer, SkinName As String) As String
-        Dim Uuid As String = McLoginLegacyUuid(UserName)
-        '根据离线皮肤获取实际使用的 Uuid
-        Select Case SkinType
-            Case 0
-                '默认，不需要处理
-            Case 1
-                'Steve
-                Do Until McSkinSex(Uuid) = "Steve"
-                    If Uuid.EndsWithF("FFFFF") Then Uuid = Uuid.Substring(0, 27) & "00000"
-                    Uuid = Uuid.Substring(0, 27) & (Long.Parse(Uuid.Substring(27), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
-                Loop
-            Case 2
-                'Alex
-                Do Until McSkinSex(Uuid) = "Alex"
-                    If Uuid.EndsWithF("FFFFF") Then Uuid = Uuid.Substring(0, 27) & "00000"
-                    Uuid = Uuid.Substring(0, 27) & (Long.Parse(Uuid.Substring(27), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
-                Loop
-            Case 3
-                '使用正版用户名
-                Try
-                    If SkinName <> "" AndAlso
-                        McVersionCurrent IsNot Nothing AndAlso McVersionCurrent.Version.McCodeMain < 20 Then '1.20+ 或快照版不能使用该项（#3746）
-                        Log("[Skin] 由于离线皮肤设置，使用正版 UUID：" & SkinName)
-                        Uuid = McLoginMojangUuid(SkinName, False)
-                    End If
-                Catch ex As Exception
-                    Log(ex, "离线启动时使用的正版皮肤获取失败")
-                    MyMsgBox("由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。" & vbCrLf & "请检查你的网络是否通畅，或尝试使用 VPN！" & vbCrLf & vbCrLf & "详细的错误信息：" & ex.Message, "皮肤获取失败")
-                End Try
-            Case 4
-                '自定义
-                Do Until McSkinSex(Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
-                    If Uuid.EndsWithF("FFFFF") Then Uuid = Uuid.Substring(0, 27) & "00000"
-                    Uuid = Uuid.Substring(0, 27) & (Long.Parse(Uuid.Substring(27), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
-                Loop
-        End Select
-        Return Uuid
-    End Function
-    '根据用户名返回对应 UUID，需要多线程
-    Public Function McLoginMojangUuid(Name As String, ThrowOnNotFound As Boolean)
-        If Name.Trim.Length = 0 Then Return StrFill("", "0", 32)
-        '从缓存获取
-        Dim Uuid As String = ReadIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, "")
-        If Len(Uuid) = 32 Then Return Uuid
-        '从官网获取
-        Try
-            Dim GotJson As JObject = NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" & Name, IsJson:=True)
-            If GotJson Is Nothing Then Throw New FileNotFoundException("正版玩家档案不存在（" & Name & "）")
-            Uuid = If(GotJson("id"), "")
-        Catch ex As Exception
-            Log(ex, "从官网获取正版 Uuid 失败（" & Name & "）")
-            If Not ThrowOnNotFound AndAlso ex.GetType.Name = "FileNotFoundException" Then
-                Uuid = McLoginLegacyUuid(Name) '玩家档案不存在
-            Else
-                Throw New Exception("从官网获取正版 Uuid 失败", ex)
-            End If
-        End Try
-        '写入缓存
-        If Not Len(Uuid) = 32 Then Throw New Exception("获取的正版 Uuid 长度不足（" & Uuid & "）")
-        WriteIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, Uuid)
-        Return Uuid
-    End Function
 
 #End Region
 
@@ -2423,4 +2367,3 @@ IgnoreCustomSkin:
 #End Region
 
 End Module
-

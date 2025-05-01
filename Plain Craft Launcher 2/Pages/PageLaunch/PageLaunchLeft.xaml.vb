@@ -252,9 +252,11 @@
     ''' <summary>
     ''' 确认当前显示的子页面正确，并刷新该页面。
     ''' </summary>
-    Public Sub RefreshPage(Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As McLoginType = Nothing)
+    ''' <param name="Anim">是否显示动画</param>
+    ''' <param name="TargetLoginType">目标验证方式，若正在创建档案需填</param>
+    Public Sub RefreshPage(Anim As Boolean, Optional TargetLoginType As McLoginType = Nothing)
         Dim Type As PageType
-        If IsLogin Then
+        If Not TargetLoginType = Nothing Then
             If TargetLoginType = McLoginType.Ms Then Type = PageType.Ms
             If TargetLoginType = McLoginType.Auth Then Type = PageType.Auth
         Else
@@ -267,25 +269,18 @@
                 PanTypeOne.Visibility = Visibility.Visible
                 If Not BtnLaunch.Text = "下载游戏" Then BtnLaunch.IsEnabled = False
             End If
-            PanType.Visibility = Visibility.Collapsed
             PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
             LabTypeOne.Text = "档案管理"
         End If
         '刷新页面
         If PageCurrent = Type Then Exit Sub
         PageChange(Type, Anim)
-        'Dim Control As MyRadioButton = FindName("RadioLoginType" & Setup.Get("LoginType"))
-        'If Control IsNot Nothing Then Control.Checked = True
     End Sub
-    Private Sub RadioLoginType_Change(sender As Object, raiseByMouse As Boolean) Handles RadioLoginType0.Check, RadioLoginType5.Check
-        If raiseByMouse Then RefreshPage(True)
-    End Sub
-
 #End Region
 
 #Region "皮肤"
 
-    '微软正版皮肤
+    '正版皮肤
     Public Shared SkinMs As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Ms", AddressOf SkinMsLoad, AddressOf SkinMsInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinMsInput() As EqualableList(Of String)
         '获取名称
@@ -303,7 +298,7 @@
             Uuid = SelectedProfile.Uuid
         End If
         If UserName = "" Then
-            Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
+            Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(UserName)) & ".png"
             Log("[Minecraft] 获取微软正版皮肤失败，ID 为空")
             GoTo Finish
         End If
@@ -318,13 +313,13 @@
                 Data.Output = ""
                 Exit Sub
             ElseIf GetExceptionSummary(ex).Contains("429") Then
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
+                Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(UserName)) & ".png"
                 Log("[Minecraft] 获取正版皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
             ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
+                Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(UserName)) & ".png"
                 Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
             Else
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
+                Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(UserName)) & ".png"
                 Log(ex, "获取微软正版皮肤失败（" & UserName & "）", LogLevel.Hint)
             End If
         End Try
@@ -357,7 +352,7 @@ Finish:
         '获取 Url
         Select Case Data.Input(0)
             Case 0 '默认
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(Data.Input(1))) & ".png"
+                Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(Data.Input(1))) & ".png"
             Case 1 'Steve
 UseDefault:
                 Data.Output = PathImage & "Skins/Steve.png"
@@ -382,10 +377,10 @@ UseDefault:
                         Data.Output = ""
                         Exit Sub
                     ElseIf GetExceptionSummary(ex).Contains("429") Then
-                        Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(ID)) & ".png"
+                        Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(ID)) & ".png"
                         Log("获取离线登录使用的正版皮肤失败（" & ID & "）：获取皮肤太过频繁，请 5 分钟后再试！")
                     Else
-                        Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(ID)) & ".png"
+                        Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(ID)) & ".png"
                         Log(ex, "获取离线登录使用的正版皮肤失败（" & ID & "）")
                     End If
                 End Try

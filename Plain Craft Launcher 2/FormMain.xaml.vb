@@ -508,6 +508,10 @@ Public Class FormMain
             Setup.Set("UiHiddenOtherHelp", False)
             Log("[Start] 已解除帮助页面的隐藏")
         End If
+        '迁移旧版用户档案
+        If LastVersionCode <= 368 Then
+            MigrateOldProfile()
+        End If
         'Mod 命名设置迁移
         If Not Setup.IsUnset("ToolDownloadTranslate") AndAlso Setup.IsUnset("ToolDownloadTranslateV2") Then
             Setup.Set("ToolDownloadTranslateV2", Setup.Get("ToolDownloadTranslate") + 1)
@@ -782,7 +786,7 @@ Public Class FormMain
                         If MyMsgBox($"是否要创建新的第三方验证档案？{vbCrLf}验证服务器地址：{AuthlibServer}", "创建新的第三方验证档案", "确定", "取消") = 2 Then Exit Sub
                         RunInUi(Sub()
                                     PageLoginAuth.DraggedAuthServer = AuthlibServer
-                                    FrmLaunchLeft.RefreshPage(True, True, McLoginType.Auth)
+                                    FrmLaunchLeft.RefreshPage(True, McLoginType.Auth)
                                 End Sub)
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionSetup Then
                             '正在服务器选项页，需要刷新设置项显示

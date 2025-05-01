@@ -61,11 +61,11 @@
             CheckAdvanceUseProxyV2.Checked = Setup.Get("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
             If IsArm64System Then
-                CheckAdvanceDisableJlw.Checked = True
-                CheckAdvanceDisableJlw.IsEnabled = False
-                CheckAdvanceDisableJlw.ToolTip = "在启动游戏时不使用 Java Wrapper 进行包装。&#xa;由于系统为 ARM64 架构，Java Wrapper 已被强制禁用。"
+                CheckAdvanceDisableJLW.Checked = True
+                CheckAdvanceDisableJLW.IsEnabled = False
+                CheckAdvanceDisableJLW.ToolTip = "在启动游戏时不使用 Java Wrapper 进行包装。&#xa;由于系统为 ARM64 架构，Java Wrapper 已被强制禁用。"
             Else
-                CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
+                CheckAdvanceDisableJLW.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
             End If
 
         Catch ex As Exception
@@ -474,7 +474,7 @@ PreFin:
         PageLoginAuth.DraggedAuthServer = TextServerAuthServer.Text
         RunInNewThread(Sub()
                            Thread.Sleep(150)
-                           RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, True, McLoginType.Auth))
+                           RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Auth))
                        End Sub)
     End Sub
 

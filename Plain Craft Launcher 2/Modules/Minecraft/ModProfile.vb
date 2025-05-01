@@ -16,9 +16,19 @@ Public Module ModProfile
     Public ProfileList As New List(Of McProfile)
     Private IsFirstLoad As Boolean = True
     Public IsCreatingProfile As Boolean = False
+    ''' <summary>
+    ''' 档案操作日志
+    ''' </summary>
+    Public Sub ProfileLog(Content As String)
+        Dim Output As String = "[Profile] " & Content
+        Log(Output)
+    End Sub
 
-#Region "声明"
+#Region "类型声明"
     Public Class McProfile
+        ''' <summary>
+        ''' 档案类型
+        ''' </summary>
         Public Type As McLoginType
         Public Uuid As String
         ''' <summary>
@@ -39,10 +49,22 @@ Public Module ModProfile
         ''' 登录用户名，用于第三方验证
         ''' </summary>
         Public Name As String
+        ''' <summary>
+        ''' 登录密码，用于第三方验证
+        ''' </summary>
         Public Password As String
+        ''' <summary>
+        ''' 联网验证档案的验证有效期
+        ''' </summary>
         Public Expires As Int64
+        ''' <summary>
+        ''' 档案描述，暂时没做功能
+        ''' </summary>
         Public Desc As String
         Public ClientToken As String
+        ''' <summary>
+        ''' 原始 JSON 数据，用于正版验证部分功能
+        ''' </summary>
         Public RawJson As String
         ''' <summary>
         ''' 用于档案列表头像显示的皮肤 ID
@@ -56,7 +78,7 @@ Public Module ModProfile
     ''' 重新获取已有档案列表
     ''' </summary>
     Public Sub GetProfile()
-        Log("[Profile] 开始获取本地档案")
+        ProfileLog("开始获取本地档案")
         ProfileList.Clear()
         Try
             If Not Directory.Exists(PathAppdataConfig) Then Directory.CreateDirectory(PathAppdataConfig)
@@ -108,7 +130,7 @@ Public Module ModProfile
                 End If
                 ProfileList.Add(NewProfile)
             Next
-            Log($"[Profile] 获取到 {ProfileList.Count} 个档案")
+            ProfileLog($"获取到 {ProfileList.Count} 个档案")
             If IsFirstLoad Then
                 If Not ProfileList.Count = 0 Then SelectedProfile = ProfileList(LastUsedProfile)
                 IsFirstLoad = False
@@ -172,14 +194,14 @@ Public Module ModProfile
                     End If
                     List.Add(ProfileJobj)
                 Next
-                Log($"[Profile] 开始保存档案，共 {List.Count} 个")
+                ProfileLog($"开始保存档案，共 {List.Count} 个")
                 Json = New JObject From {
                 {"lastUsed", LastUsedProfile},
                 {"profiles", List}
             }
             End If
             WriteFile(PathAppdataConfig & "Profiles.json", Json.ToString, False)
-            Log($"[Profile] 档案已保存")
+            ProfileLog($"档案已保存")
         Catch ex As Exception
             Log(ex, "写入档案列表失败", LogLevel.Feedback)
         End Try
@@ -202,9 +224,9 @@ Public Module ModProfile
                     End Sub)
         If SelectedAuthTypeNum Is Nothing Then Exit Sub
         If SelectedAuthTypeNum = 1 Then '正版验证
-            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, True, McLoginType.Ms))
+            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Ms))
         ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
-            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, True, McLoginType.Auth))
+            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Auth))
         Else '离线验证
             Dim UserName As String = Nothing '玩家 ID
             Dim UserUuid As String = Nothing 'UUID
@@ -224,7 +246,7 @@ Public Module ModProfile
             If UuidType = 0 Then
                 UserUuid = GetOfflineUuid(UserName, False)
             ElseIf UuidType = 1 Then
-                UserUuid = McLoginLegacyUuid(UserName)
+                UserUuid = GetOfflineUuid(UserName, IsLegacy:=True)
             Else
                 UserUuid = MyMsgBoxInput("新建档案 - 输入 UUID", HintText:="32 位，不含连字符",
                                          ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32), New ValidateRegex("([A-z]|[0-9]){32}", "UUID 只应该包括英文字母和数字！")},
@@ -305,7 +327,7 @@ Public Module ModProfile
         If UuidType = 0 Then
             NewUuid = GetOfflineUuid(Profile.Username, False)
         ElseIf UuidType = 1 Then
-            NewUuid = McLoginLegacyUuid(Profile.Username)
+            NewUuid = GetOfflineUuid(Profile.Username, IsLegacy:=True)
         Else
             NewUuid = MyMsgBoxInput($"更改档案 {Profile.Username} 的 UUID", DefaultInput:=Profile.Uuid, HintText:="32 位，不含连字符", ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(32, 32), New ValidateRegex("([A-z]|[0-9]){32}", "UUID 只应该包括英文字母和数字！")}, Button1:="继续", Button2:="取消")
         End If
@@ -442,28 +464,30 @@ Write:
 #End Region
 
 #Region "离线 UUID 获取"
-    Public Function McLoginLegacyUuid(Name As String)
-        Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
-        Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
-    End Function
     ''' <summary>
     ''' 获取离线 UUID
     ''' </summary>
-    ''' <param name="UserName">用户名</param>
+    ''' <param name="UserName">玩家 ID</param>
     ''' <param name="IsSplited">返回的 UUID 是否有连字符分割</param>
-    ''' <returns></returns>
-    Public Function GetOfflineUuid(UserName As String, Optional IsSplited As Boolean = False) As String
-        Dim MD5 As New MD5CryptoServiceProvider
-        Dim Hash As Byte() = MD5.ComputeHash(Encoding.UTF8.GetBytes("OfflinePlayer:" + UserName))
-        Hash(6) = Hash(6) And &HF
-        Hash(6) = Hash(6) Or &H30
-        Hash(8) = Hash(8) And &H3F
-        Hash(8) = Hash(8) Or &H80
-        Dim Parsed As New Guid(ToUuidString(Hash))
-        If IsSplited Then
-            Return Parsed.ToString()
+    ''' <param name="IsLegacy">是否使用旧版 PCL 生成方式，若为 True 则返回的 UUID 总是不带连字符</param>
+    Public Function GetOfflineUuid(UserName As String, Optional IsSplited As Boolean = False, Optional IsLegacy As Boolean = False) As String
+        If IsLegacy Then
+            Dim FullUuid As String = StrFill(UserName.Length.ToString("X"), "0", 16) & StrFill(GetHash(UserName).ToString("X"), "0", 16)
+            Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
         Else
-            Return Parsed.ToString().Replace("-", "")
+            Dim MD5 As New MD5CryptoServiceProvider
+            Dim Hash As Byte() = MD5.ComputeHash(Encoding.UTF8.GetBytes("OfflinePlayer:" + UserName))
+            Hash(6) = Hash(6) And &HF
+            Hash(6) = Hash(6) Or &H30
+            Hash(8) = Hash(8) And &H3F
+            Hash(8) = Hash(8) Or &H80
+            Dim Parsed As New Guid(ToUuidString(Hash))
+            ProfileLog("获取到离线 UUID: " & Parsed.ToString())
+            If IsSplited Then
+                Return Parsed.ToString()
+            Else
+                Return Parsed.ToString().Replace("-", "")
+            End If
         End If
     End Function
     Public Function ToUuidString(ByVal Bytes As Byte()) As String
@@ -504,7 +528,7 @@ Write:
     End Function
     ''' <summary>
     ''' 获取当前档案的验证信息。
-    ''' <param name="TargetAuthType">若为新档案，则填写此值</param>
+    ''' <param name="TargetAuthType">验证类型，若为新档案需填</param>
     ''' </summary>
     Public Function GetLoginData(Optional TargetAuthType As McLoginType = Nothing) As McLoginData
         Dim AuthType As McLoginType = Nothing
@@ -638,6 +662,95 @@ Retry:
             End Try
         End Sub, "Ms Skin Upload")
     End Sub
+#End Region
+
+#Region "旧版迁移"
+    ''' <summary>
+    ''' 从旧版配置文件迁移档案
+    ''' </summary>
+    Public Sub MigrateOldProfile()
+        ProfileLog("开始从旧版配置迁移档案")
+        Dim ProfileCount As Integer = 0
+        '正版档案
+        If Not Setup.Get("LoginMsJson") = "{}" Then
+            Dim OldMsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
+            ProfileLog($"找到 {OldMsJson.Count} 个旧版正版档案信息")
+            For Each Profile In OldMsJson
+                Dim NewProfile As New McProfile With {.Username = Profile.Key}
+                ProfileList.Add(NewProfile)
+                ProfileCount += 1
+            Next
+            SaveProfile()
+            ProfileLog("旧版正版档案迁移完成")
+            Setup.Reset("LoginMsJson")
+        Else
+            ProfileLog("无旧版正版档案信息")
+        End If
+        '离线档案
+        If Not String.IsNullOrWhiteSpace(Setup.Get("LoginLegacyName")) Then
+            Dim OldOfflineInfo As String() = Setup.Get("LoginLegacyName").Split("¨")
+            ProfileLog($"找到 {OldOfflineInfo.Count} 个旧版离线档案信息")
+            For Each OfflineId In OldOfflineInfo
+                Dim NewProfile As New McProfile With {.Username = OfflineId, .Uuid = GetOfflineUuid(OfflineId, IsLegacy:=True)} '迁移的档案默认使用旧版 UUID 生成方式以避免存档丢失
+                ProfileList.Add(NewProfile)
+                ProfileCount += 1
+            Next
+            SaveProfile()
+            ProfileLog("旧版离线档案迁移完成")
+            Setup.Reset("LoginLegacyName")
+        Else
+            ProfileLog("无旧版离线档案信息")
+        End If
+        '第三方验证档案
+        If Not (String.IsNullOrWhiteSpace(Setup.Get("LoginAuthName")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUuid")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthServerServer")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUsername")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthPass"))) Then
+            ProfileLog($"找到旧版第三方验证档案信息")
+            Dim NewProfile As New McProfile With {.Username = Setup.Get("CacheAuthName"), .Uuid = Setup.Get("CacheAuthUuid"),
+                    .Name = Setup.Get("CacheAuthUsername"), .Password = Setup.Get("CacheAuthPass"), .Server = Setup.Get("CacheAuthServerServer") & "/authserver"}
+            ProfileList.Add(NewProfile)
+            SaveProfile()
+            ProfileLog("旧版第三方验证档案迁移完成")
+            ProfileCount += 1
+            Setup.Reset("LoginAuthName")
+            Setup.Reset("CacheAuthUuid")
+            Setup.Reset("CacheAuthServerServer")
+            Setup.Reset("CacheAuthUsername")
+            Setup.Reset("CacheAuthPass")
+        Else
+            ProfileLog("无旧版第三方验证档案信息")
+        End If
+        If Not ProfileCount = 0 Then Hint($"已自动从旧版配置文件迁移档案，共迁移了 {ProfileCount} 个档案")
+        ProfileLog("档案迁移结束")
+    End Sub
+#End Region
+
+#Region "获取正版档案 UUID"
+    ''' <summary>
+    ''' 根据用户名返回对应 UUID，需要多线程
+    ''' </summary>
+    ''' <param name="Name">玩家 ID</param>
+    Public Function McLoginMojangUuid(Name As String, ThrowOnNotFound As Boolean)
+        If Name.Trim.Length = 0 Then Return StrFill("", "0", 32)
+        '从缓存获取
+        Dim Uuid As String = ReadIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, "")
+        If Len(Uuid) = 32 Then Return Uuid
+        '从官网获取
+        Try
+            Dim GotJson As JObject = NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" & Name, IsJson:=True)
+            If GotJson Is Nothing Then Throw New FileNotFoundException("正版玩家档案不存在（" & Name & "）")
+            Uuid = If(GotJson("id"), "")
+        Catch ex As Exception
+            Log(ex, "从官网获取正版 UUID 失败（" & Name & "）")
+            If Not ThrowOnNotFound AndAlso ex.GetType.Name = "FileNotFoundException" Then
+                Uuid = GetOfflineUuid(Name, IsLegacy:=True) '玩家档案不存在
+            Else
+                Throw New Exception("从官网获取正版 UUID 失败", ex)
+            End If
+        End Try
+        '写入缓存
+        If Not Len(Uuid) = 32 Then Throw New Exception("获取的正版 UUID 长度不足（" & Uuid & "）")
+        WriteIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, Uuid)
+        Return Uuid
+    End Function
 #End Region
 
 End Module
