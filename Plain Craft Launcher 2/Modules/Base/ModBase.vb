@@ -815,15 +815,6 @@ Public Module ModBase
         If length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
         Return FilePath
     End Function
-    Public Function GetDirNameFromPath(DirPath As String) As String
-        DirPath = DirPath.Replace("/", "\")
-        If DirPath.EndsWithF("\") Then DirPath = DirPath.Substring(0, DirPath.Length - 1)
-        DirPath = DirPath.Substring(DirPath.LastIndexOfF("\") + 1)
-        Dim length As Integer = DirPath.Length
-        If length = 0 Then Throw New Exception("不包含目录：" & DirPath)
-        If length > 250 Then Throw New PathTooLongException("目录名过长：" & DirPath)
-        Return DirPath
-    End Function
     ''' <summary>
     ''' 从文件路径或者 Url 获取不包含路径与扩展名的文件名。不包含文件名将会抛出异常。
     ''' </summary>
@@ -1497,7 +1488,7 @@ RetryDir:
             File.Move(FilePath, IO.Path.Combine(TargetDir, FileName))
         Next
         For Each DirPath In Directory.GetDirectories(SourceDir)
-            Dim DirName = GetDirNameFromPath(DirPath)
+            Dim DirName = GetFolderNameFromPath(DirPath)
             MoveDirectory(DirPath, IO.Path.Combine(TargetDir, DirName))
         Next
     End Sub
@@ -1515,17 +1506,7 @@ RetryDir:
         CMDProcess.Start()
         While Not CMDProcess.HasExited
         End While
-        Hint(CMDProcess.ExitCode)
     End Sub
-    '    Dim CMDProcess As New Process
-    '    With CMDProcess.StartInfo
-    '        .FileName = "cmd.exe"
-    '        .Arguments = $"/c mklink /J {LinkPath} {TargetPath}"
-    '        .CreateNoWindow = True
-    '    End With
-    '    CMDProcess.Start()
-    '    If CMDProcess.HasExited Then CMDProcess.Close()
-    'End Sub
 #End Region
 
 #Region "文本"

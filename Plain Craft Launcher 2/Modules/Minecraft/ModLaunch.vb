@@ -2129,11 +2129,12 @@ IgnoreCustomSkin:
         End Try
 
         'LabyMod 预处理
-        If ReadIni(McVersionCurrent.Path & "PCL\Setup.ini", "VersionLabyMod", "") <> "" Then
+        If ReadIni(McVersionCurrent.Path & "PCL\Setup.ini", "VersionLabyMod", "") <> "" AndAlso McVersionCurrent.PathIndie <> McVersionCurrent.Path Then
             Dim RootPath = McVersionCurrent.Path & "..\..\"
             If Not Directory.Exists(RootPath & "labymod-neo") Then Directory.CreateDirectory(RootPath & "labymod-neo")
             If Directory.Exists(McVersionCurrent.Path & "labymod-neo") Then
                 MoveDirectory(McVersionCurrent.Path & "labymod-neo", RootPath & "labymod-neo")
+                Thread.Sleep(50)
                 Directory.Delete(McVersionCurrent.Path & "labymod-neo", True)
                 CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo", RootPath & "labymod-neo", &H2)
             Else

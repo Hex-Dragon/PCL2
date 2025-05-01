@@ -1095,6 +1095,9 @@
     <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Blocks\LabyMod.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
   </ItemGroup>
   <ItemGroup>

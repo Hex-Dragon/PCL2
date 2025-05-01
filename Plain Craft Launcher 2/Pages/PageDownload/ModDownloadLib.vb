@@ -121,8 +121,8 @@ Public Module ModDownloadLib
             End Sub) With {.ProgressWeight = 2, .Show = False})
         End If
         Loaders.Add(New LoaderDownload(McDownloadClientJsonName, New List(Of NetFile) From {
-            New NetFile(DlSourceLauncherOrMetaGet(If(JsonUrl, "")), VersionFolder & VersionName & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
-        }) With {.ProgressWeight = 3})
+                New NetFile(DlSourceLauncherOrMetaGet(If(JsonUrl, "")), VersionFolder & VersionName & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
+            }) With {.ProgressWeight = 3})
 
         '下载支持库文件
         Dim LoadersLib As New List(Of LoaderBase)
@@ -2286,7 +2286,7 @@ Retry:
 
         '下载 Json
         MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 LabyMod 主文件下载地址",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 LabyMod 客户端文件下载地址",
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
             '启动依赖版本的下载
             If FixLibrary Then
@@ -2297,39 +2297,9 @@ Retry:
             Task.Output = New List(Of NetFile) From {New NetFile({
                 $"https://releases.r2.labymod.net/api/v1/download/manifest/labymod4/{LabyModChannel}/{MinecraftName}/{LabyModCommitRef}.json"
             }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
-        End Sub) With {.ProgressWeight = 0.5})
-        Loaders.Add(New LoaderDownload("下载 LabyMod 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
-
-        Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
-        Dim LabyModCore As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True)
-        Dim VersionJson As JObject = JObject.Parse(ReadFile(VersionFolder & Id & ".json"))
-        VersionJson("libraries") = New JArray
-
-        For Each Library In LabyModLib("libraries")
-            VersionJson("libraries").Append(JObject.Parse($"{{
-                    ""name"": ""{Library("name")}"",
-                    ""downloads"": {{
-                        ""artifact"": {{
-                            ""path"": ""{Library("url").ToString.Substring(Library("url").ToString.LastIndexOfF("https://releases.r2.labymod.net/libraries/") + 1)}"",
-                            ""sha1"": ""{Library("sha1")}"",
-                            ""size"": {Library("size")},
-                            ""url"": ""{Library("url")}""
-                        }}
-                    }}
-                }}"))
-        Next
-        VersionJson("libraries").Append(JObject.Parse($"{{
-                    ""name"": ""net.labymod:LabyMod:4"",
-                    ""downloads"": {{
-                        ""artifact"": {{
-                            ""path"": ""net/labymod/LabyMod/4/LabyMod-4.jar"",
-                            ""sha1"": ""{LabyModCore("sha1")}"",
-                            ""size"": {LabyModCore("size")},
-                            ""url"": ""https://releases.r2.labymod.net/api/v1/download/labymod4/{LabyModChannel}/{LabyModCore("commitReference")}.jar""
-                        }}
-                    }}
-                }}"))
-        WriteFile(VersionFolder & Id & ".json", VersionJson.ToString)
+            Task.Progress = 1
+        End Sub) With {.ProgressWeight = 2})
+        Loaders.Add(New LoaderDownload("下载 LabyMod 客户端 Json 文件", New List(Of NetFile)) With {.ProgressWeight = 10})
         '下载支持库
         If FixLibrary Then
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 LabyMod 支持库文件",
@@ -2345,9 +2315,9 @@ Retry:
     Public Function LabyModDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry("version").ToString & If(Entry("channel").ToString.Contains("snapshot"), " 测试版", " 稳定版"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("channel").ToString.Contains("snapshot"), "测试版", "稳定版"),
-            .Logo = PathImage & "Blocks/Quilt.png"
+            .Title = Entry("version").ToString & If(Entry("channel").ToString.Contains("snapshot"), " 快照版", " 稳定版"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = If(Entry("channel").ToString.Contains("snapshot"), "快照版", "稳定版"),
+            .Logo = PathImage & "Blocks/LabyMod.png"
         }
         AddHandler NewItem.Click, OnClick
         '结束
@@ -2580,7 +2550,7 @@ Retry:
         Dim QuiltFolder As String = Nothing
         If Request.QuiltVersion IsNot Nothing Then QuiltFolder = TempMcFolder & "versions\quilt-loader-" & Request.QuiltVersion & "-" & Request.MinecraftName
         Dim LabyModFolder As String = Nothing
-        If Request.QuiltVersion IsNot Nothing Then QuiltFolder = TempMcFolder & "versions\labymod-" & Request.LabyModCommitRef & "-" & Request.MinecraftName
+        If Request.LabyModCommitRef IsNot Nothing Then LabyModFolder = TempMcFolder & "versions\labymod-" & Request.LabyModCommitRef & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
@@ -2627,9 +2597,17 @@ Retry:
         If Request.OptiFabric IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
+        'LabyMod
+        If Request.LabyModCommitRef IsNot Nothing Then
+            LoaderList.Add(New LoaderCombo(Of String)("下载 LabyMod " & Request.LabyModCommitRef, McDownloadLabyModLoader(Request.LabyModCommitRef, Request.LabyModChannel, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 10, .Block = True})
+            'Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, $"https://releases.r2.labymod.net/api/v1/download/manifest/labymod4/{Request.LabyModChannel}/{Request.MinecraftName}/{Request.LabyModCommitRef}.json", Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
+            'LoaderList.Add(LabyModClientLoader)
+            GoTo LabyModSkip
+        End If
         '原版
         Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = Request.ForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
         LoaderList.Add(ClientLoader)
+LabyModSkip:
         'OptiFine
         If Request.OptiFineEntry IsNot Nothing Then
             If OptiFineAsMod Then
@@ -2662,16 +2640,13 @@ Retry:
         If Request.QuiltVersion IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 Quilt " & Request.QuiltVersion, McDownloadQuiltLoader(Request.QuiltVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
-        'Quilt
-        If Request.QuiltVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 LabyMod " & Request.LabyModCommitRef, McDownloadLabyModLoader(Request.LabyModCommitRef, Request.LabyModChannel, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
-        End If
+
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
                 Log("[Test] Clr folder: " & CleanroomFolder)
                 Log("[Test] Clr version: " & Request.CleanroomVersion)
-                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
+                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LabyModFolder, Request.LabyModChannel, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
@@ -2712,7 +2687,7 @@ Retry:
 
         Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasCleanroom As Boolean = CleanroomFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing, HasQuilt As Boolean = QuiltFolder IsNot Nothing, HasLabyMod As Boolean = LabyModFolder IsNot Nothing
         Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, CleanroomName As String, LiteLoaderName As String, FabricName As String, QuiltName As String, LabyModName As String
-        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, CleanroomJsonPath As String, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing, QuiltJsonPath As String = Nothing, LabyModJsonPath As String = Nothing
+        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, CleanroomJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing, QuiltJsonPath As String = Nothing, LabyModJsonPath As String = Nothing
         Dim OutputJar As String, MinecraftJar As String
 #Region "初始化路径信息"
         If Not OutputFolder.EndsWithF("\") Then OutputFolder += "\"
@@ -2777,8 +2752,10 @@ Retry:
         Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, CleanroomJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing, LabyModJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
-        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
-        MinecraftJson = GetJson(MinecraftJsonText)
+        If Not HasLabyMod Then
+            If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
+            MinecraftJson = GetJson(MinecraftJsonText)
+        End If
 
         If HasOptiFine Then
             Dim OptiFineJsonText As String = ReadFile(OptiFineJsonPath)
@@ -2832,12 +2809,14 @@ Retry:
 #Region "处理 JSON 文件"
         '获取 minecraftArguments
         Dim AllArguments As String =
-            If(MinecraftJson("minecraftArguments"), " ").ToString & " " &
-            If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
-            If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
-            If(NeoForgeJson IsNot Nothing, If(NeoForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
-            If(CleanroomJson IsNot Nothing, If(CleanroomJson("minecraftArguments"), " ").ToString, " ") & " " &
-            If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ")
+            If(LabyModJson("minecraftArguments"),
+                If(MinecraftJson IsNot Nothing AndAlso MinecraftJson("minecraftArguments") IsNot Nothing, MinecraftJson("minecraftArguments"), " ").ToString & " " &
+                If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
+                If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
+                If(NeoForgeJson IsNot Nothing, If(NeoForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
+                If(CleanroomJson IsNot Nothing, If(CleanroomJson("minecraftArguments"), " ").ToString, " ") & " " &
+                If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ")
+            ).ToString
         '分割参数字符串
         Dim RawArguments As List(Of String) = AllArguments.Split(" ").Where(Function(l) l <> "").Select(Function(l) l.Trim).ToList
         Dim SplitArguments As New List(Of String)
@@ -2900,16 +2879,32 @@ Retry:
             '合并 LabyMod
             LabyModJson.Remove("releaseTime")
             LabyModJson.Remove("time")
+            If OutputJson Is Nothing Then OutputJson = New JObject
             OutputJson.Merge(LabyModJson)
-            Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
-            Dim LabyModCore As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True)
-            OutputJson("libraries") = New JArray
+
+            Dim LabyModLib As JObject = JObject.FromObject(NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True))
+            Dim LabyModCore As JObject = JObject.FromObject(NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True))
+            Dim OutputLibraries As New JArray
+            Dim IsolatedLibraries As New Dictionary(Of String, Boolean)
+            Dim MinecraftVersion = LabyModJson("_minecraftVersion")
+
+            For Each Library In LabyModLib("isolated_libraries")
+                If CType(Library("versions"), JArray).Contains(MinecraftVersion) Then
+                    IsolatedLibraries.Add(Library("name").ToString, True)
+                End If
+            Next
+            For Each Library In LabyModJson("libraries")
+                Dim RegexMatchResult = RegexSeek(Library("name").ToString, "(?<=org.lwjgl:)lwjgl(-[a-z._.\-.0-9]*)(?=(:[0-9].[0-9].[0-9](-[a-z.0-9._.\-]*)?:([a-z._.\-.0-9]*)?))")
+                If RegexMatchResult Is Nothing OrElse Not IsolatedLibraries.Contains(New KeyValuePair(Of String, Boolean)(RegexMatchResult, True)) Then
+                    OutputLibraries.Add(Library)
+                End If
+            Next
             For Each Library In LabyModLib("libraries")
-                OutputJson("libraries").Append(JObject.Parse($"{{
+                OutputLibraries.Add(JObject.Parse($"{{
                     ""name"": ""{Library("name")}"",
                     ""downloads"": {{
                         ""artifact"": {{
-                            ""path"": ""{Library("url").ToString.Substring(Library("url").ToString.LastIndexOfF("https://releases.r2.labymod.net/libraries/") + 1)}"",
+                            ""path"": ""{Library("url").ToString.Substring(Library("url").ToString.LastIndexOfF("https://releases.r2.labymod.net/libraries/") + 42)}"",
                             ""sha1"": ""{Library("sha1")}"",
                             ""size"": {Library("size")},
                             ""url"": ""{Library("url")}""
@@ -2917,7 +2912,8 @@ Retry:
                     }}
                 }}"))
             Next
-            OutputJson("libraries").Append(JObject.Parse($"{{
+
+            OutputLibraries.Add(JObject.Parse($"{{
                     ""name"": ""net.labymod:LabyMod:4"",
                     ""downloads"": {{
                         ""artifact"": {{
@@ -2928,6 +2924,7 @@ Retry:
                         }}
                     }}
                 }}"))
+            OutputJson("libraries") = OutputLibraries
             OutputJson.Add("labymod_data", JObject.Parse($"{{
                 ""channelType"": ""{LabyModChannel}"",
                 ""commitReference"": ""{LabyModCore("commitReference")}"",

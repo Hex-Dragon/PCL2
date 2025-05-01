@@ -155,6 +155,24 @@
                     Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
+                        <local:MyCard Title="LabyMod" Height="40" Margin="0,15,0,0" x:Name="CardLabyMod" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                            <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanLabyMod" />
+                            <Grid x:Name="PanLabyModInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
+                                <Grid.RenderTransform>
+                                    <TranslateTransform />
+                                </Grid.RenderTransform>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <Image x:Name="ImgLabyMod" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/LabyMod.png" />
+                                <TextBlock x:Name="LabLabyMod" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                            </Grid>
+                            <Grid x:Name="BtnLabyModClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                                <Path x:Name="BtnLabyModClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                            </Grid>
+                        </local:MyCard>
                         <local:MyCard Title="OptiFine" Height="40" Margin="0,12,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top">
                             <StackPanel Name="PanOptiFine" />
@@ -229,6 +247,7 @@
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabricApi" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadQuilt" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadQSL" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadLabyMod" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFabric" HasAnimation="False" />
         </local:MyCard>
     </Grid>

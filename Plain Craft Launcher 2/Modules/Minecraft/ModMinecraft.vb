@@ -824,6 +824,8 @@ ExitDataLoad:
                             Logo = PathImage & "Blocks/Egg.png"
                         Case McVersionState.Fool
                             Logo = PathImage & "Blocks/GoldBlock.png"
+                        Case McVersionState.LabyMod
+                            Logo = PathImage & "Blocks/LabyMod.png"
                         Case Else
                             Logo = PathImage & "Blocks/RedstoneBlock.png"
                     End Select
