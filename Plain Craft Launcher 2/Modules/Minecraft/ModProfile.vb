@@ -365,57 +365,69 @@ Write:
         Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
         If Type = 1 Then '导入
             Hint("正在导入，请稍后...", HintType.Info)
-            Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
-            Dim OutputList As New List(Of McProfile)
-            Dim ImportNum As Integer = 0
-            For Each Profile In ImportList
-                Dim NewProfile As McProfile = Nothing
-                If Profile("type") = "microsoft" Then
-                    NewProfile = New McProfile With {
-                                            .Type = McLoginType.Ms,
-                                            .Uuid = Profile("uuid"),
-                                            .Username = Profile("displayName"),
-                                            .AccessToken = "",
-                                            .RefreshToken = "",
-                                            .Expires = 1743779140286,
-                                            .Desc = "",
-                                            .RawJson = ""
-                                        }
-                ElseIf Profile("type") = "authlibInjector" Then
-                    NewProfile = New McProfile With {
-                                            .Type = McLoginType.Auth,
-                                            .Uuid = Profile("uuid"),
-                                            .Username = Profile("displayName"),
-                                            .AccessToken = "",
-                                            .RefreshToken = "",
-                                            .Expires = 1743779140286,
-                                            .Server = Profile("serverBaseURL"),
-                                            .ServerName = "",
-                                            .Name = Profile("username"),
-                                            .Password = "",
-                                            .ClientToken = Profile("clientToken"),
-                                            .Desc = ""
-                                        }
-                    Dim Response As String = Nothing
-                    RunInNewThread(Sub() Response = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8))
-                    Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
-                    NewProfile.ServerName = ServerName
-                Else
-                    NewProfile = New McProfile With {
-                                            .Type = McLoginType.Legacy,
-                                            .Uuid = Profile("uuid"),
-                                            .Username = Profile("username"),
-                                            .Desc = ""
-                                        }
-                End If
-                OutputList.Add(NewProfile)
-                ImportNum += 1
-            Next
-            For Each Profile In OutputList
-                ProfileList.Add(Profile)
-            Next
-            SaveProfile()
-            Hint($"已导入 {ImportNum} 个档案，部分档案可能需要重新验证密码！", HintType.Finish)
+            RunInNewThread(Sub()
+                               Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
+                               Dim OutputList As New List(Of McProfile)
+                               Dim ImportNum As Integer = 0
+                               For Each Profile In ImportList
+                                   Dim NewProfile As McProfile = Nothing
+                                   If Profile("type") = "microsoft" Then
+                                       NewProfile = New McProfile With {
+                                                               .Type = McLoginType.Ms,
+                                                               .Uuid = Profile("uuid"),
+                                                               .Username = Profile("displayName"),
+                                                               .AccessToken = "",
+                                                               .RefreshToken = "",
+                                                               .Expires = 1743779140286,
+                                                               .Desc = "",
+                                                               .RawJson = "",
+                                                               .SkinHeadId = ""
+                                                           }
+                                       OutputList.Add(NewProfile)
+                                   ElseIf Profile("type") = "authlibInjector" Then
+                                       NewProfile = New McProfile With {
+                                                               .Type = McLoginType.Auth,
+                                                               .Uuid = Profile("uuid"),
+                                                               .Username = Profile("displayName"),
+                                                               .AccessToken = "",
+                                                               .RefreshToken = "",
+                                                               .Expires = 1743779140286,
+                                                               .Server = Profile("serverBaseURL"),
+                                                               .ServerName = "",
+                                                               .Name = Profile("username"),
+                                                               .Password = "",
+                                                               .ClientToken = Profile("clientToken"),
+                                                               .Desc = "",
+                                                               .SkinHeadId = ""
+                                                           }
+                                       Dim Response As String = Nothing
+                                       Try
+                                           Response = NetGetCodeByRequestRetry(NewProfile.Server.Replace("/authserver", ""), Encoding.UTF8)
+                                           Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
+                                           NewProfile.ServerName = ServerName
+                                       Catch ex As Exception
+                                           ProfileLog("获取服务器名称失败，继续档案添加流程: " & ex.ToString())
+                                       End Try
+                                       OutputList.Add(NewProfile)
+                                   Else
+                                       NewProfile = New McProfile With {
+                                                               .Type = McLoginType.Legacy,
+                                                               .Uuid = Profile("uuid"),
+                                                               .Username = Profile("username"),
+                                                               .Desc = "",
+                                                               .SkinHeadId = ""
+                                                           }
+                                       OutputList.Add(NewProfile)
+                                   End If
+                                   ImportNum += 1
+                               Next
+                               For Each Profile In OutputList
+                                   ProfileList.Add(Profile)
+                               Next
+                               SaveProfile()
+                               Hint($"已导入 {ImportNum} 个档案，部分档案可能需要重新验证密码！", HintType.Finish)
+                               RunInUi(Sub() FrmLoginProfile.RefreshProfileList())
+                           End Sub, "Profile Import")
         Else '导出
             Hint("正在导出，请稍后...", HintType.Info)
             Dim ExistList As JArray = JArray.Parse(ReadFile(OutsidePath))

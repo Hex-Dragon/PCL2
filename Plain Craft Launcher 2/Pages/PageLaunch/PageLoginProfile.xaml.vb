@@ -13,7 +13,7 @@
     ''' <summary>
     ''' 刷新档案列表
     ''' </summary>
-    Private Sub RefreshProfileList()
+    Public Sub RefreshProfileList()
         Log("[Profile] 刷新档案列表")
         StackProfile.Children.Clear()
         GetProfile()

@@ -62,7 +62,6 @@
     '选择档案
     Private Sub ChangeProfile(sender As Object, e As EventArgs) Handles BtnSelect.Click
         SelectedProfile = Nothing
-        LastUsedProfile = Nothing
         RunInUi(Sub()
                     FrmLaunchLeft.RefreshPage(True)
                     FrmLaunchLeft.BtnLaunch.IsEnabled = False
