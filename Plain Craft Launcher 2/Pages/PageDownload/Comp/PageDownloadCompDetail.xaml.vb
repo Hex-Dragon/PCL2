@@ -382,6 +382,42 @@
                             Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
                         End If
                     End If
+                ElseIf File.Type = CompType.ResourcePack OrElse File.Type = CompType.Shader Then
+                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
+                    Function(Version)
+                        If Not Version.IsLoaded Then Version.Load()
+                        If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
+                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return False
+                        Return False
+                    End Function
+                    If McVersionCurrent IsNot Nothing Then
+                        DefaultFolder = McVersionCurrent.PathIndie & If(File.Type = CompType.ResourcePack, "resourcepacks\", "shaderpacks\")
+                        Directory.CreateDirectory(DefaultFolder)
+                        Log("[Comp] 使用当前版本的对应资源文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                    Else
+                        Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
+                        If NeedLoad Then
+                            Hint("正在查找适合的游戏版本……")
+                            LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
+                        End If
+                        Dim SuitableVersions As New List(Of McVersion)
+                        For Each Version As McVersion In McVersionList.Values.SelectMany(Function(l) l)
+                            If IsVersionSuitable(Version) Then SuitableVersions.Add(Version)
+                        Next
+                        If Not SuitableVersions.Any() Then
+                            DefaultFolder = PathMcFolder
+                            If NeedLoad Then
+                                Hint("当前 MC 文件夹中没有找到适合这个资源的版本！")
+                            Else
+                                Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
+                            End If
+                        Else
+                            Dim SelectedVersion = SuitableVersions.LastOrDefault()
+                            DefaultFolder = SelectedVersion.PathIndie & If(File.Type = CompType.ResourcePack, "resourcepacks\", "shaderpacks\")
+                            Directory.CreateDirectory(DefaultFolder)
+                            Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
+                        End If
+                    End If
                 End If
                 '获取基本信息
                 Dim FileName As String
