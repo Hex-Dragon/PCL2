@@ -319,7 +319,14 @@
                 End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
-                If File.Type = CompType.Mod Then
+                Dim ResourceFolderName As String = ""
+                Select Case Project.Type
+                    Case CompType.Mod : ResourceFolderName = "mods"
+                    Case CompType.ResourcePack : ResourceFolderName = "resourcepacks"
+                    Case CompType.Shader : ResourceFolderName = "shaderpacks"
+                End Select
+                Dim IsVersionSuitable As Func(Of McVersion, Boolean)
+                If Project.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Any Then '从文件中获取
@@ -329,13 +336,12 @@
                         AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
                         AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
                     End If
-                    If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
-                       AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
+                    If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
                         AllowForge = Nothing : AllowFabric = Nothing
                     End If
                     Log("[Comp] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
-                    '判断某个版本是否符合要求
-                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
+                    '判断某个版本是否符合 Mod 要求
+                    IsVersionSuitable =
                     Function(Version)
                         If Not Version.IsLoaded Then Version.Load()
                         If Not Version.Modable Then Return False
@@ -346,14 +352,24 @@
                         If AllowFabric AndAlso Version.Version.HasFabric Then Return True
                         Return False
                     End Function
-                    '获取 Mod 默认下载位置
+                ElseIf {CompType.ResourcePack, CompType.Shader}.Contains(Project.Type) Then
+                    '判断某个版本是否符合资源包和光影要求
+                    IsVersionSuitable =
+                    Function(Version)
+                        If Not Version.IsLoaded Then Version.Load()
+                        If File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return True
+                        Return False
+                    End Function
+                End If
+                If Not String.IsNullOrWhiteSpace(ResourceFolderName) AndAlso IsVersionSuitable IsNot Nothing Then
+                    '获取常规资源默认下载位置
                     If CachedFolder IsNot Nothing Then
                         DefaultFolder = CachedFolder
                         Log("[Comp] 使用上次下载时的文件夹作为默认下载位置")
                     ElseIf McVersionCurrent IsNot Nothing AndAlso IsVersionSuitable(McVersionCurrent) Then
-                        DefaultFolder = McVersionCurrent.PathIndie & "mods\"
+                        DefaultFolder = McVersionCurrent.PathIndie & $"{ResourceFolderName}\"
                         Directory.CreateDirectory(DefaultFolder)
-                        Log("[Comp] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                        Log($"[Comp] 使用当前版本的 {ResourceFolderName} 文件夹作为默认下载位置（{McVersionCurrent.Name}）")
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
@@ -367,53 +383,17 @@
                         If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
+                                Hint("当前 MC 文件夹中没有找到适合此资源文件的版本！")
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
-                        Else '选择 Mod 数量最多的版本
+                        Else '选择资源数量最多的版本
                             Dim SelectedVersion = SuitableVersions.OrderBy(
                             Function(v)
-                                Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
+                                Dim Info As New DirectoryInfo(v.PathIndie & $"{ResourceFolderName}\")
                                 Return If(Info.Exists, Info.GetFiles().Length, -1)
                             End Function).LastOrDefault()
-                            DefaultFolder = SelectedVersion.PathIndie & "mods\"
-                            Directory.CreateDirectory(DefaultFolder)
-                            Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
-                        End If
-                    End If
-                ElseIf File.Type = CompType.ResourcePack OrElse File.Type = CompType.Shader Then
-                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
-                    Function(Version)
-                        If Not Version.IsLoaded Then Version.Load()
-                        If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
-                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return False
-                        Return False
-                    End Function
-                    If McVersionCurrent IsNot Nothing Then
-                        DefaultFolder = McVersionCurrent.PathIndie & If(File.Type = CompType.ResourcePack, "resourcepacks\", "shaderpacks\")
-                        Directory.CreateDirectory(DefaultFolder)
-                        Log("[Comp] 使用当前版本的对应资源文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
-                    Else
-                        Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
-                        If NeedLoad Then
-                            Hint("正在查找适合的游戏版本……")
-                            LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
-                        End If
-                        Dim SuitableVersions As New List(Of McVersion)
-                        For Each Version As McVersion In McVersionList.Values.SelectMany(Function(l) l)
-                            If IsVersionSuitable(Version) Then SuitableVersions.Add(Version)
-                        Next
-                        If Not SuitableVersions.Any() Then
-                            DefaultFolder = PathMcFolder
-                            If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个资源的版本！")
-                            Else
-                                Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
-                            End If
-                        Else
-                            Dim SelectedVersion = SuitableVersions.LastOrDefault()
-                            DefaultFolder = SelectedVersion.PathIndie & If(File.Type = CompType.ResourcePack, "resourcepacks\", "shaderpacks\")
+                            DefaultFolder = SelectedVersion.PathIndie & $"{ResourceFolderName}\"
                             Directory.CreateDirectory(DefaultFolder)
                             Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
                         End If
