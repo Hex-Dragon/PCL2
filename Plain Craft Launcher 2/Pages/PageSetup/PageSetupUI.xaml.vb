@@ -219,7 +219,7 @@ Public Class PageSetupUI
 
     Private Sub ComboFontChange(sender As MyComboBox, e As Object) Handles ComboUiFont.SelectionChanged
         If AniControlEnabled = 0 Then
-            If sender.SelectedIndex = 0 Then
+            If sender.SelectedIndex = 0 Or sender.SelectedItem Is Nothing Then
                 Setup.Set("UiFont", "")
                 SetLaunchFont()
             Else

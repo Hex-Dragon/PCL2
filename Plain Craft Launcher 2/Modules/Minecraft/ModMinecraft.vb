@@ -1270,6 +1270,7 @@ OnLoaded:
                                 .QuiltVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionQuilt", ""),
                                 .ForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionForge", ""),
                                 .NeoForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionNeoForge", ""),
+                                .CleanroomVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionCleanroom", ""),
                                 .OptiFineVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionOptiFine", ""),
                                 .HasLiteLoader = ReadIni(Version.Path & "PCL\Setup.ini", "VersionLiteLoader", False),
                                 .SortCode = ReadIni(Version.Path & "PCL\Setup.ini", "VersionApiCode", -1),
@@ -1282,6 +1283,7 @@ OnLoaded:
                             VersionInfo.HasQuilt = VersionInfo.QuiltVersion.Any()
                             VersionInfo.HasForge = VersionInfo.ForgeVersion.Any()
                             VersionInfo.HasNeoForge = VersionInfo.NeoForgeVersion.Any()
+                            VersionInfo.HasCleanroom = VersionInfo.CleanroomVersion.Any()
                             VersionInfo.HasOptiFine = VersionInfo.OptiFineVersion.Any()
                             Version.Version = VersionInfo
                         End If
