@@ -2449,7 +2449,7 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(TempMcFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
+        If File.Exists(VersionFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If
@@ -2507,9 +2507,7 @@ Retry:
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
-                Log("[Test] Clr folder: " & CleanroomFolder)
-                Log("[Test] Clr version: " & Request.CleanroomVersion)
-                InstallMerge(TempMcFolder, TempMcFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
+                InstallMerge(VersionFolder, VersionFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)

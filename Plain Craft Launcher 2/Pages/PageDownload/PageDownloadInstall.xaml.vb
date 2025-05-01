@@ -676,6 +676,10 @@ Public Class PageDownloadInstall
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/GrassPath.png"
+        ElseIf SelectedQuilt IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Quilt.png"
+        ElseIf SelectedCleanroom IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Cleanroom.png"
         Else
             Return SelectedMinecraftIcon
         End If
