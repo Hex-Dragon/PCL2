@@ -761,6 +761,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Log("[System] 最新版 PCL 已存在，跳过下载")
             Exit Sub
         End If
+        If GetFileSHA256(PathWithName) = LatestInfo.sha256 Then
+            CopyFile(PathWithName, LatestPCLPath)
+        End If
         NetDownloadByLoader(LatestInfo.downloads, LatestPCLTempPath, LoaderToSyncProgress)
         Using archive = New ZipArchive(New FileStream(LatestPCLTempPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), ZipArchiveMode.Read)
             Dim entry As ZipArchiveEntry = archive.Entries.FirstOrDefault(Function(x) x.FullName.EndsWithF("Plain Craft Launcher Community Edition.exe"))
