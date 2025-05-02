@@ -1820,7 +1820,7 @@ OnLoaded:
         If Not IncludeVersionJar Then Return McLibListGet
 
         '需要添加原版 Jar
-        Dim RealVersion As McVersion
+        Dim RealVersion As McVersion = Nothing
         Dim RequiredJar As String = Version.JsonObject("jar")?.ToString
         If Version.IsHmclFormatJson OrElse RequiredJar Is Nothing Then
             'HMCL 项直接使用自身的 Jar
