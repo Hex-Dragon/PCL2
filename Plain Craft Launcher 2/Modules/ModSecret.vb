@@ -763,6 +763,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
         If GetFileSHA256(PathWithName) = LatestInfo.sha256 Then
             CopyFile(PathWithName, LatestPCLPath)
+            Exit Sub
         End If
         NetDownloadByLoader(LatestInfo.downloads, LatestPCLTempPath, LoaderToSyncProgress)
         Using archive = New ZipArchive(New FileStream(LatestPCLTempPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), ZipArchiveMode.Read)
