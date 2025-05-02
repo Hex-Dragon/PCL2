@@ -1780,7 +1780,7 @@ Retry:
                                                    Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
                                                Else
                                                    i.Favs.Add(Project.Id)
-                                                   i.Favs = i.Favs.Distinct()
+                                                   i.Favs = i.Favs.Distinct().ToList()
                                                    Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
                                                End If
                                                Save()
@@ -1808,7 +1808,7 @@ Retry:
                                            Try
                                                Dim Count As Integer = i.Favs.Count
                                                i.Favs.AddRange(Project.Select(Function(p) p.Id).AsEnumerable)
-                                               i.Favs = i.Favs.Distinct.ToList
+                                               i.Favs = i.Favs.Distinct.ToList()
                                                Save()
                                                Dim SuccessCount As Integer = i.Favs.Count - Count
                                                Dim FailedCount As Integer = Project.Count - SuccessCount
