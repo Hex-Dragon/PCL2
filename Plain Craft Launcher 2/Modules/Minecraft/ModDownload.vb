@@ -1328,30 +1328,33 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-        'Dim McimUrl As String = DlSourceModGet(Url)
-        'If McimUrl <> Url Then
-        '    Select Case Setup.Get("ToolDownloadMod")
-        '        Case 0
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '        Case 1
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '        Case Else
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '    End Select
-        'End If
+        Dim McimUrl As String = DlSourceModGet(Url)
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadMod")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+            End Select
+        End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
                 Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000, IsJson:=IsJson, UseBrowserUserAgent:=True)
             Catch ex As Exception
-                Exs += ex.Message + vbCrLf
+                ' 镜像源可能随机爆炸，忽略就好
+                If Not ex.Message.ContainsF("mcimirrmr") Then
+                    Exs += ex.Message + vbCrLf
+                End If
             End Try
         Next
         Throw New Exception(Exs)
@@ -1365,30 +1368,32 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-        'Dim McimUrl As String = DlSourceModGet(Url)
-        'If McimUrl <> Url Then
-        '   Select Case Setup.Get("ToolDownloadMod")
-        '       Case 0
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '       Case 1
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '       Case Else
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
-        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-        '   End Select
-        'End If
+        Dim McimUrl As String = DlSourceModGet(Url)
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadMod")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+            End Select
+        End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
                 Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000)
             Catch ex As Exception
-                Exs += ex.Message + vbCrLf
+                If Not ex.Message.ContainsF("mcimirror") Then
+                    Exs += ex.Message + vbCrLf
+                End If
             End Try
         Next
         Throw New Exception(Exs)
@@ -1496,7 +1501,9 @@
 
     'Mod 下载源
     Public Function DlSourceModGet(Original As String) As String
-        Return Original
+        Return Original.
+                Replace("https://api.modrinth.com", "https://mod.mcimirror.top/modrinth").
+                Replace("https://api.curseforge.com", "https://mod.mcimirror.top/curseforge")
     End Function
 
     'Loader 自动切换
