@@ -285,9 +285,6 @@
     <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\Minecraft\ModProfile.vb" />
-    <Compile Include="Modules\Minecraft\MyLocalCompItem.xaml.vb">
-      <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageVersion\MyLocalModItem.xaml.vb">
       <DependentUpon>MyLocalModItem.xaml</DependentUpon>
     </Compile>
@@ -612,10 +609,6 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Modules\Minecraft\MyLocalCompItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Pages\PageDownload\Comp\MyCompItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -730,6 +723,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageLogRight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
