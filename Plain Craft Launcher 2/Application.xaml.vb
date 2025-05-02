@@ -134,6 +134,7 @@ WaitRetry:
             Setup.Load("SystemDebugAnim")
             Setup.Load("ToolDownloadThread")
             Setup.Load("ToolDownloadCert")
+            Setup.Load("ToolDownloadSpeed")
             '释放资源
             Directory.CreateDirectory(PathPure & "CE")
             SetDllDirectory(PathPure & "CE")

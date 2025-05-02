@@ -150,7 +150,7 @@
                     ItemLaunch.Checked = True
                 End If
             Case FormMain.PageSubType.SetupUI
-                If MyMsgBox("是否要初始化个性化页的所有设置？该操作不可撤销。" & vbCrLf & "（背景图片与音乐、自定义主页等外部文件不会被删除）", "初始化确认",, "取消", IsWarn:=True) = 1 Then
+                If MyMsgBox("是否要初始化个性化页的所有设置？该操作不可撤销。" & vbCrLf & "（背景图片与音乐、主页等外部文件不会被删除）", "初始化确认",, "取消", IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupUI) Then FrmSetupUI = New PageSetupUI
                     FrmSetupUI.Reset()
                     ItemUI.Checked = True
