@@ -19,7 +19,7 @@
         Project = FrmMain.PageCurrent.Additional(0)
         TargetVersion = FrmMain.PageCurrent.Additional(2)
         TargetLoader = FrmMain.PageCurrent.Additional(3)
-        PageType = FrmMain.PageCurrent.Additional(4)
+        'PageType = FrmMain.PageCurrent.Additional(4)
     End Sub
     Private Project As CompProject
     Private TargetVersion As String, TargetLoader As CompLoaderType
