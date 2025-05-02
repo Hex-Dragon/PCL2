@@ -207,7 +207,7 @@ Public Module ModMinecraft
         ''' </summary>
         Public ReadOnly Property PathIndie As String
             Get
-                InitPathIndie(Modable)
+                InitPathIndie(Version.HasLabyMod OrElse Modable)
                 Return If(Setup.Get("VersionArgumentIndieV2", Version:=Me), Path, PathMcFolder)
             End Get
         End Property
@@ -285,7 +285,10 @@ Public Module ModMinecraft
         Public ReadOnly Property Modable As Boolean
             Get
                 If Not IsLoaded Then Load()
-                Return Version.HasFabric OrElse Version.HasQuilt OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse Version.HasCleanroom OrElse
+                '判断该 LabyMod 是否支持安装 Fabric Mod
+                Dim ModdedLabyMod = False
+                If Version.HasLabyMod AndAlso Directory.Exists(PathIndie & "labymod-neo\fabric\" & Version.McName) Then ModdedLabyMod = True
+                Return Version.HasFabric OrElse Version.HasQuilt OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse Version.HasCleanroom OrElse ModdedLabyMod OrElse
                     DisplayType = McVersionCardType.API '#223
             End Get
         End Property

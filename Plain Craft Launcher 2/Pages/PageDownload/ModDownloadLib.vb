@@ -2308,6 +2308,58 @@ Retry:
 
         Return Loaders
     End Function
+
+    ''' <summary>
+    ''' 获取下载某个 Minecraft 版本的加载器列表。
+    ''' 它必须安装到 PathMcFolder，但是可以自定义版本名（不过自定义的版本名不会修改 Json 中的 id 项）。
+    ''' </summary>
+    Private Function McDownloadLabyModClientLoader(Id As String, Optional VersionName As String = Nothing) As List(Of LoaderBase)
+        VersionName = If(VersionName, Id)
+        Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
+
+        Dim Loaders As New List(Of LoaderBase)
+
+        '下载支持库文件
+        Dim LoadersLib As New List(Of LoaderBase)
+        LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析原版与 LabyMod 支持库文件（副加载器）",
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Thread.Sleep(50) '等待 JSON 文件实际写入硬盘（#3710）
+            Log("[Download] 开始分析原版与 LabyMod 支持库文件：" & VersionFolder)
+            Task.Output = McLibFix(New McVersion(VersionFolder))
+        End Sub) With {.ProgressWeight = 1, .Show = False})
+        LoadersLib.Add(New LoaderDownload("下载原版与 LabyMod 支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 13, .Show = False})
+        Loaders.Add(New LoaderCombo(Of String)(McDownloadClientLibName, LoadersLib) With {.Block = False, .ProgressWeight = 14})
+
+        '下载资源文件
+        Dim LoadersAssets As New List(Of LoaderBase)
+        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析资源文件索引地址（副加载器）",
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Try
+                Dim Version As New McVersion(VersionFolder)
+                Task.Output = New List(Of NetFile) From {DlClientAssetIndexGet(Version)}
+            Catch ex As Exception
+                Throw New Exception("分析资源文件索引地址失败", ex)
+            End Try
+            '顺手添加 Json 项目
+            Try
+                Dim VersionJson As JObject = GetJson(ReadFile(VersionFolder & VersionName & ".json"))
+                VersionJson.Add("clientVersion", Id)
+                WriteFile(VersionFolder & VersionName & ".json", VersionJson.ToString)
+            Catch ex As Exception
+                Throw New Exception("添加客户端版本失败", ex)
+            End Try
+        End Sub) With {.ProgressWeight = 1, .Show = False})
+        LoadersAssets.Add(New LoaderDownload("下载资源文件索引（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
+        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析所需资源文件（副加载器）",
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
+        End Sub) With {.ProgressWeight = 3, .Show = False})
+        LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
+        Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
+
+        Return Loaders
+
+    End Function
 #End Region
 
 #Region "LabyMod 下载菜单"
@@ -2555,7 +2607,7 @@ Retry:
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
         '决定版本隔离情况（#5970）
-        Dim Modable As Boolean = Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing
+        Dim Modable As Boolean = Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing
         Dim Version As New McVersion(VersionFolder)
         Version.InitPathIndie(Modable)
         Dim ModsFolder As String = If(Modable, VersionFolder, PathMcFolder) & "mods\"
@@ -2579,7 +2631,7 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(TempMcFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
+        If File.Exists(VersionFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If
@@ -2602,8 +2654,6 @@ Retry:
         'LabyMod
         If Request.LabyModCommitRef IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 LabyMod " & Request.LabyModCommitRef, McDownloadLabyModLoader(Request.LabyModCommitRef, Request.LabyModChannel, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 10, .Block = True})
-            'Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, $"https://releases.r2.labymod.net/api/v1/download/manifest/labymod4/{Request.LabyModChannel}/{Request.MinecraftName}/{Request.LabyModCommitRef}.json", Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
-            'LoaderList.Add(LabyModClientLoader)
             GoTo LabyModSkip
         End If
         '原版
@@ -2646,9 +2696,7 @@ LabyModSkip:
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
-                Log("[Test] Clr folder: " & CleanroomFolder)
-                Log("[Test] Clr version: " & Request.CleanroomVersion)
-                InstallMerge(TempMcFolder, TempMcFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LabyModFolder, Request.LabyModChannel, LiteLoaderFolder)
+                InstallMerge(VersionFolder, VersionFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LabyModFolder, Request.LabyModChannel, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
@@ -2660,11 +2708,16 @@ LabyModSkip:
             End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
-            LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
-            LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
-            LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
+            If Request.LabyModCommitRef IsNot Nothing Then
+                Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadLabyModClientLoader(Request.MinecraftName, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
+                LoaderList.Add(LabyModClientLoader)
+            Else
+                LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+                LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
+                LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
+            End If
         End If
         '删除忽略标识
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(VersionFolder & ".pclignore")) With {.Show = False})
