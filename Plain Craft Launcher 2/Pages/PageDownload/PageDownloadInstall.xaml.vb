@@ -369,7 +369,6 @@
             LabForge.Foreground = ColorGray1
         End If
         'NeoForge
-        CardNeoForge.Visibility = Visibility.Visible
         Dim NeoForgeError As String = LoadNeoForgeGetError()
         CardNeoForge.MainSwap.Visibility = If(NeoForgeError Is Nothing, Visibility.Visible, Visibility.Collapsed)
         If NeoForgeError IsNot Nothing Then CardNeoForge.IsSwaped = True
