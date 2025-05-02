@@ -353,15 +353,13 @@ Write:
 #Region "导入与导出"
     Public Sub MigrateProfile()
         Dim Type As Integer = 3
-        RunInUiWait(Sub()
-                        If ProfileList.Any() Then
-                            Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True)
-                            If Type = 3 Then Exit Sub
-                        Else
-                            Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}由于目前 PCL CE 不存在任何可用档案，无法导出档案。", "导入 / 导出档案", "导入", "取消", ForceWait:=True)
-                            If Type = 2 Then Exit Sub
-                        End If
-                    End Sub)
+        If ProfileList.Any() Then
+            RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
+            If Type = 3 Then Exit Sub
+        Else
+            RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出档案列表至 HMCL 全局账户列表。{vbCrLf}由于目前 PCL CE 不存在任何可用档案，无法导出档案。", "导入 / 导出档案", "导入", "取消", ForceWait:=True))
+            If Type = 2 Then Exit Sub
+        End If
         Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
         If Type = 1 Then '导入
             Hint("正在导入，请稍后...", HintType.Info)
@@ -714,7 +712,7 @@ Retry:
             ProfileLog("无旧版离线档案信息")
         End If
         '第三方验证档案
-        If Not (String.IsNullOrWhiteSpace(Setup.Get("LoginAuthName")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUuid")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthServerServer")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUsername")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthPass"))) Then
+        If Not (String.IsNullOrWhiteSpace(Setup.Get("CacheAuthName")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUuid")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthServerServer")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUsername")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthPass"))) Then
             ProfileLog($"找到旧版第三方验证档案信息")
             Dim NewProfile As New McProfile With {.Username = Setup.Get("CacheAuthName"), .Uuid = Setup.Get("CacheAuthUuid"),
                     .Name = Setup.Get("CacheAuthUsername"), .Password = Setup.Get("CacheAuthPass"), .Server = Setup.Get("CacheAuthServerServer") & "/authserver"}
@@ -722,7 +720,7 @@ Retry:
             SaveProfile()
             ProfileLog("旧版第三方验证档案迁移完成")
             ProfileCount += 1
-            Setup.Reset("LoginAuthName")
+            Setup.Reset("CacheAuthName")
             Setup.Reset("CacheAuthUuid")
             Setup.Reset("CacheAuthServerServer")
             Setup.Reset("CacheAuthUsername")
