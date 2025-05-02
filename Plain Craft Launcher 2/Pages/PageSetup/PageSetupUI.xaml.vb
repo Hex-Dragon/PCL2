@@ -69,7 +69,8 @@ Public Class PageSetupUI
                 .Tag = ""
             })
             For Each Font In Fonts.SystemFontFamilies
-                ComboUiFont.Items.Add(New MyComboBoxItem With {
+                Try
+                    ComboUiFont.Items.Add(New MyComboBoxItem With {
                     .Content = New TextBlock With {
                                       .Text = Font.Source,
                                       .FontFamily = New FontFamily(Font.Source),
@@ -78,6 +79,9 @@ Public Class PageSetupUI
                                       },
                     .Tag = Font.Source
                 })
+                Catch ex As Exception
+                    Log(ex, "发现了一个无法加载的异常的字体：" & Font.Source, LogLevel.Hint)
+                End Try
             Next
             If String.IsNullOrWhiteSpace(Setup.Get("UiFont")) Then
                 ComboUiFont.SelectedIndex = 0
