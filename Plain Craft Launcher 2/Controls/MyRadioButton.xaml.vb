@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Markup
+Imports System.Windows.Markup
 
 <ContentProperty("Inlines")>
 Public Class MyRadioButton
@@ -179,8 +179,8 @@ Public Class MyRadioButton
                         If Checked Then
                             '勾选
                             AniStart({
-                                         AaColor(ShapeLogo, Shapes.Path.FillProperty, "ColorBrush3", AnimationTimeOfCheck),
-                                         AaColor(LabText, TextBlock.ForegroundProperty, "ColorBrush3", AnimationTimeOfCheck)
+                                         AaColor(ShapeLogo, Shapes.Path.FillProperty, New MyColor(19, 112, 243), AnimationTimeOfCheck),
+                                         AaColor(LabText, TextBlock.ForegroundProperty, New MyColor(19, 112, 243), AnimationTimeOfCheck)
                                     }, "MyRadioButton Checked " & Uuid)
                             AniStart(AaColor(Me, BackgroundProperty, New MyColor(255, 255, 255) - Background, AnimationTimeOfCheck), "MyRadioButton Color " & Uuid)
                         ElseIf IsMouseDown Then
@@ -238,8 +238,8 @@ Public Class MyRadioButton
                     Case ColorState.White
                         If Checked Then
                             Background = New MyColor(255, 255, 255)
-                            ShapeLogo.SetResourceReference(Shapes.Path.FillProperty, "ColorBrush3")
-                            LabText.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush3")
+                            ShapeLogo.Fill = New MyColor(19, 112, 243)
+                            LabText.Foreground = New MyColor(19, 112, 243)
                         Else
                             Background = ColorSemiTransparent
                             ShapeLogo.Fill = New MyColor(255, 255, 255)
