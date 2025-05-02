@@ -22,7 +22,7 @@
         PageType = FrmMain.PageCurrent.Additional(4)
     End Sub
     Private Project As CompProject
-    Private TargetVersion As String, TargetLoader As CompModLoaderType
+    Private TargetVersion As String, TargetLoader As CompLoaderType
     ''' <summary>
     ''' 当前页面应展示的内容类别。可能为 Any。
     ''' </summary>
@@ -138,12 +138,12 @@
     Private Sub UpdateFilterResult()
         Dim Results = GetResults()
 
-        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
+        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompLoaderType.Any,
+            $"所选版本：{If(TargetLoader <> CompLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
         '归类到卡片下
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
         Dict.Add("其他版本", New List(Of CompFile))
-        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
+        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompLoaderType)))
         For Each Version As CompFile In Results
             For Each GameVersion In Version.GameVersions
                 '检查是否符合版本筛选器
