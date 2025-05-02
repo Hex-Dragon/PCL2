@@ -1292,8 +1292,8 @@ Retry:
                     outputWaitHandle.WaitOne(10000)
                     errorWaitHandle.WaitOne(10000)
                     process.Dispose()
-                    '检查是否安装成功：最后两行中是否有 true（true 可能在倒数第二行，见 #832）
-                    If LastResults.Last = "true" OrElse (LastResults.Count >= 2 AndAlso LastResults(LastResults.Count - 2) = "true") Then Exit Sub
+                    '检查是否安装成功：最后 5 行中是否有 true（true 可能在倒数数行，见 #832）
+                    If LastResults.Reverse().Take(5).Any(Function(l) l = "true") Then Exit Sub
                     Log(Join(LastResults, vbCrLf))
                     Dim LastLines As String = ""
                     For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
@@ -1458,7 +1458,7 @@ Retry:
                         Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
                         Dim ClientMappings As JToken = RawJson("downloads")("client_mappings")
                         Libs.Add(New McLibToken With {
-                                 .IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
+                                 .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
                                  .Url = ClientMappings("url"), .Size = ClientMappings("size"), .SHA1 = ClientMappings("sha1")})
                         Log($"[Download] 需要下载 Mappings：{ClientMappings("url")} (SHA1: {ClientMappings("sha1")})")
                     End If
@@ -2606,17 +2606,13 @@ Retry:
         Dim LiteLoaderFolder As String = Nothing
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
-        '决定版本隔离情况（#5970）
-        Dim Modable As Boolean = Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing
-        Dim Version As New McVersion(VersionFolder)
-        Version.InitPathIndie(Modable)
-        Dim ModsFolder As String = If(Modable, VersionFolder, PathMcFolder) & "mods\"
-
         '判断 OptiFine 是否作为 Mod 进行下载
+        Dim Modable As Boolean = Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing
+        Dim ModsTempFolder As String = TempMcFolder & "mods\"
         Dim OptiFineAsMod As Boolean = Request.OptiFineEntry IsNot Nothing AndAlso Modable '选择了 OptiFine 与任意 Mod 加载器
         If OptiFineAsMod Then
             Log("[Download] OptiFine 将作为 Mod 进行下载")
-            OptiFineFolder = ModsFolder
+            OptiFineFolder = ModsTempFolder
         End If
 
         '记录日志
@@ -2641,15 +2637,15 @@ Retry:
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(VersionFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(ModsTempFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL)
         If Request.QSL IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(ModsTempFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.ToNetFile(ModsTempFolder)}) With {.ProgressWeight = 3, .Block = False})
         End If
         'LabyMod
         If Request.LabyModCommitRef IsNot Nothing Then
@@ -2657,15 +2653,18 @@ Retry:
             GoTo LabyModSkip
         End If
         '原版
-        Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = Request.ForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
+        Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39,
+            .Block = Request.ForgeVersion Is Nothing AndAlso Request.NeoForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
         LoaderList.Add(ClientLoader)
 LabyModSkip:
         'OptiFine
         If Request.OptiFineEntry IsNot Nothing Then
             If OptiFineAsMod Then
-                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineSaveLoader(Request.OptiFineEntry, OptiFineFolder & Request.OptiFineEntry.NameFile)) With {.Show = False, .ProgressWeight = 16, .Block = Request.ForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineSaveLoader(Request.OptiFineEntry, OptiFineFolder & Request.OptiFineEntry.NameFile)) With {.Show = False, .ProgressWeight = 16,
+                    .Block = Request.ForgeVersion Is Nothing AndAlso Request.NeoForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
             Else
-                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineLoader(Request.OptiFineEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 24, .Block = Request.ForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineLoader(Request.OptiFineEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 24,
+                    .Block = Request.ForgeVersion Is Nothing AndAlso Request.NeoForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
             End If
         End If
         'Forge
@@ -2682,11 +2681,13 @@ LabyModSkip:
         End If
         'LiteLoader
         If Request.LiteLoaderEntry IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 LiteLoader " & Request.MinecraftName, McDownloadLiteLoaderLoader(Request.LiteLoaderEntry, TempMcFolder, ClientLoader, False)) With {.Show = False, .ProgressWeight = 1, .Block = Request.FabricVersion Is Nothing})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 LiteLoader " & Request.MinecraftName, McDownloadLiteLoaderLoader(Request.LiteLoaderEntry, TempMcFolder, ClientLoader, False)) With {.Show = False, .ProgressWeight = 1,
+                .Block = Request.FabricVersion Is Nothing})
         End If
         'Fabric
         If Request.FabricVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2,
+                .Block = True})
         End If
         'Quilt
         If Request.QuiltVersion IsNot Nothing Then
@@ -2695,20 +2696,24 @@ LabyModSkip:
 
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
-            Sub(Task As LoaderTask(Of String, String))
-                InstallMerge(VersionFolder, VersionFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LabyModFolder, Request.LabyModChannel, LiteLoaderFolder)
-                Task.Progress = 0.3
-                If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
-                If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
-                '新建 mods 文件夹
-                If Request.ForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.CleanroomEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing Then
-                    Directory.CreateDirectory(ModsFolder)
-                    Log("[Download] 自动创建 mods 文件夹：" & ModsFolder)
-                End If
-            End Sub) With {.ProgressWeight = 2, .Block = True})
+        Sub(Task As LoaderTask(Of String, String))
+            '合并 JSON
+            MergeJson(VersionFolder, VersionFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, CleanroomFolder, Request.CleanroomVersion, FabricFolder, QuiltFolder, LabyModFolder, Request.LabyModChannel, LiteLoaderFolder)
+            Task.Progress = 0.2
+            '迁移文件
+            If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
+            Task.Progress = 0.8
+            Dim ModsFolder = New McVersion(VersionFolder).PathIndie & "mods\" '版本隔离信息在此时被决定
+            If Directory.Exists(ModsTempFolder) Then
+                CopyDirectory(ModsTempFolder, ModsFolder)
+            ElseIf Modable Then
+                Directory.CreateDirectory(ModsFolder)
+                Log("[Download] 自动创建 mods 文件夹：" & ModsFolder)
+            End If
+        End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             If Request.LabyModCommitRef IsNot Nothing Then
                 Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadLabyModClientLoader(Request.MinecraftName, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
@@ -2726,9 +2731,9 @@ LabyModSkip:
     End Function
 
     ''' <summary>
-    ''' 将多个版本 Json 进行合并，如果目标已存在则直接覆盖。失败会抛出异常。
+    ''' 将多个版本 JSON 进行合并，如果目标已存在则直接覆盖。失败会抛出异常。
     ''' </summary>
-    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional CleanroomFolder As String = Nothing, Optional CleanroomVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional QuiltFolder As String = Nothing, Optional LabyModFolder As String = Nothing, Optional LabyModChannel As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
+    Private Sub MergeJson(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional CleanroomFolder As String = Nothing, Optional CleanroomVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional QuiltFolder As String = Nothing, Optional LabyModFolder As String = Nothing, Optional LabyModChannel As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
         Log("[Download] 开始进行版本合并，输出：" & OutputFolder & "，Minecraft：" & MinecraftFolder &
             If(OptiFineFolder IsNot Nothing, "，OptiFine：" & OptiFineFolder, "") &
             If(ForgeFolder IsNot Nothing, "，Forge：" & ForgeFolder, "") &

@@ -843,8 +843,8 @@ Finished:
                     If File.DirectoryName.ToLower & "\" <> RawName Then
                         '仅当 Forge 1.13- 且文件夹名与版本号相同时，才加载该子文件夹下的 Mod
                         If Not (PageVersionLeft.Version IsNot Nothing AndAlso PageVersionLeft.Version.Version.HasForge AndAlso
-                                    PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
-                                    File.Directory.Name = "1." & PageVersionLeft.Version.Version.McCodeMain & "." & PageVersionLeft.Version.Version.McCodeSub) Then
+                                PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
+                                File.Directory.Name = $"1.{PageVersionLeft.Version.Version.McCodeMain}.{PageVersionLeft.Version.Version.McCodeSub}") Then
                             Continue For
                         End If
                     End If
@@ -1134,7 +1134,11 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalComp.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
-        RunInUi(Sub() Loader.Input.Frm.RefreshBars())
+        If FrmVersionMod?.Filter = PageVersionMod.FilterType.CanUpdate Then
+            RunInUi(Sub() FrmVersionMod?.RefreshUI()) '同步 “可更新” 列表 (#4677)
+        Else
+            RunInUi(Sub() FrmVersionMod?.RefreshBars())
+        End If
     End Sub
 
     Public Function GetCurrentVersionModLoader() As List(Of CompLoaderType)

@@ -119,12 +119,12 @@ Public Class PageDownloadInstall
                 OptiFabric_Loaded()
                 LabyMod_Loaded()
                 SelectReload()
+                PanMinecraft.Visibility = Visibility.Collapsed
             End Sub, After:=True),
             AaOpacity(PanSelect, 1 - PanSelect.Opacity, 90, 100),
             AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 200, 100, Ease:=New AniEaseOutFluent(AniEasePower.ExtraStrong)),
             AaCode(
             Sub()
-                PanMinecraft.Visibility = Visibility.Collapsed
                 PanBack.IsHitTestVisible = True
                 '初始化 Binding
                 If IsFirstLoaded Then Exit Sub
@@ -728,6 +728,10 @@ Public Class PageDownloadInstall
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/GrassPath.png"
+        ElseIf SelectedQuilt IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Quilt.png"
+        ElseIf SelectedCleanroom IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Cleanroom.png"
         Else
             Return SelectedMinecraftIcon
         End If
@@ -824,7 +828,7 @@ Public Class PageDownloadInstall
                                 Version("id") = "20w14∞"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
-                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b", "24w14potato"
+                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b", "24w14potato", "25w14craftmine"
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
@@ -1830,9 +1834,9 @@ Public Class PageDownloadInstall
         '确认版本隔离
         If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedQuilt IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndieV2") = 0 OrElse Setup.Get("LaunchArgumentIndieV2") = 2) Then
-            If MyMsgBox("你尚未开启版本隔离，这会导致多个版本共用同一个 Mod 文件夹。" & vbCrLf &
-                        "因此游戏可能会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
-                        "推荐在开始下载前，在 设置 → 启动选项 → 版本隔离 中开启版本隔离！", "版本隔离提示", "取消下载", "继续") = 1 Then
+            If MyMsgBox("你尚未开启版本隔离，多个 MC 版本会共用同一个 Mod 文件夹。" & vbCrLf &
+                        "因此，游戏可能会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
+                        "推荐先在 设置 → 启动选项 → 默认版本隔离 中开启版本隔离！", "版本隔离提示", "取消下载", "继续") = 1 Then
                 Exit Sub
             End If
         End If

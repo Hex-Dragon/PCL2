@@ -11,7 +11,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemLabyMod.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemFavorites.Check, ItemCleanroom.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemLabyMod.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemDataPack.Check, ItemCleanroom.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -65,6 +65,9 @@
             Case FormMain.PageSubType.DownloadCompFavorites
                 If FrmDownloadCompFavorites Is Nothing Then FrmDownloadCompFavorites = New PageDownloadCompFavorites
                 Return FrmDownloadCompFavorites
+            Case FormMain.PageSubType.DownloadDataPack
+                If FrmDownloadDataPack Is Nothing Then FrmDownloadDataPack = New PageDownloadDataPack
+                Return FrmDownloadDataPack
             Case Else
                 Throw New Exception("未知的下载子页面种类：" & ID)
         End Select
@@ -132,31 +135,50 @@
                 DlLabyModListLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
-                PageDownloadMod.Storage = New CompProjectStorage
-                PageDownloadMod.Page = 0
                 CompProjectCache.Clear()
                 CompFilesCache.Clear()
-                If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
+                If FrmDownloadMod IsNot Nothing Then
+                    FrmDownloadMod.Content.Storage = New CompProjectStorage
+                    FrmDownloadMod.Content.Page = 0
+                    FrmDownloadMod.PageLoaderRestart()
+                End If
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
-                PageDownloadPack.Storage = New CompProjectStorage
-                PageDownloadPack.Page = 0
                 CompProjectCache.Clear()
                 CompFilesCache.Clear()
-                If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
+                If FrmDownloadPack IsNot Nothing Then
+                    FrmDownloadPack.Content.Storage = New CompProjectStorage
+                    FrmDownloadPack.Content.Page = 0
+                    FrmDownloadPack.PageLoaderRestart()
+                End If
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadResourcePack
-                PageDownloadResourcePack.Storage = New CompProjectStorage
-                PageDownloadResourcePack.Page = 0
                 CompProjectCache.Clear()
-                If FrmDownloadResourcePack IsNot Nothing Then FrmDownloadResourcePack.PageLoaderRestart()
+                CompFilesCache.Clear()
+                If FrmDownloadResourcePack IsNot Nothing Then
+                    FrmDownloadResourcePack.Content.Storage = New CompProjectStorage
+                    FrmDownloadResourcePack.Content.Page = 0
+                    FrmDownloadResourcePack.PageLoaderRestart()
+                End If
                 ItemResourcePack.Checked = True
             Case FormMain.PageSubType.DownloadShader
-                PageDownloadShader.Storage = New CompProjectStorage
-                PageDownloadShader.Page = 0
                 CompProjectCache.Clear()
-                If FrmDownloadShader IsNot Nothing Then FrmDownloadShader.PageLoaderRestart()
+                CompFilesCache.Clear()
+                If FrmDownloadShader IsNot Nothing Then
+                    FrmDownloadShader.Content.Storage = New CompProjectStorage
+                    FrmDownloadShader.Content.Page = 0
+                    FrmDownloadShader.PageLoaderRestart()
+                End If
                 ItemShader.Checked = True
+            Case FormMain.PageSubType.DownloadDataPack
+                CompProjectCache.Clear()
+                CompFilesCache.Clear()
+                If FrmDownloadDataPack IsNot Nothing Then
+                    FrmDownloadDataPack.Content.Storage = New CompProjectStorage
+                    FrmDownloadDataPack.Content.Page = 0
+                    FrmDownloadDataPack.PageLoaderRestart()
+                End If
+                ItemDataPack.Checked = True
             Case FormMain.PageSubType.DownloadClient
                 DlClientListLoader.Start(IsForceRestart:=True)
                 ItemClient.Checked = True

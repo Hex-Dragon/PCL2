@@ -111,7 +111,7 @@
                                     <local:ExportOption 
                                 Title="已绘制的地图"
                                 Description="地图类 Mod 为现有的存档、服务器记录的地图、路标点等"
-                                Rules="journeymap/data/|xaero/"
+                                Rules="journeymap/data/|xaero/|XaeroWaypoints/|XaeroWorldMap/"
                                 DefaultChecked="False" />
                                 </local:MyCheckBox.Tag>
                             </local:MyCheckBox>

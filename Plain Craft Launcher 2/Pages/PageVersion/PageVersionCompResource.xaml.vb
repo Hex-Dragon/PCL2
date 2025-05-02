@@ -541,7 +541,7 @@ Install:
 #Region "筛选"
 
     Private _Filter As FilterType = FilterType.All
-    Private Property Filter As FilterType
+    Public Property Filter As FilterType
         Get
             Return _Filter
         End Get
@@ -565,7 +565,7 @@ Install:
             RefreshUI()
         End Set
     End Property
-    Private Enum FilterType As Integer
+    Public Enum FilterType As Integer
         All = 0
         Enabled = 1
         Disabled = 2

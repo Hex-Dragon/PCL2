@@ -219,7 +219,7 @@ Public Class PageSetupUI
 
     Private Sub ComboFontChange(sender As MyComboBox, e As Object) Handles ComboUiFont.SelectionChanged
         If AniControlEnabled = 0 Then
-            If sender.SelectedIndex = 0 Then
+            If sender.SelectedIndex = 0 Or sender.SelectedItem Is Nothing Then
                 Setup.Set("UiFont", "")
                 SetLaunchFont()
             Else
@@ -465,7 +465,7 @@ Refresh:
                  "3. 点击 刷新主页 按钮，查看主页现在长啥样了。" & vbCrLf &
                  vbCrLf &
                  "你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。" & vbCrLf &
-                 "直接将自定义主页文件拖进 PCL 窗口也可以快捷加载。", "主页自定义教程")
+                 "直接将主页文件拖进 PCL 窗口也可以快捷加载。", "主页自定义教程")
     End Sub
 
     '主题

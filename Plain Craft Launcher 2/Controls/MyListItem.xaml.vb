@@ -295,7 +295,11 @@ Public Class MyListItem
                             .SnapsToDevicePixels = True, .UseLayoutRounding = False,
                             .HorizontalAlignment = HorizontalAlignment.Stretch, .VerticalAlignment = VerticalAlignment.Stretch
                     }
-                    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
+                    If _Logo.Contains(PathTemp & $"Cache\Skin\Head") Then
+                        RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.NearestNeighbor)
+                    Else
+                        RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
+                    End If
                 Else
                     '矢量图
                     PathLogo = New Shapes.Path With {
@@ -401,7 +405,7 @@ Public Class MyListItem
             Return _Checked
         End Get
         Set(value As Boolean)
-            SetChecked(value, False, True)
+            SetChecked(value, False, value <> _Checked) '仅在值发生变化时触发动画 (#4596)
         End Set
     End Property
     ''' <summary>

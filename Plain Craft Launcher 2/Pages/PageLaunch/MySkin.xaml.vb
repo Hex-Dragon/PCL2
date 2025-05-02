@@ -1,4 +1,6 @@
-﻿Public Class MySkin
+﻿Imports System.Drawing
+
+Public Class MySkin
 
     '事件
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -96,6 +98,7 @@
                 ImgFore.Source = Nothing : ImgBack.Source = Nothing
                 Throw New Exception("图片大小不足，长为 " & Image.Pic.Height & "，宽为 " & Image.Pic.Width)
             End If
+            Dim SkinHead As MyBitmap = Nothing
             '头发层（附加层）
             If Image.Pic.Width >= 64 AndAlso Image.Pic.Height >= 32 Then
                 If (Image.Pic.GetPixel(1, 1).A = 0 OrElse '如果图片中有任何透明像素（避免纯色白底）
@@ -105,6 +108,7 @@
                     Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso
                     Image.Pic.GetPixel(Image.Pic.Width - 2, Image.Pic.Height / 2 - 2) <> Image.Pic.GetPixel(Scale * 41, Scale * 9)) Then
                     ImgFore.Source = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
+                    SkinHead = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
                 Else
                     ImgFore.Source = Nothing
                 End If
@@ -113,11 +117,47 @@
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
+            '用于显示档案列表头像的图片
+            Dim SkinHeadId As String = Address.Between({If(Address.Contains("Images/Skins/"), "Skins/", "Skin\")}(0), ".png")
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{SkinHeadId}.png"
+            SelectedProfile.SkinHeadId = SkinHeadId
+            SaveProfile()
+            If SkinHead Is Nothing Then
+                SkinHead.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)
+            Else
+                SkinHead = New MyBitmap With {.Pic = New Bitmap(56, 56)}
+                Dim SkinHair As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8), 56, 56)}
+                Dim SkinFace As New MyBitmap With {.Pic = ScaleToSize(Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8), 48, 48)}
+                For i = 0 To 47
+                    For j = 0 To 47
+                        SkinHead.Pic.SetPixel(i + 4, j + 4, SkinFace.Pic.GetPixel(i, j))
+
+                    Next
+                Next
+                For i = 0 To 55
+                    For j = 0 To 55
+                        If SkinHair.Pic.GetPixel(i, j).A = 0 Then Continue For
+                        SkinHead.Pic.SetPixel(i, j, SkinHair.Pic.GetPixel(i, j))
+                    Next
+                Next
+            End If
+            If Not Directory.Exists(PathTemp & "Cache\Skin\Head") Then Directory.CreateDirectory(PathTemp & "Cache\Skin\Head")
+            If Not File.Exists(CachePath) Then File.Create(CachePath).Close()
+            SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
             Log(ex, "载入头像失败（" & If(Address, "null") & "," & Loader.Name & "）", LogLevel.Hint)
         End Try
     End Sub
+    Private Function ScaleToSize(Bitmap As Bitmap, Width As Integer, Height As Integer)
+        Dim ScaledBitmap = New Bitmap(Width, Height)
+        Using g = Graphics.FromImage(ScaledBitmap)
+            g.InterpolationMode = Drawing2D.InterpolationMode.NearestNeighbor
+            g.PixelOffsetMode = Drawing2D.PixelOffsetMode.Half
+            g.DrawImage(Bitmap, 0, 0, Width, Height)
+        End Using
+        Return ScaledBitmap
+    End Function
     ''' <summary>
     ''' 清空皮肤。
     ''' </summary>
@@ -154,7 +194,6 @@
                     If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
                     If Directory.Exists(PathTemp & "Cache\Uuid") Then DeleteDirectory(PathTemp & "Cache\Uuid")
                     IniClearCache(PathTemp & "Cache\Skin\IndexMs.ini")
-                    IniClearCache(PathTemp & "Cache\Skin\IndexNide.ini")
                     IniClearCache(PathTemp & "Cache\Skin\IndexAuth.ini")
                     IniClearCache(PathTemp & "Cache\Uuid\Mojang.ini")
                     '刷新控件
@@ -177,8 +216,8 @@
         Sub()
             Try
                 '更新缓存
-                WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", Setup.Get("CacheMsV2Uuid"), SkinAddress)
-                Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("CacheMsV2Uuid"), SkinAddress))
+                WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", SelectedProfile.Uuid, SkinAddress)
+                Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", SelectedProfile.Uuid, SkinAddress))
                 '刷新控件
                 For Each SkinLoader In {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}
                     SkinLoader.WaitForExit(IsForceRestart:=True)
@@ -223,7 +262,7 @@
             Try
 Retry:
                 '获取登录信息
-                If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
+                If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(GetLoginData())
                 If McLoginMsLoader.State <> LoadState.Finished Then
                     Hint("登录失败，无法更改披风！", HintType.Critical)
                     Exit Sub
@@ -243,7 +282,7 @@ Retry:
                             {"Minecon2013", "Minecon 2013 参与者披风"}, {"Minecon2015", "Minecon 2015 参与者披风"}, {"Minecon2016", "Minecon 2016 参与者披风"},
                             {"Cherry Blossom", "樱花披风"}, {"15th Anniversary", "15 周年纪念披风"}, {"Purple Heart", "紫色心形披风"},
                             {"Follower's", "追随者披风"}, {"MCC 15th Year", "MCC 15 周年披风"}, {"Minecraft Experience", "村民救援披风"},
-                            {"Mojang Office", "Mojang 办公室披风"}, {"Home", "家园披风"}, {"Menace", "入侵披风"}
+                            {"Mojang Office", "Mojang 办公室披风"}, {"Home", "家园披风"}, {"Menace", "入侵披风"}, {"Yearn", "渴望披风"}
                         }
                         Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = "无披风"}}
                         For Each Cape In SkinData("capes")
