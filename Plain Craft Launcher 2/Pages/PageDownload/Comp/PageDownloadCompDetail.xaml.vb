@@ -22,7 +22,7 @@
         PageType = FrmMain.PageCurrent.Additional(4)
     End Sub
     Private Project As CompProject
-    Private TargetVersion As String, TargetLoader As CompModLoaderType
+    Private TargetVersion As String, TargetLoader As CompLoaderType
     ''' <summary>
     ''' 当前页面应展示的内容类别。可能为 Any。
     ''' </summary>
@@ -138,12 +138,12 @@
     Private Sub UpdateFilterResult()
         Dim Results = GetResults()
 
-        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
+        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompLoaderType.Any,
+            $"所选版本：{If(TargetLoader <> CompLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
         '归类到卡片下
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
         Dict.Add("其他版本", New List(Of CompFile))
-        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
+        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompLoaderType)))
         For Each Version As CompFile In Results
             For Each GameVersion In Version.GameVersions
                 '检查是否符合版本筛选器
@@ -189,7 +189,7 @@
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(PageType = CompType.ModPack, 9, 8)} '9 是安装，8 是另存为
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15)} '9 是安装，8 是另存为
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.InstallMethod = Sub(Stack As StackPanel)
@@ -213,7 +213,7 @@
                 If Pair.Key = TargetCardName OrElse
                    (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
                    CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, If(PageType = CompType.ModPack, 9, 8), Pair.Key) '9 是安装，8 是另存为
+                    NewCard.StackInstall() '9 是安装，8 是另存为
                 Else
                     NewCard.IsSwaped = True
                 End If

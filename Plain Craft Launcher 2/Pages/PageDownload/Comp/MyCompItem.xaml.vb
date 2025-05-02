@@ -105,7 +105,7 @@
         '打开详情页
         Dim TargetType As CompType
         Dim TargetVersion As String = Nothing
-        Dim TargetLoader As CompModLoaderType = CompModLoaderType.Any
+        Dim TargetLoader As CompLoaderType = CompLoaderType.Any
         If FrmMain.PageCurrent.Page = FormMain.PageType.Download Then
             If FrmMain.PageCurrentSub = FormMain.PageSubType.DownloadCompFavorites Then
                 TargetVersion = ""

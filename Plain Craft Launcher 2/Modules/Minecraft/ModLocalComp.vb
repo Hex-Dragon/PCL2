@@ -1134,7 +1134,7 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalComp.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
-        If FrmVersionMod?.Filter = PageVersionMod.FilterType.CanUpdate Then
+        If FrmVersionMod?.Filter = PageVersionCompResource.FilterType.CanUpdate Then
             RunInUi(Sub() FrmVersionMod?.RefreshUI()) '同步 “可更新” 列表 (#4677)
         Else
             RunInUi(Sub() FrmVersionMod?.RefreshBars())

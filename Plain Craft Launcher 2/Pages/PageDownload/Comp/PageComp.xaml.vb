@@ -108,7 +108,7 @@ Public Class PageComp
         Dim Request As New CompProjectRequest(PageType, Storage, (Page + 1) * PageSize)
         Dim GameVersion As String = If(TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
                 If(TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w"), TextSearchVersion.Text, Nothing))
-        Dim ModLoader As CompModLoaderType = CompModLoaderType.Any
+        Dim ModLoader As CompLoaderType = CompLoaderType.Any
         If PageType = CompType.Mod Then '只有 Mod 考虑加载器
             ModLoader = Val(ComboSearchLoader.SelectedItem.Tag)
             If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
@@ -144,7 +144,7 @@ Public Class PageComp
             For i = Math.Min(Page * PageSize, Storage.Results.Count - 1) To Math.Min((Page + 1) * PageSize - 1, Storage.Results.Count - 1)
                 PanProjects.Children.Add(Storage.Results(i).ToCompItem(
                     ShowMcVersionDesc:=Loader.Input.GameVersion Is Nothing,
-                    ShowLoaderDesc:=Loader.Input.ModLoader = CompModLoaderType.Any AndAlso (PageType = CompType.Mod OrElse PageType = CompType.ModPack)))
+                    ShowLoaderDesc:=Loader.Input.ModLoader = CompLoaderType.Any AndAlso (PageType = CompType.Mod OrElse PageType = CompType.ModPack)))
             Next
             '页码
             CardPages.Visibility = If(Storage.Results.Count > 40 OrElse

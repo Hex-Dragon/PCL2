@@ -494,10 +494,10 @@ Public Module ModComp
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
                             '加载器
-                            Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
-                            Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
-                            Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
-                            Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                            Case "forge" : ModLoaders.Add(CompLoaderType.Forge)
+                            Case "fabric" : ModLoaders.Add(CompLoaderType.Fabric)
+                            Case "quilt" : ModLoaders.Add(CompLoaderType.Quilt)
+                            Case "neoforge" : ModLoaders.Add(CompLoaderType.NeoForge)
                             Case "datapack" : Type = CompType.DataPack '若包含数据包版本，则优先标为 DataPack
                             '共用
                             Case "technology" : Tags.Add("科技")
@@ -1504,20 +1504,20 @@ Retry:
                     'ModLoaders
                     '结果可能混杂着 Mod、数据包和服务端插件
                     Dim RawLoaders As List(Of String) = Data("loaders").Select(Function(v) v.ToString).ToList
-                    ModLoaders = New List(Of CompModLoaderType)
+                    ModLoaders = New List(Of CompLoaderType)
                     If Type = CompType.Mod Then '以尽量宽容的方式检测加载器，以免同时兼容两种的项被删除
                         If RawLoaders.Intersect({"bukkit", "folia", "paper", "purpur", "spigot"}).Any() Then Type = CompType.Plugin 'Veinminer Enchantment 同时支持服务端与 Fabric
                         If RawLoaders.Contains("datapack") Then Type = CompType.DataPack
-                        If RawLoaders.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge) : Type = CompType.Mod
-                        If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge) : Type = CompType.Mod
-                        If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric) : Type = CompType.Mod
-                        If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt) : Type = CompType.Mod
+                        If RawLoaders.Contains("forge") Then ModLoaders.Add(CompLoaderType.Forge) : Type = CompType.Mod
+                        If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompLoaderType.NeoForge) : Type = CompType.Mod
+                        If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompLoaderType.Fabric) : Type = CompType.Mod
+                        If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompLoaderType.Quilt) : Type = CompType.Mod
                     ElseIf Type = CompType.DataPack Then
                         If RawLoaders.Intersect({"bukkit", "folia", "paper", "purpur", "spigot"}).Any() Then Type = CompType.Plugin
-                        If RawLoaders.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge) : Type = CompType.Mod
-                        If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge) : Type = CompType.Mod
-                        If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric) : Type = CompType.Mod
-                        If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt) : Type = CompType.Mod
+                        If RawLoaders.Contains("forge") Then ModLoaders.Add(CompLoaderType.Forge) : Type = CompType.Mod
+                        If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompLoaderType.NeoForge) : Type = CompType.Mod
+                        If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompLoaderType.Fabric) : Type = CompType.Mod
+                        If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompLoaderType.Quilt) : Type = CompType.Mod
                         If RawLoaders.Contains("datapack") Then Type = CompType.DataPack
                     End If
                     'Dependencies
@@ -1780,7 +1780,7 @@ Retry:
                                                    Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
                                                Else
                                                    i.Favs.Add(Project.Id)
-                                                   i.Favs = i.Favs.Distinct()
+                                                   i.Favs = i.Favs.Distinct().ToList()
                                                    Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
                                                End If
                                                Save()
@@ -1808,7 +1808,7 @@ Retry:
                                            Try
                                                Dim Count As Integer = i.Favs.Count
                                                i.Favs.AddRange(Project.Select(Function(p) p.Id).AsEnumerable)
-                                               i.Favs = i.Favs.Distinct.ToList
+                                               i.Favs = i.Favs.Distinct.ToList()
                                                Save()
                                                Dim SuccessCount As Integer = i.Favs.Count - Count
                                                Dim FailedCount As Integer = Project.Count - SuccessCount
