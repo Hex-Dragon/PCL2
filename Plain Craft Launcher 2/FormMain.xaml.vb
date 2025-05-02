@@ -21,6 +21,12 @@ Public Class FormMain
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 版本修改的加载器选择可能不正确"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "部分字体标题栏 CE 显示不完整"))
         End If
+            If LastVersion < 357 Then 'Release 2.10.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：下载资源包、光影包、数据包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新增：允许设置文件下载源"))
+            FeatureCount += 9
+            BugCount += 26
+        End If
         If LastVersion < 365 Then '2.10.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持导出资源列表信息"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了深色模式下部分 UI 表现错误的问题"))
@@ -418,8 +424,8 @@ Public Class FormMain
             '启动加载器池
             Try
                 JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
-                Thread.Sleep(200)
-                DlClientListMojangLoader.Start(1)
+                Thread.Sleep(100)
+                DlClientListMojangLoader.Start(1) 'PCL 会同时根据这里的加载结果决定是否使用官方源进行下载
                 RunCountSub()
                 ServerLoader.Start(1)
                 RunInNewThread(AddressOf TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
@@ -868,12 +874,12 @@ Public Class FormMain
                     End If
                 Next
             End If
-            '自定义主页
+            '主页
             Dim Extension As String = FilePath.AfterLast(".").ToLower
             If Extension = "xaml" Then
-                Log("[System] 文件后缀为 XAML，作为自定义主页加载")
+                Log("[System] 文件后缀为 XAML，作为主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
-                    If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
+                    If MyMsgBox("已存在一个主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
                         Exit Sub
                     End If
                 End If
@@ -1102,9 +1108,10 @@ Public Class FormMain
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
-        DownloadResourcePack = 13
-        DownloadShader = 14
-        DownloadCompFavorites = 15
+        DownloadDataPack = 13
+        DownloadResourcePack = 14
+        DownloadShader = 15
+        DownloadCompFavorites = 16
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -1145,22 +1152,9 @@ Public Class FormMain
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
-                Dim Project As CompProject = Stack.Additional(0)
-                Select Case Project.Type
-                    Case CompType.Mod
-                        Return "Mod 下载 - " & Project.TranslatedName
-                    Case CompType.ModPack
-                        Return "整合包下载 - " & Project.TranslatedName
-                    Case CompType.ResourcePack
-                        Return "资源包下载 - " & Project.TranslatedName
-                    Case CompType.Shader
-                        Return "光影包下载 - " & Project.TranslatedName
-                    Case Else
-                        Return "资源下载 - " & Project.TranslatedName
-                End Select
+                Return "资源下载 - " & CType(Stack.Additional(0), CompProject).TranslatedName
             Case PageType.HelpDetail
-                Dim Entry As HelpEntry = Stack.Additional(0)
-                Return Entry.Title
+                Return CType(Stack.Additional(0), HelpEntry).Title
             Case Else
                 Return ""
         End Select
