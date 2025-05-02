@@ -1,32 +1,30 @@
 ﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
-    Private Property _Proxy As IWebProxy = WebRequest.GetSystemWebProxy()
     ''' <summary>
     ''' 确定是否使用代理。
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
-        Dim SystemProxy As New WebProxy(_Proxy.GetProxy(New Uri("https://www.example.com")))
+        Dim SystemProxy As New WebProxy(WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com")))
         If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
             Return SystemProxy
         End If
         If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
-            _Proxy = New WebProxy(proxy, True)
             Log("[Net] 当前代理状态：自定义")
-            Dim ProxyUri As New Uri(_Proxy.ToString)
+            Dim ProxyUri As New Uri(proxy)
             Try
                 If ProxyUri.IsLoopback OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
                 ProxyUri.Host.StartsWithF("fe80") OrElse
-                (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
+                (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {ProxyUri} 作为网络代理")
                 '视作非本地地址
             Catch
             End Try
-            Return _Proxy
+            Return New WebProxy(proxy, True)
         End If
         Log("[Net] 当前代理状态：禁用")
         Return Nothing
