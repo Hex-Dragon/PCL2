@@ -616,7 +616,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.version.name}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
-            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version.name}）{vbCrLf}此版本发布于 {DateTime.Parse(LatestVersion.upd_time).ToLocalTime()}{vbCrLf}是否立即更新？", "启动器更新", "更新", "取消") = 1 Then
+            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version.name}, 发布于 {DateTime.Parse(LatestVersion.upd_time).ToLocalTime()}){vbCrLf}是否立即更新？", "启动器更新", "更新", "取消") = 1 Then
                 UpdateStart(LatestVersion, False)
             End If
         Else
