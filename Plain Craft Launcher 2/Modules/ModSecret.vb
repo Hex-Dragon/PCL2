@@ -84,7 +84,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         SyncLock _cacheLock
             Try
                 If _RawCodeCache IsNot Nothing Then Return _RawCodeCache
-                Dim rawCode As String
+                Dim rawCode As String = Nothing
                 Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
                 For Each obj As ManagementObject In searcher.Get()
                     rawCode = obj("ProcessorId")?.ToString()
@@ -232,6 +232,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 加密字符串（优化版）。
     ''' </summary>
     Friend Function SecretEncrypt(SourceString As String) As String
+        If SourceString = "" Then Return ""
+        If String.IsNullOrWhiteSpace(SourceString) Then Return Nothing
         Dim Key = SecretGetEncryptKey()
 
         Using aes = AesCng.Create()
@@ -268,6 +270,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 解密字符串。
     ''' </summary>
     Friend Function SecretDecrypt(SourceString As String) As String
+        If SourceString = "" Then Return ""
+        If String.IsNullOrWhiteSpace(SourceString) Then Return Nothing
         Dim Key = SecretGetEncryptKey()
         Dim encryptedData = Convert.FromBase64String(SourceString)
 
