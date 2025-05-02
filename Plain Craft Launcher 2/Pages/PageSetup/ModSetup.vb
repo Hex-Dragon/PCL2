@@ -120,7 +120,6 @@ Public Class ModSetup
         {"UiLauncherThemeHide", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherThemeHide2", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherLogo", New SetupEntry(True)},
-        {"UiLauncherEmail", New SetupEntry(False)},
         {"UiLauncherCEHint", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"UiBackgroundColorful", New SetupEntry(True)},
         {"UiBackgroundOpacity", New SetupEntry(1000)},
@@ -155,6 +154,13 @@ Public Class ModSetup
         {"UiHiddenOtherVote", New SetupEntry(False)},
         {"UiHiddenOtherAbout", New SetupEntry(False)},
         {"UiHiddenOtherTest", New SetupEntry(False)},
+        {"UiHiddenVersionEdit", New SetupEntry(False)},
+        {"UiHiddenVersionExport", New SetupEntry(False)},
+        {"UiHiddenVersionSave", New SetupEntry(False)},
+        {"UiHiddenVersionScreenshot", New SetupEntry(False)},
+        {"UiHiddenVersionMod", New SetupEntry(False)},
+        {"UiHiddenVersionResourcePack", New SetupEntry(False)},
+        {"UiHiddenVersionShader", New SetupEntry(False)},
         {"UiAniFPS", New SetupEntry(59, Source:=SetupSource.Registry)},
         {"UiFont", New SetupEntry("")},
         {"VersionAdvanceJvm", New SetupEntry("", Source:=SetupSource.Version)},
@@ -802,6 +808,27 @@ Public Class ModSetup
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenOtherTest(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionEdit(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionExport(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionSave(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionScreenshot(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionMod(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionResourcePack(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenVersionShader(Value As Boolean)
         PageSetupUI.HiddenRefresh()
     End Sub
 
