@@ -26,7 +26,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemExport.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemExport.Check, ItemScreenshot.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -39,7 +39,7 @@
                 If FrmVersionOverall Is Nothing Then FrmVersionOverall = New PageVersionOverall
                 Return FrmVersionOverall
             Case FormMain.PageSubType.VersionMod
-                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionMod
+                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionComp(CompType.Mod)
                 Return FrmVersionMod
             Case FormMain.PageSubType.VersionModDisabled
                 If FrmVersionModDisabled Is Nothing Then FrmVersionModDisabled = New PageVersionModDisabled
@@ -50,6 +50,9 @@
             Case FormMain.PageSubType.VersionExport
                 If FrmVersionExport Is Nothing Then FrmVersionExport = New PageVersionExport
                 Return FrmVersionExport
+            Case FormMain.PageSubType.VersionScreenshot
+                If FrmVersionScreenshot Is Nothing Then FrmVersionScreenshot = New PageVersionScreenshot
+                Return FrmVersionScreenshot
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
@@ -100,7 +103,7 @@
     Public Sub Refresh(SubType As FormMain.PageSubType)
         Select Case SubType
             Case FormMain.PageSubType.VersionMod
-                PageVersionMod.Refresh()
+                PageVersionComp.Refresh()
                 ItemMod.Checked = True
             Case FormMain.PageSubType.VersionExport
                 If FrmVersionExport IsNot Nothing Then FrmVersionExport.RefreshAll()

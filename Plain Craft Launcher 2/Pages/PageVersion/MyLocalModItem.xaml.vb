@@ -24,11 +24,11 @@ Public Class MyLocalModItem
         Set(value As String)
             Dim RawValue = value
             Select Case Entry.State
-                Case McMod.McModState.Fine
+                Case McComp.McModState.Fine
                     LabTitle.TextDecorations = Nothing
-                Case McMod.McModState.Disabled
+                Case McComp.McModState.Disabled
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
-                Case McMod.McModState.Unavailable
+                Case McComp.McModState.Unavailable
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
@@ -79,11 +79,11 @@ Public Class MyLocalModItem
     End Property
 
     '相关联的 Mod
-    Public Property Entry As McMod
+    Public Property Entry As McComp
         Get
             Return Tag
         End Get
-        Set(value As McMod)
+        Set(value As McComp)
             Tag = value
         End Set
     End Property
@@ -188,7 +188,7 @@ Public Class MyLocalModItem
                         Anim.Add(AaOpacity(RectCheck, 1 - RectCheck.Opacity, 30))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         RectCheck.Margin = New Thickness(-3, 0, 0, 0)
-                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"), 200))
+                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(Entry.State = McComp.McModState.Fine, "ColorBrush2", "ColorBrush5"), 200))
                     Else
                         '由有变无
                         Anim.Add(AaHeight(RectCheck, -RectCheck.ActualHeight, 120,, New AniEaseInFluent(AniEasePower.Weak)))
@@ -204,11 +204,11 @@ Public Class MyLocalModItem
                     If Checked Then
                         RectCheck.Height = 32
                         RectCheck.Opacity = 1
-                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McComp.McModState.Fine, "ColorBrush2", "ColorBrush5"))
                     Else
                         RectCheck.Height = 0
                         RectCheck.Opacity = 0
-                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McComp.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
                     End If
                     AniStop("MyLocalModItem Checked " & Uuid)
                 End If
@@ -337,9 +337,9 @@ Public Class MyLocalModItem
             '标题与描述
             Dim DescFileName As String
             Select Case Entry.State
-                Case McMod.McModState.Fine
+                Case McComp.McModState.Fine
                     DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path)
-                Case McMod.McModState.Disabled
+                Case McComp.McModState.Disabled
                     DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
                 Case Else 'McMod.McModState.Unavailable
                     DescFileName = GetFileNameFromPath(Entry.Path)
@@ -382,14 +382,14 @@ Public Class MyLocalModItem
             End If
             Description = NewDescription
             If Checked Then
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McComp.McModState.Fine, "ColorBrush2", "ColorBrush5"))
             Else
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McComp.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
             End If
             '主 Logo
             Logo = If(Entry.Comp Is Nothing, PathImage & "Icons/NoIcon.png", Entry.Comp.GetControlLogo())
             '图标右下角的 Logo
-            If Entry.State = McMod.McModState.Fine Then
+            If Entry.State = McComp.McModState.Fine Then
                 If ImgState IsNot Nothing Then
                     Children.Remove(ImgState)
                     ImgState = Nothing
