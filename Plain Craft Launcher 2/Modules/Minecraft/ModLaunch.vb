@@ -522,8 +522,7 @@ Relogin:
         Data.Progress = 0.98
         For Each Profile In ProfileList
             If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
-                MyMsgBox("已经存在该档案，无需再次创建了哦.....", "档案已存在")
-                GoTo SkipLogin
+                IsNewProfile = False
             End If
         Next
         '输出登录结果
