@@ -2520,6 +2520,7 @@ Retry:
         If Not Loader.State = LoadState.Finished AndAlso Directory.Exists(Loader.Input & "PCLInstallBackups\") Then '版本修改失败回滚
             CopyDirectory(Loader.Input & "PCLInstallBackups\", Loader.Input)
             File.Delete(Loader.Input & ".pclignore")
+            DeleteDirectory(Loader.Input & "PCLInstallBackups\")
         Else
             McInstallFailedClearFolder(Loader)
         End If
@@ -2570,7 +2571,7 @@ Retry:
     ''' </summary>
     ''' <exception cref="CancelledException" />
 
-        
+
     Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False, Optional IgnoreDump As Boolean = False) As List(Of LoaderBase)
 
         '获取缓存目录（安装 Mod 加载器的文件夹不能包含空格）
