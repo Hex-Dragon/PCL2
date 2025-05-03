@@ -1401,7 +1401,7 @@ OnLoaded:
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Fool}, McVersionCardType.Fool)
 
             '筛选 API 版本
-            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric, McVersionState.Quilt, McVersionState.Cleanroom}, McVersionCardType.API)
+            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric, McVersionState.Quilt, McVersionState.Cleanroom, McVersionState.LabyMod}, McVersionCardType.API)
 
             '将老版本预先分类入不常用，只剩余原版、快照、OptiFine
             Dim VersionUseful As New List(Of McVersion)
@@ -1535,7 +1535,7 @@ OnLoaded:
             End Function)
         End If
 
-        'API 版本：优先按版本排序，此后【先放 Fabric / Quilt，再放 Neo/Forge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
+        'API 版本：优先按版本排序，此后【先放 Fabric / Quilt，再放 Neo/Forge（按版本号从高到低排序），然后放 Cleanroom / LabyMod，最后放 LiteLoader（按名称排序）】
         If ResultVersionList.ContainsKey(McVersionCardType.API) Then
             ResultVersionList(McVersionCardType.API) = ResultVersionList(McVersionCardType.API).Sort(
             Function(Left As McVersion, Right As McVersion)
@@ -1551,6 +1551,10 @@ OnLoaded:
                         Return Left.Version.HasNeoForge
                     ElseIf Left.Version.HasForge Xor Right.Version.HasForge Then
                         Return Left.Version.HasForge
+                    ElseIf Left.Version.HasCleanroom Xor Right.Version.HasCleanroom Then
+                        Return Left.Version.HasCleanroom
+                    ElseIf Left.Version.HasLabyMod Xor Right.Version.HasLabyMod Then
+                        Return Left.Version.HasLabyMod
                     ElseIf Not Left.Version.SortCode <> Right.Version.SortCode Then
                         Return Left.Version.SortCode > Right.Version.SortCode
                     Else

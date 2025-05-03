@@ -2654,9 +2654,8 @@ Retry:
         End If
         '原版
         Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39,
-            .Block = Request.ForgeVersion Is Nothing AndAlso Request.NeoForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
+            .Block = Request.ForgeVersion Is Nothing AndAlso Request.NeoForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing AndAlso Request.QuiltVersion Is Nothing AndAlso Request.CleanroomEntry Is Nothing}
         LoaderList.Add(ClientLoader)
-LabyModSkip:
         'OptiFine
         If Request.OptiFineEntry IsNot Nothing Then
             If OptiFineAsMod Then
@@ -2693,7 +2692,7 @@ LabyModSkip:
         If Request.QuiltVersion IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 Quilt " & Request.QuiltVersion, McDownloadQuiltLoader(Request.QuiltVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
-
+LabyModSkip:
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
         Sub(Task As LoaderTask(Of String, String))
@@ -2713,7 +2712,7 @@ LabyModSkip:
         End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             If Request.LabyModCommitRef IsNot Nothing Then
                 Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadLabyModClientLoader(Request.MinecraftName, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
@@ -2809,7 +2808,7 @@ LabyModSkip:
         End If
 #End Region
 
-        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, CleanroomJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing, LabyModJson As JObject = Nothing
+        Dim OutputJson As JObject, MinecraftJson As JObject = Nothing, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, CleanroomJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing, LabyModJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
         If Not HasLabyMod Then

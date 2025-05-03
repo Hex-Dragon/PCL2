@@ -1328,6 +1328,7 @@ LoginFinish:
     End Function
     Private ExtractLinkDLock As New Object
 
+    ''' <summary>
     ''' 判断是否使用 RetroWrapper。
     ''' </summary>
     Private Function McLaunchNeedsRetroWrapper() As Boolean

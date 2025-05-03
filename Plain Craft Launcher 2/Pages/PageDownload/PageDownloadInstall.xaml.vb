@@ -207,10 +207,14 @@ Public Class PageDownloadInstall
         End If
     End Sub
 
-    'Mod Loader 统一判断，内容应为 Forge / NeoForge / Fabric / Quilt / Cleanroom
+    ''' <summary>
+    ''' 选定的 Mod Loader 名称，内容应为 Forge / NeoForge / Fabric / Quilt / Cleanroom / LabyMod
+    ''' </summary>
     Private SelectedLoaderName As String = Nothing
 
-    'Mod Loader API 统一判断，内容应为 Fabric API 或 QFAPI / QSL
+    ''' <summary>
+    ''' 选定的 Mod Loader API 名称，内容应为 Fabric API 或 QFAPI / QSL
+    ''' </summary>
     Private SelectedAPIName As String = Nothing
 
     'LiteLoader
@@ -419,7 +423,7 @@ Public Class PageDownloadInstall
     ''' <summary>
     ''' 重载已选择的项目的显示。
     ''' </summary>
-    Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardNeoForge.Swap, LoadNeoForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged, LoadQuilt.StateChanged, CardQuilt.Swap, LoadQSL.StateChanged, CardQSL.Swap, LoadCleanroom.StateChanged, CardCleanroom.Swap
+    Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardNeoForge.Swap, LoadNeoForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged, LoadQuilt.StateChanged, CardQuilt.Swap, LoadQSL.StateChanged, CardQSL.Swap, LoadCleanroom.StateChanged, CardCleanroom.Swap, LoadLabyMod.StateChanged, CardLabyMod.Swap
         If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
         IsReloading = True
         '主预览
@@ -574,34 +578,13 @@ Public Class PageDownloadInstall
             If SelectedQuilt Is Nothing Then
                 BtnQuiltClear.Visibility = Visibility.Collapsed
                 ImgQuilt.Visibility = Visibility.Collapsed
-                LabQuilt.Text = If(QuiltError, "点击选择")
+                LabQuilt.Text = If(QuiltError, "可以添加")
                 LabQuilt.Foreground = ColorGray4
             Else
                 BtnQuiltClear.Visibility = Visibility.Visible
                 ImgQuilt.Visibility = Visibility.Visible
                 LabQuilt.Text = SelectedQuilt.Replace("+build", "")
                 LabQuilt.Foreground = ColorGray1
-            End If
-        End If
-        'LabyMod
-        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 8 Then
-            CardLabyMod.Visibility = Visibility.Collapsed
-        Else
-            CardLabyMod.Visibility = Visibility.Visible
-            Dim LabyModError As String = LoadLabyModGetError()
-            CardLabyMod.MainSwap.Visibility = If(LabyModError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-            If LabyModError IsNot Nothing Then CardLabyMod.IsSwaped = True
-            SetLabyModInfoShow(CardLabyMod.IsSwaped)
-            If SelectedLabyModVersion Is Nothing Then
-                BtnLabyModClear.Visibility = Visibility.Collapsed
-                ImgLabyMod.Visibility = Visibility.Collapsed
-                LabLabyMod.Text = If(LabyModError, "点击选择")
-                LabLabyMod.Foreground = ColorGray4
-            Else
-                BtnLabyModClear.Visibility = Visibility.Visible
-                ImgLabyMod.Visibility = Visibility.Visible
-                LabLabyMod.Text = SelectedLabyModVersion
-                LabLabyMod.Foreground = ColorGray1
             End If
         End If
         'QSL
@@ -616,13 +599,34 @@ Public Class PageDownloadInstall
             If SelectedQSL Is Nothing Then
                 BtnQSLClear.Visibility = Visibility.Collapsed
                 ImgQSL.Visibility = Visibility.Collapsed
-                LabQSL.Text = If(QSLError, "点击选择")
+                LabQSL.Text = If(QSLError, "可以添加")
                 LabQSL.Foreground = ColorGray4
             Else
                 BtnQSLClear.Visibility = Visibility.Visible
                 ImgQSL.Visibility = Visibility.Visible
                 LabQSL.Text = SelectedQSL.DisplayName.Split("]")(1).Trim
                 LabQSL.Foreground = ColorGray1
+            End If
+        End If
+        'LabyMod
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 8 Then
+            CardLabyMod.Visibility = Visibility.Collapsed
+        Else
+            CardLabyMod.Visibility = Visibility.Visible
+            Dim LabyModError As String = LoadLabyModGetError()
+            CardLabyMod.MainSwap.Visibility = If(LabyModError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If LabyModError IsNot Nothing Then CardLabyMod.IsSwaped = True
+            SetLabyModInfoShow(CardLabyMod.IsSwaped)
+            If SelectedLabyModVersion Is Nothing Then
+                BtnLabyModClear.Visibility = Visibility.Collapsed
+                ImgLabyMod.Visibility = Visibility.Collapsed
+                LabLabyMod.Text = If(LabyModError, "可以添加")
+                LabLabyMod.Foreground = ColorGray4
+            Else
+                BtnLabyModClear.Visibility = Visibility.Visible
+                ImgLabyMod.Visibility = Visibility.Visible
+                LabLabyMod.Text = SelectedLabyModVersion
+                LabLabyMod.Foreground = ColorGray1
             End If
         End If
         'OptiFabric
@@ -732,6 +736,8 @@ Public Class PageDownloadInstall
             Return "pack://application:,,,/images/Blocks/Quilt.png"
         ElseIf SelectedCleanroom IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Cleanroom.png"
+        ElseIf SelectedLabyModVersion IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/LabyMod.png"
         Else
             Return SelectedMinecraftIcon
         End If
@@ -913,7 +919,7 @@ Public Class PageDownloadInstall
     ''' 获取 OptiFine 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFineGetError() As String
-        If SelectedLoaderName = "NeoForge" OrElse SelectedLoaderName = "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
+        If SelectedLoaderName = "NeoForge" OrElse SelectedLoaderName = "Quilt" OrElse SelectedLoaderName = "LabyMod" Then Return $"与 {SelectedLoaderName} 不兼容"
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "加载中……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '是否有 Cleanroom
@@ -1832,7 +1838,7 @@ Public Class PageDownloadInstall
     End Sub
     Private Sub BtnStart_Click() Handles BtnStart.Click
         '确认版本隔离
-        If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedQuilt IsNot Nothing) AndAlso
+        If SelectedLoaderName IsNot Nothing AndAlso
            (Setup.Get("LaunchArgumentIndieV2") = 0 OrElse Setup.Get("LaunchArgumentIndieV2") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，多个 MC 版本会共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此，游戏可能会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
