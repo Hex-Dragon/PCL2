@@ -15,11 +15,11 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.7" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.7." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.11.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.11.0." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
-    Public Const UpstreamVersion As String = "2.9.2" '上游版本
+    Public Const UpstreamVersion As String = "2.10.0" '上游版本
     Public Const VersionCode As Integer = 367 '内部版本号
     '自动生成的版本信息
 #If RELEASE Then
@@ -3296,8 +3296,8 @@ Retry:
         OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
-        Dim LatestVersion = GetCurrentUpdateChannelInfo()
-        If LatestVersion.code > VersionCode Then
+        Dim LatestVersion = GetChannelInfo()
+        If LatestVersion.version.code > VersionCode Then
             If ShowHint Then
                 If MyMsgBox($"你的 PCL 不是最新版，因此无法提交反馈。{vbCrLf}请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈", "更新", "取消") = 1 Then
                     UpdateCheckByButton()

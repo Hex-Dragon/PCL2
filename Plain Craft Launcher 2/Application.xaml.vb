@@ -20,6 +20,9 @@ Public Class Application
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         Try
+            '创建自定义跟踪监听器，用于检测是否存在 Binding 失败
+            PresentationTraceSources.DataBindingSource.Listeners.Add(New BindingErrorTraceListener())
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error
             SecretOnApplicationStart()
             '检查参数调用
             If e.Args.Length > 0 Then
@@ -224,5 +227,18 @@ WaitRetry:
     Private Sub TooltipUnloaded(sender As Border, e As RoutedEventArgs)
         ShowingTooltips.Remove(sender)
     End Sub
+
+    ' 自定义监听器类
+    Public Class BindingErrorTraceListener
+        Inherits TraceListener
+
+        Public Overrides Sub Write(message As String)
+            Log($"警告，检测到 Binding 失败：{message}")
+        End Sub
+
+        Public Overrides Sub WriteLine(message As String)
+            Log($"警告，检测到 Binding 失败：{message}")
+        End Sub
+    End Class
 
 End Class

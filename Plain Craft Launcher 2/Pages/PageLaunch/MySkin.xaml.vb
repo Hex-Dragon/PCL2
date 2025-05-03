@@ -288,7 +288,9 @@ Retry:
                         For Each Cape In SkinData("capes")
                             Dim CapeName As String = Cape("alias").ToString
                             If CapeNames.ContainsKey(CapeName) Then CapeName = CapeNames(CapeName)
-                            SelectionControl.Add(New MyRadioBox With {.Text = CapeName})
+                            Dim state = Cape("state") '检测披风状态，若为 ACTIVE 则选中
+                            Dim active As String = state IsNot Nothing And state.ToString.ToUpper.Equals("ACTIVE")
+                            SelectionControl.Add(New MyRadioBox With {.Text = CapeName, .Checked = active})
                         Next
                         SelId = MyMsgBoxSelect(SelectionControl, "选择披风", "确定", "取消")
                     Catch ex As Exception

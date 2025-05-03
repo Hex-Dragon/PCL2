@@ -57,7 +57,6 @@ Public Class PageSetupUI
             SliderLauncherLight.Value = Setup.Get("UiLauncherLight")
             If Setup.Get("UiLauncherTheme") <= 14 Then CType(FindName("RadioLauncherTheme" & Setup.Get("UiLauncherTheme")), MyRadioBox).Checked = True
             CheckLauncherLogo.Checked = Setup.Get("UiLauncherLogo")
-            CheckLauncherEmail.Checked = Setup.Get("UiLauncherEmail")
             ComboDarkMode.SelectedIndex = Setup.Get("UiDarkMode")
             ComboUiFont.Items.Clear()
             ComboUiFont.Items.Add(New MyComboBoxItem With {
@@ -70,7 +69,8 @@ Public Class PageSetupUI
                 .Tag = ""
             })
             For Each Font In Fonts.SystemFontFamilies
-                ComboUiFont.Items.Add(New MyComboBoxItem With {
+                Try
+                    ComboUiFont.Items.Add(New MyComboBoxItem With {
                     .Content = New TextBlock With {
                                       .Text = Font.Source,
                                       .FontFamily = New FontFamily(Font.Source),
@@ -79,6 +79,9 @@ Public Class PageSetupUI
                                       },
                     .Tag = Font.Source
                 })
+                Catch ex As Exception
+                    Log(ex, "发现了一个无法加载的异常的字体：" & Font.Source, LogLevel.Hint)
+                End Try
             Next
             If String.IsNullOrWhiteSpace(Setup.Get("UiFont")) Then
                 ComboUiFont.SelectedIndex = 0
@@ -136,6 +139,13 @@ Public Class PageSetupUI
             CheckHiddenOtherVote.Checked = Setup.Get("UiHiddenOtherVote")
             CheckHiddenOtherHelp.Checked = Setup.Get("UiHiddenOtherHelp")
             CheckHiddenOtherTest.Checked = Setup.Get("UiHiddenOtherTest")
+            CheckHiddenVersionEdit.Checked = Setup.Get("UiHiddenVersionEdit")
+            CheckHiddenVersionExport.Checked = Setup.Get("UiHiddenVersionExport")
+            CheckHiddenVersionSave.Checked = Setup.Get("UiHiddenVersionSave")
+            CheckHiddenVersionScreenshot.Checked = Setup.Get("UiHiddenVersionScreenshot")
+            CheckHiddenVersionMod.Checked = Setup.Get("UiHiddenVersionMod")
+            CheckHiddenVersionResourcePack.Checked = Setup.Get("UiHiddenVersionResourcePack")
+            CheckHiddenVersionShader.Checked = Setup.Get("UiHiddenVersionShader")
 
         Catch ex As NullReferenceException
             Log(ex, "个性化设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -155,7 +165,6 @@ Public Class PageSetupUI
             Setup.Reset("UiLauncherSat")
             Setup.Reset("UiLauncherDelta")
             Setup.Reset("UiLauncherLight")
-            Setup.Reset("UiLauncherEmail")
             Setup.Reset("UiBackgroundColorful")
             Setup.Reset("UiBackgroundOpacity")
             Setup.Reset("UiBackgroundBlur")
@@ -190,6 +199,13 @@ Public Class PageSetupUI
             Setup.Reset("UiHiddenOtherVote")
             Setup.Reset("UiHiddenOtherHelp")
             Setup.Reset("UiHiddenOtherTest")
+            Setup.Reset("UiHiddenVersionEdit")
+            Setup.Reset("UiHiddenVersionExport")
+            Setup.Reset("UiHiddenVersionSave")
+            Setup.Reset("UiHiddenVersionScreenshot")
+            Setup.Reset("UiHiddenVersionMod")
+            Setup.Reset("UiHiddenVersionResourcePack")
+            Setup.Reset("UiHiddenVersionShader")
 
             Log("[Setup] 已初始化个性化设置！")
             Hint("已初始化个性化设置", HintType.Finish, False)
@@ -207,7 +223,7 @@ Public Class PageSetupUI
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDarkMode.SelectionChanged, ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change, CheckMusicSMTC.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckMusicSMTC.Change, CheckHiddenVersionEdit.Change, CheckHiddenVersionExport.Change, CheckHiddenVersionSave.Change, CheckHiddenVersionScreenshot.Change, CheckHiddenVersionMod.Change, CheckHiddenVersionResourcePack.Change, CheckHiddenVersionShader.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLogoText.ValidatedTextChanged, TextCustomNet.ValidatedTextChanged

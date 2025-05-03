@@ -298,6 +298,8 @@
                             <RowDefinition Height="30" />
                             <RowDefinition Height="30" />
                             <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="主页面" />
@@ -317,10 +319,17 @@
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="5" Text="反馈" x:Name="CheckHiddenOtherFeedback" Tag="UiHiddenOtherFeedback" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="6" Text="新功能投票" x:Name="CheckHiddenOtherVote" Tag="UiHiddenOtherVote" />
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="特定功能" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Text="邮箱隐藏" x:Name="CheckLauncherEmail" Tag="UiLauncherEmail" ToolTip="隐藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。&#xa;此选项的更改将在重启启动器后生效。" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="3" Text="版本管理" x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect" ToolTip="隐藏启动按钮下方的版本选择与版本设置入口。" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="4" Text="Mod 更新" x:Name="CheckHiddenFunctionModUpdate" Tag="UiHiddenFunctionModUpdate" ToolTip="禁止在 Mod 管理页面更新 Mod。" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="5" Text="功能隐藏" x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden" ToolTip="仅隐藏本选项卡，设置的禁用内容依然有效。&#xa;可以在保留个性化设置页面的情况下避免隐藏设置被修改。" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Text="版本管理" x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect" ToolTip="隐藏启动按钮下方的版本选择与版本设置入口。" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="3" Text="Mod 更新" x:Name="CheckHiddenFunctionModUpdate" Tag="UiHiddenFunctionModUpdate" ToolTip="禁止在 Mod 管理页面更新 Mod。" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="4" Text="功能隐藏" x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden" ToolTip="仅隐藏本选项卡，设置的禁用内容依然有效。&#xa;可以在保留个性化设置页面的情况下避免隐藏设置被修改。" />
+                        <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Text="版本设置 子页面" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="5" Grid.Column="2" Text="修改" x:Name="CheckHiddenVersionEdit" Tag="UiHiddenVersionEdit" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="5" Grid.Column="3" Text="导出" x:Name="CheckHiddenVersionExport" Tag="UiHiddenVersionExport" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="5" Grid.Column="4" Text="存档" x:Name="CheckHiddenVersionSave" Tag="UiHiddenVersionSave" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="5" Grid.Column="5" Text="截图" x:Name="CheckHiddenVersionScreenshot" Tag="UiHiddenVersionScreenshot" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="5" Grid.Column="6" Text="Mod" x:Name="CheckHiddenVersionMod" Tag="UiHiddenVersionMod" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="6" Grid.Column="2" Text="资源包" x:Name="CheckHiddenVersionResourcePack" Tag="UiHiddenVersionResourcePack" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="6" Grid.Column="3" Text="光影包" x:Name="CheckHiddenVersionShader" Tag="UiHiddenVersionShader" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

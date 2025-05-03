@@ -444,8 +444,8 @@ Install:
     End Function
 
     Private Sub BtnManageInfoExport_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInfoExport.Click
-        Dim Choice = MyMsgBox("TXT 格式：仅导出当前的模组文件名称信息，通常足够他人获取已安装的模组信息" & vbCrLf &
-                              "CSV 格式：导出详细的模组信息，包括其文件名，Mod ID，文件内版本信息等详细信息",
+        Dim Choice = MyMsgBox("TXT 格式：仅导出当前的资源文件名称信息，通常足够他人获取已安装的资源信息" & vbCrLf &
+                              "CSV 格式：导出详细的资源信息，包括其文件名，工程的 ID，文件内版本信息等详细信息",
                                 Title:="选择导出模式",
                                 Button1:="TXT 格式",
                                 Button2:="CSV 格式",
@@ -457,7 +457,7 @@ Install:
                                  File.WriteAllText(savePath, Content, Encoding.UTF8)
                                  OpenExplorer(savePath)
                              Catch ex As Exception
-                                 Log(ex, "导出模组信息失败", LogLevel.Msgbox)
+                                 Log(ex, "导出资源信息失败", LogLevel.Msgbox)
                              End Try
                          End Sub
         Select Case Choice
@@ -466,15 +466,15 @@ Install:
                 For Each ModEntity In CompResourceListLoader.Output
                     ExportContent.Add(ModEntity.FileName)
                 Next
-                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.txt")
+                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的资源信息.txt")
 
             Case 2 'CSV
                 Dim ExportContent As New List(Of String)
-                ExportContent.Add("文件名,Mod 名称,Mod 版本,此版本更新时间,Mod ID,Mod 平台工程 ID,Mod 文件大小（字节）,Mod 文件路径")
+                ExportContent.Add("文件名,资源名称,资源版本,此版本更新时间,Mod ID,对应平台工程 ID,文件大小（字节）,文件路径")
                 For Each ModEntity In CompResourceListLoader.Output
                     ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{ModEntity.CompFile?.ReleaseDate},{ModEntity.ModId},{ModEntity.Comp?.Id},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
                 Next
-                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.csv")
+                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的资源信息.csv")
 
         End Select
     End Sub
@@ -483,12 +483,13 @@ Install:
     ''' 下载 Mod。
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
-        PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        PageComp.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
         Select Case CurrentCompType
             Case CompType.Mod : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
             Case CompType.ResourcePack : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadResourcePack)
             Case CompType.Shader : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadShader)
         End Select
+        PageComp.TargetVersion = Nothing
     End Sub
 
 #End Region

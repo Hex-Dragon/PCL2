@@ -8,12 +8,34 @@ Public Class PageVersionLeft
 
     Public Sub RefreshModDisabled() Handles Me.Loaded
         If Version IsNot Nothing AndAlso Version.Modable Then
-            ItemMod.Visibility = Visibility.Visible
+            ItemMod.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionMod"), Visibility.Collapsed, Visibility.Visible)
             ItemModDisabled.Visibility = Visibility.Collapsed
         Else
             ItemMod.Visibility = Visibility.Collapsed
-            ItemModDisabled.Visibility = Visibility.Visible
+            ItemModDisabled.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionMod"), Visibility.Collapsed, Visibility.Visible)
         End If
+        '功能隐藏
+        If Not PageSetupUI.HiddenForceShow Then
+            Dim DisableCount As Integer = 0
+            If Setup.Get("UiHiddenVersionSave") Then DisableCount += 1
+            If Setup.Get("UiHiddenVersionScreenshot") Then DisableCount += 1
+            If Setup.Get("UiHiddenVersionMod") Then DisableCount += 1
+            If Setup.Get("UiHiddenVersionResourcePack") Then DisableCount += 1
+            If Setup.Get("UiHiddenVersionShader") Then DisableCount += 1
+            If DisableCount = 5 Then
+                TextResource.Visibility = Visibility.Collapsed
+            Else
+                TextResource.Visibility = Visibility.Visible
+            End If
+        Else
+            TextResource.Visibility = Visibility.Visible
+        End If
+        ItemInstall.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionEdit"), Visibility.Collapsed, Visibility.Visible)
+        ItemExport.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionExport"), Visibility.Collapsed, Visibility.Visible)
+        ItemWorld.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionSave"), Visibility.Collapsed, Visibility.Visible)
+        ItemScreenshot.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionScreenshot"), Visibility.Collapsed, Visibility.Visible)
+        ItemResourcePack.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionResourcePack"), Visibility.Collapsed, Visibility.Visible)
+        ItemShader.Visibility = If(Not PageSetupUI.HiddenForceShow AndAlso Setup.Get("UiHiddenVersionShader"), Visibility.Collapsed, Visibility.Visible)
     End Sub
 
 #Region "页面切换"
