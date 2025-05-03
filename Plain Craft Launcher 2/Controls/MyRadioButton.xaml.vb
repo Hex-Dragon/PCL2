@@ -179,8 +179,8 @@ Public Class MyRadioButton
                         If Checked Then
                             '勾选
                             AniStart({
-                                         AaColor(ShapeLogo, Shapes.Path.FillProperty, New MyColor(19, 112, 243), AnimationTimeOfCheck),
-                                         AaColor(LabText, TextBlock.ForegroundProperty, New MyColor(19, 112, 243), AnimationTimeOfCheck)
+                                         AaColor(ShapeLogo, Shapes.Path.FillProperty, New MyColor(19, 112, 243) - ShapeLogo.Fill, AnimationTimeOfCheck),
+                                         AaColor(LabText, TextBlock.ForegroundProperty, New MyColor(19, 112, 243) - LabText.Foreground, AnimationTimeOfCheck)
                                     }, "MyRadioButton Checked " & Uuid)
                             AniStart(AaColor(Me, BackgroundProperty, New MyColor(255, 255, 255) - Background, AnimationTimeOfCheck), "MyRadioButton Color " & Uuid)
                         ElseIf IsMouseDown Then
