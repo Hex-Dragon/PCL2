@@ -1909,7 +1909,9 @@ Public Class PageVersionInstall
         End If
         '备份版本核心文件
         CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
-        CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
+        If String.IsNullOrWhiteSpace(PageVersionLeft.Version.InheritVersion) Then
+            CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
+        End If
         '提交安装申请
         Dim Request As New McInstallRequest With {
             .TargetVersionName = PageVersionLeft.Version.Name,
