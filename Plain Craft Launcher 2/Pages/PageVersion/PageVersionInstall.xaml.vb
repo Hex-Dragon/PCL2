@@ -821,21 +821,21 @@ Public Class PageVersionInstall
             SelectedLiteLoader = New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}
         End If
         If CurrentVersion.HasOptiFine Then
-            SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}
+            SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion, .IsPreview = CurrentVersion.OptiFineVersion.ContainsF("pre"), .Inherit = CurrentVersion.McName, .NameVersion = CurrentVersion.McName & "-OptiFine_HD_U_" & CurrentVersion.OptiFineVersion}
         End If
-        If CurrentVersion.HasCleanroom Then
+        If CurrentVersion.HasCleanroom Then '此处有 BUG
             SelectedAPIName = "Cleanroom"
             SelectedCleanroom = New DlCleanroomListEntry(CurrentVersion.CleanroomVersion)
         ElseIf CurrentVersion.HasForge Then
             SelectedLoaderName = "Forge"
-            SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, "", CurrentVersion.McName)
+            SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, Nothing, CurrentVersion.McName) With {.Category = "installer", .ForgeType = DlForgelikeEntry.ForgelikeType.Forge, .Inherit = CurrentVersion.McName}
         ElseIf CurrentVersion.HasFabric Then
             SelectedLoaderName = "Fabric"
             SelectedFabric = CurrentVersion.FabricVersion
             SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
-        ElseIf CurrentVersion.HasNeoForge Then
+        ElseIf CurrentVersion.HasNeoForge Then '此处有 BUG
             SelectedLoaderName = "NeoForge"
-            SelectedNeoForge = New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion)
+            SelectedNeoForge = New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.ForgeType = DlForgelikeEntry.ForgelikeType.NeoForge, .Inherit = CurrentVersion.McName, .ApiName = If(CurrentVersion.McName = "1.20.1", "1.20.1-", "") & CurrentVersion.NeoForgeVersion}
         ElseIf CurrentVersion.HasLabyMod Then
             SelectedLoaderName = "LabyMod"
             SelectedLabyModVersion = CurrentVersion.LabyModVersion
@@ -1893,7 +1893,7 @@ Public Class PageVersionInstall
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
         If SelectedLoaderName IsNot Nothing AndAlso
-           (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
+           (Setup.Get("LaunchArgumentIndieV2") = 0 OrElse Setup.Get("LaunchArgumentIndieV2") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
                         "PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！", "版本隔离提示", "取消下载", "继续") = 1 Then
