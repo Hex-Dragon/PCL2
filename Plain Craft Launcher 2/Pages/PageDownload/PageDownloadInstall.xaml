@@ -84,7 +84,7 @@
                         </Grid>
                     </local:MyCard>
                         <local:MyCard Title="Fabric" Height="40" Margin="0,12,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabric" />
+                        <StackPanel Margin="20,40,18,0" VerticalAlignment="Top" Name="PanFabric" />
                         <Grid x:Name="PanFabricInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
@@ -102,7 +102,7 @@
                         </Grid>
                     </local:MyCard>
                         <local:MyCard Title="Fabric API" Height="40" Margin="0,12,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabricApi" />
+                        <StackPanel Margin="20,40,18,0" VerticalAlignment="Top" Name="PanFabricApi" />
                         <Grid x:Name="PanFabricApiInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
@@ -120,7 +120,7 @@
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="Quilt" Height="40" Margin="0,15,0,0" x:Name="CardQuilt" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQuilt" />
+                        <StackPanel Margin="20,40,18,0" VerticalAlignment="Top" Name="PanQuilt" />
                             <Grid x:Name="PanQuiltInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
@@ -138,7 +138,7 @@
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="QFAPI / QSL" Height="40" Margin="0,15,0,0" x:Name="CardQSL" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQSL" />
+                        <StackPanel Margin="20,40,18,0" VerticalAlignment="Top" Name="PanQSL" />
                             <Grid x:Name="PanQSLInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
@@ -156,7 +156,7 @@
                         </Grid>
                     </local:MyCard>
                         <local:MyCard Title="LabyMod" Height="40" Margin="0,15,0,0" x:Name="CardLabyMod" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                            <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanLabyMod" />
+                            <StackPanel Margin="20,40,18,0" VerticalAlignment="Top" Name="PanLabyMod" />
                             <Grid x:Name="PanLabyModInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                                 <Grid.RenderTransform>
                                     <TranslateTransform />
