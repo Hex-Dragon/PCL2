@@ -1930,7 +1930,7 @@ Public Class PageVersionInstall
             .LabyModCommitRef = SelectedLabyModCommitRef
         }
         BtnSelectStart.IsEnabled = False
-        If Not McInstall(Request, "修改") Then Exit Sub
+        If Not McInstall(Request, BtnSelectStart.Text.AfterFirst("开始")) Then Exit Sub
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 

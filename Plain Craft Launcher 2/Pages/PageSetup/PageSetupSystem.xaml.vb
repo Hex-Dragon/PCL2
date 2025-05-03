@@ -24,10 +24,11 @@
         SliderDownloadSpeed.Value = Setup.Get("ToolDownloadSpeed")
         ComboDownloadSource.SelectedIndex = Setup.Get("ToolDownloadSource")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
+        CheckDownloadAutoSelectVersion.Checked = Setup.Get("ToolDownloadAutoSelectVersion")
 
         'Mod 与整合包
         ComboDownloadTranslateV2.SelectedIndex = Setup.Get("ToolDownloadTranslateV2")
-        'ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
+        ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
         ComboModLocalNameStyle.SelectedIndex = Setup.Get("ToolModLocalNameStyle")
         CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
         CheckDownloadClipboard.Checked = Setup.Get("ToolDownloadClipboard")
@@ -80,6 +81,7 @@
             Setup.Reset("ToolDownloadIgnoreQuilt")
             Setup.Reset("ToolDownloadClipboard")
             Setup.Reset("ToolDownloadMod")
+            Setup.Reset("ToolDownloadAutoSelectVersion")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
@@ -108,13 +110,13 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change, CheckDownloadAutoSelectVersion.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslateV2.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadSource.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboSystemServer.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslateV2.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadSource.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboSystemServer.SelectionChanged, ComboDownloadMod.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged

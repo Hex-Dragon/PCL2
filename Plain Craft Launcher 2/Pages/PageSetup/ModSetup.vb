@@ -111,6 +111,7 @@ Public Class ModSetup
         {"ToolUpdateSnapshot", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolUpdateReleaseLast", New SetupEntry("", Source:=SetupSource.Registry)},
         {"ToolUpdateSnapshotLast", New SetupEntry("", Source:=SetupSource.Registry)},
+        {"ToolDownloadAutoSelectVersion", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"UiLauncherTransparent", New SetupEntry(600)}, '避免与 PCL1 设置冲突（UiLauncherOpacity）
         {"UiLauncherHue", New SetupEntry(180)},
         {"UiLauncherSat", New SetupEntry(80)},
