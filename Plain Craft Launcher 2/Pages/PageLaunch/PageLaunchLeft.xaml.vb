@@ -335,63 +335,12 @@ Finish:
     '离线皮肤
     Public Shared SkinLegacy As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Legacy", AddressOf SkinLegacyLoad, AddressOf SkinLegacyInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinLegacyInput() As EqualableList(Of String)
-        '根据类型判断输入
-        Dim Type As Integer = Setup.Get("LaunchSkinType")
-        Select Case Type
-            Case 0
-                Return New EqualableList(Of String) From {0, SelectedProfile.Username}
-            Case 3
-                Return New EqualableList(Of String) From {3, Setup.Get("LaunchSkinID")}
-            Case Else
-                Return New EqualableList(Of String) From {Type}
-        End Select
+        Return New EqualableList(Of String) From {0, SelectedProfile.Username}
     End Function
     Private Shared Sub SkinLegacyLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
         RunInUi(Sub() If FrmLoginProfileSkin IsNot Nothing AndAlso FrmLoginProfileSkin.Skin IsNot Nothing Then FrmLoginProfileSkin.Skin.Clear())
-        '获取 Url
-        Select Case Data.Input(0)
-            Case 0 '默认
-                Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(Data.Input(1))) & ".png"
-            Case 1 'Steve
-UseDefault:
-                Data.Output = PathImage & "Skins/Steve.png"
-            Case 2 'Alex
-                Data.Output = PathImage & "Skins/Alex.png"
-            Case 3 '正版
-                Dim ID As String = Data.Input(1)
-                Try
-                    If ID.Count < 2 Then
-                        Data.Output = PathImage & "Skins/Steve.png"
-                    Else
-                        Dim Result As String = McLoginMojangUuid(ID, True)
-                        If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & ID)
-                        Result = McSkinGetAddress(Result, "Mojang")
-                        If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & ID)
-                        Result = McSkinDownload(Result)
-                        If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & ID)
-                        Data.Output = Result
-                    End If
-                Catch ex As Exception
-                    If ex.GetType.Name = "ThreadInterruptedException" Then
-                        Data.Output = ""
-                        Exit Sub
-                    ElseIf GetExceptionSummary(ex).Contains("429") Then
-                        Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(ID)) & ".png"
-                        Log("获取离线登录使用的正版皮肤失败（" & ID & "）：获取皮肤太过频繁，请 5 分钟后再试！")
-                    Else
-                        Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(ID)) & ".png"
-                        Log(ex, "获取离线登录使用的正版皮肤失败（" & ID & "）")
-                    End If
-                End Try
-            Case 4 '自定义
-                If Not File.Exists(PathAppdata & "CustomSkin.png") Then
-                    Hint("未找到离线皮肤自定义文件，可能它已被删除。PCL 将使用默认的 Steve 皮肤！")
-                    Setup.Set("LaunchSkinType", 1)
-                    GoTo UseDefault
-                End If
-                Data.Output = PathAppdata & "CustomSkin.png"
-        End Select
+        Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(Data.Input(1))) & ".png"
         '刷新显示
         If FrmLoginProfileSkin IsNot Nothing Then
             RunInUi(Sub() FrmLoginProfileSkin.Skin.Load())

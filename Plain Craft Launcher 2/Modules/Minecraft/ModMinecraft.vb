@@ -1870,7 +1870,7 @@ OnLoaded:
         If Not IncludeVersionJar Then Return McLibListGet
 
         '需要添加原版 Jar
-        Dim RealVersion As McVersion = Nothing
+        Dim RealVersion As McVersion
         Dim RequiredJar As String = Version.JsonObject("jar")?.ToString
         If Version.IsHmclFormatJson OrElse RequiredJar Is Nothing Then
             'HMCL 项直接使用自身的 Jar
@@ -1883,24 +1883,6 @@ OnLoaded:
                     OriginalVersion = New McVersion(PathMcFolder & "versions\" & OriginalVersion.InheritVersion & "\")
                 Loop
             End If
-            Dim _ClientUrl As String
-            Dim _ClientSHA1 As String
-            '判断需求的版本是否存在
-            '不能调用 RealVersion.Check()，可能会莫名其妙地触发 CheckPermission 正被另一进程使用，导致误判前置不存在
-            If Not File.Exists(RealVersion.Path & RealVersion.Name & ".json") Then
-                RealVersion = Version
-                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 Json 文件", LogLevel.Debug)
-            End If
-            '获取详细下载信息
-            If RealVersion.JsonObject("downloads") IsNot Nothing AndAlso RealVersion.JsonObject("downloads")("client") IsNot Nothing Then
-                _ClientUrl = RealVersion.JsonObject("downloads")("client")("url")
-                _ClientSHA1 = RealVersion.JsonObject("downloads")("client")("sha1")
-            Else
-                _ClientUrl = Nothing
-                _ClientSHA1 = Nothing
-            End If
-            '把所需的原版 Jar 添加进去
-            McLibListGet.Add(New McLibToken With {.LocalPath = RealVersion.Path & RealVersion.Name & ".jar", .Size = 0, .IsNatives = False, .Url = _ClientUrl, .SHA1 = _ClientSHA1})
             '需要新建对象，否则后面的 Check 会导致 McVersionCurrent 的 State 变回 Original
             '复现：启动一个 Snapshot 版本
             RealVersion = New McVersion(OriginalVersion.Path)
