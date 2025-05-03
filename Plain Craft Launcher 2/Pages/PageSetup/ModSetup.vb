@@ -60,10 +60,6 @@ Public Class ModSetup
         {"CacheAuthPass", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthServerServer", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
-        {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
-        {"LaunchSkinID", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LaunchSkinType", New SetupEntry(0, Source:=SetupSource.Registry)},
-        {"LaunchSkinSlim", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LaunchVersionSelect", New SetupEntry("")},
         {"LaunchFolderSelect", New SetupEntry("")},
         {"LaunchFolders", New SetupEntry("", Source:=SetupSource.Registry)},
@@ -494,30 +490,6 @@ Public Class ModSetup
     Public Sub LaunchRamType(Type As Integer)
         If FrmSetupLaunch Is Nothing Then Exit Sub
         FrmSetupLaunch.RamType(Type)
-    End Sub
-
-    '离线皮肤
-    Public Sub LaunchSkinType(Value As Integer)
-        RunInUi(Sub()
-                    If Not IsNothing(FrmSetupLaunch) Then
-                        Select Case Value
-                            Case 0, 1, 2 '默认
-                                FrmSetupLaunch.PanSkinID.Visibility = Visibility.Collapsed
-                                FrmSetupLaunch.PanSkinChange.Visibility = Visibility.Collapsed
-                            Case 3 '正版
-                                FrmSetupLaunch.PanSkinID.Visibility = Visibility.Visible
-                                FrmSetupLaunch.PanSkinChange.Visibility = Visibility.Collapsed
-                            Case 4 '自定义
-                                FrmSetupLaunch.PanSkinID.Visibility = Visibility.Collapsed
-                                FrmSetupLaunch.PanSkinChange.Visibility = Visibility.Visible
-                        End Select
-                        FrmSetupLaunch.CardSkin.TriggerForceResize()
-                    End If
-                    'PageLaunchLeft.SkinLegacy.Start()
-                End Sub)
-    End Sub
-    Public Sub LaunchSkinID(Value As String)
-        'PageLaunchLeft.SkinLegacy.Start()
     End Sub
 
 #End Region
