@@ -609,7 +609,7 @@ Public Class PageDownloadInstall
             End If
         End If
         'LabyMod
-        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 8 Then
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) < 8 Then
             CardLabyMod.Visibility = Visibility.Collapsed
         Else
             CardLabyMod.Visibility = Visibility.Visible
