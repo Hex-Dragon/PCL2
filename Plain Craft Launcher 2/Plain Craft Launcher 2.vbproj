@@ -328,6 +328,9 @@
     <Compile Include="Pages\PageDownload\PageDownloadCleanroom.xaml.vb">
       <DependentUpon>PageDownloadCleanroom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadLabyMod.xaml.vb">
+      <DependentUpon>PageDownloadLabyMod.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
       <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
     </Compile>
@@ -626,6 +629,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageDownload\PageDownloadCleanroom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadLabyMod.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1082,6 +1089,9 @@
     <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Blocks\LabyMod.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
   </ItemGroup>
   <ItemGroup>
@@ -1149,6 +1159,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\Pysio.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\linkd.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

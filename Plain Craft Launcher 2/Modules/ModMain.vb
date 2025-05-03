@@ -411,6 +411,7 @@ EndHint:
     Public FrmDownloadCleanroom As PageDownloadCleanroom
     Public FrmDownloadFabric As PageDownloadFabric
     Public FrmDownloadQuilt As PageDownloadQuilt
+    Public FrmDownloadLabyMod As PageDownloadLabyMod
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
     Public FrmDownloadDataPack As PageDownloadDataPack

@@ -36,7 +36,7 @@
                 RequireLoaders = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Vanilla, CompLoaderType.Canvas}.ToList()
         End Select
         res.Loaders = RequireLoaders
-        res.CompPath = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
+        res.CompPath = PageVersionLeft.Version.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & GetPathNameByCompType(CurrentCompType) & "\"
         Return res
     End Function
 
@@ -112,7 +112,7 @@
         End If
     End Sub
     Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
-        Dim CompResourcePath As String = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
+        Dim CompResourcePath As String = PageVersionLeft.Version.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & GetPathNameByCompType(CurrentCompType) & "\"
         Return LoaderFolderRun(CompResourceListLoader, CompResourcePath, Type, LoaderInput:=GetRequireLoaderData())
     End Function
 
@@ -349,7 +349,7 @@
     ''' </summary>
     Private Sub BtnManageOpen_Click(sender As Object, e As EventArgs) Handles BtnManageOpen.Click, BtnHintOpen.Click
         Try
-            Dim CompFilePath = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
+            Dim CompFilePath = PageVersionLeft.Version.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & GetPathNameByCompType(CurrentCompType) & "\"
             Directory.CreateDirectory(CompFilePath)
             OpenExplorer(CompFilePath)
         Catch ex As Exception
@@ -425,7 +425,7 @@ Install:
                 For Each ModFile In FilePathList
                     Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "").Replace(".old", "")
                     If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
-                    CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
+                    CopyFile(ModFile, TargetVersion.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & "mods\" & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
                     Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "").Replace(".old", "")}！", HintType.Finish)
@@ -434,7 +434,7 @@ Install:
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
-                    LoaderFolderRun(CompResourceListLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun, LoaderInput:=FrmVersionMod?.GetRequireLoaderData())
+                    LoaderFolderRun(CompResourceListLoader, TargetVersion.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & "mods\", LoaderFolderRunType.ForceRun, LoaderInput:=FrmVersionMod?.GetRequireLoaderData())
                 End If
             Catch ex As Exception
                 Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
@@ -880,7 +880,7 @@ Install:
             End Sub))
             '结束处理
             Dim Loader As New LoaderCombo(Of IEnumerable(Of LocalCompFile))("资源更新：" & PageVersionLeft.Version.Name, InstallLoaders)
-            Dim PathMods As String = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
+            Dim PathMods As String = PageVersionLeft.Version.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & GetPathNameByCompType(CurrentCompType) & "\"
             Loader.OnStateChanged =
             Sub()
                 '结果提示
@@ -1033,6 +1033,8 @@ Install:
         Try
 
             Dim ModEntry As LocalCompFile = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalCompItem).Entry
+            '判断该 LabyMod 是否支持安装 Fabric Mod
+            Dim ModdedLabyMod = PageVersionLeft.Version.Version.HasLabyMod AndAlso PageVersionLeft.Version.Modable
             '加载失败信息
             If ModEntry.State = LocalCompFile.LocalFileStatus.Unavailable Then
                 MyMsgBox("无法读取此资源的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "资源读取失败")
@@ -1044,7 +1046,7 @@ Install:
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
                         If(PageVersionLeft.Version.Version.HasForge, CompLoaderType.Forge,
                         If(PageVersionLeft.Version.Version.HasNeoForge, CompLoaderType.NeoForge,
-                        If(PageVersionLeft.Version.Version.HasFabric, CompLoaderType.Fabric, CompLoaderType.Any)))}})
+                        If(PageVersionLeft.Version.Version.HasFabric OrElse ModdedLabyMod, CompLoaderType.Fabric, CompLoaderType.Any)))}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)

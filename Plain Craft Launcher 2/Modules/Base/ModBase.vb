@@ -1,12 +1,14 @@
 Imports System.Globalization
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
 Imports System.Xaml
 Imports System.Threading.Tasks
 Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Serialization
 
 Public Module ModBase
 
@@ -1300,23 +1302,42 @@ Re:
                 Dim Info As New FileInfo(LocalPath)
                 If Not Info.Exists Then Return "文件不存在：" & LocalPath
                 Dim FileSize As Long = Info.Length
-                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then
-                    Return $"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "")
-                End If
-                If MinSize >= 0 AndAlso MinSize > FileSize Then
-                    Return $"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "")
-                End If
+                Dim ErrorMessage = ""
+                Dim Passed As Integer = 0
                 If Not String.IsNullOrEmpty(Hash) Then
+                    Passed += 1
                     If Hash.Length < 35 Then 'MD5
-                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then
+                            ErrorMessage += "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath) & vbCrLf
+                            Passed -= 1
+                        End If
                     ElseIf Hash.Length = 64 Then 'SHA256
-                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then
+                            ErrorMessage += "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath) & vbCrLf
+                            Passed -= 1
+                        End If
                     Else 'SHA1 (40)
-                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then
+                            ErrorMessage += "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath) & vbCrLf
+                            Passed -= 1
+                        End If
                     End If
                 End If
+
+                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then
+                    ErrorMessage += $"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
+                Else
+                    Passed += 1
+                End If
+
+                If MinSize >= 0 AndAlso MinSize > FileSize Then
+                    ErrorMessage += $"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
+                Else
+                    Passed += 1
+                End If
+
                 If IsJson Then
                     Dim Content As String = ReadFile(LocalPath)
                     If Content = "" Then Throw New Exception("读取到的文件为空")
@@ -1326,6 +1347,7 @@ Re:
                         Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
+                If Passed = 0 Then Return ErrorMessage
                 Return Nothing
             Catch ex As Exception
                 Log(ex, "检查文件出错")
@@ -1457,8 +1479,33 @@ RetryDir:
         GetShortPathName(LongPath, ShortPath, 260)
         Return ShortPath.ToString
     End Function
+
+    Public Sub MoveDirectory(SourceDir As String, TargetDir As String)
+        If Not Directory.Exists(TargetDir) Then Directory.CreateDirectory(TargetDir)
+        For Each FilePath In Directory.GetFiles(SourceDir)
+            Dim FileName = GetFileNameFromPath(FilePath)
+            File.Move(FilePath, IO.Path.Combine(TargetDir, FileName))
+        Next
+        For Each DirPath In Directory.GetDirectories(SourceDir)
+            Dim DirName = GetFolderNameFromPath(DirPath)
+            MoveDirectory(DirPath, IO.Path.Combine(TargetDir, DirName))
+        Next
+    End Sub
     Private Declare Function GetShortPathName Lib "kernel32" Alias "GetShortPathNameA" (ByVal lpszLongPath As String, ByVal lpszShortPath As StringBuilder, ByVal cchBuffer As Integer) As Integer
 
+    Public Sub CreateSymbolicLink(ByVal LinkPath As String, ByVal TargetPath As String, ByVal Flags As Integer)
+        Dim CMDProcess As New Process
+        Dim LinkDPath = ExtractLinkD()
+        With CMDProcess.StartInfo
+            .FileName = LinkDPath
+            .Arguments = $"""{LinkPath}"" ""{TargetPath}"""
+            .CreateNoWindow = True
+            .UseShellExecute = False
+        End With
+        CMDProcess.Start()
+        While Not CMDProcess.HasExited
+        End While
+    End Sub
 #End Region
 
 #Region "文本"

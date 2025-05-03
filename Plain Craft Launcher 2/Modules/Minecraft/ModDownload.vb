@@ -1318,6 +1318,59 @@
         Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("qsl", False))
 #End Region
 
+#Region "DlLabyModList | LabyMod 列表"
+
+    Public Structure DlLabyModListResult
+        ''' <summary>
+        ''' 获取到的数据。
+        ''' </summary>
+        Public Value As JObject
+    End Structure
+
+    ''' <summary>
+    ''' LabyMod 列表，主加载器。
+    ''' </summary>
+    Public DlLabyModListLoader As New LoaderTask(Of Integer, DlLabyModListResult)("DlLabyModList Main", AddressOf DlLabyModListMain)
+    Private Sub DlLabyModListMain(Loader As LoaderTask(Of Integer, DlLabyModListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLabyModListResult), Integer)(DlLabyModListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' LabyMod 列表，官方源。
+    ''' </summary>
+    Public DlLabyModListOfficialLoader As New LoaderTask(Of Integer, DlLabyModListResult)("DlLabyModList Official", AddressOf DlLabyModListOfficialMain)
+    Private Sub DlLabyModListOfficialMain(Loader As LoaderTask(Of Integer, DlLabyModListResult))
+        Dim ResultProduction As JObject = NetGetCodeByRequestRetry("https://releases.r2.labymod.net/api/v1/manifest/production/latest.json", IsJson:=True)
+        Dim ResultSnapshot As JObject = NetGetCodeByRequestRetry("https://releases.r2.labymod.net/api/v1/manifest/snapshot/latest.json", IsJson:=True)
+        Dim Result As New JObject
+        Result.Add("production", ResultProduction)
+        Result.Add("snapshot", ResultSnapshot)
+        Try
+            Dim Output = New DlLabyModListResult With {.Value = Result}
+            If Output.Value("production")("labyModVersion") Is Nothing OrElse Output.Value("snapshot")("labyModVersion") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Loader.Output = Output
+        Catch ex As Exception
+            Throw New Exception("LabyMod 版本列表解析失败（" & Result.ToString & "）", ex)
+        End Try
+    End Sub
+#End Region
+
 #Region "DlMod | Mod 镜像源请求"
 
     ''' <summary>

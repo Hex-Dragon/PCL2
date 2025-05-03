@@ -157,6 +157,7 @@ Public Class PageVersionLeft
                 DlQuiltListLoader.Start(IsForceRestart:=True)
                 DlQSLLoader.Start(IsForceRestart:=True)
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
+                DlLabyModListLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
                 FrmVersionInstall.GetCurrentInfo()
             Case FormMain.PageSubType.VersionExport

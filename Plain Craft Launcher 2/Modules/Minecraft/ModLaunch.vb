@@ -1303,11 +1303,37 @@ LoginFinish:
     Private ExtractJavaWrapperLock As New Object
 
     ''' <summary>
+    ''' 释放 linkd 并返回完整文件路径。
+    ''' </summary>
+    Public Function ExtractLinkD() As String
+        Dim LinkDPath As String = PathPure & "linkd.exe"
+        SyncLock ExtractLinkDLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
+            Try
+                WriteFile(LinkDPath, GetResources("linkd"))
+            Catch ex As Exception
+                If File.Exists(LinkDPath) Then
+                    Log(ex, "linkd 文件释放失败，但文件已存在，将在删除后尝试重新生成", LogLevel.Developer)
+                    Try
+                        File.Delete(LinkDPath)
+                        WriteFile(LinkDPath, GetResources("linkd"))
+                    Catch ex2 As Exception
+                        Throw New FileNotFoundException("释放 linkd 失败", ex2)
+                    End Try
+                Else
+                    Throw New FileNotFoundException("释放 linkd 失败", ex)
+                End If
+            End Try
+        End SyncLock
+        Return LinkDPath
+    End Function
+    Private ExtractLinkDLock As New Object
+
     ''' 判断是否使用 RetroWrapper。
     ''' </summary>
     Private Function McLaunchNeedsRetroWrapper() As Boolean
         Return (McVersionCurrent.ReleaseTime >= New Date(2013, 6, 25) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse (McVersionCurrent.Version.McCodeMain < 6 AndAlso McVersionCurrent.Version.McCodeMain <> 99) AndAlso Not Setup.Get("LaunchAdvanceDisableRW") AndAlso Not Setup.Get("VersionAdvanceDisableRW", McVersionCurrent) '<1.6
     End Function
+
 
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
@@ -2108,6 +2134,28 @@ IgnoreCustomSkin:
             Log(ex, "离线皮肤资源包设置失败", LogLevel.Hint)
         End Try
 
+        'LabyMod 预处理
+        If ReadIni(McVersionCurrent.Path & "PCL\Setup.ini", "VersionLabyMod", "") <> "" AndAlso McVersionCurrent.PathIndie = McVersionCurrent.Path Then
+            Dim RootPath = McVersionCurrent.Path & "..\..\"
+            If Not Directory.Exists(RootPath & "labymod-neo") Then Directory.CreateDirectory(RootPath & "labymod-neo")
+            If Not Directory.Exists(McVersionCurrent.Path & "labymod-neo") Then Directory.CreateDirectory(McVersionCurrent.Path & "labymod-neo")
+            If Directory.Exists(McVersionCurrent.Path & "labymod-neo\libraries") Then
+                MoveDirectory(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries")
+                Thread.Sleep(50)
+                Directory.Delete(McVersionCurrent.Path & "labymod-neo\libraries", True)
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries", &H2)
+            Else
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries", &H2)
+            End If
+            If Directory.Exists(McVersionCurrent.Path & "labymod-neo\assets") Then
+                MoveDirectory(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets")
+                Thread.Sleep(50)
+                Directory.Delete(McVersionCurrent.Path & "labymod-neo\assets", True)
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets", &H2)
+            Else
+                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets", &H2)
+            End If
+        End If
     End Sub
     Private Sub McLaunchCustom(Loader As LoaderTask(Of Integer, Integer))
 

@@ -79,6 +79,10 @@ Public Module ModComp
         ''' 光影包
         ''' </summary>
         Vanilla = 11
+        ''' <summary>
+        ''' LabyMod 客户端
+        ''' </summary>
+        LabyMod = 12
     End Enum
     <Flags> Public Enum CompSourceType
         CurseForge = 1
