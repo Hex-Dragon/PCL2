@@ -185,7 +185,6 @@
     End Sub
     Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioLogoType0.Check, RadioLogoType1.Check, RadioLogoType2.Check, RadioLogoType3.Check, RadioLauncherTheme0.Check, RadioLauncherTheme1.Check, RadioLauncherTheme2.Check, RadioLauncherTheme3.Check, RadioLauncherTheme4.Check, RadioLauncherTheme5.Check, RadioLauncherTheme6.Check, RadioLauncherTheme7.Check, RadioLauncherTheme8.Check, RadioLauncherTheme9.Check, RadioLauncherTheme10.Check, RadioLauncherTheme11.Check, RadioLauncherTheme12.Check, RadioLauncherTheme13.Check, RadioLauncherTheme14.Check, RadioCustomType0.Check, RadioCustomType1.Check, RadioCustomType2.Check, RadioCustomType3.Check
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)))
-        UiCustomType(Setup.Get("UiCustomType"))
     End Sub
 
     '背景图片
@@ -424,44 +423,6 @@ Refresh:
                  vbCrLf &
                  "你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。" & vbCrLf &
                  "直接将主页文件拖进 PCL 窗口也可以快捷加载。", "主页自定义教程")
-    End Sub
-
-    '主页卡片的实际处理
-    Public Shared Sub UiCustomType(Value As Integer)
-        If FrmSetupUI Is Nothing Then Exit Sub
-        Select Case Value
-            Case 0 '无
-                FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustomWarn.Visibility = Visibility.Collapsed
-            Case 1 '本地
-                FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomLocal.Visibility = Visibility.Visible
-                FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustom.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustomWarn.Visibility = If(Setup.Get("HintCustomWarn"), Visibility.Collapsed, Visibility.Visible)
-                FrmSetupUI.HintCustom.Text = $"从 PCL 文件夹下的 Custom.xaml 读取主页内容。{vbCrLf}你可以手动编辑该文件，向主页添加文本、图片、常用网站、快捷启动等功能。"
-                FrmSetupUI.HintCustom.EventType = ""
-                FrmSetupUI.HintCustom.EventData = ""
-            Case 2 '联网
-                FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomNet.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustom.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustomWarn.Visibility = If(Setup.Get("HintCustomWarn"), Visibility.Collapsed, Visibility.Visible)
-                FrmSetupUI.HintCustom.Text = $"从指定网址联网获取主页内容。服主也可以用于动态更新服务器公告。{vbCrLf}如果你制作了稳定运行的联网主页，可以点击这条提示投稿，若合格即可加入预设！"
-                FrmSetupUI.HintCustom.EventType = "打开网页"
-                FrmSetupUI.HintCustom.EventData = "https://github.com/Hex-Dragon/PCL2/discussions/2528"
-            Case 3 '预设
-                FrmSetupUI.PanCustomPreset.Visibility = Visibility.Visible
-                FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
-                FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustomWarn.Visibility = Visibility.Collapsed
-        End Select
-        FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub
 
     '主题
