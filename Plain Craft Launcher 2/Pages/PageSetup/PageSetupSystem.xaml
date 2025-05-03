@@ -139,7 +139,7 @@
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动器更新通道" Margin="0,0,25,0" Grid.Row="2"/>
                     <local:MyComboBox x:Name="ComboSystemUpdateBranch" Tag="SystemSystemUpdateBranch" Grid.Column="1" Grid.Row="2" 
                         ToolTip="PCL2 社区版提供了两种更新通道：&#xa;Slow Ring：较为稳定，功能通常已经过测试。&#xa;Fast Ring：更新较快，但可能包含未经充分测试的功能，可能不稳定。&#xa;&#xa;Fast Ring 仅推荐具有一定基础知识和能力的用户使用，且不适合用于制作整合包。&#xa;在升级到 Fast Ring 版本后，只能通过手动重新下载启动器切换回 Slow Ring。&#xa;&#xa;如果你不知道你在干什么，请选择 Slow Ring。">
-                        <local:MyComboBoxItem Content="Slow Ring" x:Name="ItemSystemUpdateBranch" />
+                        <local:MyComboBoxItem Content="Slow Ring" />
                         <local:MyComboBoxItem Content="Fast Ring" />
                     </local:MyComboBox>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动器公告" Margin="0,0,25,0" Grid.Row="4" />
