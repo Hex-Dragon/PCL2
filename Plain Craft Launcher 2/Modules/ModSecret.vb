@@ -577,13 +577,14 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     Private Sub RefreshUpdatesCache()
         Try
-            Dim UpdCaches As JObject = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json"), IsJson:=True)
+            Dim UpdCaches As JObject = Nothing
+            If RemoteServerBaseurl.Count <> 0 Then UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json"), IsJson:=True)
             Dim UpdatesCacheFile = PathTemp & "Cache/updates.json"
             Dim AnnouncementCacheFile = PathTemp & "Cache/announcement.json"
-            If GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
+            If RemoteServerBaseurl.Count <> 0 AndAlso GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
                 WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/updates.json")))
             End If
-            If GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
+            If RemoteServerBaseurl.Count <> 0 AndAlso GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
                 WriteFile(AnnouncementCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/announcement.json")))
             End If
             RemoteVersionData = CType(GetJson(ReadFile(UpdatesCacheFile)), JObject).ToObject(Of UpdateInfo)()
