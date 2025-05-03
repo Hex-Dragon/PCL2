@@ -2503,6 +2503,10 @@ Retry:
     Public Sub McInstallState(Loader)
         Select Case Loader.State
             Case LoadState.Finished
+                If Setup.Get("ToolDownloadAutoSelectVersion") Then
+                    Dim VersionName As String = Loader.Name.ToString()
+                    WriteIni(PathMcFolder & "PCL.ini", "Version", VersionName.Remove(VersionName.Length - 3, 3))
+                End If
                 WriteIni(PathMcFolder & "PCL.ini", "VersionCache", "") '清空缓存（合并安装会先生成文件夹，这会在刷新时误判为可以使用缓存）
                 DeleteDirectory(Loader.Input & "PCLInstallBackups\")
                 Hint(Loader.Name & "成功！", HintType.Finish)
@@ -2868,14 +2872,13 @@ LabyModSkip:
 #Region "处理 JSON 文件"
         '获取 minecraftArguments
         Dim AllArguments As String =
-            If(LabyModJson("minecraftArguments"),
-                If(MinecraftJson IsNot Nothing AndAlso MinecraftJson("minecraftArguments") IsNot Nothing, MinecraftJson("minecraftArguments"), " ").ToString & " " &
-                If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
-                If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
-                If(NeoForgeJson IsNot Nothing, If(NeoForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
-                If(CleanroomJson IsNot Nothing, If(CleanroomJson("minecraftArguments"), " ").ToString, " ") & " " &
-                If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ")
-            ).ToString
+            If(MinecraftJson("minecraftArguments"), " ").ToString & " " &
+            If(LabyModJson IsNot Nothing, If(LabyModJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(NeoForgeJson IsNot Nothing, If(NeoForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(CleanroomJson IsNot Nothing, If(CleanroomJson("minecraftArguments"), " ").ToString, " ")
         '分割参数字符串
         Dim RawArguments As List(Of String) = AllArguments.Split(" ").Where(Function(l) l <> "").Select(Function(l) l.Trim).ToList
         Dim SplitArguments As New List(Of String)
