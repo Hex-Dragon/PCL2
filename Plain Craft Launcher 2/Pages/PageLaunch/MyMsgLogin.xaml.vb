@@ -79,7 +79,7 @@
         MyConverter.Result = Result
         RunInUi(AddressOf Close)
         Thread.Sleep(200)
-        FrmMain.ShowWindowToTop()
+        'FrmMain.ShowWindowToTop()
     End Sub
 
     Private Sub Init()
@@ -113,54 +113,8 @@
         Thread.Sleep((Data("interval").ToObject(Of Integer) - 1) * 1000)
         '轮询
         Dim UnknownFailureCount As Integer = 0
-        Do While Not MyConverter.IsExited
-            Try
-                Dim Scope As String = ""
-                Dim ClientId As String = ""
-                If OAuthUrl.ToLower().Contains("microsoftonline.com") Then
-                    ClientId = OAuthClientId
-                    Scope = "scope=XboxLive.signin%20offline_access"
-                Else
-                    ClientId = LittleSkinClientId
-                End If
-                Dim Result = NetRequestOnce(
-                    OAuthUrl, "POST",
-                    "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
-                    "client_id=" & ClientId & "&" &
-                    "device_code=" & DeviceCode & "&" &
-                    Scope,
-                    "application/x-www-form-urlencoded", 5000 + UnknownFailureCount * 5000, MakeLog:=False)
-                '获取结果
-                Dim ResultJson As JObject = GetJson(Result)
-                McLaunchLog($"令牌过期时间：{ResultJson("expires_in")} 秒")
-                Hint("网页登录成功！", HintType.Finish)
-                Finished({ResultJson("access_token").ToString, ResultJson("refresh_token").ToString})
-                Return
-            Catch ex As Exception
-                If ex.Message.Contains("authorization_declined") Or ex.Message.Contains("access_denied") Then
-                    Finished(New Exception("$你拒绝了 PCL 申请的权限……"))
-                    Return
-                ElseIf ex.Message.Contains("expired_token") Then
-                    Finished(New Exception("$登录用时太长啦，重新试试吧！"))
-                    Return
-                ElseIf ex.Message.Contains("service abuse") Then
-                    Finished(New Exception("$非常抱歉，该账号已被微软封禁，无法登录。"))
-                    Return
-                ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
-                    Finished(New RestartException)
-                    Return
-                ElseIf ex.Message.Contains("authorization_pending") Then
-                    Thread.Sleep(2000)
-                ElseIf UnknownFailureCount <= 2 Then
-                    UnknownFailureCount += 1
-                    Log(ex, $"登录轮询第 {UnknownFailureCount} 次失败")
-                    Thread.Sleep(2000)
-                Else
-                    Finished(New Exception("登录轮询失败", ex))
-                    Return
-                End If
-            End Try
-        Loop
+        Finished(0)
+        Return
     End Sub
 
 End Class

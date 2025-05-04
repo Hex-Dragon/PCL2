@@ -70,6 +70,10 @@ Public Module ModProfile
         ''' 用于档案列表头像显示的皮肤 ID
         ''' </summary>
         Public SkinHeadId As String
+        ''' <summary>
+        ''' 用于识别正版档案的 ID 标识符
+        ''' </summary>
+        Public IdentityId As String
     End Class
 #End Region
 
@@ -101,7 +105,8 @@ Public Module ModProfile
                         .Expires = Profile("expires"),
                         .Desc = Profile("desc"),
                         .RawJson = SecretDecrypt(Profile("rawJson")),
-                        .SkinHeadId = Profile("skinHeadId")
+                        .SkinHeadId = Profile("skinHeadId"),
+                        .IdentityId = SecretDecrypt(Profile("identityId"))
                     }
                 ElseIf Profile("type") = "authlib" Then
                     NewProfile = New McProfile With {
@@ -165,7 +170,8 @@ Public Module ModProfile
                             {"expires", Profile.Expires},
                             {"desc", Profile.Desc},
                             {"rawJson", SecretEncrypt(Profile.RawJson)},
-                            {"skinHeadId", Profile.SkinHeadId}
+                            {"skinHeadId", Profile.SkinHeadId},
+                            {"identityId", SecretEncrypt(Profile.IdentityId)}
                         }
                     ElseIf Profile.Type = McLoginType.Auth Then
                         ProfileJobj = New JObject From {
@@ -375,7 +381,7 @@ Write:
                                                                .Uuid = Profile("uuid"),
                                                                .Username = Profile("displayName"),
                                                                .AccessToken = "",
-                                                               .RefreshToken = "",
+                                                               .IdentityId = "",
                                                                .Expires = 1743779140286,
                                                                .Desc = "",
                                                                .RawJson = "",
@@ -572,11 +578,11 @@ Write:
                 }
             ElseIf AuthType = McLoginType.Ms Then
                 If McLoginMsLoader.State = LoadState.Finished Then
-                    Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken,
+                    Return New McLoginMs With {.OAuthId = SelectedProfile.IdentityId,
                         .UserName = SelectedProfile.Username, .AccessToken = SelectedProfile.AccessToken,
                         .Uuid = SelectedProfile.Uuid, .ProfileJson = SelectedProfile.RawJson}
                 Else
-                    Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile.RefreshToken, .UserName = SelectedProfile.Name}
+                    Return New McLoginMs With {.OAuthId = SelectedProfile.IdentityId, .UserName = SelectedProfile.Name}
                 End If
             Else
                 Return New McLoginLegacy With {.UserName = SelectedProfile.Username, .Uuid = SelectedProfile.Uuid}
