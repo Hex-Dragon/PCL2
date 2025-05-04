@@ -850,7 +850,7 @@ Finished:
             If ModFileList.Count > 50 Then RunInUi(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.ShowProgress = True)
 
             '获取本地文件缓存
-            Dim CachePath As String = PathTemp & "Cache\LocalMod.json"
+            Dim CachePath As String = PathTemp & "Cache\LocalComp.json"
             Dim Cache As New JObject
             Try
                 Dim CacheContent As String = ReadFile(CachePath)
@@ -1125,7 +1125,7 @@ Finished:
             Entry.CompLoaded = Not IsFailed
             Cache(Entry.ModrinthHash & McVersion & ModLoaders.Join("")) = Entry.ToJson()
         Next
-        WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
+        WriteFile(PathTemp & "Cache\LocalComp.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
         If FrmVersionMod?.Filter = PageVersionComp.FilterType.CanUpdate Then
             RunInUi(Sub() FrmVersionMod?.RefreshUI()) '同步 “可更新” 列表 (#4677)

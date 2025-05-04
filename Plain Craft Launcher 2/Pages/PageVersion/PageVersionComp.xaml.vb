@@ -56,7 +56,7 @@
         Try
             CompProjectCache.Clear()
             CompFilesCache.Clear()
-            File.Delete(PathTemp & "Cache\LocalMod.json")
+            File.Delete(PathTemp & "Cache\LocalComp.json")
             Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
         Catch ex As Exception
             Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
