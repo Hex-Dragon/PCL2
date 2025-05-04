@@ -29,6 +29,8 @@
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
+                            <RowDefinition Height="28" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="默认版本隔离" Margin="0,0,25,0" />
@@ -97,13 +99,18 @@
                                 </local:MyTextBox.ValidateRules>
                             </local:MyTextBox>
                         </Grid>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="12" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="12" Grid.Column="1" MaxDropDownHeight="240"
+                        <TextBlock VerticalAlignment="Center" Grid.Row="12" HorizontalAlignment="Left" Text="正版验证方式" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboMsAuthType" Grid.Row="12" Grid.ColumnSpan="2" Tag="LoginMsAuthType" Grid.Column="1" ToolTip="Web 账户管理器可以提供更为便利的正版验证流程，而设备代码流允许你在任意设备上打开网页进行验证。">
+                            <local:MyComboBoxItem Content="Web 账户管理器" IsSelected="True" />
+                            <local:MyComboBoxItem Content="设备代码流" />
+                        </local:MyComboBox>
+                        <TextBlock VerticalAlignment="Center" Grid.Row="14" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="14" Grid.Column="1" MaxDropDownHeight="240"
                                       ToolTip="若将 Java 放在游戏文件夹或 PCL 文件夹，在进行自动选择时 PCL 会尽量优先选择它">
                             <ComboBoxItem Content="加载中……" IsSelected="True" />
                             <!--<local:MyComboBoxItem Content="Java 8 (1.8.0_171)，64 位：C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" IsSelected="True" ToolTip="C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" />-->
                         </local:MyComboBox>
-                        <Grid Grid.Row="13" Grid.Column="1">
+                        <Grid Grid.Row="15" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />

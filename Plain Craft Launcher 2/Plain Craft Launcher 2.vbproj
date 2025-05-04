@@ -1114,11 +1114,17 @@
     <PackageReference Include="Imazen.WebP">
       <Version>10.0.1</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.71.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Client.Broker">
+      <Version>4.71.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.19041.2</Version>
     </PackageReference>
     <PackageReference Include="IPNetwork2">
-      <Version>3.1.743</Version>
+      <Version>3.1.764</Version>
     </PackageReference>
     <PackageReference Include="Makaretu.Nat">
       <Version>0.2.0</Version>

@@ -39,6 +39,7 @@
             TextArgumentWindowWidth.Text = Setup.Get("LaunchArgumentWindowWidth")
             TextArgumentWindowHeight.Text = Setup.Get("LaunchArgumentWindowHeight")
             CheckArgumentRam.Checked = Setup.Get("LaunchArgumentRam")
+            ComboMsAuthType.SelectedIndex = Setup.Get("LoginMsAuthType")
             CheckArgumentJavaTraversal.Checked = Setup.Get("LaunchArgumentJavaTraversal")
             RefreshJavaComboBox()
 
@@ -90,6 +91,7 @@
             Setup.Reset("LaunchAdvanceRunWait")
             Setup.Reset("LaunchAdvanceDisableJLW")
             Setup.Reset("LaunchAdvanceGraphicCard")
+            Setup.Reset("LoginMsAuthType")
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
             JavaSearchLoader.Start(IsForceRestart:=True)
@@ -113,7 +115,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged, ComboMsAuthType.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckArgumentJavaTraversal.Change, CheckAdvanceDisableJLW.Change, CheckAdvanceGraphicCard.Change, CheckAdvanceDisableRW.Change
