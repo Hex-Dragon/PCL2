@@ -1,4 +1,4 @@
-ï»¿'ç”±äºåŒ…å«åŠ è§£å¯†ç­‰å®‰å…¨ä¿¡æ¯ï¼Œæœ¬æ–‡ä»¶ä¸­çš„éƒ¨åˆ†ä»£ç å·²è¢«åˆ é™¤
+'ÓÉÓÚ°üº¬¼Ó½âÃÜµÈ°²È«ĞÅÏ¢£¬±¾ÎÄ¼şÖĞµÄ²¿·Ö´úÂëÒÑ±»É¾³ı
 
 Imports System.ComponentModel
 Imports System.Net
@@ -12,15 +12,15 @@ Imports System.IO.Compression
 
 Friend Module ModSecret
 
-#Region "æ‚é¡¹"
+#Region "ÔÓÏî"
 
 #If RELEASE Or BETA Then
-    Public Const RegFolder As String = "PCLCE" 'PCL ç¤¾åŒºç‰ˆçš„æ³¨å†Œè¡¨ä¸ PCL çš„æ³¨å†Œè¡¨éš”ç¦»ï¼Œä»¥é˜²æ•°æ®å†²çª
+    Public Const RegFolder As String = "PCLCE" 'PCL ÉçÇø°æµÄ×¢²á±íÓë PCL µÄ×¢²á±í¸ôÀë£¬ÒÔ·ÀÊı¾İ³åÍ»
 #Else
-    Public Const RegFolder As String = "PCLCEDebug" 'ç¤¾åŒºå¼€å‘ç‰ˆçš„æ³¨å†Œè¡¨ä¸ç¤¾åŒºå¸¸è§„ç‰ˆçš„æ³¨å†Œè¡¨éš”ç¦»ï¼Œä»¥é˜²æ•°æ®å†²çª
+    Public Const RegFolder As String = "PCLCEDebug" 'ÉçÇø¿ª·¢°æµÄ×¢²á±íÓëÉçÇø³£¹æ°æµÄ×¢²á±í¸ôÀë£¬ÒÔ·ÀÊı¾İ³åÍ»
 #End If
 
-    'ç”¨äºå¾®è½¯ç™»å½•çš„ ClientId
+    'ÓÃÓÚÎ¢ÈíµÇÂ¼µÄ ClientId
     Public Const OAuthClientId As String = ""
     'CurseForge API Key
     Public Const CurseForgeAPIKey As String = ""
@@ -28,57 +28,57 @@ Friend Module ModSecret
     Public Const LittleSkinClientId As String = ""
 
     Friend Sub SecretOnApplicationStart()
-        'æå‡ UI çº¿ç¨‹ä¼˜å…ˆçº§
+        'ÌáÉı UI Ïß³ÌÓÅÏÈ¼¶
         Thread.CurrentThread.Priority = ThreadPriority.Highest
-        'ç¡®ä¿ .NET Framework ç‰ˆæœ¬
+        'È·±£ .NET Framework °æ±¾
         Try
             Dim VersionTest As New FormattedText("", Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Fonts.SystemTypefaces.First, 96, New MyColor, DPI)
-        Catch ex As UriFormatException 'ä¿®å¤ #3555
+        Catch ex As UriFormatException 'ĞŞ¸´ #3555
             Environment.SetEnvironmentVariable("windir", Environment.GetEnvironmentVariable("SystemRoot"), EnvironmentVariableTarget.User)
             Dim VersionTest As New FormattedText("", Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Fonts.SystemTypefaces.First, 96, New MyColor, DPI)
         End Try
-        'æ£€æµ‹å½“å‰æ–‡ä»¶å¤¹æƒé™
+        '¼ì²âµ±Ç°ÎÄ¼ş¼ĞÈ¨ÏŞ
         Try
             Directory.CreateDirectory(Path & "PCL")
         Catch ex As Exception
-            MsgBox($"PCL æ— æ³•åˆ›å»º PCL æ–‡ä»¶å¤¹ï¼ˆ{Path & "PCL"}ï¼‰ï¼Œè¯·å°è¯•ï¼š" & vbCrLf &
-                  "1. å°† PCL ç§»åŠ¨åˆ°å…¶ä»–æ–‡ä»¶å¤¹" & If(Path.StartsWithF("C:", True), "ï¼Œä¾‹å¦‚ C ç›˜å’Œæ¡Œé¢ä»¥å¤–çš„å…¶ä»–ä½ç½®ã€‚", "ã€‚") & vbCrLf &
-                  "2. åˆ é™¤å½“å‰ç›®å½•ä¸­çš„ PCL æ–‡ä»¶å¤¹ï¼Œç„¶åå†è¯•ã€‚" & vbCrLf &
-                  "3. å³é”® PCL é€‰æ‹©å±æ€§ï¼Œæ‰“å¼€ å…¼å®¹æ€§ ä¸­çš„ ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤ç¨‹åºã€‚",
-                MsgBoxStyle.Critical, "è¿è¡Œç¯å¢ƒé”™è¯¯")
+            MsgBox($"PCL ÎŞ·¨´´½¨ PCL ÎÄ¼ş¼Ğ£¨{Path & "PCL"}£©£¬Çë³¢ÊÔ£º" & vbCrLf &
+                  "1. ½« PCL ÒÆ¶¯µ½ÆäËûÎÄ¼ş¼Ğ" & If(Path.StartsWithF("C:", True), "£¬ÀıÈç C ÅÌºÍ×ÀÃæÒÔÍâµÄÆäËûÎ»ÖÃ¡£", "¡£") & vbCrLf &
+                  "2. É¾³ıµ±Ç°Ä¿Â¼ÖĞµÄ PCL ÎÄ¼ş¼Ğ£¬È»ºóÔÙÊÔ¡£" & vbCrLf &
+                  "3. ÓÒ¼ü PCL Ñ¡ÔñÊôĞÔ£¬´ò¿ª ¼æÈİĞÔ ÖĞµÄ ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë³ÌĞò¡£",
+                MsgBoxStyle.Critical, "ÔËĞĞ»·¾³´íÎó")
             Environment.[Exit](ProcessReturnValues.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
-            MsgBox("PCL æ²¡æœ‰å¯¹å½“å‰æ–‡ä»¶å¤¹çš„å†™å…¥æƒé™ï¼Œè¯·å°è¯•ï¼š" & vbCrLf &
-                  "1. å°† PCL ç§»åŠ¨åˆ°å…¶ä»–æ–‡ä»¶å¤¹" & If(Path.StartsWithF("C:", True), "ï¼Œä¾‹å¦‚ C ç›˜å’Œæ¡Œé¢ä»¥å¤–çš„å…¶ä»–ä½ç½®ã€‚", "ã€‚") & vbCrLf &
-                  "2. åˆ é™¤å½“å‰ç›®å½•ä¸­çš„ PCL æ–‡ä»¶å¤¹ï¼Œç„¶åå†è¯•ã€‚" & vbCrLf &
-                  "3. å³é”® PCL é€‰æ‹©å±æ€§ï¼Œæ‰“å¼€ å…¼å®¹æ€§ ä¸­çš„ ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤ç¨‹åºã€‚",
-                MsgBoxStyle.Critical, "è¿è¡Œç¯å¢ƒé”™è¯¯")
+            MsgBox("PCL Ã»ÓĞ¶Ôµ±Ç°ÎÄ¼ş¼ĞµÄĞ´ÈëÈ¨ÏŞ£¬Çë³¢ÊÔ£º" & vbCrLf &
+                  "1. ½« PCL ÒÆ¶¯µ½ÆäËûÎÄ¼ş¼Ğ" & If(Path.StartsWithF("C:", True), "£¬ÀıÈç C ÅÌºÍ×ÀÃæÒÔÍâµÄÆäËûÎ»ÖÃ¡£", "¡£") & vbCrLf &
+                  "2. É¾³ıµ±Ç°Ä¿Â¼ÖĞµÄ PCL ÎÄ¼ş¼Ğ£¬È»ºóÔÙÊÔ¡£" & vbCrLf &
+                  "3. ÓÒ¼ü PCL Ñ¡ÔñÊôĞÔ£¬´ò¿ª ¼æÈİĞÔ ÖĞµÄ ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë³ÌĞò¡£",
+                MsgBoxStyle.Critical, "ÔËĞĞ»·¾³´íÎó")
             Environment.[Exit](ProcessReturnValues.Cancel)
         End If
-        'ç¤¾åŒºç‰ˆæç¤º
+        'ÉçÇø°æÌáÊ¾
         If Setup.Get("UiLauncherCEHint") Then ShowCEAnnounce()
     End Sub
     ''' <summary>
-    ''' å±•ç¤ºç¤¾åŒºç‰ˆæç¤º
+    ''' Õ¹Ê¾ÉçÇø°æÌáÊ¾
     ''' </summary>
-    ''' <param name="IsUpdate">æ˜¯å¦ä¸ºæ›´æ–°æ—¶å¯åŠ¨</param>
+    ''' <param name="IsUpdate">ÊÇ·ñÎª¸üĞÂÊ±Æô¶¯</param>
     Public Sub ShowCEAnnounce(Optional IsUpdate As Boolean = False)
-        MyMsgBox($"ä½ æ­£åœ¨ä½¿ç”¨æ¥è‡ª PCL-Community çš„ PCL ç¤¾åŒºç‰ˆæœ¬ï¼Œé‡åˆ°é—®é¢˜è¯·ä¸è¦å‘å®˜æ–¹ä»“åº“åé¦ˆï¼
-PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„ä½¿ç”¨åšæ‹…ä¿ã€‚
+        MyMsgBox($"ÄãÕıÔÚÊ¹ÓÃÀ´×Ô PCL-Community µÄ PCL ÉçÇø°æ±¾£¬Óöµ½ÎÊÌâÇë²»ÒªÏò¹Ù·½²Ö¿â·´À¡£¡
+PCL-Community ¼°Æä³ÉÔ±ÓëÁúÌÚÃ¨Ô¾ÎŞ´ÓÊô¹ØÏµ£¬ÇÒ¾ù²»»áÎªÄúµÄÊ¹ÓÃ×öµ£±£¡£
 
-å¦‚æœä½ æ˜¯æ„å¤–ä¸‹è½½çš„ç¤¾åŒºç‰ˆï¼Œå»ºè®®ä¸‹è½½å®˜æ–¹ç‰ˆ PCL ä½¿ç”¨ã€‚
+Èç¹ûÄãÊÇÒâÍâÏÂÔØµÄÉçÇø°æ£¬½¨ÒéÏÂÔØ¹Ù·½°æ PCL Ê¹ÓÃ¡£
 
-è¯¥ç‰ˆæœ¬ä¸å®˜æ–¹ç‰ˆæœ¬çš„ç‰¹æ€§åŒºåˆ«ï¼š
-- è”ç½‘é€šçŸ¥ï¼šæš‚æ—¶æ²¡æœ‰ï¼Œåœ¨åšäº†åœ¨åšäº†.jpg
-- ä¸»é¢˜åˆ‡æ¢ï¼šä¸ä¼šåˆ¶ä½œï¼Œè¿™æ˜¯éœ€è¦èµåŠ©è§£é”çš„çºªå¿µæ€§è´¨çš„åŠŸèƒ½
-- ç™¾å®ç®±ï¼šéƒ¨åˆ†å†…å®¹æ›´æ”¹å’Œç¼ºå¤±ï¼Œä¸»çº¿åˆ†æ”¯æ²¡æœ‰æä¾›ç›¸å…³å†…å®¹{If(IsUpdate, $"{vbCrLf}{vbCrLf}è¯¥æç¤ºæ€»ä¼šåœ¨æ›´æ–°å¯åŠ¨å™¨æ—¶å±•ç¤ºä¸€æ¬¡ã€‚", "")}", "ç¤¾åŒºç‰ˆæœ¬è¯´æ˜", "æˆ‘çŸ¥é“äº†")
+¸Ã°æ±¾Óë¹Ù·½°æ±¾µÄÌØĞÔÇø±ğ£º
+- ÁªÍøÍ¨Öª£ºÔİÊ±Ã»ÓĞ£¬ÔÚ×öÁËÔÚ×öÁË.jpg
+- Ö÷ÌâÇĞ»»£º²»»áÖÆ×÷£¬ÕâÊÇĞèÒªÔŞÖú½âËøµÄ¼ÍÄîĞÔÖÊµÄ¹¦ÄÜ
+- °Ù±¦Ïä£º²¿·ÖÄÚÈİ¸ü¸ÄºÍÈ±Ê§£¬Ö÷Ïß·ÖÖ§Ã»ÓĞÌá¹©Ïà¹ØÄÚÈİ{If(IsUpdate, $"{vbCrLf}{vbCrLf}¸ÃÌáÊ¾×Ü»áÔÚ¸üĞÂÆô¶¯Æ÷Ê±Õ¹Ê¾Ò»´Î¡£", "")}", "ÉçÇø°æ±¾ËµÃ÷", "ÎÒÖªµÀÁË")
     End Sub
 
     Private _RawCodeCache As String = Nothing
     Private ReadOnly _cacheLock As New Object()
     ''' <summary>
-    ''' è·å–åŸå§‹çš„è®¾å¤‡æ ‡è¯†ç 
+    ''' »ñÈ¡Ô­Ê¼µÄÉè±¸±êÊ¶Âë
     ''' </summary>
     ''' <returns></returns>
     Friend Function SecretGetRawCode() As String
@@ -86,27 +86,27 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
             Try
                 If _RawCodeCache IsNot Nothing Then Return _RawCodeCache
                 Dim rawCode As String = Nothing
-                Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' è·å– CPU åºåˆ—å·
+                Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' »ñÈ¡ CPU ĞòÁĞºÅ
                 For Each obj As ManagementObject In searcher.Get()
                     rawCode = obj("ProcessorId")?.ToString()
                     Exit For
                 Next
-                If String.IsNullOrWhiteSpace(rawCode) Then Throw New Exception("è·å– CPU åºåˆ—å·å¤±è´¥")
-                Using sha256 As SHA256 = SHA256.Create() ' SHA256 åŠ å¯†
+                If String.IsNullOrWhiteSpace(rawCode) Then Throw New Exception("»ñÈ¡ CPU ĞòÁĞºÅÊ§°Ü")
+                Using sha256 As SHA256 = SHA256.Create() ' SHA256 ¼ÓÃÜ
                     Dim hash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
                     rawCode = BitConverter.ToString(hash).Replace("-", "")
                 End Using
                 _RawCodeCache = rawCode
                 Return rawCode
             Catch ex As Exception
-                Log(ex, "[System] è·å–è®¾å¤‡åŸå§‹æ ‡è¯†ç å¤±è´¥ï¼Œä½¿ç”¨é»˜è®¤æ ‡è¯†ç ")
+                Log(ex, "[System] »ñÈ¡Éè±¸Ô­Ê¼±êÊ¶ÂëÊ§°Ü£¬Ê¹ÓÃÄ¬ÈÏ±êÊ¶Âë")
                 Return "b09675a9351cbd1fd568056781fe3966dd936cc9b94e51ab5cf67eeb7e74c075".ToUpper()
             End Try
         End SyncLock
     End Function
 
     ''' <summary>
-    ''' è·å–è®¾å¤‡çš„çŸ­æ ‡è¯†ç 
+    ''' »ñÈ¡Éè±¸µÄ¶Ì±êÊ¶Âë
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
         Dim code As String
@@ -127,7 +127,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
     Private _EncryptKeyCache As String = Nothing
     Private ReadOnly _cacheEncryptKeyLock As New Object()
     ''' <summary>
-    ''' è·å– AES åŠ å¯†å¯†é’¥
+    ''' »ñÈ¡ AES ¼ÓÃÜÃÜÔ¿
     ''' </summary>
     ''' <returns></returns>
     Friend Function SecretGetEncryptKey() As String
@@ -146,27 +146,27 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))
         Dim DataJvmCustom As String = Setup.Get("VersionAdvanceJvm", Version:=McVersionCurrent)
-        DataList.Insert(0, If(DataJvmCustom = "", Setup.Get("LaunchAdvanceJvm"), DataJvmCustom)) 'å¯å˜ JVM å‚æ•°
-        McLaunchLog("å½“å‰å‰©ä½™å†…å­˜ï¼š" & Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10 & "G")
+        DataList.Insert(0, If(DataJvmCustom = "", Setup.Get("LaunchAdvanceJvm"), DataJvmCustom)) '¿É±ä JVM ²ÎÊı
+        McLaunchLog("µ±Ç°Ê£ÓàÄÚ´æ£º" & Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10 & "G")
         DataList.Add("-Xmn" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent) * 1024 * 0.15) & "m")
         DataList.Add("-Xmx" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent) * 1024) & "m")
         If Not DataList.Any(Function(d) d.Contains("-Dlog4j2.formatMsgNoLookups=true")) Then DataList.Add("-Dlog4j2.formatMsgNoLookups=true")
     End Sub
 
     ''' <summary>
-    ''' æ‰“ç å­—ç¬¦ä¸²ä¸­çš„ AccessTokenã€‚
+    ''' ´òÂë×Ö·û´®ÖĞµÄ AccessToken¡£
     ''' </summary>
     Friend Function SecretFilter(Raw As String, FilterChar As Char) As String
-        'æ‰“ç  "accessToken " åçš„å†…å®¹
+        '´òÂë "accessToken " ºóµÄÄÚÈİ
         If Raw.Contains("accessToken ") Then
             For Each Token In RegexSearch(Raw, "(?<=accessToken ([^ ]{5}))[^ ]+(?=[^ ]{5})")
                 Raw = Raw.Replace(Token, New String(FilterChar, Token.Count))
             Next
         End If
-        'æ‰“ç å½“å‰ç™»å½•çš„ç»“æœ
+        '´òÂëµ±Ç°µÇÂ¼µÄ½á¹û
         Dim AccessToken As String = McLoginLoader.Output.AccessToken
         If AccessToken Is Nothing OrElse AccessToken.Length < 10 OrElse Not Raw.ContainsF(AccessToken, True) OrElse
-            McLoginLoader.Output.Uuid = McLoginLoader.Output.AccessToken Then 'UUID å’Œ AccessToken ä¸€æ ·åˆ™ä¸æ‰“ç 
+            McLoginLoader.Output.Uuid = McLoginLoader.Output.AccessToken Then 'UUID ºÍ AccessToken Ò»ÑùÔò²»´òÂë
             Return Raw
         Else
             Return Raw.Replace(AccessToken, Strings.Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Strings.Right(AccessToken, 5))
@@ -175,14 +175,14 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
 #End Region
 
-#Region "ç½‘ç»œé‰´æƒ"
+#Region "ÍøÂç¼øÈ¨"
 
     Friend Function SecretCdnSign(UrlWithMark As String)
         If Not UrlWithMark.EndsWithF("{CDN}") Then Return UrlWithMark
         Return UrlWithMark.Replace("{CDN}", "").Replace(" ", "%20")
     End Function
     ''' <summary>
-    ''' è®¾ç½® Headers çš„ UAã€Refererã€‚
+    ''' ÉèÖÃ Headers µÄ UA¡¢Referer¡£
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
@@ -196,7 +196,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
         If Url.Contains("api.curseforge.com") Then Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
-    ''' è®¾ç½® Headers çš„ UAã€Refererã€‚
+    ''' ÉèÖÃ Headers µÄ UA¡¢Referer¡£
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
@@ -212,7 +212,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
 #End Region
 
-#Region "å­—ç¬¦ä¸²åŠ è§£å¯†"
+#Region "×Ö·û´®¼Ó½âÃÜ"
 
     Friend Function SecretDecrptyOld(SourceString As String) As String
         Dim Key = "00000000"
@@ -230,7 +230,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
     End Function
 
     ''' <summary>
-    ''' åŠ å¯†å­—ç¬¦ä¸²ï¼ˆä¼˜åŒ–ç‰ˆï¼‰ã€‚
+    ''' ¼ÓÃÜ×Ö·û´®£¨ÓÅ»¯°æ£©¡£
     ''' </summary>
     Friend Function SecretEncrypt(SourceString As String) As String
         If SourceString = "" Then Return ""
@@ -268,7 +268,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
     End Function
 
     ''' <summary>
-    ''' è§£å¯†å­—ç¬¦ä¸²ã€‚
+    ''' ½âÃÜ×Ö·û´®¡£
     ''' </summary>
     Friend Function SecretDecrypt(SourceString As String) As String
         If SourceString = "" Then Return ""
@@ -290,7 +290,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
             aes.IV = iv
 
             If encryptedData.Length < salt.Length + iv.Length Then
-                Throw New ArgumentException("åŠ å¯†æ•°æ®æ ¼å¼æ— æ•ˆæˆ–å·²æŸå")
+                Throw New ArgumentException("¼ÓÃÜÊı¾İ¸ñÊ½ÎŞĞ§»òÒÑËğ»µ")
             End If
 
             Using deriveBytes = New Rfc2898DeriveBytes(Key, salt, 1000)
@@ -310,7 +310,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
 #End Region
 
-#Region "ä¸»é¢˜"
+#Region "Ö÷Ìâ"
 
     Public IsDarkMode As Boolean = False
 
@@ -369,12 +369,12 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
     Public ColorHue As Integer = 210, ColorSat As Integer = 85, ColorLightAdjust As Integer = 0, ColorHueTopbarDelta As Object = 0
     Public ThemeDontClick As Integer = 0
 
-    'æ·±è‰²æ¨¡å¼äº‹ä»¶
+    'ÉîÉ«Ä£Ê½ÊÂ¼ş
 
-    ' å®šä¹‰è‡ªå®šä¹‰äº‹ä»¶
+    ' ¶¨Òå×Ô¶¨ÒåÊÂ¼ş
     Public Event ThemeChanged As EventHandler(Of Boolean)
 
-    ' è§¦å‘äº‹ä»¶çš„å‡½æ•°
+    ' ´¥·¢ÊÂ¼şµÄº¯Êı
     Public Sub RaiseThemeChanged(isDarkMode As Boolean)
         RaiseEvent ThemeChanged("", isDarkMode)
     End Sub
@@ -457,7 +457,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
         RunInUi(
         Sub()
             If Not FrmMain.IsLoaded Then Exit Sub
-            'é¡¶éƒ¨æ¡èƒŒæ™¯
+            '¶¥²¿Ìõ±³¾°
             Dim Brush = New LinearGradientBrush With {.EndPoint = New Point(1, 0), .StartPoint = New Point(0, 0)}
             If ThemeNow = 5 Then
                 Brush.GradientStops.Add(New GradientStop With {.Offset = 0, .Color = New MyColor().FromHSL2(ColorHue, ColorSat, 25)})
@@ -484,7 +484,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
                 Brush.GradientStops.Add(New GradientStop With {.Offset = 1, .Color = New MyColor().FromHSL2(ColorHue + 21, ColorSat, 53 + ColorLightAdjust)})
                 FrmMain.PanTitle.Background = Brush
             End If
-            'ä¸»é¡µé¢èƒŒæ™¯
+            'Ö÷Ò³Ãæ±³¾°
             If Setup.Get("UiBackgroundColorful") Then
                 Brush = New LinearGradientBrush With {.EndPoint = New Point(0.1, 1), .StartPoint = New Point(0.9, 0)}
                 Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
@@ -514,7 +514,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
 #End Region
 
-#Region "æ›´æ–°"
+#Region "¸üĞÂ"
 
     Public Class UpdateInfo
         Public Property assets As List(Of UpdateAssetInfo)
@@ -561,17 +561,17 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
     Public Sub UpdateCheckByButton()
         If IsUpdateStarted Then
-            Hint("æ­£åœ¨æ£€æŸ¥æ›´æ–°ä¸­ï¼Œè¯·ç¨åå†è¯•â€¦â€¦")
+            Hint("ÕıÔÚ¼ì²é¸üĞÂÖĞ£¬ÇëÉÔºóÔÙÊÔ¡­¡­")
             Exit Sub
         End If
-        Hint("æ­£åœ¨è·å–æ›´æ–°ä¿¡æ¯...")
+        Hint("ÕıÔÚ»ñÈ¡¸üĞÂĞÅÏ¢...")
         RunInNewThread(Sub()
                            Try
                                RefreshUpdatesCache()
                                NoticeUserUpdate()
                            Catch ex As Exception
-                               Log(ex, "[Update] è·å–å¯åŠ¨å™¨æ›´æ–°ä¿¡æ¯å¤±è´¥", LogLevel.Hint)
-                               Hint("è·å–å¯åŠ¨å™¨æ›´æ–°ä¿¡æ¯å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç½‘ç»œè¿æ¥", HintType.Critical)
+                               Log(ex, "[Update] »ñÈ¡Æô¶¯Æ÷¸üĞÂĞÅÏ¢Ê§°Ü", LogLevel.Hint)
+                               Hint("»ñÈ¡Æô¶¯Æ÷¸üĞÂĞÅÏ¢Ê§°Ü£¬Çë¼ì²éÍøÂçÁ¬½Ó", HintType.Critical)
                            End Try
                        End Sub)
     End Sub
@@ -590,7 +590,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
             RemoteVersionData = CType(GetJson(ReadFile(UpdatesCacheFile)), JObject).ToObject(Of UpdateInfo)()
             RemoteAnnounceData = CType(GetJson(ReadFile(AnnouncementCacheFile)), JObject).ToObject(Of AnnouncementInfo)()
         Catch ex As Exception
-            Log(ex, "[System] åˆ·æ–°æ›´æ–°ä¿¡æ¯å¤±è´¥â€¦â€¦")
+            Log(ex, "[System] Ë¢ĞÂ¸üĞÂĞÅÏ¢Ê§°Ü¡­¡­")
         End Try
     End Sub
     Private Function GetRemotePath(path As String) As String
@@ -598,30 +598,30 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
     End Function
     Public Function GetChannelInfo(Optional TargetMainChannel As String = Nothing) As UpdateAssetInfo
         If RemoteVersionData Is Nothing Then
-            Log("[Update] æœªè·å–åˆ°è¿œç¨‹ç‰ˆæœ¬ä¿¡æ¯ï¼Œå°è¯•é‡æ–°è·å–")
+            Log("[Update] Î´»ñÈ¡µ½Ô¶³Ì°æ±¾ĞÅÏ¢£¬³¢ÊÔÖØĞÂ»ñÈ¡")
             RefreshUpdatesCache()
         End If
         Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch") = 1
         Dim targetChannel As UpdateAssetInfo = Nothing
         Dim targetMainChannelName = If(TargetMainChannel, If(IsBeta, "fr", "sr"))
-        Log($"[System] è¿”å› {targetMainChannelName} é€šé“çš„æ›´æ–°ä¿¡æ¯")
+        Log($"[System] ·µ»Ø {targetMainChannelName} Í¨µÀµÄ¸üĞÂĞÅÏ¢")
         targetChannel = RemoteVersionData.assets.Where(Function(x) x.version.channel = targetMainChannelName & If(IsArm64System, "arm64", "x64")).First()
         Return targetChannel
     End Function
 
     Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
         Dim LatestVersion = GetChannelInfo()
-        Log($"[System] è·å–åˆ°æœ€æ–°ç‰ˆæœ¬å· {LatestVersion.version.code.ToString()}")
+        Log($"[System] »ñÈ¡µ½×îĞÂ°æ±¾ºÅ {LatestVersion.version.code.ToString()}")
         If LatestVersion.version.code > VersionCode Then
             If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.version.name.StartsWithF("2.9.") Then
-                If MyMsgBox($"å‘ç°äº†å¯åŠ¨å™¨æ›´æ–°ï¼ˆç‰ˆæœ¬ {LatestVersion.version.name}ï¼‰ï¼Œä½†æ˜¯ç”±äºä½ çš„ Windows ç‰ˆæœ¬è¿‡ä½ï¼Œä¸æ»¡è¶³æ–°ç‰ˆæœ¬è¦æ±‚ã€‚{vbCrLf}ä½ éœ€è¦æ›´æ–°åˆ° Windows 10 20H2 æˆ–æ›´é«˜ç‰ˆæœ¬æ‰å¯ä»¥ç»§ç»­æ›´æ–°ã€‚", "å¯åŠ¨å™¨æ›´æ–° - ç³»ç»Ÿç‰ˆæœ¬è¿‡ä½", "å‡çº§ Windows 10", "å–æ¶ˆ", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+                If MyMsgBox($"·¢ÏÖÁËÆô¶¯Æ÷¸üĞÂ£¨°æ±¾ {LatestVersion.version.name}£©£¬µ«ÊÇÓÉÓÚÄãµÄ Windows °æ±¾¹ıµÍ£¬²»Âú×ãĞÂ°æ±¾ÒªÇó¡£{vbCrLf}ÄãĞèÒª¸üĞÂµ½ Windows 10 20H2 »ò¸ü¸ß°æ±¾²Å¿ÉÒÔ¼ÌĞø¸üĞÂ¡£", "Æô¶¯Æ÷¸üĞÂ - ÏµÍ³°æ±¾¹ıµÍ", "Éı¼¶ Windows 10", "È¡Ïû", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
-            If MyMsgBox($"å¯åŠ¨å™¨æœ‰æ–°ç‰ˆæœ¬å¯ç”¨ï¼ˆï½›VersionBaseNameï½ -> {LatestVersion.version.name}, å‘å¸ƒäº {DateTime.Parse(LatestVersion.upd_time).ToLocalTime()}){vbCrLf}æ˜¯å¦ç«‹å³æ›´æ–°ï¼Ÿ", "å¯åŠ¨å™¨æ›´æ–°", "æ›´æ–°", "å–æ¶ˆ") = 1 Then
+            If MyMsgBox($"Æô¶¯Æ÷ÓĞĞÂ°æ±¾¿ÉÓÃ£¨£ûVersionBaseName£ı -> {LatestVersion.version.name}, ·¢²¼ÓÚ {DateTime.Parse(LatestVersion.upd_time).ToLocalTime()}){vbCrLf}ÊÇ·ñÁ¢¼´¸üĞÂ£¿", "Æô¶¯Æ÷¸üĞÂ", "¸üĞÂ", "È¡Ïû") = 1 Then
                 UpdateStart(LatestVersion, False)
             End If
         Else
-            If Not Silent Then Hint("å¯åŠ¨å™¨å·²æ˜¯æœ€æ–°ç‰ˆ " + VersionBaseName + "ï¼Œæ— é¡»æ›´æ–°å•¦ï¼", HintType.Finish)
+            If Not Silent Then Hint("Æô¶¯Æ÷ÒÑÊÇ×îĞÂ°æ " + VersionBaseName + "£¬ÎŞĞë¸üĞÂÀ²£¡", HintType.Finish)
         End If
     End Sub
 
@@ -630,20 +630,20 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
         Dim DlTempPath As String = PathTemp & "Cache\CEUpdates.zip"
         RunInNewThread(Sub()
                            Try
-                               'æ„é€ æ­¥éª¤åŠ è½½å™¨
+                               '¹¹Ôì²½Öè¼ÓÔØÆ÷
                                Dim Loaders As New List(Of LoaderBase)
-                               'ä¸‹è½½
-                               Loaders.Add(New LoaderDownload("ä¸‹è½½æ›´æ–°æ–‡ä»¶", New List(Of NetFile) From {New NetFile(Version.downloads, DlTempPath, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
-                               Loaders.Add(New LoaderTask(Of Integer, Integer)("æ£€æŸ¥æ›´æ–°æ–‡ä»¶", Sub()
+                               'ÏÂÔØ
+                               Loaders.Add(New LoaderDownload("ÏÂÔØ¸üĞÂÎÄ¼ş", New List(Of NetFile) From {New NetFile(Version.downloads, DlTempPath, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+                               Loaders.Add(New LoaderTask(Of Integer, Integer)("¼ì²é¸üĞÂÎÄ¼ş", Sub()
                                                                                              Dim NewFileSha256 = GetFileSHA256(DlTempPath)
                                                                                              If String.IsNullOrWhiteSpace(NewFileSha256) Then
-                                                                                                 Throw New Exception("è®¡ç®—å·²ä¸‹è½½æ–‡ä»¶ SHA256 å¤±è´¥")
+                                                                                                 Throw New Exception("¼ÆËãÒÑÏÂÔØÎÄ¼ş SHA256 Ê§°Ü")
                                                                                              End If
                                                                                              If NewFileSha256 <> Version.sha256 Then
-                                                                                                 Throw New Exception($"æ–‡ä»¶æ£€éªŒä¸é€šè¿‡ï¼Œæ›´æ–°æ–‡ä»¶ SHA256 ä¸º {NewFileSha256}ï¼Œå®é™…éœ€è¦ {Version.sha256}")
+                                                                                                 Throw New Exception($"ÎÄ¼ş¼ìÑé²»Í¨¹ı£¬¸üĞÂÎÄ¼ş SHA256 Îª {NewFileSha256}£¬Êµ¼ÊĞèÒª {Version.sha256}")
                                                                                              End If
                                                                                          End Sub))
-                               Loaders.Add(New LoaderTask(Of Integer, Integer)("è§£å‹æ›´æ–°æ–‡ä»¶", Sub()
+                               Loaders.Add(New LoaderTask(Of Integer, Integer)("½âÑ¹¸üĞÂÎÄ¼ş", Sub()
                                                                                              Using archive = New ZipArchive(New FileStream(DlTempPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), ZipArchiveMode.Read)
                                                                                                  Dim entry As ZipArchiveEntry = archive.Entries.FirstOrDefault(Function(x) x.FullName.EndsWithF("Plain Craft Launcher Community Edition.exe"))
                                                                                                  entry.ExtractToFile(DlTargetPath, True)
@@ -651,10 +651,10 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
                                                                                              File.Delete(DlTempPath)
                                                                                          End Sub))
                                If Not Slient Then
-                                   Loaders.Add(New LoaderTask(Of Integer, Integer)("å®‰è£…æ›´æ–°", Sub() UpdateRestart(True)))
+                                   Loaders.Add(New LoaderTask(Of Integer, Integer)("°²×°¸üĞÂ", Sub() UpdateRestart(True)))
                                End If
-                               'å¯åŠ¨
-                               Dim Loader As New LoaderCombo(Of JObject)("å¯åŠ¨å™¨æ›´æ–°", Loaders)
+                               'Æô¶¯
+                               Dim Loader As New LoaderCombo(Of JObject)("Æô¶¯Æ÷¸üĞÂ", Loaders)
                                Loader.Start()
                                If Slient Then
                                    IsUpdateWaitingRestart = True
@@ -664,8 +664,8 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
                                    FrmMain.BtnExtraDownload.Ribble()
                                End If
                            Catch ex As Exception
-                               Log(ex, "[Update] ä¸‹è½½å¯åŠ¨å™¨æ›´æ–°æ–‡ä»¶å¤±è´¥", LogLevel.Hint)
-                               Hint("ä¸‹è½½å¯åŠ¨å™¨æ›´æ–°æ–‡ä»¶å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç½‘ç»œè¿æ¥", HintType.Critical)
+                               Log(ex, "[Update] ÏÂÔØÆô¶¯Æ÷¸üĞÂÎÄ¼şÊ§°Ü", LogLevel.Hint)
+                               Hint("ÏÂÔØÆô¶¯Æ÷¸üĞÂÎÄ¼şÊ§°Ü£¬Çë¼ì²éÍøÂçÁ¬½Ó", HintType.Critical)
                            End Try
                        End Sub)
     End Sub
@@ -673,21 +673,21 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
         Try
             Dim fileName As String = Path + "PCL\Plain Craft Launcher Community Edition.exe"
             If Not File.Exists(fileName) Then
-                Log("[System] æ›´æ–°å¤±è´¥ï¼šæœªæ‰¾åˆ°æ›´æ–°æ–‡ä»¶")
+                Log("[System] ¸üĞÂÊ§°Ü£ºÎ´ÕÒµ½¸üĞÂÎÄ¼ş")
                 Exit Sub
             End If
             ' id old new restart
             Dim text As String = String.Concat(New String() {"--update ", Process.GetCurrentProcess().Id, " """, PathWithName, """ """, fileName, """ ", TriggerRestartAndByEnd})
-            Log("[System] æ›´æ–°ç¨‹åºå¯åŠ¨ï¼Œå‚æ•°ï¼š" + text, LogLevel.Normal, "å‡ºç°é”™è¯¯")
+            Log("[System] ¸üĞÂ³ÌĞòÆô¶¯£¬²ÎÊı£º" + text, LogLevel.Normal, "³öÏÖ´íÎó")
             Process.Start(New ProcessStartInfo(fileName) With {.WindowStyle = ProcessWindowStyle.Hidden, .CreateNoWindow = True, .Arguments = text})
             If TriggerRestartAndByEnd Then
                 FrmMain.EndProgram(False)
-                Log("[System] å·²ç”±äºæ›´æ–°å¼ºåˆ¶ç»“æŸç¨‹åº", LogLevel.Normal, "å‡ºç°é”™è¯¯")
+                Log("[System] ÒÑÓÉÓÚ¸üĞÂÇ¿ÖÆ½áÊø³ÌĞò", LogLevel.Normal, "³öÏÖ´íÎó")
             End If
         Catch ex As Win32Exception
-            Log(ex, "è‡ªåŠ¨æ›´æ–°æ—¶è§¦å‘ Win32 é”™è¯¯ï¼Œç–‘ä¼¼è¢«æ‹¦æˆª", LogLevel.Debug, "å‡ºç°é”™è¯¯")
-            If MyMsgBox(String.Format("ç”±äºè¢« Windows å®‰å…¨ä¸­å¿ƒæ‹¦æˆªï¼Œæˆ–è€…å­˜åœ¨æƒé™é—®é¢˜ï¼Œå¯¼è‡´ PCL æ— æ³•æ›´æ–°ã€‚{0}è¯·å°† PCL æ‰€åœ¨æ–‡ä»¶å¤¹åŠ å…¥ç™½åå•ï¼Œæˆ–è€…æ‰‹åŠ¨ç”¨ {1}PCL\Plain Craft Launcher Community Edition.exe æ›¿æ¢å½“å‰æ–‡ä»¶ï¼", vbCrLf, ModBase.Path), "æ›´æ–°å¤±è´¥", "æŸ¥çœ‹å¸®åŠ©", "ç¡®å®š", "", True, True, False, Nothing, Nothing, Nothing) = 1 Then
-                TryStartEvent("æ‰“å¼€å¸®åŠ©", "å¯åŠ¨å™¨/Microsoft Defender æ·»åŠ æ’é™¤é¡¹.json")
+            Log(ex, "×Ô¶¯¸üĞÂÊ±´¥·¢ Win32 ´íÎó£¬ÒÉËÆ±»À¹½Ø", LogLevel.Debug, "³öÏÖ´íÎó")
+            If MyMsgBox(String.Format("ÓÉÓÚ±» Windows °²È«ÖĞĞÄÀ¹½Ø£¬»òÕß´æÔÚÈ¨ÏŞÎÊÌâ£¬µ¼ÖÂ PCL ÎŞ·¨¸üĞÂ¡£{0}Çë½« PCL ËùÔÚÎÄ¼ş¼Ğ¼ÓÈë°×Ãûµ¥£¬»òÕßÊÖ¶¯ÓÃ {1}PCL\Plain Craft Launcher Community Edition.exe Ìæ»»µ±Ç°ÎÄ¼ş£¡", vbCrLf, ModBase.Path), "¸üĞÂÊ§°Ü", "²é¿´°ïÖú", "È·¶¨", "", True, True, False, Nothing, Nothing, Nothing) = 1 Then
+                TryStartEvent("´ò¿ª°ïÖú", "Æô¶¯Æ÷/Microsoft Defender Ìí¼ÓÅÅ³ıÏî.json")
             End If
         End Try
     End Sub
@@ -720,43 +720,43 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
             Try
                 CopyFile(NewFileName, OldFileName)
             Catch ex4 As UnauthorizedAccessException
-                MsgBox("PCL æ›´æ–°å¤±è´¥ï¼šæƒé™ä¸è¶³ã€‚è¯·æ‰‹åŠ¨å¤åˆ¶ PCL æ–‡ä»¶å¤¹ä¸‹çš„æ–°ç‰ˆæœ¬ç¨‹åºã€‚" & vbCrLf & "è‹¥ PCL ä½äºæ¡Œé¢æˆ– C ç›˜ï¼Œä½ å¯ä»¥å°è¯•å°†å…¶æŒªåˆ°å…¶ä»–æ–‡ä»¶å¤¹ï¼Œè¿™å¯èƒ½å¯ä»¥è§£å†³æƒé™é—®é¢˜ã€‚" & vbCrLf + GetExceptionSummary(ex4), MsgBoxStyle.Critical, "æ›´æ–°å¤±è´¥")
+                MsgBox("PCL ¸üĞÂÊ§°Ü£ºÈ¨ÏŞ²»×ã¡£ÇëÊÖ¶¯¸´ÖÆ PCL ÎÄ¼ş¼ĞÏÂµÄĞÂ°æ±¾³ÌĞò¡£" & vbCrLf & "Èô PCL Î»ÓÚ×ÀÃæ»ò C ÅÌ£¬Äã¿ÉÒÔ³¢ÊÔ½«ÆäÅ²µ½ÆäËûÎÄ¼ş¼Ğ£¬Õâ¿ÉÄÜ¿ÉÒÔ½â¾öÈ¨ÏŞÎÊÌâ¡£" & vbCrLf + GetExceptionSummary(ex4), MsgBoxStyle.Critical, "¸üĞÂÊ§°Ü")
             Catch ex5 As Exception
-                MsgBox("PCL æ›´æ–°å¤±è´¥ï¼šæ— æ³•å¤åˆ¶æ–°æ–‡ä»¶ã€‚è¯·æ‰‹åŠ¨å¤åˆ¶ PCL æ–‡ä»¶å¤¹ä¸‹çš„æ–°ç‰ˆæœ¬ç¨‹åºã€‚" & vbCrLf + GetExceptionSummary(ex5), MsgBoxStyle.Critical, "æ›´æ–°å¤±è´¥")
+                MsgBox("PCL ¸üĞÂÊ§°Ü£ºÎŞ·¨¸´ÖÆĞÂÎÄ¼ş¡£ÇëÊÖ¶¯¸´ÖÆ PCL ÎÄ¼ş¼ĞÏÂµÄĞÂ°æ±¾³ÌĞò¡£" & vbCrLf + GetExceptionSummary(ex5), MsgBoxStyle.Critical, "¸üĞÂÊ§°Ü")
                 Return
             End Try
             If TriggerRestart Then
                 Try
                     Process.Start(OldFileName)
                 Catch ex6 As Exception
-                    MsgBox("PCL æ›´æ–°å¤±è´¥ï¼šæ— æ³•é‡æ–°å¯åŠ¨ã€‚" & vbCrLf + GetExceptionSummary(ex6), MsgBoxStyle.Critical, "æ›´æ–°å¤±è´¥")
+                    MsgBox("PCL ¸üĞÂÊ§°Ü£ºÎŞ·¨ÖØĞÂÆô¶¯¡£" & vbCrLf + GetExceptionSummary(ex6), MsgBoxStyle.Critical, "¸üĞÂÊ§°Ü")
                 End Try
             End If
             Return
         End If
         If TypeOf ex2 Is UnauthorizedAccessException Then
-            MsgBox(String.Concat(New String() {"ç”±äºæƒé™ä¸è¶³ï¼ŒPCL æ— æ³•å®Œæˆæ›´æ–°ã€‚è¯·å°è¯•ï¼š" & vbCrLf,
+            MsgBox(String.Concat(New String() {"ÓÉÓÚÈ¨ÏŞ²»×ã£¬PCL ÎŞ·¨Íê³É¸üĞÂ¡£Çë³¢ÊÔ£º" & vbCrLf,
                                  If((Path.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), False) OrElse Path.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Personal), False)),
-                                 " - å°† PCL æ–‡ä»¶ç§»åŠ¨åˆ°æ¡Œé¢ã€æ–‡æ¡£ä»¥å¤–çš„æ–‡ä»¶å¤¹ï¼ˆè¿™æˆ–è®¸å¯ä»¥ä¸€åŠ³æ°¸é€¸åœ°è§£å†³æƒé™é—®é¢˜ï¼‰" & vbCrLf, ""),
+                                 " - ½« PCL ÎÄ¼şÒÆ¶¯µ½×ÀÃæ¡¢ÎÄµµÒÔÍâµÄÎÄ¼ş¼Ğ£¨Õâ»òĞí¿ÉÒÔÒ»ÀÍÓÀÒİµØ½â¾öÈ¨ÏŞÎÊÌâ£©" & vbCrLf, ""),
                                  If(Path.StartsWithF("C", True),
-                                 " - å°† PCL æ–‡ä»¶ç§»åŠ¨åˆ° C ç›˜ä»¥å¤–çš„æ–‡ä»¶å¤¹ï¼ˆè¿™æˆ–è®¸å¯ä»¥ä¸€åŠ³æ°¸é€¸åœ°è§£å†³æƒé™é—®é¢˜ï¼‰" & vbCrLf, ""),
-                                 " - å³é”®ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œ PCL" & vbCrLf & " - æ‰‹åŠ¨å¤åˆ¶å·²ä¸‹è½½åˆ° PCL æ–‡ä»¶å¤¹ä¸‹çš„æ–°ç‰ˆæœ¬ç¨‹åºï¼Œè¦†ç›–åŸç¨‹åº" & vbCrLf & vbCrLf,
-                                 GetExceptionSummary(ex2)}), MsgBoxStyle.Critical, "æ›´æ–°å¤±è´¥")
+                                 " - ½« PCL ÎÄ¼şÒÆ¶¯µ½ C ÅÌÒÔÍâµÄÎÄ¼ş¼Ğ£¨Õâ»òĞí¿ÉÒÔÒ»ÀÍÓÀÒİµØ½â¾öÈ¨ÏŞÎÊÌâ£©" & vbCrLf, ""),
+                                 " - ÓÒ¼üÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ PCL" & vbCrLf & " - ÊÖ¶¯¸´ÖÆÒÑÏÂÔØµ½ PCL ÎÄ¼ş¼ĞÏÂµÄĞÂ°æ±¾³ÌĞò£¬¸²¸ÇÔ­³ÌĞò" & vbCrLf & vbCrLf,
+                                 GetExceptionSummary(ex2)}), MsgBoxStyle.Critical, "¸üĞÂÊ§°Ü")
             Return
         End If
-        MsgBox("PCL æ›´æ–°å¤±è´¥ï¼šæ— æ³•åˆ é™¤åŸæ–‡ä»¶ã€‚è¯·æ‰‹åŠ¨å¤åˆ¶å·²ä¸‹è½½åˆ° PCL æ–‡ä»¶å¤¹ä¸‹çš„æ–°ç‰ˆæœ¬ç¨‹åºè¦†ç›–åŸç¨‹åºã€‚" & vbCrLf + GetExceptionSummary(ex2), MsgBoxStyle.Critical, "æ›´æ–°å¤±è´¥")
+        MsgBox("PCL ¸üĞÂÊ§°Ü£ºÎŞ·¨É¾³ıÔ­ÎÄ¼ş¡£ÇëÊÖ¶¯¸´ÖÆÒÑÏÂÔØµ½ PCL ÎÄ¼ş¼ĞÏÂµÄĞÂ°æ±¾³ÌĞò¸²¸ÇÔ­³ÌĞò¡£" & vbCrLf + GetExceptionSummary(ex2), MsgBoxStyle.Critical, "¸üĞÂÊ§°Ü")
     End Sub
     ''' <summary>
-    ''' ç¡®ä¿ PathTemp ä¸‹çš„ Latest.exe æ˜¯æœ€æ–°æ­£å¼ç‰ˆçš„ PCLï¼Œå®ƒä¼šè¢«ç”¨äºæ•´åˆåŒ…æ‰“åŒ…ã€‚
-    ''' å¦‚æœä¸æ˜¯ï¼Œåˆ™ä¸‹è½½ä¸€ä¸ªã€‚
+    ''' È·±£ PathTemp ÏÂµÄ Latest.exe ÊÇ×îĞÂÕıÊ½°æµÄ PCL£¬Ëü»á±»ÓÃÓÚÕûºÏ°ü´ò°ü¡£
+    ''' Èç¹û²»ÊÇ£¬ÔòÏÂÔØÒ»¸ö¡£
     ''' </summary>
     Friend Sub DownloadLatestPCL(Optional LoaderToSyncProgress As LoaderBase = Nothing)
-        'æ³¨æ„ï¼šå¦‚æœè¦è‡ªè¡Œå®ç°è¿™ä¸ªåŠŸèƒ½ï¼Œè¯·æ¢ç”¨å¦ä¸€ä¸ªæ–‡ä»¶è·¯å¾„ï¼Œä»¥å…ä¸å®˜æ–¹ç‰ˆæœ¬å†²çª
+        '×¢Òâ£ºÈç¹ûÒª×ÔĞĞÊµÏÖÕâ¸ö¹¦ÄÜ£¬Çë»»ÓÃÁíÒ»¸öÎÄ¼şÂ·¾¶£¬ÒÔÃâÓë¹Ù·½°æ±¾³åÍ»
         Dim LatestPCLPath As String = PathTemp & "CE-Latest.exe"
         Dim LatestPCLTempPath As String = PathTemp & "CE-Latest.zip"
         Dim LatestInfo As UpdateAssetInfo = GetChannelInfo("sr")
         If File.Exists(LatestPCLPath) AndAlso GetFileSHA256(LatestPCLPath) = LatestInfo.sha256 Then
-            Log("[System] æœ€æ–°ç‰ˆ PCL å·²å­˜åœ¨ï¼Œè·³è¿‡ä¸‹è½½")
+            Log("[System] ×îĞÂ°æ PCL ÒÑ´æÔÚ£¬Ìø¹ıÏÂÔØ")
             Exit Sub
         End If
         If GetFileSHA256(PathWithName) = LatestInfo.sha256 Then
@@ -775,9 +775,9 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
 
 #End Region
 
-#Region "è”ç½‘é€šçŸ¥"
+#Region "ÁªÍøÍ¨Öª"
 
-    Public ServerLoader As New LoaderTask(Of Integer, Integer)("PCL æœåŠ¡", AddressOf LoadOnlineInfo, Priority:=ThreadPriority.BelowNormal)
+    Public ServerLoader As New LoaderTask(Of Integer, Integer)("PCL ·şÎñ", AddressOf LoadOnlineInfo, Priority:=ThreadPriority.BelowNormal)
 
     Private Sub LoadOnlineInfo()
         Dim UpdateDesire = Setup.Get("SystemSystemUpdate")
@@ -789,7 +789,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
             Case 0
                 Dim LatestVersion = GetChannelInfo()
                 If LatestVersion.version.code > VersionCode Then
-                    UpdateStart(LatestVersion, True) 'é™é»˜æ›´æ–°
+                    UpdateStart(LatestVersion, True) '¾²Ä¬¸üĞÂ
                 End If
             Case 1
                 NoticeUserUpdate(True)
@@ -799,7 +799,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
         If AnnouncementDesire <= 1 Then
             Dim ShowedAnnounced = Setup.Get("SystemSystemAnnouncement").ToString().Split("|").ToList()
             Dim ShowAnnounce = RemoteAnnounceData.content.Where(Function(x) Not ShowedAnnounced.Contains(x.id)).ToList()
-            Log("[System] éœ€è¦å±•ç¤ºçš„å…¬å‘Šæ•°é‡ï¼š" + ShowAnnounce.Count.ToString())
+            Log("[System] ĞèÒªÕ¹Ê¾µÄ¹«¸æÊıÁ¿£º" + ShowAnnounce.Count.ToString())
             RunInNewThread(Sub()
                                For Each item In ShowAnnounce
                                    Dim SelectedBtn = MyMsgBox(
@@ -807,7 +807,7 @@ PCL-Community åŠå…¶æˆå‘˜ä¸é¾™è…¾çŒ«è·ƒæ— ä»å±å…³ç³»ï¼Œä¸”å‡ä¸ä¼šä¸ºæ‚¨çš„
                                    item.title,
                                    If(item.btn1 Is Nothing, "", item.btn1.text),
                                    If(item.btn2 Is Nothing, "", item.btn2.text),
-                                   "å…³é—­",
+                                   "¹Ø±Õ",
                                    Button1Action:=Sub()
                                                       TryStartEvent(item.btn1.command, item.btn1.command_paramter)
                                                   End Sub,

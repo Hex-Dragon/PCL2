@@ -233,7 +233,7 @@ NextInner:
         RunInUiWait(Sub() CheckResult = IsProfileVaild())
         If SelectedProfile Is Nothing Then '没选档案
             CheckResult = "请先选择一个档案再启动游戏！"
-        ElseIf Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 1 Then '要求正版验证
+        ElseIf McVersionCurrent.Version.HasLabyMod OrElse Setup.Get("VersionServerLoginRequire", McVersionCurrent) = 1 Then '要求正版验证
             If Not SelectedProfile.Type = McLoginType.Ms Then
                 CheckResult = "当前实例要求使用正版验证，请使用正版验证档案启动游戏！"
             End If

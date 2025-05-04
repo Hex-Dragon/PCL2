@@ -2873,7 +2873,7 @@ LabyModSkip:
 #Region "处理 JSON 文件"
         '获取 minecraftArguments
         Dim AllArguments As String =
-            If(MinecraftJson("minecraftArguments"), " ").ToString & " " &
+            If(MinecraftJson IsNot Nothing, If(MinecraftJson("minecraftArguments"), " ").ToString, " ").ToString & " " &
             If(LabyModJson IsNot Nothing, If(LabyModJson("minecraftArguments"), " ").ToString, " ") & " " &
             If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
             If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &

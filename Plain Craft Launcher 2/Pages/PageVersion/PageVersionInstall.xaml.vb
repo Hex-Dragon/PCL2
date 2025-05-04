@@ -1907,6 +1907,10 @@ Public Class PageVersionInstall
                 Exit Sub
             End If
         End If
+        '删除 LabyMod Neo 文件
+        If PageVersionLeft.Version.PathIndie <> PageVersionLeft.Version.Path AndAlso PageVersionLeft.Version.Version.HasLabyMod Then
+            Directory.Delete(PageVersionLeft.Version.PathIndie & "labymod-neo", True)
+        End If
         '备份版本核心文件
         CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
         If String.IsNullOrWhiteSpace(PageVersionLeft.Version.InheritVersion) Then
