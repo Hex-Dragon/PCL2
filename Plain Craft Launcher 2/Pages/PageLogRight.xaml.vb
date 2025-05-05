@@ -28,9 +28,6 @@
         CardOperation.Visibility = Visibility.Visible
         BtnOperationKill.IsEnabled = Not FrmLogLeft.CurrentLog.GameProcess.HasExited
         BtnOperationExportStackDump.IsEnabled = (Not FrmLogLeft.CurrentLog.GameProcess.HasExited) And Not String.IsNullOrWhiteSpace(FrmLogLeft.CurrentLog.JStackPath)
-        If (String.IsNullOrWhiteSpace(FrmLogLeft.CurrentLog.JStackPath)) Then
-            BtnOperationExportStackDump.Text = "游戏 Java 不支持"
-        End If
         '绑定日志输出
         PanLog.Document = FrmLogLeft.FlowDocuments(FrmLogLeft.CurrentUuid)
         '绑定事件
