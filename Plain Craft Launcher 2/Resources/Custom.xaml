@@ -137,6 +137,21 @@
     </StackPanel>
 </local:MyCard>
 
+<local:MyCard Title="在单个按钮中执行多个事件" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="25,40,23,15">
+        <TextBlock Margin="0,4,0,6"
+                    Text="通过按钮的 CustomEvents 属性来指定多个事件，它们将挨个运行" />
+        <local:MyButton Margin="0,5,0,6" Width="400" Height="35"
+                    Text="打开 Minecraft Wiki，显示一个弹窗，然后打开知乎">
+            <local:MyButton.CustomEvents>
+                <local:CustomEvent EventType="打开网页" EventData="https://zh.minecraft.wiki/" />
+                <local:CustomEvent EventType="弹出窗口" EventData="刚刚打开了 Wiki|该弹窗关闭后将打开知乎" />
+                <local:CustomEvent EventType="打开网页" EventData="https://www.zhihu.com/" />
+            </local:MyButton.CustomEvents>
+        </local:MyButton>
+    </StackPanel>
+</local:MyCard>
+
 <local:MyCard Title="StackPanel 横向布局" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
     <StackPanel Margin="25,40,23,15">
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"

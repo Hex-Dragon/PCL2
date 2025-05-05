@@ -79,7 +79,7 @@ Public Class MyHint
         IsMouseDown = False
         Log("[Control] 按下提示条" & If(String.IsNullOrEmpty(Name), "", "：" & Name))
         e.Handled = True
-        ModEvent.TryStartEvent(EventType, EventData)
+        ModEvent.ProcessCustomEvents(EventType, EventData, _CustomEvents)
     End Sub
     Private Sub MyHint_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
         IsMouseDown = True
@@ -105,6 +105,18 @@ Public Class MyHint
         End Set
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyHint), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            If _CustomEvents Is Nothing Then
+                _CustomEvents = New CustomEventCollection
+            End If
+            Return _CustomEvents
+        End Get
+        Set(value As CustomEventCollection)
+            _CustomEvents = value
+        End Set
+    End Property
+    Private _CustomEvents As CustomEventCollection = Nothing
 
 End Class
 Partial Public Module ModAnimation
