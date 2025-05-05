@@ -109,13 +109,16 @@
         Public Version As McVersion
         Private WindowTitle As String = ""
         Private PID As Integer
+        Public JStackPath As String
         Public Loader As LoaderTask(Of Process, Integer)
-        Public Sub New(Loader As LoaderTask(Of Process, Integer), Version As McVersion, WindowTitle As String, Optional OutputRealTime As Boolean = False)
+        Public Sub New(Loader As LoaderTask(Of Process, Integer), Version As McVersion, WindowTitle As String, JStackPath As String, Optional OutputRealTime As Boolean = False)
             Me.Loader = Loader
             Me.Version = Version
             Me.WindowTitle = WindowTitle
             Me.RealTime = OutputRealTime
             Me.PID = Loader.Input.Id
+            Me.JStackPath = JStackPath
+
             WatcherLog("开始 Minecraft 日志监控")
             If Me.WindowTitle <> "" Then WatcherLog("要求窗口标题：" & WindowTitle)
 
@@ -485,6 +488,16 @@
                 Log(ex, "强制结束 Minecraft 进程失败", LogLevel.Hint)
             End Try
         End Sub
+
+        '导出运行栈
+        Public Function ExportStackDump(SavePath As String) As List(Of String)
+            Dim Dump As New List(Of String)
+            For i = 1 To 3
+                Dump.Add(ShellAndGetOutput(JStackPath, "-l -e " & GameProcess.Id))
+                Thread.Sleep(3000)
+            Next
+            Return Dump
+        End Function
     End Class
 
 End Module
