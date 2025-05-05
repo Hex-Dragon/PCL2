@@ -28,6 +28,9 @@
         CardOperation.Visibility = Visibility.Visible
         BtnOperationKill.IsEnabled = Not FrmLogLeft.CurrentLog.GameProcess.HasExited
         BtnOperationExportStackDump.IsEnabled = (Not FrmLogLeft.CurrentLog.GameProcess.HasExited) And Not String.IsNullOrWhiteSpace(FrmLogLeft.CurrentLog.JStackPath)
+        If (String.IsNullOrWhiteSpace(FrmLogLeft.CurrentLog.JStackPath)) Then
+            BtnOperationExportStackDump.Text = "游戏 Java 不支持"
+        End If
         '绑定日志输出
         PanLog.Document = FrmLogLeft.FlowDocuments(FrmLogLeft.CurrentUuid)
         '绑定事件
@@ -53,10 +56,6 @@
     Public LabFatal As Run = Nothing
 
     Private Sub PageLogRight_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        If (String.IsNullOrWhiteSpace(FrmLogLeft.CurrentLog.JStackPath)) Then
-            BtnOperationExportStackDump.Text = "游戏 Java 不支持"
-        End If
-
         Refresh()
     End Sub
     Private Sub OnLogOutput(sender As Watcher, e As LogOutputEventArgs)
