@@ -89,7 +89,7 @@
             Catch
                 Setup.Reset("UiCustomPreset")
             End Try
-            CType(FindName("RadioCustomType" & Setup.Load("UiCustomType")), MyRadioBox).Checked = True
+            CType(FindName("RadioCustomType" & Setup.Load("UiCustomType",ForceReload:=True)), MyRadioBox).Checked = True
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 
             '功能隐藏
