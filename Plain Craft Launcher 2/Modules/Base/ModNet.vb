@@ -596,6 +596,10 @@ RequestFinished:
         ''' </summary>
         Public Thread As Thread
         ''' <summary>
+        ''' 允许的最大重定向次数，默认为 20 次。
+        ''' </summary>
+        Public AllowMaxRedirect As Integer = 20
+        ''' <summary>
         ''' 链表中的下一个线程。
         ''' </summary>
         Public NextThread As NetThread
@@ -1057,6 +1061,9 @@ StartThread:
             If ModeDebug OrElse Info.DownloadStart = 0 Then Log("[Download] " & LocalName & " " & Info.Uuid & "#：开始，起始点 " & Info.DownloadStart & "，" & Info.Source.Url)
             Dim HttpRequest As HttpWebRequest
             Dim ResultStream As Stream = Nothing
+            '计算重定向次数
+            Dim Redirect As Integer = 0
+            Dim RedirectHistory As New SafeList(Of String)
             '部分下载源真的特别慢，并且只需要一个请求，例如 Ping 为 20s，如果增长太慢，就会造成类似 2.5s 5s 7.5s 10s 12.5s... 的极大延迟
             '延迟过长会导致某些特别慢的链接迟迟不被掐死
             Dim Timeout As Integer = Math.Min(Math.Max(ConnectAverage, 6000) * (1 + Info.Source.FailCount), 30000)
@@ -1064,8 +1071,12 @@ StartThread:
             Try
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
+                '使用变量记录 Url 以方便重定向
+                Dim RequestUrl As String = Info.Source.Url
                 '请求头
-                HttpRequest = WebRequest.Create(Info.Source.Url)
+Redirect:
+                HttpRequest = WebRequest.Create(RequestUrl)
+                HttpRequest.AllowAutoRedirect = False
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
                 'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
                 HttpRequest.Timeout = Timeout
@@ -1074,9 +1085,6 @@ StartThread:
                 Dim ContentLength As Long = 0
                 Using HttpResponse As HttpWebResponse = HttpRequest.GetResponse()
                     If State = NetState.Error Then GoTo SourceBreak '快速中断
-                    If ModeDebug AndAlso HttpResponse.ResponseUri.OriginalString <> Info.Source.Url Then
-                        Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {HttpResponse.ResponseUri.OriginalString}")
-                    End If
                     ''从响应头获取文件名
                     'If Info.IsFirstThread Then
                     '    Dim FileName As String = GetFileNameFromResponse(HttpResponse)
@@ -1086,6 +1094,27 @@ StartThread:
                     '        Log($"[Download] {LocalName} {Info.Uuid}#：从响应头获取到文件名")
                     '    End If
                     'End If
+                    '重定向处理
+                    If 300 <= HttpResponse.StatusCode AndAlso HttpResponse.StatusCode <= 399 Then
+                        '避免循环重定向浪费资源
+                        If Redirect > Info.AllowMaxRedirect Then Throw New Exception($"{Info.Source.Url} 重定向的次数过多。")
+                        Dim RedirectUrl As String = HttpResponse.GetResponseHeader("location")
+                        
+                        If RedirectUrl Is Nothing Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
+                        '处理相对路径的重定向
+                        If RedirectUrl.StartsWithF("/") OrElse RedirectUrl.StartsWithF("./") Then
+                            Dim ParseUrl As New Uri(RequestUrl)
+                            RedirectUrl = New Uri(New Uri(If(RedirectUrl.StartsWithF("/"), $"{ParseUrl.Scheme}://{ParseUrl.Host}", RequestUrl)), RedirectUrl).AbsoluteUri
+                        '可能导致循环重定向
+                        If RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
+                        End If
+                        '把主控也记录进去
+                        If RequestUrl.ContainsF("bmclapi2.bangbang93.com") Then RedirectHistory.Add(RequestUrl)
+                        RedirectHistory.Add(RedirectUrl)
+                        RequestUrl = RedirectUrl
+                        Redirect += 1
+                        GoTo Redirect
+                    End If 
                     '文件大小校验
                     ContentLength = HttpResponse.ContentLength
                     If ContentLength = -1 Then
@@ -1250,6 +1279,7 @@ SourceBreak:
                 Dim IsTimeout As Boolean = IsTimeoutString.Contains("由于连接方在一段时间后没有正确答复或连接的主机没有反应") OrElse
                                            IsTimeoutString.Contains("超时") OrElse IsTimeoutString.Contains("timeout") OrElse IsTimeoutString.Contains("timedout")
                 Log("[Download] " & LocalName & " " & Info.Uuid & If(IsTimeout, "#：超时（" & (Timeout * 0.001) & "s）", "#：出错，" & GetExceptionDetail(ex)))
+                If RedirectHistory.Count > 0 Then Log($"[Download] 重定向记录：{Join(RedirectHistory, " → ")}")
                 Info.State = NetState.Error
                 ''使用该下载源的线程是否没有速度
                 ''下载超时也会导致没有速度，容易误判下载失败，所以已弃用此方法
