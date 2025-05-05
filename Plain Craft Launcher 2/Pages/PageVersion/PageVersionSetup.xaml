@@ -22,6 +22,8 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
@@ -35,8 +37,9 @@
                         </local:MyComboBox>
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="游戏窗口标题" Margin="0,0,25,0" />
                         <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="2" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" ToolTip="自定义游戏窗口的标题，若留空则跟随全局设置的值。&#xa;支持以下替换标记：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登录方式&#xa; · {name}：游戏版本名&#xa; · {date}、{time}：当前的系统时间&#xa; · {version}：游戏对应的原版版本号" HintText="跟随全局设置" MaxLength="100" />
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="自定义信息" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="4" Grid.ColumnSpan="2" Tag="VersionArgumentInfo" Grid.Column="1" HintText="跟随全局设置" ToolTip="该信息会显示在游戏主界面的左下角，与 F3 调试页面的左上角。&#xa;若留空，则跟随全局设置的值。">
+                        <local:MyCheckBox x:Name="CheckArgumentTitleEmpty" Margin="0,0,0,9" Grid.Row="4" Grid.ColumnSpan="3" Text="默认窗口标题" Tag="VersionArgumentTitleEmpty" Grid.Column="0" ToolTip="游戏窗口标题是否保留默认。" />
+                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="自定义信息" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="6" Grid.ColumnSpan="2" Tag="VersionArgumentInfo" Grid.Column="1" HintText="跟随全局设置" ToolTip="该信息会显示在游戏主界面的左下角，与 F3 调试页面的左上角。&#xa;若留空，则跟随全局设置的值。">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateExcept>
                                     <local:ValidateExcept.Excepts>
@@ -47,8 +50,8 @@
                                 </local:ValidateExcept>
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" MaxDropDownHeight="240"
+                        <TextBlock VerticalAlignment="Center" Grid.Row="8" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="8" Grid.Column="1" MaxDropDownHeight="240"
                                           ToolTip="若将 Java 放在游戏文件夹或 PCL 文件夹，在进行自动选择时 PCL 会尽量优先选择它">
                             <ComboBoxItem Content="加载中……" IsSelected="True" />
                             <!--<local:MyComboBoxItem Content="Java 8 (1.8.0_171)，64 位：C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" IsSelected="True" ToolTip="C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" />-->

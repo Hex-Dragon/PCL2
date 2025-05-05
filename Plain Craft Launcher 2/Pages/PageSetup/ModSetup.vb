@@ -177,6 +177,7 @@ Public Class ModSetup
         {"VersionRamCustom", New SetupEntry(15, Source:=SetupSource.Version)},
         {"VersionRamOptimize", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionArgumentTitle", New SetupEntry("", Source:=SetupSource.Version)},
+        {"VersionArgumentTitleEmpty", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionArgumentInfo", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionArgumentIndie", New SetupEntry(-1, Source:=SetupSource.Version)},
         {"VersionArgumentIndieV2", New SetupEntry(False, Source:=SetupSource.Version)},

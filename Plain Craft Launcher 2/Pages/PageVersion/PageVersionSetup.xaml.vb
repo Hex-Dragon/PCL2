@@ -28,9 +28,12 @@
 
             '启动参数
             TextArgumentTitle.Text = Setup.Get("VersionArgumentTitle", Version:=PageVersionLeft.Version)
+            CheckArgumentTitleEmpty.Checked = Setup.Get("VersionArgumentTitleEmpty", Version:=PageVersionLeft.Version)
             TextArgumentInfo.Text = Setup.Get("VersionArgumentInfo", Version:=PageVersionLeft.Version)
             Dim _unused = PageVersionLeft.Version.PathIndie '触发自动判定
             ComboArgumentIndieV2.SelectedIndex = If(Setup.Get("VersionArgumentIndieV2", Version:=PageVersionLeft.Version), 0, 1)
+            CheckArgumentTitleEmpty.Visibility = If(TextArgumentTitle.Text.Length > 0, Visibility.Collapsed, Visibility.Visible)
+            TextArgumentTitle.HintText = If(CheckArgumentTitleEmpty.Checked, "默认", "跟随全局设置")
             RefreshJavaComboBox()
 
             '游戏内存
@@ -133,7 +136,7 @@
     Private Shared Sub CheckBoxLikeComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex = 0, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJLW.Change, CheckAdvanceUseProxyV2.Change, CheckAdvanceDisableRW.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckArgumentTitleEmpty.Change, CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJLW.Change, CheckAdvanceUseProxyV2.Change, CheckAdvanceDisableRW.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 
@@ -568,6 +571,14 @@ PreFin:
             ComboArgumentIndieV2.SelectedItem = e.RemovedItems(0)
             IsReverting = False
         End If
+    End Sub
+
+    '游戏窗口
+    Private Sub CheckArgumentTitleEmpty_Change(sender As MyCheckBox, e As Object) Handles CheckArgumentTitleEmpty.Change
+        TextArgumentTitle.HintText = If(CheckArgumentTitleEmpty.Checked, "默认", "跟随全局设置")
+    End Sub
+    Private Sub TextArgumentTitle_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextArgumentTitle.TextChanged
+        CheckArgumentTitleEmpty.Visibility = If(TextArgumentTitle.Text.Length > 0, Visibility.Collapsed, Visibility.Visible)
     End Sub
 
 #End Region
