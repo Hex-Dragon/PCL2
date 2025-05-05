@@ -145,7 +145,7 @@
   <data name="Transformer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\transformer.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="maslruntime" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\maslruntime.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="msalruntime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\msalruntime.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

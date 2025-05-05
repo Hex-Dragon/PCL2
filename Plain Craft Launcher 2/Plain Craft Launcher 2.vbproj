@@ -1167,7 +1167,7 @@
     <Resource Include="Images\Heads\Pysio.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\maslruntime.dll" />
+    <Content Include="Resources\msalruntime.dll" />
     <Content Include="Resources\msalruntime_arm64.dll" />
     <Content Include="Resources\linkd.exe" />
   </ItemGroup>
