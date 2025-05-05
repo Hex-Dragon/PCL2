@@ -343,7 +343,7 @@ Retry:
         Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
-        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.TaskList))
         Return Loader
     End Function
 
@@ -487,7 +487,7 @@ Retry:
         Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
-        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.TaskList))
         Return Loader
     End Function
 
@@ -541,7 +541,7 @@ Retry:
         Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
-        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.TaskList))
         Return Loader
     End Function
 
@@ -668,7 +668,7 @@ Retry:
         Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
-        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.TaskList))
         Return Loader
     End Function
 
@@ -741,7 +741,7 @@ Retry:
         Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
-        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+        RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.TaskList))
         Return Loader
     End Function
 
