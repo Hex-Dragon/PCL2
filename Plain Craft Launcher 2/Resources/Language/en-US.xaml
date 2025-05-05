@@ -465,7 +465,7 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallBack">Back</s:String>
     <s:String x:Key="LangDownloadInstallGettingList">Loading Version List...</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft tile to return!</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">You Can Click to Select</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">Click to Select</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
     <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">Only Compatible Specific Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
@@ -479,9 +479,9 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Automatic installation unavailable</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled version isolation, which may result in multiple MC versions sharing the same Mod folder.
-Therefore, when switching between MC versions, MC games may crash due to reading mods that do not match the current version.
-PCL recommends that you enable version isolation in Settings → Startup Options → Version Isolation before starting the download!</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">"Instance Isolation" has not been enabled yet, which will let multiple instances share the same mods folder.
+Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
+PCL recommends to turn on the "Instance Isolation" option in "Settings → Instance Isolation" before the installation!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
