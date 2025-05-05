@@ -1,4 +1,6 @@
-﻿Public Module ModNet
+﻿Imports System.Net.Http
+Imports System.Threading.Tasks
+Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
@@ -91,30 +93,28 @@ Retry:
         End Try
     End Function
     Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Timeout As Integer, Accept As String, Optional UseBrowserUserAgent As Boolean = False) As String
-        Url = SecretCdnSign(Url)
-        Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
-        Dim Request As CookieWebClient
-        Dim res As HttpWebResponse = Nothing
-        Dim HttpStream As Stream = Nothing
         Try
-            Request = New CookieWebClient With {
-                .Encoding = Encoding,
-                .Timeout = Timeout
-            }
-            Request.Headers("Accept") = Accept
-            Request.Headers("Accept-Language") = "en-US,en;q=0.5"
-            Request.Headers("X-Requested-With") = "XMLHttpRequest"
-            SecretHeadersSign(Url, Request, UseBrowserUserAgent)
-            Return Request.DownloadString(Url)
+            Url = SecretCdnSign(Url)
+            Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
+            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
+                Using request As New HttpRequestMessage(HttpMethod.Get, Url)
+                    SecretHeadersSign(Url, request, UseBrowserUserAgent)
+                    request.Headers.Accept.ParseAdd(Accept)
+                    request.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.5")
+                    request.Headers.Add("X-Requested-With", "XMLHttpRequest")
+
+                    Using response = client.SendAsync(request).Result
+                        response.EnsureSuccessStatusCode()
+                        Return Encoding.GetString(response.Content.ReadAsByteArrayAsync().Result)
+                    End Using
+                End Using
+            End Using
         Catch ex As Exception
             If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
                 Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
             Else
                 Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
             End If
-        Finally
-            If Not IsNothing(HttpStream) Then HttpStream.Dispose()
-            If Not IsNothing(res) Then res.Dispose()
         End Try
     End Function
 
@@ -280,28 +280,35 @@ RequestFinished:
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
-    Public Sub NetDownloadByClient(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
+    Public Async Function NetDownloadByClient(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False) As Task
         Log("[Net] 直接下载文件：" & Url)
-        '初始化
         Try
-            '建立目录
             Directory.CreateDirectory(GetPathFromFullPath(LocalFile))
-            '尝试删除原文件
-            File.Delete(LocalFile)
+            If File.Exists(LocalFile) Then File.Delete(LocalFile)
+
+            Using client As New HttpClient()
+                Using request As New HttpRequestMessage(HttpMethod.Get, Url)
+                    SecretHeadersSign(Url, request, UseBrowserUserAgent)
+                    Using response As HttpResponseMessage = Await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                        response.EnsureSuccessStatusCode()
+
+                        Using httpStream As Stream = Await response.Content.ReadAsStreamAsync()
+                            Using fileStream As New FileStream(LocalFile, FileMode.Create)
+                                Await httpStream.CopyToAsync(fileStream)
+                            End Using
+                        End Using
+                    End Using
+                End Using
+            End Using
+        Catch ex As TaskCanceledException When ex.InnerException Is Nothing
+            Throw New TimeoutException($"下载超时（{Url}）", ex)
+        Catch ex As HttpRequestException
+            Throw New WebException($"下载失败：{ex.Message}（{Url}）", ex)
         Catch ex As Exception
-            Throw New WebException($"预处理下载文件路径失败（{LocalFile}）", ex)
+            If File.Exists(LocalFile) Then File.Delete(LocalFile)
+            Throw New WebException($"下载失败：{ex.Message}（{Url}）", ex)
         End Try
-        '下载
-        Using Client As New WebClient
-            Try
-                SecretHeadersSign(Url, Client, UseBrowserUserAgent)
-                Client.DownloadFile(Url, LocalFile)
-            Catch ex As Exception
-                File.Delete(LocalFile)
-                Throw New WebException($"直接下载文件失败（{Url}）", ex)
-            End Try
-        End Using
-    End Sub
+    End Function
 
     ''' <summary>
     ''' 简单的多线程下载文件。可以下载 CDN 中的文件。
