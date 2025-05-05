@@ -692,7 +692,7 @@ Retry:
             Dim OldMsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
             ProfileLog($"找到 {OldMsJson.Count} 个旧版正版档案信息")
             For Each Profile In OldMsJson
-                Dim NewProfile As New McProfile With {.Username = Profile.Key}
+                Dim NewProfile As New McProfile With {.Username = Profile.Key, .Type = McLoginType.Ms}
                 ProfileList.Add(NewProfile)
                 ProfileCount += 1
             Next
@@ -707,7 +707,7 @@ Retry:
             Dim OldOfflineInfo As String() = Setup.Get("LoginLegacyName").Split("¨")
             ProfileLog($"找到 {OldOfflineInfo.Count} 个旧版离线档案信息")
             For Each OfflineId In OldOfflineInfo
-                Dim NewProfile As New McProfile With {.Username = OfflineId, .Uuid = GetOfflineUuid(OfflineId, IsLegacy:=True)} '迁移的档案默认使用旧版 UUID 生成方式以避免存档丢失
+                Dim NewProfile As New McProfile With {.Username = OfflineId, .Uuid = GetOfflineUuid(OfflineId, IsLegacy:=True), .Type = McLoginType.Legacy} '迁移的档案默认使用旧版 UUID 生成方式以避免存档丢失
                 ProfileList.Add(NewProfile)
                 ProfileCount += 1
             Next
@@ -721,7 +721,7 @@ Retry:
         If Not (String.IsNullOrWhiteSpace(Setup.Get("CacheAuthName")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUuid")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthServerServer")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthUsername")) OrElse String.IsNullOrWhiteSpace(Setup.Get("CacheAuthPass"))) Then
             ProfileLog($"找到旧版第三方验证档案信息")
             Dim NewProfile As New McProfile With {.Username = Setup.Get("CacheAuthName"), .Uuid = Setup.Get("CacheAuthUuid"),
-                    .Name = Setup.Get("CacheAuthUsername"), .Password = Setup.Get("CacheAuthPass"), .Server = Setup.Get("CacheAuthServerServer") & "/authserver"}
+                    .Name = Setup.Get("CacheAuthUsername"), .Password = Setup.Get("CacheAuthPass"), .Server = Setup.Get("CacheAuthServerServer") & "/authserver", .Type = McLoginType.Auth}
             ProfileList.Add(NewProfile)
             SaveProfile()
             ProfileLog("旧版第三方验证档案迁移完成")
