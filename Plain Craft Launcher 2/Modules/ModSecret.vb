@@ -557,7 +557,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public RemoteAnnounceData As AnnouncementInfo = Nothing
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
-    Public RemoteServerBaseurl As New Dictionary(Of Integer, String) From {}
+    Public RemoteServerBaseurl As New Dictionary(Of Integer, String) 'REPLACE_URL
 
     Public Sub UpdateCheckByButton()
         If IsUpdateStarted Then
