@@ -655,31 +655,36 @@ Install:
     Private ReadOnly SortLock As New Object
     Private Sub DoSort()
         SyncLock SortLock
-            If PanList Is Nothing OrElse PanList.Children.Count < 2 Then Exit Sub
+            Try
+                If PanList Is Nothing OrElse PanList.Children.Count < 2 Then Exit Sub
 
-            ' 将子元素转换为可排序的列表
-            Dim items = PanList.Children.OfType(Of MyLocalCompItem)().ToList()
-            Dim Method = GetSortMethod(CurrentSortMethod)
+                ' 将子元素转换为可排序的列表
+                Dim items = PanList.Children.OfType(Of MyLocalCompItem)().ToList()
+                Dim Method = GetSortMethod(CurrentSortMethod)
 
-            ' 根据排序类型处理特殊逻辑
-            If CurrentSortMethod = SortMethod.TagNums Then
-                ' 分离有效和无效项（保持原始相对顺序）
-                Dim valid = items.Where(Function(i) i.Entry.Comp IsNot Nothing).ToList()
-                Dim invalid = items.Except(valid).ToList()
+                ' 根据排序类型处理特殊逻辑
+                If CurrentSortMethod = SortMethod.TagNums Then
+                    ' 分离有效和无效项（保持原始相对顺序）
+                    Dim valid = items.Where(Function(i) i.Entry.Comp IsNot Nothing).ToList()
+                    Dim invalid = items.Except(valid).ToList()
 
-                ' 仅对有效项进行排序
-                valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
+                    ' 仅对有效项进行排序
+                    valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
 
-                ' 合并保持无效项的原始顺序
-                items = valid.Concat(invalid).ToList()
-            Else
-                ' 直接进行高效排序
-                items.Sort(Function(x, y) Method(y.Entry, x.Entry))
-            End If
+                    ' 合并保持无效项的原始顺序
+                    items = valid.Concat(invalid).ToList()
+                Else
+                    ' 直接进行高效排序
+                    items.Sort(Function(x, y) Method(y.Entry, x.Entry))
+                End If
 
-            ' 批量更新UI元素
-            PanList.Children.Clear()
-            items.ForEach(Sub(i) PanList.Children.Add(i))
+                ' 批量更新UI元素
+                PanList.Children.Clear()
+                items.ForEach(Sub(i) PanList.Children.Add(i))
+
+            Catch ex As Exception
+                Log(ex, "执行排序时出错", LogLevel.Hint)
+            End Try
         End SyncLock
     End Sub
 
