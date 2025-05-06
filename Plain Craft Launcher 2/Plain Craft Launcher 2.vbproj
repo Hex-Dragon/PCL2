@@ -1035,6 +1035,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Help.zip" />
+    <None Include="Resources\msalruntime.zip" />
     <None Include="Resources\transformer.jar" />
   </ItemGroup>
   <ItemGroup>
@@ -1167,8 +1168,6 @@
     <Resource Include="Images\Heads\Pysio.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\msalruntime.dll" />
-    <Content Include="Resources\msalruntime_arm64.dll" />
     <Content Include="Resources\linkd.exe" />
   </ItemGroup>
   <ItemGroup />

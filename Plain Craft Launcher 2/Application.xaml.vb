@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Reflection
 Imports System.Windows.Threading
+Imports System.IO.Compression
 
 Public Class Application
 
@@ -142,7 +143,12 @@ WaitRetry:
             Directory.CreateDirectory(PathPure & "CE")
             SetDllDirectory(PathPure & "CE")
             WriteFile(PathPure & "CE\" & "libwebp.dll", GetResources("libwebp64"))
-            WriteFile(PathPure & "CE\" & "msalruntime.dll", GetResources("msalruntime"))
+            WriteFile(PathPure & "CE\" & "msalruntime.zip", GetResources("msalruntime"))
+            Using fs = New FileStream(PathPure & "CE\" & "msalruntime.zip", FileMode.Open)
+                Using fszip = New ZipArchive(fs)
+                    fszip.ExtractToDirectory(Path)
+                End Using
+            End Using
             '网络配置初始化
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
