@@ -557,7 +557,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public RemoteAnnounceData As AnnouncementInfo = Nothing
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
-    Public RemoteServerBaseurl As New Dictionary(Of Integer, String) 'REPLACE_URL
+    Public RemoteServerBaseurl As New Dictionary(Of Integer, String) From {{1, "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/"}, {0, "https://s3.pysio.online/pcl2-ce/"}}
 
     Public Sub UpdateCheckByButton()
         If IsUpdateStarted Then
@@ -578,13 +578,13 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Private Sub RefreshUpdatesCache()
         Try
             Dim UpdCaches As JObject = Nothing
-            If RemoteServerBaseurl.Count <> 0 Then UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json"), IsJson:=True)
+            UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json"), IsJson:=True)
             Dim UpdatesCacheFile = PathTemp & "Cache/updates.json"
             Dim AnnouncementCacheFile = PathTemp & "Cache/announcement.json"
-            If RemoteServerBaseurl.Count <> 0 AndAlso GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
+            If GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
                 WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/updates.json")))
             End If
-            If RemoteServerBaseurl.Count <> 0 AndAlso GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
+            If GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
                 WriteFile(AnnouncementCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/announcement.json")))
             End If
             RemoteVersionData = CType(GetJson(ReadFile(UpdatesCacheFile)), JObject).ToObject(Of UpdateInfo)()
