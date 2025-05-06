@@ -662,21 +662,13 @@ Install:
                 Dim items = PanList.Children.OfType(Of MyLocalCompItem)().ToList()
                 Dim Method = GetSortMethod(CurrentSortMethod)
 
-                ' 根据排序类型处理特殊逻辑
-                If CurrentSortMethod = SortMethod.TagNums Then
-                    ' 分离有效和无效项（保持原始相对顺序）
-                    Dim valid = items.Where(Function(i) i.Entry.Comp IsNot Nothing).ToList()
-                    Dim invalid = items.Except(valid).ToList()
-
-                    ' 仅对有效项进行排序
-                    valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
-
-                    ' 合并保持无效项的原始顺序
-                    items = valid.Concat(invalid).ToList()
-                Else
-                    ' 直接进行高效排序
-                    items.Sort(Function(x, y) Method(y.Entry, x.Entry))
-                End If
+                ' 分离有效和无效项（保持原始相对顺序）
+                Dim invalid = items.Where(Function(i) i.Entry Is Nothing OrElse (CurrentSortMethod = SortMethod.TagNums AndAlso i.Entry.Comp Is Nothing)).ToList()
+                Dim valid = items.Except(invalid).ToList()
+                ' 仅对有效项进行排序
+                valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
+                ' 合并保持无效项的原始顺序
+                items = valid.Concat(invalid).ToList()
 
                 ' 批量更新UI元素
                 PanList.Children.Clear()
