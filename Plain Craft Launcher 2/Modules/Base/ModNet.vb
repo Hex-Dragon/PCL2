@@ -102,7 +102,6 @@ Retry:
                     request.Headers.Accept.ParseAdd(Accept)
                     request.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.5")
                     request.Headers.Add("X-Requested-With", "XMLHttpRequest")
-
                     Using response = client.SendAsync(request).Result
                         response.EnsureSuccessStatusCode()
                         Return Encoding.GetString(response.Content.ReadAsByteArrayAsync().Result)
@@ -212,35 +211,27 @@ RequestFinished:
     End Function
     Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
-        Url = SecretCdnSign(Url)
-        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
-        Dim Request As HttpWebRequest = WebRequest.Create(Url)
-        Dim Result As New List(Of Byte)
         Try
-            If Url.StartsWithF("https", True) Then Request.ProtocolVersion = HttpVersion.Version11
-            Request.Timeout = Timeout
-            Request.Accept = Accept
-            SecretHeadersSign(Url, Request, UseBrowserUserAgent)
-            Using res As HttpWebResponse = Request.GetResponse()
-                Using HttpStream As Stream = res.GetResponseStream()
-                    HttpStream.ReadTimeout = Timeout
-                    Dim HttpData As Byte() = New Byte(16384) {}
-                    Using Reader As New StreamReader(HttpStream, If(Encode, Encoding.UTF8))
-                        Dim ResultString As String = Reader.ReadToEnd
-                        Return If(IsJson, GetJson(ResultString), ResultString)
+            Url = SecretCdnSign(Url)
+            Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
+            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
+                Using request As New HttpRequestMessage(HttpMethod.Get, Url)
+                    request.Headers.Accept.ParseAdd(Accept)
+                    SecretHeadersSign(Url, request, UseBrowserUserAgent)
+                    Using response = client.SendAsync(request).Result
+                        response.EnsureSuccessStatusCode()
+                        If Encode Is Nothing Then Encode = Encoding.UTF8
+                        Dim ret = Encode.GetString(response.Content.ReadAsByteArrayAsync().Result)
+                        Return If(IsJson, GetJson(ret), ret)
                     End Using
                 End Using
             End Using
-        Catch ex As ThreadInterruptedException
-            Throw
         Catch ex As Exception
-            If TypeOf ex Is WebException AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException($"获取结果失败（{CType(ex, WebException).Status}，{ex.Message}，{Url}）", ex)
+            If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
+                Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
             Else
-                Throw New WebException($"获取结果失败（{If(TypeOf ex Is WebException, CType(ex, WebException).Status & "，", "")}{ex.Message}，{Url}）", ex)
+                Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
             End If
-        Finally
-            Request.Abort()
         End Try
     End Function
 

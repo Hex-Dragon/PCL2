@@ -198,7 +198,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 )
             ))
 
-        Client.Headers.Add("Referrer", "http://" & VersionCode & ".ce.open.pcl2.server/")
+        Client.Headers.Add("Referer", "http://" & VersionCode & ".ce.open.pcl2.server/")
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
