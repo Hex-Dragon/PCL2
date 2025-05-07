@@ -181,6 +181,9 @@ EndHint:
         ''' 登录模式：登录步骤 1 中返回的 JSON。
         ''' </summary>
         Public Content As Object
+
+        '设置轮询 Url
+        Public AuthUrl = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
         ''' <summary>
         ''' 输入模式：输入验证规则。
         ''' </summary>
