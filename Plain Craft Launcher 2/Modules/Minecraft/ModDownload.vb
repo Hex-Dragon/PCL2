@@ -197,10 +197,17 @@
     Public DlClientListMojangLoader As New LoaderTask(Of String, DlClientListResult)("DlClientList Mojang", AddressOf DlClientListMojangMain)
     Private IsNewClientVersionHinted As Boolean = False
     Private Sub DlClientListMojangMain(Loader As LoaderTask(Of String, DlClientListResult))
+        Dim StartTime As Long = GetTimeTick()
         Dim Json As JObject = NetGetCodeByRequestRetry("https://launchermeta.mojang.com/mc/game/version_manifest.json", IsJson:=True)
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
+            '确定官方源是否可用
+            If Not DlPreferMojang Then
+                Dim DeltaTime = GetTimeTick() - StartTime
+                DlPreferMojang = DeltaTime < 4000
+                Log($"[Download] Mojang 官方源加载耗时：{DeltaTime}ms，{If(DlPreferMojang, "可优先使用官方源", "不优先使用官方源")}")
+            End If
             '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
             '返回
@@ -627,7 +634,7 @@
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
-                Throw New Exception("没有可用版本")
+                Throw New Exception("不可用")
             Else
                 Throw
             End If
@@ -685,7 +692,7 @@
         Catch ex As Exception
             Throw New Exception("Forge 官方源版本列表解析失败（" & Result & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -740,7 +747,7 @@
         Catch ex As Exception
             Throw New Exception("Forge BMCLAPI 版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -865,7 +872,7 @@
         Dim Versions = VersionNames.
             Where(Function(name) name <> "47.1.82"). '这个版本虽然在版本列表中，但不能下载
             Select(Function(name) New DlNeoForgeListEntry(name)).ToList
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
         Return Versions
     End Function
@@ -1171,18 +1178,54 @@
 
 #Region "DlSource | 镜像下载源"
 
-    Public Function DlSourceResourceGet(Original As String) As String()
-        Original = Original.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
-        Return {
-            Original.
-                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").
-                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").
-                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
-            Original
-        }
+    Private DlPreferMojang As Boolean = False
+    ''' <summary>
+    ''' 下载文件（而非获取版本列表）的时候，是否优先使用官方源。
+    ''' </summary>
+    Public ReadOnly Property DlSourcePreferMojang As Boolean
+        Get
+            Return Setup.Get("ToolDownloadSource") = 2 OrElse (Setup.Get("ToolDownloadSource") = 1 AndAlso DlPreferMojang)
+        End Get
+    End Property
+    ''' <summary>
+    ''' 下载文件（而非获取版本列表）的时候，根据是否优先使用官方源决定使用 Url 的顺序。
+    ''' </summary>
+    Public Function DlSourceOrder(OfficialUrls As IEnumerable(Of String), MirrorUrls As IEnumerable(Of String)) As IEnumerable(Of String)
+        Return If(DlSourcePreferMojang, OfficialUrls.Union(MirrorUrls), MirrorUrls.Union(OfficialUrls))
+    End Function
+    ''' <summary>
+    ''' 获取版本列表（而非下载文件）的时候，是否优先使用官方源。
+    ''' </summary>
+    Public ReadOnly Property DlVersionListPreferMojang As Boolean
+        Get
+            Return Setup.Get("ToolDownloadVersion") = 2 OrElse (Setup.Get("ToolDownloadVersion") = 1 AndAlso DlPreferMojang)
+        End Get
+    End Property
+    ''' <summary>
+    ''' 获取版本列表（而非下载文件）的时候，根据是否优先使用官方源决定使用 Url 的顺序。
+    ''' </summary>
+    Public Function DlVersionListOrder(OfficialUrls As IEnumerable(Of String), MirrorUrls As IEnumerable(Of String)) As IEnumerable(Of String)
+        Return If(DlVersionListPreferMojang, OfficialUrls.Union(MirrorUrls), MirrorUrls.Union(OfficialUrls))
     End Function
 
-    Public Function DlSourceLibraryGet(Original As String) As String()
+
+    ''' <summary>
+    ''' 下载 Assets 文件。
+    ''' </summary>
+    Public Function DlSourceAssetsGet(Original As String) As IEnumerable(Of String)
+        Original = Original.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
+        Return DlSourceOrder(
+            {Original},
+            {Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
+            })
+    End Function
+    ''' <summary>
+    ''' 下载 Libraries 文件。
+    ''' </summary>
+    Public Function DlSourceLibraryGet(Original As String) As IEnumerable(Of String)
         If {"minecraftforge", "fabricmc", "neoforged"}.Any(Function(k) Original.Contains(k)) Then '不添加原版源
             Return {
                 Original.
@@ -1195,44 +1238,41 @@
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
             }
         Else
-            Return {
-                Original.
+            Return DlSourceOrder(
+                {Original},
+                {Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                     Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-                Original.
+                 Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
-                Original
-            }
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+                })
         End If
     End Function
-
-    Public Function DlSourceModGet(Original As String) As String
-        Return Original
-        'Return Original.
-        '    Replace("api.modrinth.com", "mod.mcimirror.top/modrinth").
-        '    Replace("staging-api.modrinth.com", "mod.mcimirror.top/modrinth").
-        '    Replace("cdn.modrinth.com", "mod.mcimirror.top").
-        '    Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
-        '    Replace("edge.forgecdn.net", "mod.mcimirror.top").
-        '    Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
-        '    Replace("media.forgecdn.net", "mod.mcimirror.top")
-    End Function
-
-    Public Function DlSourceLauncherOrMetaGet(Original As String) As String()
+    ''' <summary>
+    ''' 下载 Launcher 或 Meta 文件。
+    ''' 不应使用它来获取版本列表（因为它只使用文件下载源设置来决定源顺序）。
+    ''' </summary>
+    Public Function DlSourceLauncherOrMetaGet(Original As String) As IEnumerable(Of String)
         If Original Is Nothing Then Throw New Exception("无对应的 json 下载地址")
-        Return {
-            Original.
+        Return DlSourceOrder(
+            {Original},
+            {Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
-            Original
-        }
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com")
+            })
     End Function
 
+    'Mod 下载源
+    Public Function DlSourceModGet(Original As String) As String
+        Return Original
+    End Function
+
+    'Loader 自动切换
     Private Sub DlSourceLoader(Of InputType, OutputType)(MainLoader As LoaderTask(Of InputType, OutputType),
                                                          LoaderList As List(Of KeyValuePair(Of LoaderTask(Of InputType, OutputType), Integer)),
                                                          Optional IsForceRestart As Boolean = False)
@@ -1276,7 +1316,7 @@
                     For ii = 0 To LoaderList.Count - 1
                         LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
                         If LoaderList(ii).Key.Error IsNot Nothing Then
-                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("没有可用版本") Then
+                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("不可用") Then
                                 ErrorInfo = LoaderList(ii).Key.Error
                             End If
                         End If

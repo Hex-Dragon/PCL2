@@ -380,7 +380,7 @@ Install:
     ''' 下载 Mod。
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
-        PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        PageComp.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
         FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
     End Sub
 
@@ -432,7 +432,7 @@ Install:
 #Region "筛选"
 
     Private _Filter As FilterType = FilterType.All
-    Private Property Filter As FilterType
+    Public Property Filter As FilterType
         Get
             Return _Filter
         End Get
@@ -454,7 +454,7 @@ Install:
             RefreshUI()
         End Set
     End Property
-    Private Enum FilterType As Integer
+    Public Enum FilterType As Integer
         All = 0
         Enabled = 1
         Disabled = 2
@@ -601,12 +601,20 @@ Install:
                 Dim CurrentSegs = CurrentReplaceName.Split("-"c).ToList()
                 Dim NewestSegs = NewestReplaceName.Split("-"c).ToList()
                 Dim Shortened As Boolean = False
-                For Each Seg In CurrentSegs.ToList()
-                    If Not NewestSegs.Contains(Seg) Then Continue For
-                    CurrentSegs.Remove(Seg)
-                    NewestSegs.Remove(Seg)
+                Do While True '移除前导相同部分（不能移除所有相同项，这会导致例如 1.2-forge-2 和 1.3-forge-3 中间的 forge 被去掉，导致尝试替换 1.2-2）
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.First <> NewestSegs.First Then Exit Do
+                    CurrentSegs.RemoveAt(0)
+                    NewestSegs.RemoveAt(0)
                     Shortened = True
-                Next
+                Loop
+                Do While True '移除后导相同部分
+                    If Not CurrentSegs.Any() OrElse Not NewestSegs.Any() Then Exit Do
+                    If CurrentSegs.Last <> NewestSegs.Last Then Exit Do
+                    CurrentSegs.RemoveAt(CurrentSegs.Count - 1)
+                    NewestSegs.RemoveAt(NewestSegs.Count - 1)
+                    Shortened = True
+                Loop
                 If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
                     CurrentReplaceName = Join(CurrentSegs, "-")
                     NewestReplaceName = Join(NewestSegs, "-")
@@ -800,7 +808,8 @@ Install:
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
                         If(PageVersionLeft.Version.Version.HasForge, CompModLoaderType.Forge,
                         If(PageVersionLeft.Version.Version.HasNeoForge, CompModLoaderType.NeoForge,
-                        If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any)))}})
+                        If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any))),
+                        CompType.Mod}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)

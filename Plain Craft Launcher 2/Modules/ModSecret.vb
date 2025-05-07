@@ -1,7 +1,5 @@
 ﻿'由于包含加解密等安全信息，本文件中的部分代码已被删除
 
-Imports System.Net
-Imports System.Reflection
 Imports System.Security.Cryptography
 
 Friend Module ModSecret
@@ -36,7 +34,7 @@ Friend Module ModSecret
                   "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
                   "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
                 MsgBoxStyle.Critical, "运行环境错误")
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
             MsgBox("PCL 没有对当前文件夹的写入权限，请尝试：" & vbCrLf &
@@ -44,7 +42,7 @@ Friend Module ModSecret
                   "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
                   "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
                 MsgBoxStyle.Critical, "运行环境错误")
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End If
         '开源版本提示
         MyMsgBox($"该版本中无法使用以下特性：
