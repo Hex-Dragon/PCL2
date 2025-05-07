@@ -2,6 +2,43 @@
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
+    ''' 确定是否使用代理。
+    ''' </summary>
+    ''' <returns>返回 WebProxy 或者 Nothing</returns>
+    Public Function GetProxy()
+        Dim ProxyServer As String = Setup.Get("SystemHttpProxy")
+        Dim SystemProxyServer As String = WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com/")).ToString
+        If SystemProxyServer.Equals("https://www.example.com/") Then '没有系统代理的情况下会返回原始 Uri，这导致了使用此方法获取系统代理的网络请求全部炸掉
+            Log("[Net] 检测到未设置系统代理，已忽略系统代理")
+        ElseIf Not SystemProxyServer.StartsWithF("http:") Then
+            Log("[Net] 检测到不支持的代理服务器协议，已忽略系统代理")
+        Else
+            Dim SystemProxy As New WebProxy(New Uri(SystemProxyServer))
+            If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
+                Log("[Net] 当前代理状态：跟随系统代理设置")
+                Return SystemProxy
+            End If
+        End If
+        If Not String.IsNullOrWhiteSpace(ProxyServer) Then
+            Log("[Net] 当前代理状态：自定义")
+            Dim ProxyUri As New Uri(ProxyServer)
+            Try
+                If Not ProxyUri.Scheme.ContainsF("http:") Then Return Nothing
+                If ProxyUri.IsLoopback OrElse
+                ProxyUri.Host.StartsWithF("192.168.") OrElse
+                ProxyUri.Host.StartsWithF("10.") OrElse
+                ProxyUri.Host.StartsWithF("fe80") OrElse
+                (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {ProxyUri} 作为网络代理")
+                '视作非本地地址
+            Catch
+            End Try
+            Return New WebProxy(ProxyServer, True)
+        End If
+        Log("[Net] 当前代理状态：禁用")
+        Return Nothing
+    End Function
+
+    ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
     Public Function Ping(Ip As String, Optional Timeout As Integer = 10000, Optional MakeLog As Boolean = True) As Integer
@@ -406,6 +443,7 @@ RequestFinished:
         Dim Req As HttpWebRequest
         Try
             Req = WebRequest.Create(Url)
+            Req.Proxy = GetProxy()
             Req.Method = Method
             Dim SendData As Byte()
             If TypeOf Data Is Byte() Then
@@ -1067,7 +1105,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
+                HttpRequest.Proxy = GetProxy()
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)

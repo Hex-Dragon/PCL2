@@ -57,6 +57,10 @@
         CheckDebugDelay.Checked = Setup.Get("SystemDebugDelay")
         CheckDebugSkipCopy.Checked = Setup.Get("SystemDebugSkipCopy")
 
+        '网络
+        TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
+        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
+        CheckUseDefaultProxy.Checked = Setup.Get("SystemUseDefaultProxy")
     End Sub
 
     '初始化
@@ -68,7 +72,6 @@
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslateV2")
             Setup.Reset("ToolDownloadIgnoreQuilt")
-            Setup.Reset("ToolDownloadCert")
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
@@ -81,6 +84,9 @@
             Setup.Reset("SystemSystemCache")
             Setup.Reset("SystemSystemUpdate")
             Setup.Reset("SystemSystemActivity")
+            Setup.Reset("SystemHttpProxy")
+            Setup.Reset("ToolDownloadCert")
+            Setup.Reset("SystemUseDefaultProxy")
 
             Log("[Setup] 已初始化启动器页设置")
             Hint("已初始化启动器页设置！", HintType.Finish, False)
@@ -92,7 +98,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckUseDefaultProxy.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
@@ -101,7 +107,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslateV2.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadSource.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
 
