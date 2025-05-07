@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Http
 Imports System.Threading.Tasks
+
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
@@ -8,20 +9,11 @@ Public Module ModNet
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
-        Dim ProxyServer As String = Setup.Get("SystemHttpProxy")
-        Dim SystemProxyServer As String = WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com/")).ToString
-        '没有系统代理的情况下会返回原始 Uri，这导致了使用此方法获取系统代理的网络请求全部炸掉（#517）
-        If SystemProxyServer.Equals("https://www.example.com/") Then
-            Log("[Net] 检测到未设置系统代理，已忽略系统代理")
-        ElseIf Not SystemProxyServer.StartsWithF("http:") Then
-            Log("[Net] 检测到不支持的代理服务器协议，已忽略系统代理")
-        Else
-            Dim SystemProxy As New WebProxy(New Uri(SystemProxyServer))
-            If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
-                Log("[Net] 当前代理状态：跟随系统代理设置")
-                Return SystemProxy
-            End If
+        If Setup.Get("SystemUseDefaultProxy") Then
+            Log("[Net] 当前代理状态：跟随系统代理设置")
+            Return Nothing
         End If
+        Dim ProxyServer As String = Setup.Get("SystemHttpProxy")
         If Not String.IsNullOrWhiteSpace(ProxyServer) Then
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(ProxyServer)
@@ -62,7 +54,7 @@ Public Module ModNet
     End Function
 
     ''' <summary>
-    ''' 以 WebClient 获取网页源代码。会进行至多 45 秒 3 次的尝试，允许最长 30s 的超时。
+    ''' 以 HttpClient 获取网页源代码。会进行至多 45 秒 3 次的尝试，允许最长 30s 的超时。
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
     ''' <param name="Encoding">网页的编码，通常为 UTF-8。</param>
@@ -105,7 +97,7 @@ Retry:
         Try
             Url = SecretCdnSign(Url)
             Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
-            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
+            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()}) With {.Timeout = TimeSpan.FromMilliseconds(Timeout)}
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
                     request.Headers.Accept.ParseAdd(Accept)
@@ -223,7 +215,7 @@ RequestFinished:
         Try
             Url = SecretCdnSign(Url)
             Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
-            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
+            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()}) With {.Timeout = TimeSpan.FromMilliseconds(Timeout)}
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     request.Headers.Accept.ParseAdd(Accept)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
@@ -276,7 +268,7 @@ RequestFinished:
     End Function
 
     ''' <summary>
-    ''' 使用 WebClient 从网络中下载文件。这不能下载 CDN 中的文件。
+    ''' 使用 HttpClient 从网络中下载文件。这不能下载 CDN 中的文件。
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
