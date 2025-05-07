@@ -8,6 +8,7 @@
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
         Dim SystemProxy As New WebProxy(WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com")))
+        Log($"[Net] 获取到的系统代理为{WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com"))}")
         If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
             Return SystemProxy
