@@ -8,7 +8,7 @@
         Dim proxy As String = Setup.Get("SystemHttpProxy")
         Dim ProxyServer As String = WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com")).ToString
         '没有系统代理的情况下会返回原始 Uri，这导致了使用此方法获取系统代理的网络请求全部炸掉 （#517）
-        If ProxyServer = "https://www.example.com" Then 
+        If ProxyServer.ContainsF("www.example.com") Then 
             GoTo IgnoreSystemProxy
         Else If Not ProxyServer.StartsWithF("http:") Then 
                 Log("[Net] 检测到不支持的代理服务器协议，已忽略系统代理。")
