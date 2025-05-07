@@ -20,7 +20,7 @@
             Return SystemProxy
         End If
 IgnoreSystemProxy:
-        If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
+        If Not String.IsNullOrWhiteSpace(proxy) Then
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(proxy)
             Try
