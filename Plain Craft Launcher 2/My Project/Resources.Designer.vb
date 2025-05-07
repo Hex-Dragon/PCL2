@@ -123,9 +123,9 @@ Namespace My.Resources
         '''<summary>
         '''  查找 System.Byte[] 类型的本地化资源。
         '''</summary>
-        Friend ReadOnly Property maslruntime() As Byte()
+        Friend ReadOnly Property ModData() As Byte()
             Get
-                Dim obj As Object = ResourceManager.GetObject("maslruntime", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("ModData", resourceCulture)
                 Return CType(obj,Byte())
             End Get
         End Property
@@ -133,9 +133,9 @@ Namespace My.Resources
         '''<summary>
         '''  查找 System.Byte[] 类型的本地化资源。
         '''</summary>
-        Friend ReadOnly Property ModData() As Byte()
+        Friend ReadOnly Property msalruntime() As Byte()
             Get
-                Dim obj As Object = ResourceManager.GetObject("ModData", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("msalruntime", resourceCulture)
                 Return CType(obj,Byte())
             End Get
         End Property

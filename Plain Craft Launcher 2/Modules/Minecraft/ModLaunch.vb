@@ -2216,8 +2216,11 @@ NextVersion:
         If WindowTitle = "" Then WindowTitle = Setup.Get("LaunchArgumentTitle")
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
+        'JStack 路径
+        Dim JStackPath As String = McLaunchJavaSelected.PathFolder & "jstack.exe"
+
         '初始化等待
-        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle, CurrentLaunchOptions.Test)
+        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle, If(File.Exists(JStackPath), JStackPath, ""), CurrentLaunchOptions.Test)
         McLaunchWatcher = Watcher
 
         '显示实时日志

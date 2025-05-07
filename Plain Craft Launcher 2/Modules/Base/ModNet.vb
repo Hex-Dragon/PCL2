@@ -8,16 +8,25 @@ Public Module ModNet
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
-        Dim proxy As String = Setup.Get("SystemHttpProxy")
-        Dim SystemProxy As New WebProxy(WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com")))
-        If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
-            Log("[Net] 当前代理状态：跟随系统代理设置")
-            Return SystemProxy
+        Dim ProxyServer As String = Setup.Get("SystemHttpProxy")
+        Dim SystemProxyServer As String = WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com/")).ToString
+        '没有系统代理的情况下会返回原始 Uri，这导致了使用此方法获取系统代理的网络请求全部炸掉（#517）
+        If SystemProxyServer.Equals("https://www.example.com/") Then
+            Log("[Net] 检测到未设置系统代理，已忽略系统代理")
+        ElseIf Not SystemProxyServer.StartsWithF("http:") Then
+            Log("[Net] 检测到不支持的代理服务器协议，已忽略系统代理")
+        Else
+            Dim SystemProxy As New WebProxy(New Uri(SystemProxyServer))
+            If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
+                Log("[Net] 当前代理状态：跟随系统代理设置")
+                Return SystemProxy
+            End If
         End If
-        If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
+        If Not String.IsNullOrWhiteSpace(ProxyServer) Then
             Log("[Net] 当前代理状态：自定义")
-            Dim ProxyUri As New Uri(proxy)
+            Dim ProxyUri As New Uri(ProxyServer)
             Try
+                If Not ProxyUri.Scheme.ContainsF("http:") Then Return Nothing
                 If ProxyUri.IsLoopback OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
@@ -26,7 +35,7 @@ Public Module ModNet
                 '视作非本地地址
             Catch
             End Try
-            Return New WebProxy(proxy, True)
+            Return New WebProxy(ProxyServer, True)
         End If
         Log("[Net] 当前代理状态：禁用")
         Return Nothing
