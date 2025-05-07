@@ -1,22 +1,29 @@
 ﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
-
     ''' <summary>
     ''' 确定是否使用代理。
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
-        Dim SystemProxy As New WebProxy(WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com")))
-        Log($"[Net] 获取到的系统代理为{WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com"))}")
+        Dim ProxyServer = WebRequest.GetSystemWebProxy().GetProxy(New Uri("https://www.example.com"))
+        '没有系统代理的情况下会返回原始 Uri，这导致了使用此方法获取系统代理的网络请求全部炸掉 （#517）
+        If ProxyServer = "https://www.example.com" Then GoTo IgnoreSystemProxy
+        Else If Not ProxyServer.StartsWithF("http:") Then 
+                Log("[Net] 检测到不支持的代理服务器协议，已忽略系统代理。")
+                GoTo IgnoreSystemProxy
+        End If
+        Dim SystemProxy As New WebProxy(New Uri(ProxyServer))
         If SystemProxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
             Return SystemProxy
         End If
+IgnoreSystemProxy:
         If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(proxy)
             Try
+                If Not ProxyUri.Scheme.ContainsF("http:") Then Return Nothing
                 If ProxyUri.IsLoopback OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
