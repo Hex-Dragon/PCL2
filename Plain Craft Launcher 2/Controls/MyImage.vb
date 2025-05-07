@@ -132,8 +132,11 @@ RetryStart:
                 Using Client As New Net.Http.HttpClient(New Http.HttpClientHandler() With {.Proxy = GetProxy()})
                     Using request As New Net.Http.HttpRequestMessage(Http.HttpMethod.Get, Url)
                         Using fs As New FileStream(TempDownloadingPath, FileMode.Create)
-                            Dim res = Client.SendAsync(request).Result.Content.ReadAsByteArrayAsync().Result
-                            fs.Write(res, 0, res.Length)
+                            Using response = Client.SendAsync(request).Result
+                                response.EnsureSuccessStatusCode()
+                                Dim res = response.Content.ReadAsByteArrayAsync().Result
+                                fs.Write(res, 0, res.Length)
+                            End Using
                         End Using
                     End Using
                 End Using
