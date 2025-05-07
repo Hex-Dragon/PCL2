@@ -1,49 +1,143 @@
-一、声明
+PCL 开源许可协议
+版本 1.0
 
-本文件仅作为指南，不是法律文件或协议。但开发者在此承诺，在您遵守本指南且善意、合理使用的情况下，不会追究您的责任。
-法律上，开发者仍保留所有权利（All Rights Reserved），若情况恶劣，仍可能将诉讼作为最终手段。
+Copyright © 2025 龙腾猫跃 (Dragon-Hex)
 
+1. 定义
 
+在本许可协议中：
 
-二、轻度使用
+"协议"指本PCL开源许可协议。
+"软件"指由版权持有人开发的Planting Craft Launcher (PCL)软件及其相关源代码、文档和组件。
+"版权持有人"指龙腾猫跃(Dragon-Hex)，该软件的原始创建者。
+"您"指行使本协议所授予权利的个人或法人实体。
+"派生作品"指基于或衍生自软件的任何作品。
+"实质功能"指软件的核心功能，包括但不限于启动或下载Java版Minecraft，下载或管理Mod等功能。
 
-若您仅参考了本存储库中极小部分的内容，或您在制作与 PCL 的实质功能不存在任何重叠的软件，则为轻度使用。
-其常见情形例如：
-· 使用或参考存储库中极小部分的内容，来开发启动器或其他软件。
-· 虽参考了较大量的内容，但制作的软件与 PCL 的实质功能不存在任何重叠。
+2. 授予的权利
 
-若属于轻度使用，您需要：
-1、以适当的形式给出署名。
-2、不得将您的内容与 PCL 混淆，或暗示您的内容与 PCL 有关。
- 　例如：您的内容不得使用 Planting Craft Launcher、PCL 手机版 等会造成混淆或暗示这与 PCL 有关的名称。
+在遵守本协议的条款和条件的前提下，版权持有人特此授予您以下权利：
 
+a) 获取、查看和学习软件源代码的权利；
+b) 根据以下使用类型的具体条款，使用、复制、修改和创建派生作品的权利。
 
+3. 使用类型及条件
 
-三、重度使用
+3.1 轻度使用
 
-若不符合轻度使用的情形，即为重度使用。
-其常见情形例如：
-· 基于本存储库进行修改。
-· 参考存储库中较大量的内容，以制作或重新实现 PCL 的部分实质功能（例如启动或下载 Java 版 Minecraft，下载或管理 Mod 等）。
+如果您仅参考了软件中极小部分的内容，或您在制作与PCL的实质功能不存在任何重叠的软件，则为轻度使用。
 
-若属于重度使用，您需要：
-1、明确表示您的内容是第三方基于 PCL 独立进行二次创作的产物。
-2、您的内容的名称必须以 Plain Craft Launcher (PCL) 开头，并在其后添加足以表现其由第三方修改的后缀。
- 　允许的示例：PCL 某服务器魔改版、PCL PR Collection、PCL (XX Bug Fix)、PCL XXX修改版。
- 　禁止的示例：PCL 某服务器特供版（暗示由官方提供）、PCL 3、PCL 手机版、PCL++、PCL Pro（这像是官方的后续作品）。
-3、在关于页面的首位给出龙腾猫跃的署名及对应的赞助链接，公开源代码，且继续使用本文件作为指南（可参考 CC BY-SC 协议）。
-4、软件若有 Minecraft 启动功能，则应实现与 McLaunchPrecheck 函数一致的 Minecraft 正版购买弹窗与赞助弹窗。
-5、软件在 Windows 系统上运行时，不应有与 PCL 的赞助解锁功能类似的功能或表现。
- 　例如：界面的主要色相必须为蓝色（即使没有修改功能，改为其他色相也和需要赞助解锁的主题功能类似）。
+轻度使用的条件：
 
-————————————
+1. 署名义务：您必须以适当的形式在软件界面或文档中明确标注："部分代码参考自PCL (https://github.com/Hex-Dragon/PCL2)"。
+2. 避免混淆义务：您不得将您的内容与PCL混淆，或暗示您的内容与PCL有官方关联。您的软件不得使用可能导致用户混淆的名称，如"Planting Craft Launcher手机版"、"PCL Mobile"等类似名称。
 
-说人话的备注：
+3.2 重度使用
 
-因为没有法律专业人士检查，所以这不敢作为正式的法律协议，如果有专业人士愿意帮忙改一改我也很乐意……
-这些规则主要是为了阻止恶意的使用和 “山寨版” 的出现，常规、善意的使用都没啥问题的，放心吧！
+如不符合轻度使用的情形，即为重度使用，包括但不限于：基于软件进行修改，或参考软件中较大量的内容以制作或重新实现PCL的部分实质功能。
 
-如果你只是参考了一小段代码，署个名就行啦，不用担心。
-如果对具体细节有疑问，欢迎在 https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E6%8F%90%E9%97%AE 发帖询问！
+重度使用的条件：
 
-多谢大家啦！
+1. 标明独立修改声明：您必须明确表示您的内容是第三方基于PCL独立进行二次创作的产物。
+2. 命名规范：您的软件名称必须以"Plain Craft Launcher (PCL)"开头，并添加足以表明其由第三方修改的后缀。
+   - 允许的示例：PCL某服务器魔改版、PCL PR Collection、PCL (XX Bug Fix)、PCL XXX修改版
+   - 禁止的示例：PCL某服务器特供版、PCL 3、PCL手机版、PCL++、PCL Pro
+3. 署名与开源义务：
+   - 在软件关于页面的首位位置给出龙腾猫跃的署名及对应的赞助链接
+   - 公开您修改后的完整源代码
+   - 继续在您的软件中使用本协议并将其应用于派生作品
+4. 功能实现要求：如果您的软件具有Minecraft启动功能，则必须实现与原软件中McLaunchPrecheck函数一致的Minecraft正版购买提示和赞助提示功能。
+5. 界面设计限制：您的软件在Windows系统上运行时，不应具有与PCL赞助解锁功能类似的功能或表现。例如，界面的主要色相必须为蓝色。
+
+4. 保留权利
+
+除本协议明确授予的权利外，版权持有人保留所有其他权利。本协议不授予任何专利权、商标权或版权持有人的任何其他知识产权。
+
+5. 免责声明
+
+软件是"按原样"提供的，没有任何明示或暗示的保证，包括但不限于对适销性、特定用途适用性和非侵权性的保证。在任何情况下，版权持有人均不对任何索赔、损害或其他责任负责，无论是在合同诉讼、侵权行为还是其他方面。
+
+6. 终止
+
+如果您违反了本协议的任何条款，本协议授予您的权利将自动终止。在此情况下，您必须立即停止使用软件及其派生作品，并删除所有相关副本。
+
+7. 法律适用
+
+本协议受中华人民共和国法律管辖。任何因本协议引起的争议应通过友好协商解决。如协商不成，应提交至版权持有人所在地有管辖权的人民法院解决。
+
+8. 完整协议
+
+本协议构成您与版权持有人之间关于软件使用的完整协议，并取代之前或同时期的所有口头或书面通信、提议和陈述。
+
+---
+
+PCL Open Source License Agreement
+Version 1.0
+
+Copyright © 2025 Dragon-Hex
+
+1. Definitions
+
+In this License Agreement:
+
+"Agreement" refers to this PCL Open Source License Agreement.
+"Software" refers to the Planting Craft Launcher (PCL) software and its related source code, documentation, and components developed by the Copyright Holder.
+"Copyright Holder" refers to Dragon-Hex, the original creator of the Software.
+"You" refers to the individual or legal entity exercising the rights granted by this Agreement.
+"Derivative Work" refers to any work based on or derived from the Software.
+"Substantial Functionality" refers to the core functions of the Software, including but not limited to launching or downloading Java Edition Minecraft, downloading or managing Mods, etc.
+
+2. Grant of Rights
+
+Subject to the terms and conditions of this Agreement, the Copyright Holder hereby grants You the following rights:
+
+a) The right to access, view, and study the Software's source code;
+b) The right to use, copy, modify, and create Derivative Works according to the specific terms of the usage types outlined below.
+
+3. Usage Types and Conditions
+
+3.1 Light Usage
+
+Light Usage applies if You have only referenced a minimal portion of the Software's content, or if You are developing software that does not overlap with any substantial functionality of PCL.
+
+Conditions for Light Usage:
+
+1. Attribution Obligation: You must clearly indicate in your software interface or documentation: "Portions of code referenced from PCL (https://github.com/Hex-Dragon/PCL2)".
+2. Non-confusion Obligation: You must not create confusion between your content and PCL, or imply that your content is officially associated with PCL. Your software must not use names that might cause user confusion, such as "Planting Craft Launcher Mobile Version", "PCL Mobile", or similar names.
+
+3.2 Heavy Usage
+
+Heavy Usage applies to any usage that does not qualify as Light Usage, including but not limited to: modifying the Software, or referencing a substantial portion of the Software's content to create or re-implement parts of PCL's substantial functionality.
+
+Conditions for Heavy Usage:
+
+1. Independent Modification Declaration: You must clearly state that your content is a third-party Derivative Work independently created based on PCL.
+2. Naming Conventions: Your software name must begin with "Plain Craft Launcher (PCL)" and include a suffix that clearly indicates third-party modification.
+   - Permitted examples: PCL Server X Modified Version, PCL PR Collection, PCL (XX Bug Fix), PCL XXX Modified Version
+   - Prohibited examples: PCL Server X Special Edition, PCL 3, PCL Mobile, PCL++, PCL Pro
+3. Attribution and Open Source Obligations:
+   - Prominently display Dragon-Hex's attribution and corresponding sponsorship links in the primary position of your software's about page
+   - Make your modified complete source code publicly available
+   - Continue to use this Agreement and apply it to your Derivative Works
+4. Functional Implementation Requirements: If your software includes Minecraft launching functionality, it must implement Minecraft legitimate purchase prompts and sponsorship prompts consistent with the McLaunchPrecheck function in the original Software.
+5. Interface Design Restrictions: Your software, when running on Windows systems, should not have functionality or appearance similar to PCL's sponsorship unlock features. For example, the main hue of the interface must be blue.
+
+4. Reservation of Rights
+
+All rights not expressly granted under this Agreement are reserved by the Copyright Holder. This Agreement does not grant any patent rights, trademark rights, or any other intellectual property rights of the Copyright Holder.
+
+5. Disclaimer
+
+The Software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the Copyright Holder be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise.
+
+6. Termination
+
+If You violate any term of this Agreement, the rights granted to You under this Agreement will automatically terminate. In such event, You must immediately cease using the Software and its Derivative Works and delete all related copies.
+
+7. Governing Law
+
+This Agreement is governed by the laws of the People's Republic of China. Any disputes arising from this Agreement shall be resolved through friendly negotiation. If negotiation fails, the dispute shall be submitted to the jurisdiction of the people's court where the Copyright Holder is located.
+
+8. Entire Agreement
+
+This Agreement constitutes the entire agreement between You and the Copyright Holder regarding the use of the Software and supersedes all prior or contemporaneous oral or written communications, proposals, and representations.
