@@ -1055,174 +1055,173 @@ StartThread:
         ''' </summary>
         Private Sub Thread(Info As NetThread)
             If ModeDebug OrElse Info.DownloadStart = 0 Then Log("[Download] " & LocalName & " " & Info.Uuid & "#：开始，起始点 " & Info.DownloadStart & "，" & Info.Source.Url)
-            Dim HttpRequest As HttpWebRequest
             Dim ResultStream As Stream = Nothing
             '部分下载源真的特别慢，并且只需要一个请求，例如 Ping 为 20s，如果增长太慢，就会造成类似 2.5s 5s 7.5s 10s 12.5s... 的极大延迟
             '延迟过长会导致某些特别慢的链接迟迟不被掐死
             Dim Timeout As Integer = Math.Min(Math.Max(ConnectAverage, 6000) * (1 + Info.Source.FailCount), 30000)
+            Dim ContentLength As Long = 0
             Info.State = NetState.Connect
             Try
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
-                '请求头
-                HttpRequest = WebRequest.Create(Info.Source.Url)
-                If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                HttpRequest.Proxy = GetProxy()
-                HttpRequest.Timeout = Timeout
-                HttpRequest.AddRange(Info.DownloadStart)
-                SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
-                Dim ContentLength As Long = 0
-                Using HttpResponse As HttpWebResponse = HttpRequest.GetResponse()
-                    If State = NetState.Error Then GoTo SourceBreak '快速中断
-                    If ModeDebug AndAlso HttpResponse.ResponseUri.OriginalString <> Info.Source.Url Then
-                        Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {HttpResponse.ResponseUri.OriginalString}")
-                    End If
-                    ''从响应头获取文件名
-                    'If Info.IsFirstThread Then
-                    '    Dim FileName As String = GetFileNameFromResponse(HttpResponse)
-                    '    If ModeDebug Then Log($"[Download] {LocalName} {Info.Uuid}#：远程文件名：{If(FileName, "未提供")}")
-                    '    If FileName IsNot Nothing AndAlso LocalName = "待定" Then
-                    '        LocalName = FileName
-                    '        Log($"[Download] {LocalName} {Info.Uuid}#：从响应头获取到文件名")
-                    '    End If
-                    'End If
-                    '文件大小校验
-                    ContentLength = HttpResponse.ContentLength
-                    If ContentLength = -1 Then
-                        If FileSize > 1 Then
-                            If Info.DownloadStart = 0 Then
-                                Log($"[Download] {LocalName} {Info.Uuid}#：文件大小未知，但已从其他下载源获取，不作处理")
-                            Else
-                                Log($"[Download] {LocalName} {Info.Uuid}#：ContentLength 返回了 -1，无法确定是否支持分段下载，视作不支持")
-                                GoTo NotSupportRange
-                            End If
-                        Else
-                            FileSize = -1 : IsUnknownSize = True
-                            Log($"[Download] {LocalName} {Info.Uuid}#：文件大小未知")
+                ' 使用 HttpClient 替代 HttpWebRequest
+                Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
+                    client.Timeout = TimeSpan.FromMilliseconds(Timeout)
+                    Dim request As New HttpRequestMessage(HttpMethod.Get, Info.Source.Url)
+                    request.Headers.Range = New System.Net.Http.Headers.RangeHeaderValue(Info.DownloadStart, Nothing)
+                    SecretHeadersSign(Info.Source.Url, request, UseBrowserUserAgent)
+                    Using response = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result
+                        response.EnsureSuccessStatusCode()
+                        If State = NetState.Error Then GoTo SourceBreak '快速中断
+                        If ModeDebug AndAlso response.RequestMessage.RequestUri.OriginalString <> Info.Source.Url Then
+                            Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {response.RequestMessage.RequestUri.OriginalString}")
                         End If
-                    ElseIf ContentLength < 0 Then
-                        Throw New Exception("获取片大小失败，结果为 " & ContentLength & "。")
-                    ElseIf Info.IsFirstThread Then
-                        If Check IsNot Nothing Then
-                            If ContentLength < Check.MinSize AndAlso Check.MinSize > 0 Then
-                                Throw New Exception($"文件大小不足，获取结果为 {ContentLength}，要求至少为 {Check.MinSize}。")
-                            End If
-                            If ContentLength <> Check.ActualSize AndAlso Check.ActualSize > 0 Then
-                                Throw New Exception($"文件大小不一致，获取结果为 {ContentLength}，要求必须为 {Check.ActualSize}。")
-                            End If
-                        End If
-                        FileSize = ContentLength : IsUnknownSize = False
-                        Log($"[Download] {LocalName} {Info.Uuid}#：文件大小 {ContentLength}（{GetString(ContentLength)}）")
-                        '若文件大小大于 50 M，进行剩余磁盘空间校验
-                        If ContentLength > 50 * 1024 * 1024 Then
-                            For Each Drive As DriveInfo In DriveInfo.GetDrives
-                                Dim DriveName As String = Drive.Name.First.ToString
-                                Dim RequiredSpace = If(PathTemp.StartsWithF(DriveName), ContentLength * 1.1, 0) +
-                                                If(LocalPath.StartsWithF(DriveName), ContentLength + 5 * 1024 * 1024, 0)
-                                If Drive.TotalFreeSpace < RequiredSpace Then
-                                    Throw New Exception(DriveName & " 盘空间不足，无法进行下载。" & vbCrLf & "需要至少 " & GetString(RequiredSpace) & " 空间，但当前仅剩余 " & GetString(Drive.TotalFreeSpace) & "。" &
-                                                    If(PathTemp.StartsWithF(DriveName), vbCrLf & vbCrLf & "下载时需要与文件同等大小的空间存放缓存，你可以在设置中调整缓存文件夹的位置。", ""))
-                                End If
-                            Next
-                        End If
-                    ElseIf FileSize < 0 Then
-                        Throw New Exception("非首线程运行时，尚未获取文件大小")
-                    ElseIf Info.DownloadStart > 0 AndAlso ContentLength = FileSize Then
-NotSupportRange:
-                        SyncLock LockSource
-                            If SourcesOnce.Contains(Info.Source) Then
-                                GoTo SourceBreak
-                            Else
-                                SourcesOnce.Add(Info.Source)
-                            End If
-                        End SyncLock
-                        Throw New WebException($"该下载源不支持分段下载：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
-                    ElseIf Not FileSize - Info.DownloadStart = ContentLength Then
-                        Throw New WebException($"获取到的分段大小不一致：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
-                    End If
-                    'Log($"[Download] {LocalName} {Info.Uuid}#：通过大小检查，文件大小 {FileSize}，起始点 {Info.DownloadStart}，ContentLength {ContentLength}")
-                    Info.State = NetState.Get
-                    SyncLock LockState
-                        If State < NetState.Get Then State = NetState.Get
-                    End SyncLock
-                    '创建缓存文件
-                    If IsNoSplit Then
-                        Info.Temp = Nothing
-                        SmailFileCache = New Queue(Of Byte)
-                    Else
-                        Info.Temp = $"{PathTemp}Download\{Uuid}_{Info.Uuid}_{RandomInteger(0, 999999)}.tmp"
-                        ResultStream = New FileStream(Info.Temp, FileMode.Create, FileAccess.Write, FileShare.Read)
-                    End If
-                    '开始下载
-                    Using HttpStream = HttpResponse.GetResponseStream()
-                        HttpStream.ReadTimeout = Timeout
-                        If Setup.Get("SystemDebugDelay") Then Threading.Thread.Sleep(RandomInteger(50, 3000))
-                        Dim HttpData As Byte() = New Byte(16384) {}
-                        HttpDataCount = HttpStream.Read(HttpData, 0, 16384)
-                        While (IsUnknownSize OrElse Info.DownloadUndone > 0) AndAlso '判断是否下载完成
-                            HttpDataCount > 0 AndAlso Not IsProgramEnded AndAlso State < NetState.Merge AndAlso (Not Info.Source.IsFailed OrElse Info.Equals(Info.Source.Thread))
-                            '限速
-                            While NetTaskSpeedLimitHigh > 0 AndAlso NetTaskSpeedLimitLeft <= 0
-                                Threading.Thread.Sleep(16)
-                            End While
-                            Dim RealDataCount As Integer = If(IsUnknownSize, HttpDataCount, Math.Min(HttpDataCount, Info.DownloadUndone))
-                            SyncLock NetTaskSpeedLimitLeftLock
-                                If NetTaskSpeedLimitHigh > 0 Then NetTaskSpeedLimitLeft -= RealDataCount
-                            End SyncLock
-                            Dim DeltaTime = GetTimeTick() - Info.LastReceiveTime
-                            If DeltaTime > 1000000 Then DeltaTime = 1 '时间刻反转导致出现极大值
-                            If RealDataCount > 0 Then
-                                '有数据
-                                If Info.DownloadDone = 0 Then
-                                    '第一次接受到数据
-                                    Info.State = NetState.Download
-                                    SyncLock LockState
-                                        If State < NetState.Download Then State = NetState.Download
-                                    End SyncLock
-                                    SyncLock LockCount
-                                        ConnectCount += 1
-                                        ConnectTime += GetTimeTick() - Info.InitTime
-                                    End SyncLock
-                                End If
-                                SyncLock LockCount
-                                    Info.Source.FailCount = 0
-                                    For Each Task In Tasks
-                                        Task.FailCount = 0
-                                    Next
-                                End SyncLock
-                                NetManager.DownloadDone += RealDataCount
-                                SyncLock LockDone
-                                    DownloadDone += RealDataCount
-                                End SyncLock
-                                Info.DownloadDone += RealDataCount
-                                If IsNoSplit Then
-                                    If HttpData.Count = RealDataCount Then
-                                        'SmailFileCache.AddRange(HttpData)
-                                        For Each B In HttpData
-                                            SmailFileCache.Enqueue(B)
-                                        Next
-                                    Else
-                                        'SmailFileCache.AddRange(HttpData.ToList.GetRange(0, RealDataCount))
-                                        For i = 0 To RealDataCount - 1
-                                            SmailFileCache.Enqueue(HttpData(i))
-                                        Next
-                                    End If
+                        ''从响应头获取文件名
+                        'If Info.IsFirstThread Then
+                        '    Dim FileName As String = GetFileNameFromResponse(HttpResponse)
+                        '    If ModeDebug Then Log($"[Download] {LocalName} {Info.Uuid}#：远程文件名：{If(FileName, "未提供")}")
+                        '    If FileName IsNot Nothing AndAlso LocalName = "待定" Then
+                        '        LocalName = FileName
+                        '        Log($"[Download] {LocalName} {Info.Uuid}#：从响应头获取到文件名")
+                        '    End If
+                        'End If
+                        '文件大小校验
+                        ContentLength = response.Content.Headers.ContentLength.GetValueOrDefault(-1)
+                        If ContentLength = -1 Then
+                            If FileSize > 1 Then
+                                If Info.DownloadStart = 0 Then
+                                    Log($"[Download] {LocalName} {Info.Uuid}#：文件大小未知，但已从其他下载源获取，不作处理")
                                 Else
-                                    ResultStream.Write(HttpData, 0, RealDataCount)
+                                    Log($"[Download] {LocalName} {Info.Uuid}#：ContentLength 返回了 -1，无法确定是否支持分段下载，视作不支持")
+                                    GoTo NotSupportRange
                                 End If
-                                '检查速度是否过慢
-                                If DeltaTime > 1500 AndAlso DeltaTime > RealDataCount Then '数据包间隔大于 1.5s，且速度小于 1.5K/s
-                                    Throw New TimeoutException("由于速度过慢断开链接，下载 " & RealDataCount & " B，消耗 " & DeltaTime & " ms。")
-                                End If
-                                Info.LastReceiveTime = GetTimeTick()
-                                '已完成
-                                If Info.DownloadUndone = 0 AndAlso Not IsUnknownSize Then Exit While
-                            ElseIf Info.LastReceiveTime > 0 AndAlso DeltaTime > Timeout Then
-                                '无数据，且已超时
-                                Throw New TimeoutException("操作超时，无数据。")
+                            Else
+                                FileSize = -1 : IsUnknownSize = True
+                                Log($"[Download] {LocalName} {Info.Uuid}#：文件大小未知")
                             End If
+                        ElseIf ContentLength < 0 Then
+                            Throw New Exception("获取片大小失败，结果为 " & ContentLength & "。")
+                        ElseIf Info.IsFirstThread Then
+                            If Check IsNot Nothing Then
+                                If ContentLength < Check.MinSize AndAlso Check.MinSize > 0 Then
+                                    Throw New Exception($"文件大小不足，获取结果为 {ContentLength}，要求至少为 {Check.MinSize}。")
+                                End If
+                                If ContentLength <> Check.ActualSize AndAlso Check.ActualSize > 0 Then
+                                    Throw New Exception($"文件大小不一致，获取结果为 {ContentLength}，要求必须为 {Check.ActualSize}。")
+                                End If
+                            End If
+                            FileSize = ContentLength : IsUnknownSize = False
+                            Log($"[Download] {LocalName} {Info.Uuid}#：文件大小 {ContentLength}（{GetString(ContentLength)}）")
+                            '若文件大小大于 50 M，进行剩余磁盘空间校验
+                            If ContentLength > 50 * 1024 * 1024 Then
+                                For Each Drive As DriveInfo In DriveInfo.GetDrives
+                                    Dim DriveName As String = Drive.Name.First.ToString
+                                    Dim RequiredSpace = If(PathTemp.StartsWithF(DriveName), ContentLength * 1.1, 0) +
+                                                    If(LocalPath.StartsWithF(DriveName), ContentLength + 5 * 1024 * 1024, 0)
+                                    If Drive.TotalFreeSpace < RequiredSpace Then
+                                        Throw New Exception(DriveName & " 盘空间不足，无法进行下载。" & vbCrLf & "需要至少 " & GetString(RequiredSpace) & " 空间，但当前仅剩余 " & GetString(Drive.TotalFreeSpace) & "。" &
+                                                        If(PathTemp.StartsWithF(DriveName), vbCrLf & vbCrLf & "下载时需要与文件同等大小的空间存放缓存，你可以在设置中调整缓存文件夹的位置。", ""))
+                                    End If
+                                Next
+                            End If
+                        ElseIf FileSize < 0 Then
+                            Throw New Exception("非首线程运行时，尚未获取文件大小")
+                        ElseIf Info.DownloadStart > 0 AndAlso ContentLength = FileSize Then
+NotSupportRange:
+                            SyncLock LockSource
+                                If SourcesOnce.Contains(Info.Source) Then
+                                    GoTo SourceBreak
+                                Else
+                                    SourcesOnce.Add(Info.Source)
+                                End If
+                            End SyncLock
+                            Throw New WebException($"该下载源不支持分段下载：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
+                        ElseIf Not FileSize - Info.DownloadStart = ContentLength Then
+                            Throw New WebException($"获取到的分段大小不一致：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
+                        End If
+                        'Log($"[Download] {LocalName} {Info.Uuid}#：通过大小检查，文件大小 {FileSize}，起始点 {Info.DownloadStart}，ContentLength {ContentLength}")
+                        Info.State = NetState.Get
+                        SyncLock LockState
+                            If State < NetState.Get Then State = NetState.Get
+                        End SyncLock
+                        '创建缓存文件
+                        If IsNoSplit Then
+                            Info.Temp = Nothing
+                            SmailFileCache = New Queue(Of Byte)
+                        Else
+                            Info.Temp = $"{PathTemp}Download\{Uuid}_{Info.Uuid}_{RandomInteger(0, 999999)}.tmp"
+                            ResultStream = New FileStream(Info.Temp, FileMode.Create, FileAccess.Write, FileShare.Read)
+                        End If
+                        '开始下载
+                        Using HttpStream = response.Content.ReadAsStreamAsync().Result
+                            If Setup.Get("SystemDebugDelay") Then Threading.Thread.Sleep(RandomInteger(50, 3000))
+                            Dim HttpData As Byte() = New Byte(16384) {}
                             HttpDataCount = HttpStream.Read(HttpData, 0, 16384)
-                        End While
+                            While (IsUnknownSize OrElse Info.DownloadUndone > 0) AndAlso '判断是否下载完成
+                                HttpDataCount > 0 AndAlso Not IsProgramEnded AndAlso State < NetState.Merge AndAlso (Not Info.Source.IsFailed OrElse Info.Equals(Info.Source.Thread))
+                                '限速
+                                While NetTaskSpeedLimitHigh > 0 AndAlso NetTaskSpeedLimitLeft <= 0
+                                    Threading.Thread.Sleep(16)
+                                End While
+                                Dim RealDataCount As Integer = If(IsUnknownSize, HttpDataCount, Math.Min(HttpDataCount, Info.DownloadUndone))
+                                SyncLock NetTaskSpeedLimitLeftLock
+                                    If NetTaskSpeedLimitHigh > 0 Then NetTaskSpeedLimitLeft -= RealDataCount
+                                End SyncLock
+                                Dim DeltaTime = GetTimeTick() - Info.LastReceiveTime
+                                If DeltaTime > 1000000 Then DeltaTime = 1 '时间刻反转导致出现极大值
+                                If RealDataCount > 0 Then
+                                    '有数据
+                                    If Info.DownloadDone = 0 Then
+                                        '第一次接受到数据
+                                        Info.State = NetState.Download
+                                        SyncLock LockState
+                                            If State < NetState.Download Then State = NetState.Download
+                                        End SyncLock
+                                        SyncLock LockCount
+                                            ConnectCount += 1
+                                            ConnectTime += GetTimeTick() - Info.InitTime
+                                        End SyncLock
+                                    End If
+                                    SyncLock LockCount
+                                        Info.Source.FailCount = 0
+                                        For Each Task In Tasks
+                                            Task.FailCount = 0
+                                        Next
+                                    End SyncLock
+                                    NetManager.DownloadDone += RealDataCount
+                                    SyncLock LockDone
+                                        DownloadDone += RealDataCount
+                                    End SyncLock
+                                    Info.DownloadDone += RealDataCount
+                                    If IsNoSplit Then
+                                        If HttpData.Count = RealDataCount Then
+                                            'SmailFileCache.AddRange(HttpData)
+                                            For Each B In HttpData
+                                                SmailFileCache.Enqueue(B)
+                                            Next
+                                        Else
+                                            'SmailFileCache.AddRange(HttpData.ToList.GetRange(0, RealDataCount))
+                                            For i = 0 To RealDataCount - 1
+                                                SmailFileCache.Enqueue(HttpData(i))
+                                            Next
+                                        End If
+                                    Else
+                                        ResultStream.Write(HttpData, 0, RealDataCount)
+                                    End If
+                                    '检查速度是否过慢
+                                    If DeltaTime > 1500 AndAlso DeltaTime > RealDataCount Then '数据包间隔大于 1.5s，且速度小于 1.5K/s
+                                        Throw New TimeoutException("由于速度过慢断开链接，下载 " & RealDataCount & " B，消耗 " & DeltaTime & " ms。")
+                                    End If
+                                    Info.LastReceiveTime = GetTimeTick()
+                                    '已完成
+                                    If Info.DownloadUndone = 0 AndAlso Not IsUnknownSize Then Exit While
+                                ElseIf Info.LastReceiveTime > 0 AndAlso DeltaTime > Timeout Then
+                                    '无数据，且已超时
+                                    Throw New TimeoutException("操作超时，无数据。")
+                                End If
+                                HttpDataCount = HttpStream.Read(HttpData, 0, 16384)
+                            End While
+                        End Using
                     End Using
                 End Using
 SourceBreak:
