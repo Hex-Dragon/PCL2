@@ -8,7 +8,7 @@ Public Module ModNet
     ''' 确定是否使用代理。
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
-    Public Function GetProxy()
+    Public Function GetProxy() As WebProxy
         If Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
             Return Nothing
@@ -278,7 +278,7 @@ RequestFinished:
             Directory.CreateDirectory(GetPathFromFullPath(LocalFile))
             If File.Exists(LocalFile) Then File.Delete(LocalFile)
 
-            Using client As New HttpClient()
+            Using client As New HttpClient(New HttpClientHandler() With {.Proxy = GetProxy()})
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
                     Using response As HttpResponseMessage = Await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
