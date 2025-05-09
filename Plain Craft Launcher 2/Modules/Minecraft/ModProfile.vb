@@ -692,7 +692,7 @@ Retry:
             Dim OldMsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
             ProfileLog($"找到 {OldMsJson.Count} 个旧版正版档案信息")
             For Each Profile In OldMsJson
-                Dim NewProfile As New McProfile With {.Username = Profile.Key, .Type = McLoginType.Ms}
+                Dim NewProfile As New McProfile With {.Username = Profile.Key, .Uuid = McLoginMojangUuid(Profile.Key, False), .Type = McLoginType.Ms}
                 ProfileList.Add(NewProfile)
                 ProfileCount += 1
             Next
