@@ -439,6 +439,10 @@ RequestFinished:
                         RequestMethod = HttpMethod.Put
                     Case "DELETE"
                         RequestMethod = HttpMethod.Delete
+                    Case "HEAD"
+                        RequestMethod = HttpMethod.Head
+                    Case "OPTIONS"
+                        RequestMethod = HttpMethod.Options
                 End Select
                 Using request As New HttpRequestMessage(RequestMethod, Url)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
