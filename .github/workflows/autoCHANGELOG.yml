@@ -10,9 +10,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.BOT }}
-          fetch-depth: 0
 
       - name: Setup environment variables
         id: setup-vars
