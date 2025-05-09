@@ -53,7 +53,6 @@ Public Class ModSetup
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
-        {"CacheAnnounceVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"CacheAuthUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthUsername", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
