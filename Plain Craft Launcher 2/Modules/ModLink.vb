@@ -77,7 +77,7 @@ Public Class ModLink
                             End If
                         Loop While bytesNeeded > 0
                         packetLength -= 3
-                        Log($"[MCPing] Got packet length ({packetLength})")
+                        Log($"[MCPing] Got packet length ({packetLength})", LogLevel.Debug)
 
                         ' 读取剩余数据包
                         Dim totalBytes = 0
@@ -86,16 +86,16 @@ Public Class ModLink
                             If bytesRead = 0 Then Exit Do
                             res.AddRange(buffer.Take(bytesRead))
                             totalBytes += bytesRead
-                            Log($"[MCPing] Received part ({bytesRead})")
+                            Log($"[MCPing] Received part ({bytesRead})", LogLevel.Debug)
                         Loop While totalBytes < packetLength
 
-                        Log($"[MCPing] Received ({res.Count})")
+                        Log($"[MCPing] Received ({res.Count})", LogLevel.Debug)
 
                         Dim response As String = Encoding.UTF8.GetString(res.ToArray(), 0, res.Count)
                         Dim startIndex = response.IndexOf("{""")
                         If startIndex > 10 Then Return Nothing
                         response = response.Substring(startIndex)
-                        Log("[MCPing] Server Response: " & response)
+                        Log("[MCPing] Server Response: " & response, LogLevel.Debug)
 
                         Dim j = JObject.Parse(response)
 
@@ -108,11 +108,14 @@ Public Class ModLink
                         }
                         Dim descObj = j("description")
                         world.Description = ""
-                        If descObj("extra") IsNot Nothing Then
+                        If descObj.Type = JTokenType.Object AndAlso descObj("extra") IsNot Nothing Then
+                            Log("[MCPing] 获取到的内容为 extra 形式", LogLevel.Debug)
                             world.Description = MinecraftFormatter.ConvertToMinecraftFormat(descObj)
-                        ElseIf descObj("text") IsNot Nothing Then
+                        ElseIf descObj.Type = JTokenType.Object AndAlso descObj("text") IsNot Nothing Then
+                            Log("[MCPing] 获取到的内容为 text 形式", LogLevel.Debug)
                             world.Description = descObj("text").ToString()
                         ElseIf descObj.Type = JTokenType.String Then
+                            Log("[MCPing] 获取到的内容为 string 形式", LogLevel.Debug)
                             world.Description = descObj.ToString()
                         End If
                         Return world
