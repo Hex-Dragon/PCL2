@@ -471,6 +471,22 @@ Public Class ModLink
     ''' </summary>
     ''' <returns>NAT 类型 + IPv6 支持与否</returns>
     Public Shared Function NetTest() As String()
+        '申请通过防火墙以准确测试 NAT 类型
+        Dim RetryTime As Integer = 0
+        Try
+PortRetry:
+            Dim TestTcpListener = TcpListener.Create(RandomInteger(20000, 65000))
+            TestTcpListener.Start()
+            Thread.Sleep(200)
+            TestTcpListener.Stop()
+        Catch ex As Exception
+            Log(ex, "[Link] 请求防火墙通过失败")
+            If RetryTime >= 3 Then
+                Log("[Link] 请求防火墙通过失败次数已达 3 次，不再重试")
+                Exit Try
+            End If
+            GoTo PortRetry
+        End Try
         'IPv4 NAT 测试
         Dim NATType As String
         Dim STUNServerDomain As String = "stun.miwifi.com" '指定 STUN 服务器
@@ -484,13 +500,8 @@ Public Class ModLink
             Log("[STUN] 开始进行 NAT 测试")
             Dim STUNTestResult = STUNClient.Query(STUNServerEndPoint, STUNQueryType.ExactNAT, True) '进行 STUN 测试
 
-            If STUNTestResult.QueryError = STUNQueryError.Success Then
-                NATType = STUNTestResult.NATType.ToString()
-                Log("[STUN] NAT 检测完成，本地 NAT 类型为: " + NATType)
-            Else
-                Log("[STUN] NAT 测试失败")
-                NATType = "TestFailed"
-            End If
+            NATType = STUNTestResult.NATType.ToString()
+            Log("[STUN] 本地 NAT 类型: " + NATType)
         Catch ex As Exception
             Log(ex, "[STUN] 进行 NAT 测试失败", LogLevel.Normal)
             NATType = "TestFailed"
@@ -516,6 +527,7 @@ Public Class ModLink
             Next
         Catch ex As Exception
             Log(ex, "[IP] 进行 IPv6 测试失败", LogLevel.Normal)
+            IPv6Status = "Unknown"
         End Try
 
         Return {NATType, IPv6Status}

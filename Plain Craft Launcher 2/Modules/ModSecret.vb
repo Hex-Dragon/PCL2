@@ -835,9 +835,6 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' </summary>
     Public Sub SendTelemetry()
         Dim NetResult = ModLink.NetTest()
-        Dim NatType = "Unknown", IPv6Status = "Unknown"
-        NatType = NetResult(0)
-        IPv6Status = NetResult(1)
         Dim Data = New JObject From {
             {"Id", UniqueAddress},
             {"OS", Environment.OSVersion.Version.Build},
@@ -845,21 +842,25 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             {"IsARM64", IsArm64System},
             {"Launcher", VersionCode},
             {"LauncherBranch", VersionBranchName},
-            {"UsedOfficialPCL", True},
-            {"UsedHMCL", True},
-            {"Memory", My.Computer.Info.TotalPhysicalMemory / 1024 / 1024},
-            {"NatType", NatType},
-            {"IPv6Status", IPv6Status}
+            {"UsedOfficialPCL", ReadReg("SystemEula", Nothing, "PCL") IsNot Nothing},
+            {"UsedHMCL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.hmcl")},
+            {"Memory", Math.Ceiling(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024)},
+            {"NatType", NetResult(0)},
+            {"IPv6Status", NetResult(1)}
         }
         Dim SendData = New JObject From {
             {"data", Data}
         }
-        Dim Result As String = NetRequestRetry("https://pcl2ce.pysio.online/post", "POST", SendData.ToString(), "application/json")
-        If Result.Contains("数据已成功保存") Then
-            Log("[Telemetry] 软硬件调查数据已发送")
-        Else
-            Log("[Telemetry] 软硬件调查数据发送失败，原始返回内容: " + Result)
-        End If
+        Try
+            Dim Result As String = NetRequestRetry("https://pcl2ce.pysio.online/post", "POST", SendData.ToString(), "application/json")
+            If Result.Contains("数据已成功保存") Then
+                Log("[Telemetry] 软硬件调查数据已发送")
+            Else
+                Log("[Telemetry] 软硬件调查数据发送失败，原始返回内容: " + Result)
+            End If
+        Catch ex As Exception
+            Log(ex, "[Telemetry] 软硬件调查数据发送失败", LogLevel.Normal)
+        End Try
     End Sub
 #End Region
 
