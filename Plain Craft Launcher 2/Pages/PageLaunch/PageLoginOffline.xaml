@@ -24,14 +24,14 @@
     <local:MyTextBox Grid.Row="0" Grid.Column="1" Height="28" x:Name="TextUserName" ToolTip="3 - 16 位，只可以使用英文字母、数字与下划线">
         <local:MyTextBox.ValidateRules>
             <local:ValidateLength Min="3" Max="16"/>
-            <local:ValidateRegex Regex="([A-z]|[0-9]|_)+" ErrorDescription="请不要输入除了字母或数字或下划线的字符！"/>
+            <local:ValidateRegex Regex="^[a-zA-Z0-9]{3,16}$" ErrorDescription="请不要输入除了字母或数字或下划线的字符！"/>
         </local:MyTextBox.ValidateRules>
     </local:MyTextBox>
     <TextBlock Text="名称" Grid.Row="0" VerticalAlignment="Center" />
     <local:MyTextBox Grid.Row="2" Grid.Column="1" Height="28" x:Name="TextUserUuid" ToolTip="如果在下列选择了除自定义以外的单选框，则这里不用填">
         <local:MyTextBox.ValidateRules>
             <local:ValidateLength Min="32" Max="32"/>
-            <local:ValidateRegex Regex="([a-f]|[0-9]){32}" ErrorDescription="请不要输入除了a-f字母或数字的字符！"/>
+            <local:ValidateRegex Regex="^[a-f0-9]{32}$" ErrorDescription="请不要输入除了a-f字母或数字的字符！"/>
         </local:MyTextBox.ValidateRules>
     </local:MyTextBox>
     <TextBlock Text="UUID" Grid.Row="2" VerticalAlignment="Center" />
