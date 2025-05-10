@@ -2275,12 +2275,14 @@ RetryDir:
         Return NewProcess.ExitCode
     End Function
 
+    Public IsRestrictedFeatAllowed As Boolean = False
     ''' <summary>
-    ''' 判断当前系统语言是否为 zh-CN。
+    ''' 获取区域限制状态，用于判断是否允许使用部分区域限制功能。
     ''' </summary>
-    Public Function IsSystemLanguageChinese() As Boolean
-        Return CultureInfo.CurrentCulture.Name = "zh-CN" OrElse CultureInfo.CurrentUICulture.Name = "zh-CN"
-    End Function
+    Public Sub GetCoR()
+        If TimeZoneInfo.Local.Id = "China Standard Time" AndAlso
+            (CultureInfo.CurrentCulture.Name = "zh-CN" OrElse CultureInfo.CurrentUICulture.Name = "zh-CN") Then IsRestrictedFeatAllowed = True
+    End Sub
 
     Private Uuid As Integer = 1
     Private UuidLock As Object
