@@ -175,6 +175,7 @@
         Ms
         Profile
         ProfileSkin
+        Offline
     End Enum
     ''' <summary>
     ''' 当前页面的种类。
@@ -195,6 +196,9 @@
             Case PageType.ProfileSkin
                 If IsNothing(FrmLoginProfileSkin) Then FrmLoginProfileSkin = New PageLoginProfileSkin
                 Return FrmLoginProfileSkin
+            Case PageType.Offline
+                If IsNothing(FrmLoginOffline) Then FrmLoginOffline = New PageLoginOffline
+                Return FrmLoginOffline
             Case Else
                 Throw New ArgumentOutOfRangeException("Type", "即将切换的登录分页编号越界")
         End Select
@@ -259,6 +263,7 @@
         If Not TargetLoginType = Nothing Then
             If TargetLoginType = McLoginType.Ms Then Type = PageType.Ms
             If TargetLoginType = McLoginType.Auth Then Type = PageType.Auth
+            If TargetLoginType = McLoginType.Offline Then Type = PageType.Offline
         Else
             If SelectedProfile IsNot Nothing Then
                 Type = PageType.ProfileSkin

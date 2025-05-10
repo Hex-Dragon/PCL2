@@ -1,0 +1,51 @@
+﻿<Grid x:Class="PageLoginOffline" Tag="False"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PCL"
+      mc:Ignorable="d" d:DesignWidth="317.6" Margin="0,0,0,-2">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="10" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="10" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="10" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="50" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="30" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="50"/>
+        <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <local:MyTextBox Grid.Row="0" Grid.Column="1" Height="28" x:Name="TextUserName" ToolTip="3 - 16 位，只可以使用英文字母、数字与下划线">
+        <local:MyTextBox.ValidateRules>
+            <local:ValidateLength Min="3" Max="16"/>
+            <local:ValidateRegex Regex="([A-z]|[0-9]|_)+" ErrorDescription="请不要输入除了字母或数字或下划线的字符！"/>
+        </local:MyTextBox.ValidateRules>
+    </local:MyTextBox>
+    <TextBlock Text="名称" Grid.Row="0" VerticalAlignment="Center" />
+    <local:MyTextBox Grid.Row="2" Grid.Column="1" Height="28" x:Name="TextUserUuid" ToolTip="如果在下列选择了除自定义以外的单选框，则这里不用填">
+        <local:MyTextBox.ValidateRules>
+            <local:ValidateLength Min="32" Max="32"/>
+            <local:ValidateRegex Regex="([A-z]|[0-9]){32}" ErrorDescription="请不要输入除了字母或数字的字符！"/>
+        </local:MyTextBox.ValidateRules>
+    </local:MyTextBox>
+    <TextBlock Text="UUID" Grid.Row="2" VerticalAlignment="Center" />
+    <TextBlock Grid.Row="4" Grid.Column="1" Text="选择UUID类型" TextAlignment="Center" Margin="-30,0,0,0" FontWeight="Bold"/>
+    <Grid Margin="-30,-30,-30,0" Grid.Row="7" Grid.Column="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <local:MyRadioBox Grid.Column="0" Text="行业规范" x:Name="CreateStandardUuid" Checked="True" Height="22" ToolTip="（无需填写UUID）推荐"/>
+        <local:MyRadioBox Grid.Column="1" Text="官方版" x:Name="CreateOfficialUuid" Height="22" ToolTip="（无需填写UUID）若单人存档的部分信息丢失，可尝试此项" />
+        <local:MyRadioBox Grid.Column="2" Text="自定义" x:Name="CreateCustomUuid" Height="22" ToolTip="（需要填写UUID）32位，不含连字符"/>
+    </Grid>
+    <local:MyButton x:Name="BtnBack" Grid.Row="9" Grid.Column="1" Width="50" Margin="-100,-20,0,20" ColorType="Normal" Text="返回" HorizontalAlignment="Center"/>
+    <local:MyButton x:Name="BtnLogin" Grid.Row="9" Grid.Column="1" Width="50" Margin="20,-20,0,20" ColorType="Highlight" Text="登录" HorizontalAlignment="Center"/>
+</Grid>
