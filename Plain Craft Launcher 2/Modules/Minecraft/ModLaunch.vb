@@ -594,7 +594,7 @@ SkipLogin:
             ProfileLog("不存在缓存的账号信息，进行全新登录流程")
             GoTo NewLogin
         Catch ex As Exception
-            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString())
+            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString().Replace(OAuthClientId, ""))
             GoTo Exception
         End Try
         ProfileLog("使用已缓存的账号信息")
@@ -643,7 +643,7 @@ Retry:
             If ClientEx.Message.Contains("User canceled authentication") Then
                 Hint("你关闭了验证弹窗...", HintType.Critical)
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ClientEx.ToString())
+                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ClientEx.ToString().Replace(OAuthClientId, ""))
                 GoTo Exception
             End If
         Catch ServiceEx As MsalServiceException
@@ -656,11 +656,11 @@ Retry:
             ElseIf ServiceEx.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                 GoTo Retry
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ServiceEx.ToString())
+                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ServiceEx.ToString().Replace(OAuthClientId, ""))
                 GoTo Exception
             End If
         Catch ex As Exception
-            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString())
+            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString().Replace(OAuthClientId, ""))
             GoTo Exception
         End Try
         FrmMain.ShowWindowToTop()
