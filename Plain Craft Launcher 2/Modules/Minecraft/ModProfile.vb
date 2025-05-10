@@ -279,22 +279,27 @@ Public Module ModProfile
                                                           ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateLength(3, 16), New ValidateRegex("([A-z]|[0-9]|_)+")},
                                                           HintText:="3 - 16 个字符，只可以包含大小写字母、数字、下划线", Button1:="确认", Button2:="取消"))
             If NewUsername = Nothing Then Exit Sub
-            Dim Result As String = NetRequestRetry($"https://api.minecraftservices.com/minecraft/profile/name/", "PUT", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & SelectedProfile.AccessToken}})
-            Try
-                Dim ResultJson As JObject = GetJson(Result)
-                Hint($"玩家 ID 修改成功，当前 ID 为：{ResultJson("name")}", HintType.Finish)
-            Catch ex As WebException
-                Dim Message As String = GetExceptionSummary(ex)
-                If Message.Contains("(400)") Then
-                    MyMsgBox("玩家 ID 修改失败，因为不符合规范！", "ID 修改失败", "确认", IsWarn:=True)
-                ElseIf Message.Contains("(403)") Then
-                    If Message.Contains("DUPLICATE") Then
-                        MyMsgBox("玩家 ID 修改失败，因为该 ID 已被使用！", "ID 修改失败", "确认", IsWarn:=True)
-                    End If
-                Else
-                    Throw
-                End If
-            End Try
+            RunInNewThread(Sub()
+                               Try
+                                   Dim Result As String = NetRequestRetry($"https://api.minecraftservices.com/minecraft/profile/name/", "PUT", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & SelectedProfile.AccessToken}})
+                                   Dim ResultJson As JObject = GetJson(Result)
+                                   Hint($"玩家 ID 修改成功，当前 ID 为：{ResultJson("name")}", HintType.Finish)
+                               Catch ex As WebException
+                                   Dim Message As String = GetExceptionSummary(ex)
+                                   If Message.Contains("(400)") Then
+                                       MyMsgBox("玩家 ID 修改失败，因为不符合规范！", "ID 修改失败", "确认", IsWarn:=True)
+                                   ElseIf Message.Contains("(403)") Then
+                                       If Message.Contains("DUPLICATE") Then
+                                           MyMsgBox("玩家 ID 修改失败，因为该 ID 已被使用！", "ID 修改失败", "确认", IsWarn:=True)
+                                       End If
+                                   Else
+                                       Throw
+                                   End If
+                               End Try
+                           End Sub
+                    )
+
+
         ElseIf SelectedProfile.Type = McLoginType.Auth Then
             Dim Server As String = SelectedProfile.Server
             OpenWebsite(Server.ToString.Replace("/api/yggdrasil/authserver" + If(Server.EndsWithF("/"), "/", ""), "/user/profile"))
