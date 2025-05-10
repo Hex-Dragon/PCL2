@@ -685,7 +685,11 @@ Public Class FormMain
 
     '标题栏改变大小
     Private Sub PanTitle_SizeChanged() Handles PanTitleLeft.SizeChanged
-        PanTitleLeft.ColumnDefinitions(0).MaxWidth = PanTitleMain.ColumnDefinitions(0).ActualWidth - 30
+        If PanTitleMain.ColumnDefinitions(0).ActualWidth - 30 <= 0 Then
+            PanTitleLeft.ColumnDefinitions(0).MaxWidth = 0
+        Else
+            PanTitleLeft.ColumnDefinitions(0).MaxWidth = PanTitleMain.ColumnDefinitions(0).ActualWidth - 30
+        End If
     End Sub
 
     '最小化
