@@ -31,7 +31,7 @@
     <local:MyTextBox Grid.Row="2" Grid.Column="1" Height="28" x:Name="TextUserUuid" ToolTip="如果在下列选择了除自定义以外的单选框，则这里不用填">
         <local:MyTextBox.ValidateRules>
             <local:ValidateLength Min="32" Max="32"/>
-            <local:ValidateRegex Regex="([a-f]|[0-9]){32}" ErrorDescription="请不要输入除了字母或数字的字符！"/>
+            <local:ValidateRegex Regex="([a-f]|[0-9]){32}" ErrorDescription="请不要输入除了a-f字母或数字的字符！"/>
         </local:MyTextBox.ValidateRules>
     </local:MyTextBox>
     <TextBlock Text="UUID" Grid.Row="2" VerticalAlignment="Center" />
