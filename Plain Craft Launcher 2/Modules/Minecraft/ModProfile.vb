@@ -233,7 +233,7 @@ Public Module ModProfile
             RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Ms))
         ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
             RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Auth))
-        Else Then '离线验证
+        Else '离线验证
             Dim UserName As String = Nothing '玩家 ID
             Dim UserUuid As String = Nothing 'UUID
             RunInUiWait(Sub() UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="3 - 16 位，只可以使用英文字母、数字与下划线",
