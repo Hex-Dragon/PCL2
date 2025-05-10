@@ -27,7 +27,7 @@ Public Class ModLink
     Public Class MCPing
 
 
-        Sub New(IP As String, Port As Integer)
+        Sub New(IP As String, Optional Port As Integer = 25565)
             _IP = IP
             _Port = Port
         End Sub
@@ -42,37 +42,39 @@ Public Class ModLink
             Try
                 ' 创建 TCP 客户端并连接到服务器
                 Using client As New TcpClient(_IP, _Port)
+                    Log($"[MCPing] Established connection ({_IP}:{_Port})", LogLevel.Debug)
                     ' 向服务器发送握手数据包
                     Using stream = client.GetStream()
                         If Not stream.CanWrite OrElse Not stream.CanRead Then Return New WorldInfo
 
                         Dim handshake As Byte() = BuildHandshake(_IP, _Port)
+                        Log($"[MCPing] Sending {String.Join(" ", handshake)}", LogLevel.Debug)
                         Await stream.WriteAsync(handshake, 0, handshake.Length)
-                        Log($"[MCPing] Send {String.Join(" ", handshake)}", LogLevel.Debug)
+                        Log($"[MCPing] Sended handshake", LogLevel.Debug)
 
                         ' 向服务器发送查询状态信息的数据包
                         Dim statusRequest As Byte() = BuildStatusRequest()
+                        Log($"[MCPing] Sending {String.Join(" ", statusRequest)}")
                         Await stream.WriteAsync(statusRequest, 0, statusRequest.Length)
-                        Log($"[MCPing] Send {String.Join(" ", statusRequest)}")
+                        Log($"[MCPing] Sended statusrequest", LogLevel.Debug)
 
                         ' 读取服务器响应的数据
-                        Dim result As New List(Of Byte)
-                        While True
-                            Dim responseBuffer(1024) As Byte
-                            Dim bytesRead As Integer = Await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length)
-                            If bytesRead = 0 Then Exit While
-                            result.AddRange(responseBuffer.Take(bytesRead))
+                        Dim readedCount As Integer = -1
+                        Dim res As New List(Of Byte)
+                        Dim buffer As Byte() = New Byte(1024) {}
+                        While readedCount <> 0
+                            readedCount = Await stream.ReadAsync(buffer, 0, buffer.Length)
+                            For i = 0 To readedCount - 1
+                                res.Add(buffer(i))
+                            Next
                         End While
+                        Log($"[MCPing] Received ({res.Count}) = {String.Join(" ", res)}")
 
-                        Log($"[MCPing] Received ({result.Count}) = {String.Join(" ", result)}")
                         ' 将响应数据转换为字符串
-                        Dim response As String = Encoding.UTF8.GetString(result.ToArray(), 0, result.Count)
-                        Dim i = 0
-                        While i < response.Length AndAlso response.Chars(i) <> "{" AndAlso response.Chars(i + 1) <> """"
-                            i += 1
-                        End While
-                        If i = response.Length Then Return New WorldInfo
-                        response = response.Substring(i)
+                        Dim response As String = Encoding.UTF8.GetString(res.ToArray(), 0, res.Count)
+                        Dim startIndex = response.IndexOf("{""")
+                        If startIndex > 10 Then Return New WorldInfo
+                        response = response.Substring(startIndex)
                         Log("[MCPing] Server Response: " & response)
 
                         Dim j = JObject.Parse(response)
@@ -81,7 +83,7 @@ Public Class ModLink
                         .VersionName = j("version")("name"),
                         .PlayerMax = j("players")("max"),
                         .PlayerOnline = j("players")("online"),
-                        .Description = j("description")("text"),
+                        .Description = j("description"),
                         .Favicon = j("favicon"),
                         .Port = _Port
                         }

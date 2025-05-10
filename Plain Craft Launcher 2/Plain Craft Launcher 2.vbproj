@@ -319,9 +319,6 @@
     <Compile Include="Modules\ModDevelop.vb" />
     <Compile Include="Modules\Minecraft\ModWatcher.vb" />
     <Compile Include="Modules\ModSecret.vb" />
-    <Compile Include="Modules\Reference\CookieWebClient.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Pages\PageDownload\Comp\PageComp.xaml.vb">
       <DependentUpon>PageComp.xaml</DependentUpon>
     </Compile>

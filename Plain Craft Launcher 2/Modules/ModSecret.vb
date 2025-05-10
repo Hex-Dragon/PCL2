@@ -1,7 +1,7 @@
 '由于包含加解密等安全信息，本文件中的部分代码已被删除
 
 Imports System.ComponentModel
-Imports System.Net
+Imports System.Net.Http
 Imports System.Reflection
 Imports System.Text
 Imports System.Security.Cryptography
@@ -186,17 +186,19 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
-    Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
-        If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
-            Client.Headers("User-Agent") = "LogStatistic" '#4951
-        ElseIf UseBrowserUserAgent Then
-            Client.Headers("User-Agent") = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
-        Else
-            Client.Headers("User-Agent") = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode
-        End If
-        Client.Headers("Referer") = "http://" & VersionCode & ".ce.open.pcl2.server/"
-        If Url.Contains("api.curseforge.com") Then Client.Headers("x-api-key") = CurseForgeAPIKey
-        If Url.Contains("pcl2ce.pysio.online/post") Then Client.Headers("Authorization") = TelemetryKey
+    Friend Sub SecretHeadersSign(Url As String, ByRef Client As HttpRequestMessage, Optional UseBrowserUserAgent As Boolean = False)
+        If Url.Contains("api.curseforge.com") Then Client.Headers.Add("x-api-key", CurseForgeAPIKey)
+        Client.Headers.Add("User-Agent",
+        If(Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com"),
+                "LogStatistic",
+                If(UseBrowserUserAgent,
+                    $"PCL2/{UpstreamVersion}.{VersionBranchCode} PCLCE/{VersionStandardCode} Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36",
+                    $"PCL2/{UpstreamVersion}.{VersionBranchCode} PCLCE/{VersionStandardCode}"
+                )
+            ))
+
+        Client.Headers.Add("Referer", "http://" & VersionCode & ".ce.open.pcl2.server/")
+        If Url.Contains("pcl2ce.pysio.online/post") Then Client.Headers.Add("Authorization", TelemetryKey)
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
