@@ -285,6 +285,7 @@
     <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\Minecraft\ModProfile.vb" />
+    <Compile Include="Modules\Minecraft\ModStyle.vb" />
     <Compile Include="Pages\PageVersion\MyLocalModItem.xaml.vb">
       <DependentUpon>MyLocalModItem.xaml</DependentUpon>
     </Compile>

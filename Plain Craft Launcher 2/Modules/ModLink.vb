@@ -44,7 +44,7 @@ Public Class ModLink
                     Log($"[MCPing] Established connection ({_IP}:{_Port})", LogLevel.Debug)
                     ' 向服务器发送握手数据包
                     Using stream = client.GetStream()
-                        If Not stream.CanWrite OrElse Not stream.CanRead Then Return New WorldInfo
+                        If Not stream.CanWrite OrElse Not stream.CanRead Then Return Nothing
 
                         Dim handshake As Byte() = BuildHandshake(_IP, _Port)
                         Log($"[MCPing] Sending {String.Join(" ", handshake)}", LogLevel.Debug)
@@ -58,40 +58,70 @@ Public Class ModLink
                         Log($"[MCPing] Sended statusrequest", LogLevel.Debug)
 
                         ' 读取服务器响应的数据
-                        Dim readedCount As Integer = -1
                         Dim res As New List(Of Byte)
-                        Dim buffer As Byte() = New Byte(1024) {}
-                        While readedCount <> 0
-                            readedCount = Await stream.ReadAsync(buffer, 0, buffer.Length)
-                            For i = 0 To readedCount - 1
-                                res.Add(buffer(i))
-                            Next
-                        End While
-                        Log($"[MCPing] Received ({res.Count}) = {String.Join(" ", res)}")
+                        Dim buffer(4096) As Byte
 
-                        ' 将响应数据转换为字符串
+                        ' 读取varInt头部
+                        Dim packetLength As Integer = 0
+                        Dim bytesNeeded = 5
+                        Do
+                            Dim bytesRead = Await stream.ReadAsync(buffer, 0, Math.Min(buffer.Length, bytesNeeded))
+                            If bytesRead = 0 Then Exit Do
+
+                            Dim parseResult = ParseVarInt(buffer.Take(bytesRead).ToArray(), packetLength)
+                            If parseResult.Success Then
+                                bytesNeeded = parseResult.BytesNeeded
+                                If bytesNeeded = 0 Then Exit Do
+                            Else
+                                Exit Do
+                            End If
+                        Loop While bytesNeeded > 0
+                        packetLength -= 3
+                        Log($"[MCPing] Got packet length ({packetLength})")
+
+                        ' 读取剩余数据包
+                        Dim totalBytes = 0
+                        Do
+                            Dim bytesRead = Await stream.ReadAsync(buffer, 0, buffer.Length)
+                            If bytesRead = 0 Then Exit Do
+                            res.AddRange(buffer.Take(bytesRead))
+                            totalBytes += bytesRead
+                            Log($"[MCPing] Received part ({bytesRead})")
+                        Loop While totalBytes < packetLength
+
+                        Log($"[MCPing] Received ({res.Count})")
+
                         Dim response As String = Encoding.UTF8.GetString(res.ToArray(), 0, res.Count)
                         Dim startIndex = response.IndexOf("{""")
-                        If startIndex > 10 Then Return New WorldInfo
+                        If startIndex > 10 Then Return Nothing
                         response = response.Substring(startIndex)
                         Log("[MCPing] Server Response: " & response)
 
                         Dim j = JObject.Parse(response)
 
-                        Return New WorldInfo With {
+                        Dim world As New WorldInfo With {
                         .VersionName = j("version")("name"),
                         .PlayerMax = j("players")("max"),
                         .PlayerOnline = j("players")("online"),
-                        .Description = j("description"),
-                        .Favicon = j("favicon"),
+                        .Favicon = If(j("favicon"), ""),
                         .Port = _Port
                         }
+                        Dim descObj = If(j("description")("text"), j("description"))
+                        world.Description = ""
+                        If descObj IsNot Nothing Then
+                            If descObj.Type = JTokenType.String Then
+                                world.Description = descObj.ToString()
+                            Else
+                                world.Description = "§l§a暂不支持展示此 MOTD"
+                            End If
+                        End If
+                        Return world
                     End Using
                 End Using
             Catch ex As Exception
                 Log(ex, "[MCPing] Error: " & ex.Message)
             End Try
-            Return New WorldInfo
+            Return Nothing
         End Function
 
 
@@ -117,6 +147,29 @@ Public Class ModLink
             packet.AddRange(GetVarInt(1))
             packet.AddRange(GetVarInt(0))
             Return packet.ToArray() ' 状态请求数据包
+        End Function
+
+        Private Function ParseVarInt(bytes As Byte(), ByRef value As Integer) As (Success As Boolean, BytesNeeded As Integer, Value As Integer)
+            value = 0
+            Dim shift = 0
+            Dim index = 0
+
+            Do While index < bytes.Length
+                Dim b = bytes(index)
+                value = value Or (CInt(b And &H7F) << shift)
+                shift += 7
+                index += 1
+
+                If (b And &H80) = 0 Then
+                    Return (True, 0, value)
+                End If
+
+                If index >= 5 Then
+                    Return (False, 0, 0)
+                End If
+            Loop
+
+            Return (False, 5 - index, 0)
         End Function
 
         Private Function GetVarInt(value As Integer) As Byte()
