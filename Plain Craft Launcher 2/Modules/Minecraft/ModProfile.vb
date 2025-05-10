@@ -375,7 +375,14 @@ Write:
                                Dim ImportNum As Integer = 0
                                For Each Profile In ImportList
                                    Dim NewProfile As McProfile = Nothing
+                                   Dim IsDuplicated As Boolean = False
                                    If Profile("type") = "microsoft" Then
+                                       For Each ExistProfile In ProfileList
+                                           If ExistProfile.Type = McLoginType.Ms AndAlso ExistProfile.Uuid = Profile("uuid") Then '不检查玩家 ID，因为可能改了名字还没刷新
+                                               IsDuplicated = True
+                                               Exit For
+                                           End If
+                                       Next
                                        NewProfile = New McProfile With {
                                                                .Type = McLoginType.Ms,
                                                                .Uuid = Profile("uuid"),
@@ -387,7 +394,7 @@ Write:
                                                                .RawJson = "",
                                                                .SkinHeadId = ""
                                                            }
-                                       OutputList.Add(NewProfile)
+                                       If Not IsDuplicated Then OutputList.Add(NewProfile)
                                    ElseIf Profile("type") = "authlibInjector" Then
                                        NewProfile = New McProfile With {
                                                                .Type = McLoginType.Auth,
