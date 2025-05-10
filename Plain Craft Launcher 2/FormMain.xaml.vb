@@ -438,6 +438,7 @@ Public Class FormMain
             Catch ex As Exception
                 Log(ex, "清理自动更新文件失败")
             End Try
+            GetSystemInfo()
         End Sub, "Start Loader", ThreadPriority.Lowest)
         '剪贴板识别
         If Setup.Get("ToolDownloadClipboard") Then RunInNewThread(Sub() CompClipboard.ClipboardListening(), "Clipboard Listener", ThreadPriority.Lowest)
