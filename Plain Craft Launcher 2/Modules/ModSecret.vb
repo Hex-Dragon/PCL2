@@ -844,6 +844,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             {"LauncherBranch", VersionBranchName},
             {"UsedOfficialPCL", ReadReg("SystemEula", Nothing, "PCL") IsNot Nothing},
             {"UsedHMCL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.hmcl")},
+            {"UsedBakaXL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\BakaXL")},
             {"Memory", Math.Ceiling(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024)},
             {"NatType", NetResult(0)},
             {"IPv6Status", NetResult(1)}

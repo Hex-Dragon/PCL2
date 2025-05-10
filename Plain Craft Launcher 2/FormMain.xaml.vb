@@ -423,9 +423,9 @@ Public Class FormMain
             End If
             '遥测提示
             If Setup.Get("SystemTelemetry") = Nothing Then
-                Select Case MyMsgBox("参与 PCL CE 软硬件调查可以帮助我们更好的进行功能开发，且我们会不定期发布该调查的统计结果。" & vbCrLf &
+                Select Case MyMsgBox("这是一项与 Steam 硬件调查类似的计划，参与调查可以帮助我们更好的进行规划和开发，且我们会不定期发布该调查的统计结果。" & vbCrLf &
                                      "如果选择参与调查，我们将会收集以下信息：" & vbCrLf &
-                                     "启动器版本信息与识别码，使用的 Windows 系统版本与架构，已安装的物理内存大小，NAT 与 IPv6 支持情况，是否使用过官方版 PCL 或 HMCL" & vbCrLf & vbCrLf &
+                                     "启动器版本信息与识别码，使用的 Windows 系统版本与架构，已安装的物理内存大小，NAT 与 IPv6 支持情况，是否使用过官方版 PCL、HMCL 或 BakaXL" & vbCrLf & vbCrLf &
                                      "这些数据均不与你关联，我们也绝不会向第三方出售数据。" & vbCrLf &
                                      "如果不想参与该调查，可以选择拒绝，不会影响其他功能使用。" & vbCrLf &
                                      "你可以随时在启动器设置中调整这项设置。", "参与 PCL CE 软硬件调查", "同意", "拒绝")
