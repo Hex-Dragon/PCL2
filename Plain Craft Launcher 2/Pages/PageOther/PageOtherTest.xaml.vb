@@ -407,4 +407,56 @@ Public Class PageOtherTest
     Private Sub BtnMemory_Click(sender As Object, e As MouseButtonEventArgs)
         RunInThread(Sub() MemoryOptimize(True))
     End Sub
+    Private _IsQueryServer As Boolean = False
+    Private Sub BtnServerQuery_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnServerQuery.Click
+        If _IsQueryServer Then
+            Hint("正在查询中，请稍等……")
+            Exit Sub
+        End If
+        Dim url = LabServerIp.Text
+        _IsQueryServer = True
+        RunInNewThread(Sub()
+                           Try
+                               Dim needSRV = False
+                               Try
+                                   Dns.GetHostAddresses(url)
+                               Catch ex As Exception
+                                   needSRV = True
+                               End Try
+                               If needSRV Then
+                                   Log($"需要获取 {url} 的 SRV 记录")
+                                   url = nDnsQuery.GetSRVRecords(url).First()
+                                   Log($"获取到的 SRV 记录为 {url}")
+                               End If
+                               Dim query As New ModLink.MCPing(url)
+                               Dim ret = query.GetInfo().Result
+                               If ret Is Nothing Then Throw New Exception("没有查询到信息")
+                               Dim base64String = ret.Favicon
+                               If base64String.Contains(",") Then
+                                   base64String = base64String.Split(","c)(1)
+                               End If
+                               Dim imageBytes As Byte() = Convert.FromBase64String(base64String)
+                               RunInUi(Sub()
+                                           MinecraftFormatter.SetColorfulTextLab(ret.Description, LabServerDesc)
+                                           LabServerPlayer.Text = $"{ret.PlayerOnline}/{ret.PlayerMax}"
+                                           ServerInfo.Visibility = Visibility.Visible
+                                           If Not String.IsNullOrEmpty(base64String) Then
+                                               Dim bitmapImage As New BitmapImage()
+                                               Using ms As New MemoryStream(imageBytes)
+                                                   bitmapImage.BeginInit()
+                                                   bitmapImage.CacheOption = BitmapCacheOption.OnLoad ' 加载后关闭流
+                                                   bitmapImage.StreamSource = ms
+                                                   bitmapImage.EndInit()
+                                               End Using
+                                               ImgServerLogo.Source = bitmapImage
+                                           End If
+                                       End Sub)
+                               Hint("查询完成", HintType.Finish)
+                           Catch ex As Exception
+                               Log(ex, "Thread 查询失败", LogLevel.Hint)
+                           Finally
+                               _IsQueryServer = False
+                           End Try
+                       End Sub, "Server Query")
+    End Sub
 End Class
