@@ -224,8 +224,7 @@ Public Module ModProfile
                         Dim AuthTypeList As New List(Of IMyRadio) From {
                             New MyRadioBox With {.Text = "离线验证"},
                             New MyRadioBox With {.Text = "正版验证"},
-                            New MyRadioBox With {.Text = "第三方验证"},
-                            New MyRadioBox With {.Text = "第三方验证（Yggdrasil Connect 协议）"}
+                            New MyRadioBox With {.Text = "第三方验证"}
                         }
                         SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消")
                     End Sub)
@@ -234,7 +233,7 @@ Public Module ModProfile
             RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Ms))
         ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
             RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Auth))
-        ElseIf SelectedAuthTypeNum = 3 Then '离线验证
+        Else Then '离线验证
             Dim UserName As String = Nothing '玩家 ID
             Dim UserUuid As String = Nothing 'UUID
             RunInUiWait(Sub() UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="3 - 16 位，只可以使用英文字母、数字与下划线",
@@ -268,8 +267,6 @@ Public Module ModProfile
             ProfileList.Add(NewProfile)
             SaveProfile()
             Hint("档案新建成功！", HintType.Finish)
-        Else
-
         End If
     End Sub
     ''' <summary>
