@@ -2029,25 +2029,8 @@ NextVersion:
 
         'LabyMod 预处理
         If ReadIni(McVersionCurrent.Path & "PCL\Setup.ini", "VersionLabyMod", "") <> "" AndAlso McVersionCurrent.PathIndie = McVersionCurrent.Path Then
-            Dim RootPath = McVersionCurrent.Path & "..\..\"
-            If Not Directory.Exists(RootPath & "labymod-neo") Then Directory.CreateDirectory(RootPath & "labymod-neo")
-            If Not Directory.Exists(McVersionCurrent.Path & "labymod-neo") Then Directory.CreateDirectory(McVersionCurrent.Path & "labymod-neo")
-            If Directory.Exists(McVersionCurrent.Path & "labymod-neo\libraries") Then
-                MoveDirectory(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries")
-                Thread.Sleep(50)
-                Directory.Delete(McVersionCurrent.Path & "labymod-neo\libraries", True)
-                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries", &H2)
-            Else
-                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\libraries", RootPath & "labymod-neo\libraries", &H2)
-            End If
-            If Directory.Exists(McVersionCurrent.Path & "labymod-neo\assets") Then
-                MoveDirectory(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets")
-                Thread.Sleep(50)
-                Directory.Delete(McVersionCurrent.Path & "labymod-neo\assets", True)
-                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets", &H2)
-            Else
-                CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo\assets", RootPath & "labymod-neo\assets", &H2)
-            End If
+            If Directory.Exists(McVersionCurrent.Path & "labymod-neo") Then Directory.Delete(McVersionCurrent.Path & "labymod-neo")
+            CreateSymbolicLink(McVersionCurrent.Path & "labymod-neo", PathMcFolder & "labymod-neo", &H2)
         End If
     End Sub
     Private Sub McLaunchCustom(Loader As LoaderTask(Of Integer, Integer))

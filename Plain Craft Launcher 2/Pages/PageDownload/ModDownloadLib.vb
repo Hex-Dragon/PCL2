@@ -2313,7 +2313,7 @@ Retry:
     ''' 获取下载某个 Minecraft 版本的加载器列表。
     ''' 它必须安装到 PathMcFolder，但是可以自定义版本名（不过自定义的版本名不会修改 Json 中的 id 项）。
     ''' </summary>
-    Private Function McDownloadLabyModClientLoader(Id As String, Optional VersionName As String = Nothing) As List(Of LoaderBase)
+    Private Function McDownloadLabyModClientLoader(Id As String, LabyChannel As String, LabyCommitRef As String, Optional VersionName As String = Nothing) As List(Of LoaderBase)
         VersionName = If(VersionName, Id)
         Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
 
@@ -2355,6 +2355,23 @@ Retry:
             Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
+        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("下载 LabyMod 资源",
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                'WriteFile($"{VersionFolder}labymod-neo\configs\labymod\settings.json", "{""appearance"":{""theme"":""FANCY""}}")
+                Directory.CreateDirectory($"{PathMcFolder}labymod-neo\libraries")
+                Dim manifest As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyChannel}/latest.json", IsJson:=True)
+                Dim LabyAssets As JObject = manifest("assets")
+                Dim ret As New List(Of NetFile)
+                For Each Asset In LabyAssets
+                    Dim AssetName As String = Asset.Key
+                    Dim AssetSHA1 As String = Asset.Value.ToString()
+                    Dim AssetPath As String = $"{PathMcFolder}labymod-neo\assets\{AssetName}.jar"
+                    Dim AssetUrl As String = $"https://releases.r2.labymod.net/api/v1/download/assets/labymod4/{LabyChannel}/{LabyCommitRef}/{AssetName}/{AssetSHA1}.jar"
+                    ret.Add(New NetFile(New List(Of String) From {AssetUrl}, AssetPath, New FileChecker(Hash:=AssetSHA1)))
+                Next
+                Task.Output = ret
+            End Sub))
+        LoadersAssets.Add(New LoaderDownload("下载 LabyMod 资源", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
         Return Loaders
@@ -2720,7 +2737,7 @@ LabyModSkip:
         (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.CleanroomVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing OrElse Request.LabyModCommitRef IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             If Request.LabyModCommitRef IsNot Nothing Then
-                Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadLabyModClientLoader(Request.MinecraftName, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
+                Dim LabyModClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadLabyModClientLoader(Request.MinecraftName, Request.LabyModChannel, Request.LabyModCommitRef, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = False}
                 LoaderList.Add(LabyModClientLoader)
             Else
                 LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
@@ -2945,8 +2962,8 @@ LabyModSkip:
             If OutputJson Is Nothing Then OutputJson = New JObject
             OutputJson.Merge(LabyModJson)
 
-            Dim LabyModLib As JObject = JObject.FromObject(NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True))
-            Dim LabyModCore As JObject = JObject.FromObject(NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True))
+            Dim LabyModLib As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/libraries/{LabyModChannel}.json", IsJson:=True)
+            Dim LabyModCore As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyModChannel}/latest.json", IsJson:=True)
             Dim OutputLibraries As New JArray
             Dim IsolatedLibraries As New Dictionary(Of String, Boolean)
             Dim MinecraftVersion = LabyModJson("_minecraftVersion")
