@@ -274,7 +274,7 @@ NextInner:
         '正版购买提示
         If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
            Not Setup.Get("HintBuy") AndAlso SelectedProfile.Type <> McLoginType.Ms Then
-            If IsSystemLanguageChinese() Then
+            If IsRestrictedFeatAllowed Then
                 RunInNewThread(
                 Sub()
                     Select Case Setup.Get("SystemLaunchCount")
@@ -287,8 +287,8 @@ NextInner:
                             End If
                     End Select
                 End Sub, "Buy Minecraft")
-            ElseIf SelectedProfile.Type = McLoginType.Legacy Then
-                Select Case MyMsgBox("你必须先登录正版账号，才能使用离线验证！", "正版验证", "购买正版", "试玩", "返回",
+            Else
+                Select Case MyMsgBox("你必须先登录正版账号才能启动游戏！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
                         Hint("游戏将以试玩模式启动！", HintType.Critical)
@@ -489,31 +489,37 @@ NextInner:
         Dim IsSkipAuth As Boolean = False
         Dim OAuthAccessToken As String
         Dim OAuthId As String
-        Dim OAuthResult = MsLoginStep1(Data)
+        Dim OAuthResult = MsLoginStep1(Data) 'Step 1
         If OAuthResult Is Nothing Then GoTo SkipLogin
         OAuthAccessToken = OAuthResult.AccessToken
         OAuthId = OAuthResult.Account.HomeAccountId.Identifier
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Data.Progress = 0.25
         If Data.IsAborted Then Throw New ThreadInterruptedException
+        'Step 2
         Dim XBLToken As String = MsLoginStep2(OAuthAccessToken)
         If XBLToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.4
         If Data.IsAborted Then Throw New ThreadInterruptedException
+        'Step 3
         Dim Tokens = MsLoginStep3(XBLToken)
         If Tokens(1) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.55
         If Data.IsAborted Then Throw New ThreadInterruptedException
+        'Step 4
         Dim AccessToken As String = MsLoginStep4(Tokens)
         If AccessToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.7
         If Data.IsAborted Then Throw New ThreadInterruptedException
+        'Step 5
         MsLoginStep5(AccessToken)
         Data.Progress = 0.85
         If Data.IsAborted Then Throw New ThreadInterruptedException
+        'Step 6
         Dim Result = MsLoginStep6(AccessToken)
         If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
+
         For Each Profile In ProfileList
             If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
                 IsNewProfile = False
@@ -545,7 +551,6 @@ NextInner:
         ProfileLog("正版验证完成")
 SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
-        If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
         If IsSkipAuth Then
             Data.Progress = 0.99
             Data.Output = New McLoginResult With {.AccessToken = SelectedProfile.AccessToken,
@@ -554,13 +559,17 @@ SkipLogin:
             Exit Sub
         End If
     End Sub
-    '正版验证步骤 1：使用 MSAL 获取账号信息
+    ''' <summary>
+    ''' 正版验证步骤 1：使用 MSAL 获取账号信息
+    ''' </summary>
+    ''' <returns>OAuth 验证完成的返回结果</returns>
     Private Function MsLoginStep1(Data As LoaderTask(Of McLoginMs, McLoginResult)) As AuthenticationResult
         '参考：https://learn.microsoft.com/zh-cn/entra/msal/dotnet/
-        ProfileLog("开始正版验证步骤 1/6")
+        ProfileLog("开始正版验证 Step 1/6: 获取账号信息")
         Dim Scopes = {"XboxLive.signin", "offline_access"}
-        Dim Options As New BrokerOptions(BrokerOptions.OperatingSystems.Windows)
-        Options.Title = "PCL CE 正版验证"
+        Dim Options As New BrokerOptions(BrokerOptions.OperatingSystems.Windows) With {
+            .Title = "PCL CE 正版验证"
+        }
 
         Dim App As IPublicClientApplication = PublicClientApplicationBuilder.Create(OAuthClientId).
             WithAuthority(AzureCloudInstance.AzurePublic, "consumers").
@@ -578,23 +587,26 @@ SkipLogin:
         Try
             If Account IsNot Nothing Then
                 Result = App.AcquireTokenSilent(Scopes, Account).ExecuteAsync().GetAwaiter().GetResult()
-                Return Result
             Else
                 Result = App.AcquireTokenSilent(Scopes, PublicClientApplication.OperatingSystemAccount).ExecuteAsync().GetAwaiter().GetResult()
-                Return Result
             End If
         Catch ex1 As MsalUiRequiredException
+            ProfileLog("不存在缓存的账号信息，进行全新登录流程")
             GoTo NewLogin
         Catch ex As Exception
             ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString())
             GoTo Exception
         End Try
+        ProfileLog("使用已缓存的账号信息")
+        Return Result
 
 NewLogin:
         Try
             If Setup.Get("LoginMsAuthType") = 0 Then 'Web Account Manager / https://learn.microsoft.com/en-us/entra/msal/dotnet/acquiring-tokens/desktop-mobile/wam
+                ProfileLog("使用 Web 账户管理器进行登录")
                 Result = App.AcquireTokenInteractive(Scopes).ExecuteAsync().GetAwaiter().GetResult()
             Else 'Device Code Flow / https://learn.microsoft.com/zh-cn/entra/msal/dotnet/acquiring-tokens/desktop-mobile/device-code-flow
+                ProfileLog("使用设备代码流进行登录")
 Retry:
                 Result = App.AcquireTokenWithDeviceCode(Scopes, Function(deviceCodeResult)
 Retry:
@@ -626,24 +638,31 @@ Retry:
                                                                     End If
                                                                 End Function).ExecuteAsync().GetAwaiter().GetResult()
             End If
-        Catch ex1 As MsalServiceException
-            If ex1.Message.Contains("authorization_declined") Or ex1.Message.Contains("access_denied") Then
+            Hint("网页登录成功！", HintType.Finish)
+        Catch ClientEx As MsalClientException
+            If ClientEx.Message.Contains("User canceled authentication") Then
+                Hint("你关闭了验证弹窗...", HintType.Critical)
+            Else
+                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ClientEx.ToString())
+                GoTo Exception
+            End If
+        Catch ServiceEx As MsalServiceException
+            If ServiceEx.Message.Contains("authorization_declined") Or ServiceEx.Message.Contains("access_denied") Then
                 Hint("你拒绝了 PCL 申请的权限……", HintType.Critical)
-            ElseIf ex1.Message.Contains("expired_token") Then
+            ElseIf ServiceEx.Message.Contains("expired_token") Then
                 Hint("登录用时太长啦，重新试试吧！", HintType.Critical)
-            ElseIf ex1.Message.Contains("service abuse") Then
+            ElseIf ServiceEx.Message.Contains("service abuse") Then
                 Hint("非常抱歉，该账号已被微软封禁，无法登录", HintType.Critical)
-            ElseIf ex1.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
+            ElseIf ServiceEx.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                 GoTo Retry
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex1.ToString())
+                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ServiceEx.ToString())
                 GoTo Exception
             End If
         Catch ex As Exception
             ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString())
             GoTo Exception
         End Try
-        Hint("网页登录成功！", HintType.Finish)
         FrmMain.ShowWindowToTop()
         Return Result
 
@@ -659,9 +678,13 @@ Exception:
             Throw New Exception("$$")
         End If
     End Function
-    '正版验证步骤 2：从 OAuth AccessToken 获取 XBLToken
+    ''' <summary>
+    ''' 正版验证步骤 2：从 OAuth AccessToken 获取 XBLToken
+    ''' </summary>
+    ''' <param name="AccessToken">OAuth AccessToken</param>
+    ''' <returns>XBLToken</returns>
     Private Function MsLoginStep2(AccessToken As String) As String
-        ProfileLog("开始正版验证步骤 2/6: 获取 XBLToken")
+        ProfileLog("开始正版验证 Step 2/6: 获取 XBLToken")
 
         Dim Request As String = "{
            ""Properties"": {
@@ -691,9 +714,12 @@ Exception:
         Dim XBLToken As String = ResultJson("Token").ToString
         Return XBLToken
     End Function
-    '正版验证步骤 3：从 XBLToken 获取 {XSTSToken, UHS}
+    ''' <summary>
+    ''' 正版验证步骤 3：从 XBLToken 获取 {XSTSToken, UHS}
+    ''' </summary>
+    ''' <returns>包含 XSTSToken 与 UHS 的字符串组</returns>
     Private Function MsLoginStep3(XBLToken As String) As String()
-        ProfileLog("开始正版验证步骤 3/6: 获取 XSTSToken")
+        ProfileLog("开始正版验证 Step 3/6: 获取 XSTSToken")
 
         Dim Request As String = "{
                                     ""Properties"": {
@@ -708,7 +734,7 @@ Exception:
         Dim Result As String
         Try
             Result = NetRequestMultiple("https://xsts.auth.xboxlive.com/xsts/authorize", "POST", Request, "application/json", 3)
-        Catch ex As Net.WebException
+        Catch ex As WebException
             '参考 https://github.com/PrismarineJS/prismarine-auth/blob/master/src/common/Constants.js
             If ex.Message.Contains("2148916227") Then
                 MyMsgBox("该账号似乎已被微软封禁，无法登录。", "登录失败", "我知道了", IsWarn:=True)
@@ -752,9 +778,13 @@ Exception:
         Dim UHS As String = ResultJson("DisplayClaims")("xui")(0)("uhs").ToString
         Return {XSTSToken, UHS}
     End Function
-    '正版验证步骤 4：从 {XSTSToken, UHS} 获取 Minecraft AccessToken
+    ''' <summary>
+    ''' 正版验证步骤 4：从 {XSTSToken, UHS} 获取 Minecraft AccessToken
+    ''' </summary>
+    ''' <param name="Tokens">包含 XSTSToken 与 UHS 的字符串组</param>
+    ''' <returns>Minecraft AccessToken</returns>
     Private Function MsLoginStep4(Tokens As String()) As String
-        ProfileLog("开始正版验证步骤 4/6: 获取 Minecraft AccessToken")
+        ProfileLog("开始正版验证 Step 4/6: 获取 Minecraft AccessToken")
 
         Dim Request As String = New JObject(New JProperty("identityToken", $"XBL3.0 x={Tokens(1)};{Tokens(0)}")).ToString(0)
         Dim Result As String
@@ -763,10 +793,10 @@ Exception:
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
-                Log(ex, "正版验证第 4 步汇报 429")
+                Log(ex, "正版验证 Step 4 汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(403)") Then
-                Log(ex, "正版验证第 4 步汇报 403")
+                Log(ex, "正版验证 Step 4 汇报 403")
                 Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
             Else
                 Dim IsIgnore As Boolean = False
@@ -786,9 +816,12 @@ Exception:
         Dim AccessToken As String = ResultJson("access_token").ToString
         Return AccessToken
     End Function
-    '正版验证步骤 5：验证微软账号是否持有 MC，这也会刷新 XGP
+    ''' <summary>
+    ''' 正版验证步骤 5：验证微软账号是否持有 MC，这也会刷新 XGP
+    ''' </summary>
+    ''' <param name="AccessToken">Minecraft AccessToken</param>
     Private Sub MsLoginStep5(AccessToken As String)
-        ProfileLog("开始正版验证步骤 5/6: 验证账户是否持有 MC")
+        ProfileLog("开始正版验证 Step 5/6: 验证账户是否持有 MC")
 
         Dim Result As String = NetRequestMultiple("https://api.minecraftservices.com/entitlements/mcstore", "GET", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
         Try
@@ -801,13 +834,17 @@ Exception:
                 Throw New Exception("$$")
             End If
         Catch ex As Exception
-            Log(ex, "正版验证第 5 步异常：" & Result)
+            Log(ex, "正版验证 Step 5 异常：" & Result)
             Throw
         End Try
     End Sub
-    '正版验证步骤 6：从 Minecraft AccessToken 获取 {UUID, UserName, ProfileJson}
+    ''' <summary>
+    ''' 正版验证步骤 6：从 Minecraft AccessToken 获取 {UUID, UserName, ProfileJson}
+    ''' </summary>
+    ''' <param name="AccessToken">Minecraft AccessToken</param>
+    ''' <returns>包含 UUID, UserName 和 ProfileJson 的字符串组</returns>
     Private Function MsLoginStep6(AccessToken As String) As String()
-        ProfileLog("开始正版验证步骤 6/6: 获取玩家 ID 与 UUID 等相关信息")
+        ProfileLog("开始正版验证 Step 6/6: 获取玩家 ID 与 UUID 等相关信息")
 
         Dim Result As String
         Try
@@ -815,10 +852,10 @@ Exception:
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
-                Log(ex, "微软登录第 6 步汇报 429")
+                Log(ex, "正版验证 Step 6 汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(404)") Then
-                Log(ex, "微软登录第 6 步汇报 404")
+                Log(ex, "正版验证 Step 6 汇报 404")
                 RunInNewThread(
                 Sub()
                     Select Case MyMsgBox("请先创建 Minecraft 玩家档案，然后再重新登录。", "登录失败", "创建档案", "取消")
