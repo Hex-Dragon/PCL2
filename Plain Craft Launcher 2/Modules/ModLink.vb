@@ -106,14 +106,14 @@ Public Class ModLink
                         .Favicon = If(j("favicon"), ""),
                         .Port = _Port
                         }
-                        Dim descObj = If(j("description")("text"), j("description"))
+                        Dim descObj = j("description")
                         world.Description = ""
-                        If descObj IsNot Nothing Then
-                            If descObj.Type = JTokenType.String Then
-                                world.Description = descObj.ToString()
-                            Else
-                                world.Description = "§l§a暂不支持展示此 MOTD"
-                            End If
+                        If descObj("extra") IsNot Nothing Then
+                            world.Description = MinecraftFormatter.ConvertToMinecraftFormat(descObj)
+                        ElseIf descObj("text") IsNot Nothing Then
+                            world.Description = descObj("text").ToString()
+                        ElseIf descObj.Type = JTokenType.String Then
+                            world.Description = descObj.ToString()
                         End If
                         Return world
                     End Using

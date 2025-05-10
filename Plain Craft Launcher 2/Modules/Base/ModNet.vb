@@ -1,4 +1,7 @@
-﻿Public Module ModNet
+﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
+
+Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
@@ -2080,5 +2083,96 @@ Retry:
         Next
         Return False
     End Function
+
+#Region "DNS 解析"
+
+    Public Class nDnsQuery
+
+        Public Sub New()
+        End Sub
+
+        <DllImport("dnsapi", EntryPoint:="DnsQuery_W", CharSet:=CharSet.Unicode, SetLastError:=True, ExactSpelling:=True)>
+        Private Shared Function DnsQuery(ByRef pszName As String, wType As QueryTypes, options As QueryOptions, aipServers As Integer, ByRef ppQueryResults As IntPtr, pReserved As Integer) As Integer
+        End Function
+
+        <DllImport("dnsapi", CharSet:=CharSet.Auto, SetLastError:=True)>
+        Private Shared Sub DnsRecordListFree(pRecordList As IntPtr, FreeType As Integer)
+        End Sub
+
+        Public Shared Function GetSRVRecords(needle As String) As String()
+            Dim ptr1 As IntPtr = IntPtr.Zero
+            Dim ptr2 As IntPtr = IntPtr.Zero
+            Dim recSRV As SRVRecord
+            If Environment.OSVersion.Platform <> PlatformID.Win32NT Then
+                Throw New NotSupportedException()
+            End If
+            Dim list1 As New ArrayList()
+            Try
+                Dim num1 As Integer = DnsQuery(needle, QueryTypes.DNS_TYPE_SRV, QueryOptions.DNS_QUERY_BYPASS_CACHE, 0, ptr1, 0)
+                If num1 <> 0 Then
+                    If num1 = 9003 Then
+                        list1.Add("DNS record does not exist")
+                    Else
+                        Throw New Win32Exception(num1)
+                    End If
+                End If
+                ptr2 = ptr1
+                While Not ptr2.Equals(IntPtr.Zero)
+                    recSRV = CType(Marshal.PtrToStructure(ptr2, GetType(SRVRecord)), SRVRecord)
+                    If recSRV.wType = CShort(QueryTypes.DNS_TYPE_SRV) Then
+                        Dim text1 As String = Marshal.PtrToStringAuto(recSRV.pNameTarget)
+                        text1 += ":" & recSRV.wPort.ToString()
+                        list1.Add(text1)
+                    End If
+                    ptr2 = recSRV.pNext
+                End While
+            Finally
+                DnsRecordListFree(ptr1, 0)
+            End Try
+            Return CType(list1.ToArray(GetType(String)), String())
+        End Function
+
+        Private Enum QueryOptions As Integer
+            DNS_QUERY_ACCEPT_TRUNCATED_RESPONSE = 1
+            DNS_QUERY_BYPASS_CACHE = 8
+            DNS_QUERY_DONT_RESET_TTL_VALUES = &H100000
+            DNS_QUERY_NO_HOSTS_FILE = &H40
+            DNS_QUERY_NO_LOCAL_NAME = &H20
+            DNS_QUERY_NO_NETBT = &H80
+            DNS_QUERY_NO_RECURSION = 4
+            DNS_QUERY_NO_WIRE_QUERY = &H10
+            DNS_QUERY_RESERVED = &HFF000000
+            DNS_QUERY_RETURN_MESSAGE = &H200
+            DNS_QUERY_STANDARD = 0
+            DNS_QUERY_TREAT_AS_FQDN = &H1000
+            DNS_QUERY_USE_TCP_ONLY = 2
+            DNS_QUERY_WIRE_ONLY = &H100
+        End Enum
+
+        Private Enum QueryTypes As Integer
+            DNS_TYPE_A = &H1
+            DNS_TYPE_MX = &HF
+            DNS_TYPE_SRV = &H21
+        End Enum
+
+        <StructLayout(LayoutKind.Sequential)>
+        Private Structure SRVRecord
+            Public pNext As IntPtr
+            Public pName As String
+            Public wType As Short
+            Public wDataLength As Short
+            Public flags As Integer
+            Public dwTtl As Integer
+            Public dwReserved As Integer
+            Public pNameTarget As IntPtr
+            Public wPriority As Short
+            Public wWeight As Short
+            Public wPort As Short
+            Public Pad As Short
+        End Structure
+
+    End Class
+
+#End Region
 
 End Module
