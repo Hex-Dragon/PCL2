@@ -2,8 +2,6 @@
 
 Imports System.ComponentModel
 Imports System.Net.Http
-Imports System.Reflection
-Imports System.Text
 Imports System.Security.Cryptography
 Imports System.Management
 Imports System.IO.Compression
@@ -22,8 +20,10 @@ Friend Module ModSecret
     Public Const OAuthClientId As String = ""
     'CurseForge API Key
     Public Const CurseForgeAPIKey As String = ""
-    ' LittleSkin OAuth ClientId
+    'LittleSkin OAuth ClientId
     Public Const LittleSkinClientId As String = ""
+    '遥测鉴权密钥
+    Public Const TelemetryKey As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -183,10 +183,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Client As HttpRequestMessage, Optional UseBrowserUserAgent As Boolean = False)
-        If Url.Contains("api.curseforge.com") Then
-            Client.Headers.Add("x-api-key", CurseForgeAPIKey)
-        End If
-
+        If Url.Contains("api.curseforge.com") Then Client.Headers.Add("x-api-key", CurseForgeAPIKey)
         Client.Headers.Add("User-Agent",
         If(Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com"),
                 "LogStatistic",
@@ -197,6 +194,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             ))
 
         Client.Headers.Add("Referer", "http://" & VersionCode & ".ce.open.pcl2.server/")
+        If Url.Contains("pcl2ce.pysio.online/post") Then Client.Headers.Add("Authorization", TelemetryKey)
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -211,6 +209,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
         Request.Referer = "http://" & VersionCode & ".ce.open.pcl2.server/"
         If Url.Contains("api.curseforge.com") Then Request.Headers("x-api-key") = CurseForgeAPIKey
+        If Url.Contains("pcl2ce.pysio.online/post") Then Request.Headers("Authorization") = TelemetryKey
     End Sub
 
 #End Region
@@ -826,6 +825,42 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
     End Sub
 
+#End Region
+
+#Region "遥测"
+    ''' <summary>
+    ''' 发送遥测数据，需要在非 UI 线程运行
+    ''' </summary>
+    Public Sub SendTelemetry()
+        Dim NetResult = ModLink.NetTest()
+        Dim Data = New JObject From {
+            {"Id", UniqueAddress},
+            {"OS", Environment.OSVersion.Version.Build},
+            {"Is64Bit", Not Is32BitSystem},
+            {"IsARM64", IsArm64System},
+            {"Launcher", VersionCode},
+            {"LauncherBranch", VersionBranchName},
+            {"UsedOfficialPCL", ReadReg("SystemEula", Nothing, "PCL") IsNot Nothing},
+            {"UsedHMCL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.hmcl")},
+            {"UsedBakaXL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\BakaXL")},
+            {"Memory", SystemMemorySize},
+            {"NatType", NetResult(0)},
+            {"IPv6Status", NetResult(1)}
+        }
+        Dim SendData = New JObject From {
+            {"data", Data}
+        }
+        Try
+            Dim Result As String = NetRequestRetry("https://pcl2ce.pysio.online/post", "POST", SendData.ToString(), "application/json")
+            If Result.Contains("数据已成功保存") Then
+                Log("[Telemetry] 软硬件调查数据已发送")
+            Else
+                Log("[Telemetry] 软硬件调查数据发送失败，原始返回内容: " + Result)
+            End If
+        Catch ex As Exception
+            Log(ex, "[Telemetry] 软硬件调查数据发送失败", LogLevel.Normal)
+        End Try
+    End Sub
 #End Region
 
 #Region "系统信息"

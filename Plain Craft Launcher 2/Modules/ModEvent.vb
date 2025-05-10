@@ -149,8 +149,8 @@
             Dim LocalTemp As String = RequestTaskTempFolder() & RawFileName
             Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp)
             Try
-                NetDownloadByClient(RelativeUrl, LocalTemp)
-                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp.Replace(".json", ".xaml"))
+                NetDownloadByClient(RelativeUrl, LocalTemp).GetAwaiter().GetResult()
+                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp.Replace(".json", ".xaml")).GetAwaiter().GetResult()
             Catch ex As Exception
                 Throw New Exception("下载指定的文件失败！" & vbCrLf &
                                     "注意，联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &

@@ -170,6 +170,8 @@
                     <local:MySlider x:Name="SliderAniFPS" Grid.Row="10" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
 ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
                     <local:MyCheckBox Grid.Row="11" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <local:MyCheckBox Grid.Row="11" Grid.Column="1" Text="参与 PCL CE 软硬件调查" x:Name="CheckSystemTelemetry" Tag="SystemTelemetry" 
+                                      ToolTip="这是一项与 Steam 硬件调查类似的计划，参与调查可以帮助我们更好的进行规划和开发，且我们会不定期发布该调查的统计结果。&#xa;如果选择参与调查，我们将会收集以下信息：&#xa;启动器版本信息与识别码，使用的 Windows 系统版本与架构，已安装的物理内存大小，NAT 与 IPv6 支持情况，是否使用过官方版 PCL、HMCL 或 BakaXL&#xa;&#xa;这些数据均不与你关联，我们也绝不会向第三方出售数据。不参与调查不会影响你使用其他功能。"/>
                     <Grid Height="35" Grid.Row="12" Grid.ColumnSpan="5" Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
