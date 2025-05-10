@@ -100,7 +100,8 @@
                             </local:MyTextBox>
                         </Grid>
                         <TextBlock VerticalAlignment="Center" Grid.Row="12" HorizontalAlignment="Left" Text="正版验证方式" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboMsAuthType" Grid.Row="12" Grid.ColumnSpan="2" Tag="LoginMsAuthType" Grid.Column="1" ToolTip="Web 账户管理器可以提供更为便利的正版验证流程，而设备代码流允许你在任意设备上打开网页进行验证。">
+                        <local:MyComboBox x:Name="ComboMsAuthType" Grid.Row="12" Grid.ColumnSpan="2" Tag="LoginMsAuthType" Grid.Column="1" 
+                                          ToolTip="Web 账户管理器的正版验证流程更为简单，而设备代码流允许你在任意设备上打开网页进行验证。&#xa;如果使用 Web 账户管理器登录遇到问题，可以尝试使用设备代码流。&#xa;如果正在公共计算机上临时登录账号，推荐使用设备代码流。">
                             <local:MyComboBoxItem Content="Web 账户管理器" IsSelected="True" />
                             <local:MyComboBoxItem Content="设备代码流" />
                         </local:MyComboBox>
