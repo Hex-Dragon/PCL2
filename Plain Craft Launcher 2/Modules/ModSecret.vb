@@ -5,9 +5,7 @@ Imports System.Net.Http
 Imports System.Reflection
 Imports System.Text
 Imports System.Security.Cryptography
-Imports NAudio.Midi
 Imports System.Management
-Imports System
 Imports System.IO.Compression
 
 Friend Module ModSecret
@@ -828,6 +826,72 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
     End Sub
 
+#End Region
+
+#Region "系统信息"
+    Friend CPUName As String = Nothing
+    ''' <summary>
+    ''' 系统 GPU 信息
+    ''' </summary>
+    Friend GPUs As New List(Of GPUInfo)
+    ''' <summary>
+    ''' 已安装物理内存大小，单位 MB
+    ''' </summary>
+    Friend SystemMemorySize As Long = My.Computer.Info.TotalPhysicalMemory / 1024 / 1024
+    ''' <summary>
+    ''' 系统信息描述，例如 Microsoft Windows 11 专业工作站版 10.0.22635.0
+    ''' </summary>
+    Public OSInfo As String = My.Computer.Info.OSFullName & " " & My.Computer.Info.OSVersion
+    Class GPUInfo
+        Friend Name As String
+        ''' <summary>
+        ''' 显存大小，单位 MB
+        ''' </summary>
+        Friend Memory As Long
+        Friend DriverVersion As String
+    End Class
+    ''' <summary>
+    ''' 获取系统信息，例如 CPU 与 GPU，并存储到 CPUName 和 GPUs
+    ''' </summary>
+    Friend Sub GetSystemInfo()
+        'CPU
+        Try
+            Dim searcher As New ManagementObjectSearcher("root\CIMV2", "SELECT * FROM Win32_Processor")
+
+            For Each queryObj As ManagementObject In searcher.Get()
+                CPUName = queryObj("Name").ToString().Trim()
+                Exit For '通常只需要第一个CPU的信息
+            Next
+        Catch ex As Exception
+            Log(ex, "获取 CPU 信息时出错", LogLevel.Normal)
+        End Try
+
+        'GPU
+        Try
+            Dim searcher As New ManagementObjectSearcher("root\CIMV2", "SELECT * FROM Win32_VideoController")
+
+            For Each queryObj As ManagementObject In searcher.Get()
+                Dim gpuInfo As New GPUInfo
+
+                If queryObj("Name") IsNot Nothing Then
+                    gpuInfo.Name = queryObj("Name")
+                End If
+                If queryObj("AdapterRAM") IsNot Nothing Then
+                    Dim ramMB As Long = CLng(queryObj("AdapterRAM")) \ (1024 * 1024)
+                    gpuInfo.Memory = ramMB
+                End If
+                If queryObj("DriverVersion") IsNot Nothing Then
+                    gpuInfo.DriverVersion = queryObj("DriverVersion")
+                End If
+
+                GPUs.Add(gpuInfo)
+            Next
+
+            Log("已获取系统环境信息")
+        Catch ex As Exception
+            Log(ex, "获取 GPU 信息时出错", LogLevel.Normal)
+        End Try
+    End Sub
 #End Region
 
 End Module
