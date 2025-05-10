@@ -1125,7 +1125,7 @@
       <Version>10.0.19041.2</Version>
     </PackageReference>
     <PackageReference Include="IPNetwork2">
-      <Version>3.1.764</Version>
+      <Version>2.6.618</Version>
     </PackageReference>
     <PackageReference Include="Makaretu.Nat">
       <Version>0.2.0</Version>

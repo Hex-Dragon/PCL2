@@ -6,6 +6,7 @@ Imports System.Net.Sockets
 Imports Makaretu.Nat
 Imports STUN
 Imports System.Net.NetworkInformation
+Imports PCL.PageLinkNetStatus
 
 Public Class ModLink
 
@@ -462,6 +463,63 @@ Public Class ModLink
         End Try
     End Sub
 
+#End Region
+
+#Region "NAT 测试"
+    ''' <summary>
+    ''' 进行网络测试，包括 IPv4 NAT 类型测试和 IPv6 支持情况测试
+    ''' </summary>
+    ''' <returns>NAT 类型 + IPv6 支持与否</returns>
+    Public Shared Function NetTest() As String()
+        'IPv4 NAT 测试
+        Dim NATType As String
+        Dim STUNServerDomain As String = "stun.miwifi.com" '指定 STUN 服务器
+        Log("[STUN] 指定的 STUN 服务器: " + STUNServerDomain)
+        Try
+            Dim STUNServerIP As String = Dns.GetHostAddresses(STUNServerDomain)(0).ToString() '解析 STUN 服务器 IP
+            Log("[STUN] 解析目标 STUN 服务器 IP: " + STUNServerIP)
+            Dim STUNServerEndPoint As IPEndPoint = New IPEndPoint(IPAddress.Parse(STUNServerIP), 3478) '设置 IPEndPoint
+
+            STUNClient.ReceiveTimeout = 500 '设置超时
+            Log("[STUN] 开始进行 NAT 测试")
+            Dim STUNTestResult = STUNClient.Query(STUNServerEndPoint, STUNQueryType.ExactNAT, True) '进行 STUN 测试
+
+            If STUNTestResult.QueryError = STUNQueryError.Success Then
+                NATType = STUNTestResult.NATType.ToString()
+                Log("[STUN] NAT 检测完成，本地 NAT 类型为: " + NATType)
+            Else
+                Log("[STUN] NAT 测试失败")
+                NATType = "TestFailed"
+            End If
+        Catch ex As Exception
+            Log(ex, "[STUN] 进行 NAT 测试失败", LogLevel.Normal)
+            NATType = "TestFailed"
+        End Try
+
+        'IPv6
+        Dim IPv6Status As String = "Unsupported"
+        Try
+            For Each ip In NatDiscovery.GetIPAddresses()
+                If ip.AddressFamily() = AddressFamily.InterNetworkV6 Then 'IPv6
+                    If ip.IsIPv6LinkLocal() OrElse ip.IsIPv6SiteLocal() OrElse ip.IsIPv6Teredo() OrElse ip.IsIPv4MappedToIPv6() Then
+                        Continue For
+                    ElseIf ip.IsPublic() Then
+                        Log("[IP] 检测到 IPv6 公网地址")
+                        IPv6Status = "Public"
+                        Exit For
+                    ElseIf ip.IsPrivate() AndAlso Not IPv6Status = "Supported" Then
+                        Log("[IP] 检测到 IPv6 支持")
+                        IPv6Status = "Supported"
+                        Continue For
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+            Log(ex, "[IP] 进行 IPv6 测试失败", LogLevel.Normal)
+        End Try
+
+        Return {NATType, IPv6Status}
+    End Function
 #End Region
 
 End Class
