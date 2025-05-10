@@ -2,8 +2,6 @@
 
 Imports System.ComponentModel
 Imports System.Net.Http
-Imports System.Reflection
-Imports System.Text
 Imports System.Security.Cryptography
 Imports System.Management
 Imports System.IO.Compression
@@ -845,7 +843,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             {"UsedOfficialPCL", ReadReg("SystemEula", Nothing, "PCL") IsNot Nothing},
             {"UsedHMCL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.hmcl")},
             {"UsedBakaXL", Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\BakaXL")},
-            {"Memory", Math.Ceiling(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024)},
+            {"Memory", SystemMemorySize},
             {"NatType", NetResult(0)},
             {"IPv6Status", NetResult(1)}
         }
@@ -861,6 +859,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             End If
         Catch ex As Exception
             Log(ex, "[Telemetry] 软硬件调查数据发送失败", LogLevel.Normal)
+        End Try
+    End Sub
 #End Region
 
 #Region "系统信息"
