@@ -8,7 +8,7 @@
             Return
         End If
         If CreateCustomUuid.Checked AndAlso TextUserUuid.ValidateResult <> "" Then
-            MyMsgBox(TextUserUuid.ValidateResult, "UUID为空", "确认")
+            MyMsgBox(TextUserUuid.ValidateResult, "UUID输入错误", "确认")
             Return
         End If
         Dim UserUuid As String = Nothing
