@@ -129,14 +129,12 @@ RetryStart:
                 ActualSource = LoadingSource '显示加载中图片
                 TempDownloadingPath = TempPath & RandomInteger(0, 10000000)
                 Directory.CreateDirectory(GetPathFromFullPath(TempPath)) '重新实现下载，以避免携带 Header（#5072）
-                Using Client As New Net.Http.HttpClient(New Http.HttpClientHandler() With {.Proxy = GetProxy()})
-                    Using request As New Net.Http.HttpRequestMessage(Http.HttpMethod.Get, Url)
-                        Using fs As New FileStream(TempDownloadingPath, FileMode.Create)
-                            Using response = Client.SendAsync(request).Result
-                                response.EnsureSuccessStatusCode()
-                                Dim res = response.Content.ReadAsByteArrayAsync().Result
-                                fs.Write(res, 0, res.Length)
-                            End Using
+                Using request As New Net.Http.HttpRequestMessage(Http.HttpMethod.Get, Url)
+                    Using fs As New FileStream(TempDownloadingPath, FileMode.Create)
+                        Using response = GetHttpClient().SendAsync(request).Result
+                            response.EnsureSuccessStatusCode()
+                            Dim res = response.Content.ReadAsByteArrayAsync().Result
+                            fs.Write(res, 0, res.Length)
                         End Using
                     End Using
                 End Using

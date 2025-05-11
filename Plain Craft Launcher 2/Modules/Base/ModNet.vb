@@ -17,6 +17,7 @@ Public Module ModNet
             Return Nothing
         End If
         Dim ProxyServer As String = Setup.Get("SystemHttpProxy")
+        _PreviousProxyLink = ProxyServer
         If Not String.IsNullOrWhiteSpace(ProxyServer) Then
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(ProxyServer)
@@ -34,6 +35,28 @@ Public Module ModNet
         End If
         Log("[Net] 当前代理状态：禁用")
         Return Nothing
+    End Function
+
+    Private _PreviousProxyLink As String
+    Private _httpClient As HttpClient
+    Private _httpClientHandler As HttpClientHandler
+    Public Function GetHttpClient() As HttpClient
+        If Setup.Get("SystemHttpProxy") <> _PreviousProxyLink Then
+            _httpClient?.Dispose()
+            _httpClient = Nothing
+            _httpClientHandler?.Dispose()
+            _httpClientHandler = Nothing
+        End If
+        If _httpClient Is Nothing Then
+            _httpClientHandler = New HttpClientHandler()
+            With _httpClientHandler
+                .Proxy = GetProxy()
+                .MaxConnectionsPerServer = 1024
+                .AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate Or DecompressionMethods.None
+            End With
+            _httpClient = New HttpClient(_httpClientHandler)
+        End If
+        Return _httpClient
     End Function
 
     ''' <summary>
@@ -100,13 +123,14 @@ Retry:
         Try
             Url = SecretCdnSign(Url)
             Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
-            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()}) With {.Timeout = TimeSpan.FromMilliseconds(Timeout)}
+            Using cts As New CancellationTokenSource
+                cts.CancelAfter(Timeout)
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
                     request.Headers.Accept.ParseAdd(Accept)
                     request.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.5")
                     request.Headers.Add("X-Requested-With", "XMLHttpRequest")
-                    Using response = client.SendAsync(request).Result
+                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
                         response.EnsureSuccessStatusCode()
                         Return Encoding.GetString(response.Content.ReadAsByteArrayAsync().Result)
                     End Using
@@ -218,11 +242,12 @@ RequestFinished:
         Try
             Url = SecretCdnSign(Url)
             Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
-            Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()}) With {.Timeout = TimeSpan.FromMilliseconds(Timeout)}
+            Using cts As New CancellationTokenSource
+                cts.CancelAfter(Timeout)
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     request.Headers.Accept.ParseAdd(Accept)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
-                    Using response = client.SendAsync(request).Result
+                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
                         response.EnsureSuccessStatusCode()
                         If Encode Is Nothing Then Encode = Encoding.UTF8
                         Dim ret = Encode.GetString(response.Content.ReadAsByteArrayAsync().Result)
@@ -280,17 +305,14 @@ RequestFinished:
         Try
             Directory.CreateDirectory(GetPathFromFullPath(LocalFile))
             If File.Exists(LocalFile) Then File.Delete(LocalFile)
+            Using request As New HttpRequestMessage(HttpMethod.Get, Url)
+                SecretHeadersSign(Url, request, UseBrowserUserAgent)
+                Using response As HttpResponseMessage = Await GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                    response.EnsureSuccessStatusCode()
 
-            Using client As New HttpClient(New HttpClientHandler() With {.Proxy = GetProxy()})
-                Using request As New HttpRequestMessage(HttpMethod.Get, Url)
-                    SecretHeadersSign(Url, request, UseBrowserUserAgent)
-                    Using response As HttpResponseMessage = Await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
-                        response.EnsureSuccessStatusCode()
-
-                        Using httpStream As Stream = Await response.Content.ReadAsStreamAsync()
-                            Using fileStream As New FileStream(LocalFile, FileMode.Create)
-                                Await httpStream.CopyToAsync(fileStream)
-                            End Using
+                    Using httpStream As Stream = Await response.Content.ReadAsStreamAsync()
+                        Using fileStream As New FileStream(LocalFile, FileMode.Create)
+                            Await httpStream.CopyToAsync(fileStream)
                         End Using
                     End Using
                 End Using
@@ -433,7 +455,8 @@ RequestFinished:
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
         Try
-            Using client As New HttpClient(New HttpClientHandler() With {.Proxy = GetProxy()}) With {.Timeout = TimeSpan.FromMilliseconds(Timeout)}
+            Using cts As New CancellationTokenSource
+                cts.CancelAfter(Timeout)
                 Dim RequestMethod As HttpMethod = HttpMethod.Get
                 Select Case Method.ToUpper() '我不相信上面的输入.jpg
                     Case "POST"
@@ -465,7 +488,7 @@ RequestFinished:
                             request.Headers.Add(Pair.Key, Pair.Value)
                         Next
                     End If
-                    Using response = client.SendAsync(request).Result
+                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
                         response.EnsureSuccessStatusCode()
                         Return Encoding.UTF8.GetString(response.Content.ReadAsByteArrayAsync().Result)
                     End Using
@@ -1072,12 +1095,12 @@ StartThread:
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
                 ' 使用 HttpClient 替代 HttpWebRequest
-                Using client As New HttpClient(New HttpClientHandler With {.Proxy = GetProxy()})
-                    client.Timeout = TimeSpan.FromMilliseconds(Timeout)
-                    Dim request As New HttpRequestMessage(HttpMethod.Get, Info.Source.Url)
-                    request.Headers.Range = New System.Net.Http.Headers.RangeHeaderValue(Info.DownloadStart, Nothing)
-                    SecretHeadersSign(Info.Source.Url, request, UseBrowserUserAgent)
-                    Using response = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result
+                Dim request As New HttpRequestMessage(HttpMethod.Get, Info.Source.Url)
+                request.Headers.Range = New System.Net.Http.Headers.RangeHeaderValue(Info.DownloadStart, Nothing)
+                SecretHeadersSign(Info.Source.Url, request, UseBrowserUserAgent)
+                Using cts As New CancellationTokenSource
+                    cts.CancelAfter(Timeout)
+                    Using response = GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).Result
                         response.EnsureSuccessStatusCode()
                         If State = NetState.Error Then GoTo SourceBreak '快速中断
                         If ModeDebug AndAlso response.RequestMessage.RequestUri.OriginalString <> Info.Source.Url Then
