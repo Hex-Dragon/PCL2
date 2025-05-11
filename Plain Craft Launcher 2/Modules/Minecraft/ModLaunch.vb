@@ -308,10 +308,9 @@ NextInner:
 
     '登录方式
     Public Enum McLoginType
-        Legacy = 0
-        Auth = 3
-        Ms = 5
-        Offline = 7
+        Legacy = 1
+        Auth = 2
+        Ms = 3
     End Enum
 
     '各个登录方式的对应数据
