@@ -39,7 +39,7 @@ Public Class PageComp
         Set(Value As String)
             If _TypeNameSpaced = Value Then Return
             _TypeNameSpaced = Value
-            PanSearchBox.HintText = $"搜索{Value} 使用回车键发起搜索"
+            PanSearchBox.HintText = $"搜索{Value} 在输入框中按下 Enter 以进行搜索"
             Load.Text = $"正在获取{Value}列表"
         End Set
     End Property

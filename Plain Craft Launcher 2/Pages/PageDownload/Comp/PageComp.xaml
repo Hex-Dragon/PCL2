@@ -8,7 +8,7 @@
       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
     <StackPanel Orientation="Vertical" Margin="25">
         <StackPanel x:Name="PanAlways">
-            <local:MySearchBox x:Name="PanSearchBox" Margin="0,0,0,15" HintText="搜索XXX 使用回车键发起搜索"/>
+            <local:MySearchBox x:Name="PanSearchBox" Margin="0,0,0,15" HintText="搜索XXX 在输入框中按下 Enter 以进行搜索"/>
             <local:MyCard Margin="0,0,0,15">
                 <Grid Margin="7" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
@@ -60,9 +60,9 @@
                     </local:MyComboBox>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="7">
                         <local:MyIconButton x:Name="BtnSearchReset" Logo="M931.07 384.75a368 368 0 0 0-704 95.25H64l192 192 192-192H288.91C312 333.51 439.12 221.13 592 221.13c169.21 0 306.87 137.66 306.87 306.87S761.21 834.87 592 834.87a307.37 307.37 0 0 1-194.56-69.55 30.57 30.57 0 0 0-38.79 47.25 368.1 368.1 0 0 0 572.42-427.82z"
-                                            ToolTip="重置条件" Margin="3,0,0,0" Grid.Column="1"/>
+                                            ToolTip="重置条件" LogoScale="0.9" Margin="3,0,0,0" Grid.Column="1"/>
                         <local:MyIconButton x:Name="BtnSearchInstallModPack" Logo="M955 610h-59c-15 0-29 13-29 29v196c0 15-13 29-29 29h-649c-15 0-29-13-29-29v-196c0-15-13-29-29-29h-59c-15 0-29 13-29 29V905c0 43 35 78 78 78h787c43 0 78-35 78-78V640c0-15-13-29-29-29zM492 740c11 11 29 11 41 0l265-265c11-11 11-29 0-41l-41-41c-11-11-29-11-41 0l-110 110c-11 11-33 3-33-13V68C571 53 555 39 541 39h-59c-15 0-29 13-29 29v417c0 17-21 25-33 13l-110-110c-11-11-29-11-41 0L226 433c-11 11-11 29 0 41L492 740z" Margin="3,0,0,0" Grid.Column="2" Visibility="Collapsed" 
-                                            ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
+                                            ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" LogoScale="0.9" ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
