@@ -263,7 +263,7 @@
         PanIntro.Children.Insert(0, CompItem)
 
         '决定按钮显示
-        BtnIntroWeb.Text = If(Project.FromCurseForge, "转到 CurseForge", "转到 Modrinth")
+        BtnIntroWeb.Text = If(Project.FromCurseForge, "CurseForge", "Modrinth")
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
@@ -477,7 +477,7 @@
         ClipboardSet(Project.Website)
     End Sub
     '翻译简介
-    Private Async Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
+    Private Async Sub BtnTranslate_Click(sender As Object, e As EventArgs) Handles BtnTranslate.Click
         Hint($"正在获取 {Project.TranslatedName} 的简介译文……")
         Dim ChineseDescription = Await Project.ChineseDescription
         If ChineseDescription Is Nothing Then Return
