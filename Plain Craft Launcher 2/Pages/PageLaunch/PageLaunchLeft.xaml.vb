@@ -263,7 +263,7 @@
         If Not TargetLoginType = Nothing Then
             If TargetLoginType = McLoginType.Ms Then Type = PageType.Ms
             If TargetLoginType = McLoginType.Auth Then Type = PageType.Auth
-            If TargetLoginType = McLoginType.Offline Then Type = PageType.Offline
+            If TargetLoginType = McLoginType.Legacy Then Type = PageType.Offline
         Else
             If SelectedProfile IsNot Nothing Then
                 Type = PageType.ProfileSkin
