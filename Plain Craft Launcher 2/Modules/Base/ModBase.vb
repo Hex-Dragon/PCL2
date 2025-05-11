@@ -3288,6 +3288,13 @@ Retry:
         Return System.Text.Encoding.UTF8.GetString(decodedBytes)
 
     End Function
+    Public Function Base64Encode(Text As String) As String
+        Dim bytes As Byte() = System.Text.Encoding.UTF8.GetBytes(Text)
+        Return Convert.ToBase64String(bytes)
+    End Function
+    Public Function Base64Encode(bytes As Byte()) As String
+        Return Convert.ToBase64String(bytes)
+    End Function
     '反馈
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
