@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-help:
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Update Help
+      run: |
+        cd ..
+        git clone https://github.com/PCL-Community/PCL2CEHelp -b master --single-branch --depth 1
+        cd PCL2CEHelp
+        rm -Force -r *.*
+        Compress-Archive -Path .\* -DestinationPath .\Help.zip
+        Copy-Item -Path .\Help.zip -Destination "${{ github.workspace }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        cd ..
+        rm -Force -r .\PCL2CEHelp
+        cd ${{ GITHUB.WORKSPACE }}
+
+    - name: Push to GitHub
+      uses: EndBug/add-and-commit@v9
+      with:
+        message: "chore: ¸üÐÂ Help.zip"
