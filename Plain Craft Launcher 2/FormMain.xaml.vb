@@ -819,9 +819,6 @@ Public Class FormMain
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionSetup Then
                             '正在服务器选项页，需要刷新设置项显示
                             FrmVersionSetup.Reload()
-                        ElseIf PageCurrent = PageType.Launch Then
-                            '正在主页，需要刷新左边栏
-                            FrmLaunchLeft.RefreshPage(False)
                         End If
                     ElseIf Str.StartsWithF("file:///") Then
                         '文件拖拽（例如从浏览器下载窗口拖入）
