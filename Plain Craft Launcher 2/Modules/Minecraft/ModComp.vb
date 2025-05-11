@@ -281,10 +281,19 @@ Public Module ModComp
             Dim para = If(FromCurseForge, "modId", "project_id")
             Dim result As String = Nothing
 
+            Dim DescHash As String = $"{Id}{GetStringMD5(Description)}"
+            Dim CacheFilePath As String = $"{PathTemp}Cache\CompTranslation.ini"
+            Dim CacheTranslation As String = ReadIni(CacheFilePath, DescHash)
+            If Not String.IsNullOrWhiteSpace(CacheTranslation) Then
+                result = Base64Decode(CacheTranslation)
+                Return result
+            End If
+
             Try
                 Dim jsonObject = Await Task.Run(Function() NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True))
                 If jsonObject.ContainsKey("translated") Then
                     result = jsonObject("translated").ToString()
+                    WriteIni(CacheFilePath, DescHash, Base64Encode(result))
                 Else
                     Hint($"{TranslatedName} 的简介暂无译文！", HintType.Critical)
                 End If
