@@ -439,6 +439,7 @@ EndHint:
     Public FrmLoginMs As PageLoginMs
     Public FrmLoginProfile As PageLoginProfile
     Public FrmLoginProfileSkin As PageLoginProfileSkin
+    Public FrmLoginOffline As PageLoginOffline
 
     '版本设置页面声明
     Public FrmVersionLeft As PageVersionLeft
