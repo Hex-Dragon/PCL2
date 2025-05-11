@@ -6,6 +6,8 @@ on:
 jobs:
   update-help:
     runs-on: windows-latest
+    env:
+      LANG: en_US.UTF-8
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -22,7 +24,11 @@ jobs:
         rm -Force -r .\PCL2CEHelp
         cd ${{ GITHUB.WORKSPACE }}
 
+    - name: Commit Files
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -a -m "chore: 更新 Help.zip"
+
     - name: Push to GitHub
-      uses: EndBug/add-and-commit@v9
-      with:
-        message: "chore: 更新 Help.zip"
+      uses: ad-m/github-push-action@master
