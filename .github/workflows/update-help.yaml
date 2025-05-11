@@ -6,8 +6,6 @@ on:
 jobs:
   update-help:
     runs-on: windows-latest
-    env:
-      LANG: en_US.UTF-8
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -26,9 +24,9 @@ jobs:
 
     - name: Commit Files
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git commit -a -m "chore: ¸üÐÂ Help.zip"
+        git commit -a -m "chore: Update Help.zip"
 
     - name: Push to GitHub
       uses: ad-m/github-push-action@master
