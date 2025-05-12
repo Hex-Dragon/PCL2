@@ -110,8 +110,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Dim code As String
         Dim rawCode As String = SecretGetRawCode()
         Try
-            Using MD5 As MD5 = MD5.Create()
-                Dim buffer = MD5.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
+            Using SHA As SHA256 = SHA256.Create()
+                Dim buffer = SHA.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
                 code = BitConverter.ToString(buffer).Replace("-", "")
             End Using
             code = code.Substring(6, 16)
