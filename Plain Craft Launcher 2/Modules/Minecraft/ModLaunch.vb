@@ -1468,7 +1468,7 @@ LoginFinish:
         End If
         '进服
         Dim Server As String = If(String.IsNullOrEmpty(CurrentLaunchOptions.ServerIp), Setup.Get("VersionServerEnter", McVersionCurrent), CurrentLaunchOptions.ServerIp)
-        If WorldName IsNot Nothing AndAlso Server.Length > 0 Then
+        If String.IsNullOrWhiteSpace(WorldName) AndAlso Not String.IsNullOrWhiteSpace(Server) Then
             If McVersionCurrent.ReleaseTime > New Date(2023, 4, 4) Then
                 'QuickPlay
                 Arguments += $" --quickPlayMultiplayer ""{Server}"""
