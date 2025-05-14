@@ -3109,6 +3109,8 @@ Retry:
                 IsInitSuccess = False
                 Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
                 Log(ex, "日志初始化失败（疑似文件占用问题）")
+            Catch ex As ComponentModel.Win32Exception
+                Hint("与系统底层交互异常，请尝试通过重新安装 .NET 框架解决！", HintType.Critical)
             Catch ex As Exception
                 IsInitSuccess = False
                 Log(ex, "日志初始化失败", LogLevel.Hint)
@@ -3237,6 +3239,8 @@ Retry:
         Console.Write(AppendText)
 #End If
         If IsProgramEnded Then Exit Sub
+
+        If Ex.GetType() = GetType(ComponentModel.Win32Exception) Then ExFull += vbCrLf & "与系统底层交互失败，请尝试重新安装 .NET Framework 4.8.1 解决此问题"
 
         '输出提示
         Select Case Level
