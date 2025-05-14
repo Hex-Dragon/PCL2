@@ -511,10 +511,10 @@ Write:
     ''' <returns>显示的详情信息</returns>
     Public Function GetProfileInfo(Profile As McProfile)
         Dim Info As String = Nothing
-        If Profile.Type = 3 Then
+        If Profile.Type = McLoginType.Auth Then
             Info += "第三方验证"
             If Not String.IsNullOrWhiteSpace(Profile.ServerName) Then Info += $" / {Profile.ServerName}"
-        ElseIf Profile.Type = 5 Then
+        ElseIf Profile.Type = McLoginType.Ms Then
             Info += "正版验证"
         Else
             Info += "离线验证"
