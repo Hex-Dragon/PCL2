@@ -420,6 +420,7 @@ Appuyez à nouveau sur "F11" pour quitter le mode de visualisation des instances
     <s:String x:Key="LangDownloadChangelog">Journal des modifications</s:String>
     <s:String x:Key="LangDownloadSaveAs">Enregistrer sous</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Publiée le</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Released on {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible avec Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Version Forge recommandée : </s:String>
     <s:String x:Key="LangDownloadShowAll">Afficher toutes les versions</s:String>
@@ -747,10 +748,10 @@ Cette page fournit le téléchargement de l'installateur NeoForge. Après le té
     <s:String x:Key="LangPageLoginMsAddAccount">Nouveau compte</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Veuillez vous connecter à votre compte avant de lancer le jeu !</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">La connexion a été annulée !</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Échec de la vérification de la connexion Microsoft. Veuillez essayer de désactiver "Vérifier les certificats SSL" dans "Paramètres → Launcher" et réessayer.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Échec de la vérification de la connexion Microsoft. Veuillez essayer de désactiver "Vérifier les certificats SSL" dans "Paramètres → Launcher" et réessayer.
 
 Message d'erreur original : </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">La connexion a été annulée !</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">La connexion a été annulée !</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Chargement...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Peaux et capes</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Changer de peau</s:String>

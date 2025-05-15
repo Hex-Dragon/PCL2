@@ -421,6 +421,7 @@
     <s:String x:Key="LangDownloadChangelog">浭噺ㄖ梽</s:String>
     <s:String x:Key="LangDownloadSaveAs">叧洊潙</s:String>
     <s:String x:Key="LangDownloadReleaseOn">潑鈽纡{0}</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">潑鈽纡{0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">芣凲嫆 Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">蓷薦 Forge 蝂夲：</s:String>
     <s:String x:Key="LangDownloadShowAll">楂看洤蔀蝂夲</s:String>
@@ -753,10 +754,10 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageLoginMsAddAccount">婖咖噺账呺</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">埥茬憕淥账呺後侢晵憅遊戱！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">巳掫消憕淥！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">囸蝂憕淥験姃妷敗，埥甞鉽茬 [蔎置 → 晵憅噐] 狆関閉 [験姃 SSL 姃書] 嘫後侢鉽。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">囸蝂憕淥験姃妷敗，埥甞鉽茬 [蔎置 → 晵憅噐] 狆関閉 [験姃 SSL 姃書] 嘫後侢鉽。
 
 厡始措誤信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">巳掫消憕淥！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">巳掫消憕淥！</s:String>
     <s:String x:Key="LangPageLoginMsLoading">咖酨狆</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">怶膚玙怶颩</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">俢妀怶膚</s:String>

@@ -421,6 +421,7 @@
     <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另救为</s:String>
     <s:String x:Key="LangDownloadReleaseOn">发布于{0}</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">发布于{0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容锻造</s:String>
     <s:String x:Key="LangDownloadRecommendForge">兼容锻造{0}</s:String>
     <s:String x:Key="LangDownloadShowAll">看看全部版本</s:String>
@@ -753,10 +754,10 @@
     <s:String x:Key="LangPageLoginMsAddAccount">添加新账号</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">请在登陆账号后再发射游戏！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登陆！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登陆验证不成功，请尝试在 [设置 → 发射台] 中关掉 [验证安全套接层证书] 然后再试。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">正版登陆验证不成功，请尝试在 [设置 → 发射台] 中关掉 [验证安全套接层证书] 然后再试。
 
 原始错误信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 发射台] 中关闭 [在正版登录时验证安全套接层证书]，然后再试。</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">正版登录验证失败，请考虑在 [设置 → 发射台] 中关闭 [在正版登录时验证安全套接层证书]，然后再试。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外壳与海角</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改外壳</s:String>

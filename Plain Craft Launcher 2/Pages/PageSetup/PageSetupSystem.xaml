@@ -43,7 +43,7 @@
                         <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="5" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1"
                                         ToolTip="{StaticResource LangPageSetupSystemDownloadSpeedLimitToolTip}" />
                         <TextBlock VerticalAlignment="Top" Grid.Row="6" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadTargetFolder}" Margin="0,5,25,5" />
-                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
+                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" TextWrapping="Wrap"/>
                         <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadSSL}" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
                                           ToolTip="{StaticResource LangPageSetupSystemDownloadSSLToolTip}" />

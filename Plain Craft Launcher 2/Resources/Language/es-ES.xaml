@@ -420,6 +420,7 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadChangelog">Registro de cambios</s:String>
     <s:String x:Key="LangDownloadSaveAs">Guardar como</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Lanzado el</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Released on {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible con Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Versión de Forge recomendada: </s:String>
     <s:String x:Key="LangDownloadShowAll">Mostrar todas las versiones</s:String>
@@ -745,10 +746,10 @@ Esta página proporciona la descarga del instalador de NeoForge. Después de des
     <s:String x:Key="LangPageLoginMsAddAccount">Nueva cuenta</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">¡Por favor, inicia sesión en tu cuenta primero antes de lanzar el juego!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">¡La sesión ha sido cancelada!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">La verificación de inicio de sesión de Microsoft falló. Por favor, intenta desactivar "Verificar certificados SSL" en "Configuración → Lanzador" y vuelve a intentarlo.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">La verificación de inicio de sesión de Microsoft falló. Por favor, intenta desactivar "Verificar certificados SSL" en "Configuración → Lanzador" y vuelve a intentarlo.
 
 Mensaje de error original: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">¡La sesión ha sido cancelada!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">¡La sesión ha sido cancelada!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Cargando...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Pieles y capas</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Cambiar piel</s:String>

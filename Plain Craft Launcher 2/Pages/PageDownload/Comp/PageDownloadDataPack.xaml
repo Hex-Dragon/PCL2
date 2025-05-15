@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" x:Class="PageDownloadDataPack"
     PanScroll="{Binding ElementName=Content}">
-    <local:PageComp x:Name="Content" PageType="DataPack" TypeName="{StaticResource LangDownloadPageLeftDatapack}" TypeNameSpaced="{StaticResource LangDownloadPageLeftDatapack}">
+    <local:PageComp x:Name="Content" PageType="DataPack" TypeName="{StaticResource LangDownloadPageLeftDatapack}" TypeNameSpaced="{StaticResource LangDownloadPageLeftDatapackL}">
         <local:MyComboBoxItem Tag="" Content="{StaticResource LangDownloadResourceTypeAll}" IsSelected="True" />
         <local:MyComboBoxItem Content="{StaticResource LangDownloadDatapackTypeWorldgen}" Tag="/worldgen" />
         <local:MyComboBoxItem Content="{StaticResource LangDownloadDatapackTypeTechnology}" Tag="6951/technology" />

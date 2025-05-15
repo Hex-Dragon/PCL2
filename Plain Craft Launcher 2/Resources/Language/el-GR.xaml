@@ -420,6 +420,7 @@
     <s:String x:Key="LangDownloadChangelog">Κούτσουρο</s:String>
     <s:String x:Key="LangDownloadSaveAs">Αποθήκευση ως</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Κυκλοφόρησε στις</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Released on {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Μη συμβατό με Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Προτεινόμενη Έκδοση Forge: </s:String>
     <s:String x:Key="LangDownloadShowAll">Εμφάνιση Όλων των Εκδόσεων</s:String>
@@ -752,10 +753,10 @@
     <s:String x:Key="LangPageLoginMsAddAccount">Νέος Λογαριασμός</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Συνδεθείτε πρώτα στον λογαριασμό σας πριν ξεκινήσετε το παιχνίδι!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">Η σύνδεση ακυρώθηκε!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Η επαλήθευση σύνδεσης της Microsoft απέτυχε. Δοκιμάστε να απενεργοποιήσετε το «Επαλήθευση πιστοποιητικών SSL» στο «Ρυθμίσεις → Εκκίνηση» και δοκιμάστε ξανά.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Η επαλήθευση σύνδεσης της Microsoft απέτυχε. Δοκιμάστε να απενεργοποιήσετε το «Επαλήθευση πιστοποιητικών SSL» στο «Ρυθμίσεις → Εκκίνηση» και δοκιμάστε ξανά.
 
 Αρχικό μήνυμα σφάλματος: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Η σύνδεση ακυρώθηκε!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">Η σύνδεση ακυρώθηκε!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Φόρτωση...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Δέρμα και Μανδύας</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Αλλαγή Εμφάνισης</s:String>

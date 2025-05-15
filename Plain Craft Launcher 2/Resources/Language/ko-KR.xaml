@@ -417,6 +417,7 @@ F11을 다시 눌러 숨겨진 버전 보기 모드를 종료하세요.</s:Strin
     <s:String x:Key="LangDownloadChangelog">변경 로그</s:String>
     <s:String x:Key="LangDownloadSaveAs">다른 이름으로 저장</s:String>
     <s:String x:Key="LangDownloadReleaseOn">발행일</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">발행일</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Forge와 호환되지 않음</s:String>
     <s:String x:Key="LangDownloadRecommendForge">추천 Forge 버전：</s:String>
     <s:String x:Key="LangDownloadShowAll">모든 버전 보기</s:String>
@@ -746,10 +747,10 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageLoginMsAddAccount">새 계정 추가</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">게임을 시작하기 전에 계정에 로그인해 주세요!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">로그인이 취소되었습니다!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">정품 로그인 검증에 실패했습니다. [설정 → 런처]에서 [SSL 인증서 검증]을 끄고 다시 시도해 주세요.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">정품 로그인 검증에 실패했습니다. [설정 → 런처]에서 [SSL 인증서 검증]을 끄고 다시 시도해 주세요.
 
 원래 오류 메시지：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">로그인이 취소되었습니다!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">로그인이 취소되었습니다!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">로딩 중</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">스킨 및 망토</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">스킨 변경</s:String>
