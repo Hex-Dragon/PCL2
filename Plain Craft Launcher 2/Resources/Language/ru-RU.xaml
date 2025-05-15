@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Отменено!</s:String>
     <s:String x:Key="LangDialogBtnOK">ОК</s:String>
     <s:String x:Key="LangDialogBtnCancel">Отмена</s:String>
@@ -89,9 +89,7 @@
     <s:String x:Key="LangPageNameDownloadManagement">Скачивания</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">Свойства</s:String>
     <s:String x:Key="LangPageNameVersionConfigurationUnknownVersion">Неизвестный экземпляр</s:String>
-    <s:String x:Key="LangPageNameModDownload">Скачивание модов</s:String>
-    <s:String x:Key="LangPageNameModpacksDownload">Скачивание модпаков</s:String>
-    <s:String x:Key="LangPageNameResourcePacksDownload">Скачивание ресурс-паков</s:String>
+    <s:String x:Key="LangPageNameCompDownload">资源下载</s:String>
     <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
     <s:String x:Key="LangThemeRealWhite">ИСТИННЫЙ БЕЛЫЙ</s:String>
     <s:String x:Key="LangThemeRealFunny">ИСТИННЫЕ СМЕШНЫЕ ЦВЕТА</s:String>
@@ -422,6 +420,7 @@
     <s:String x:Key="LangDownloadChangelog">Журнал изменений</s:String>
     <s:String x:Key="LangDownloadSaveAs">Сохранить как</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Дата выхода</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">Дата выхода</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Не совместимо с Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">Рекомендуемая версия Forge: </s:String>
     <s:String x:Key="LangDownloadShowAll">Показать все версии</s:String>
@@ -496,6 +495,9 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadPageLeftResource">Ресурсы</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Моды</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Модпаки</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -517,9 +519,9 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadCompSearchLoader">Любой загрузчик модов</s:String>
     <s:String x:Key="LangDownloadCompSearch">Поиск</s:String>
     <s:String x:Key="LangDownloadModReset">Сброс</s:String>
-    <s:String x:Key="LangDownloadModGettingList">Получение списка модов...</s:String>
+    <s:String x:Key="LangDownloadCompGettingList">正在获取{0}列表</s:String>
     <s:String x:Key="LangDownloadModType">Тип</s:String>
-    <s:String x:Key="LangDownloadModTypeAll">Все</s:String>
+    <s:String x:Key="LangDownloadResourceTypeAll">Все</s:String>
     <s:String x:Key="LangDownloadModTypeWorldElement">Генерация мира</s:String>
     <s:String x:Key="LangDownloadModTypeBiome">Биом</s:String>
     <s:String x:Key="LangDownloadModTypeDimension">Измерения</s:String>
@@ -556,19 +558,9 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine позволяет устанавливать шейдеры, использовать HD-ресурспаки и значительно улучшать производительность игры.</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">Официальный сайт</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">Получение списка OptiFine...</s:String>
-    <s:String x:Key="LangDownloadModpackSearchTitle">Поиск модпаков</s:String>
-    <s:String x:Key="LangDownloadModpackSearchName">Имя</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSource">Источник</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSourceAll">Все</s:String>
-    <s:String x:Key="LangDownloadModpackSearchVersion">Версия</s:String>
-    <s:String x:Key="LangDownloadModpackSearchVersionAll">Все (доступные вводы)</s:String>
-    <s:String x:Key="LangDownloadModpackSearch">Поиск</s:String>
-    <s:String x:Key="LangDownloadModpackReset">Сброс</s:String>
-    <s:String x:Key="LangDownloadModpackGettingList">Получение списка модпаков...</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">Установить из файлов</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">Установить модпак под текущую выбранную папку Minecraft.</s:String>
     <s:String x:Key="LangDownloadModpackType">Тип</s:String>
-    <s:String x:Key="LangDownloadModpackTypeAll">Все</s:String>
     <s:String x:Key="LangDownloadModpackTypeMulti">Мультиплеер</s:String>
     <s:String x:Key="LangDownloadModpackTypeOptimization">Оптимизация</s:String>
     <s:String x:Key="LangDownloadModpackTypeChallenging">Героический и сложный</s:String>
@@ -588,7 +580,66 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadModpackTypeMapBased">На основе карты</s:String>
     <s:String x:Key="LangDownloadModpackTypeLightWeight">Небольшой и легкий</s:String>
     <s:String x:Key="LangDownloadModpackTypeHeavyWeight">Очень большой</s:String>
-    <s:String x:Key="LangDownloadModpackTypeMisc">Разное</s:String>
+    <s:String x:Key="LangDownloadModpackTypeOther">其它</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeTitleStyle">风格</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeVanillaLike">原版风</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeRealistic">写实风</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeModern">现代风</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeMedieval">中世纪</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeSteampunk">蒸汽朋克</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeThemed">主题化</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeSimplistic">简洁</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeDecoration">装饰</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeCombat">战斗</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeUtility">实用</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeTweaks">改良</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeCursed">神经病</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeTitleFeature">特性</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeEntities">含实体</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeAudio">含声音</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeFonts">含字体</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeModels">含模型</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeLocale">含语言</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeGUI">含 UI</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeCoreShader">核心着色器</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeDynamic">动态效果</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeModed">兼容 Mod</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeTitleResolution">分辨率</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeLowerThan8x">8x 或更低</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeHigherThan512x">512x 或更高</s:String>
+    <s:String x:Key="LangDownloadShaderTypeTitleStyle">风格</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaLike">原版风</s:String>
+    <s:String x:Key="LangDownloadShaderTypeFantasy">幻想风</s:String>
+    <s:String x:Key="LangDownloadShaderTypeRealistic">写实风</s:String>
+    <s:String x:Key="LangDownloadShaderTypeSemiRealistic">半写实风</s:String>
+    <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
+    <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
+    <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
+    <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
+    <s:String x:Key="LangDownloadShaderTypeReflections">反射</s:String>
+    <s:String x:Key="LangDownloadShaderTypeTitleLoad">性能负荷</s:String>
+    <s:String x:Key="LangDownloadShaderTypePotato">极低</s:String>
+    <s:String x:Key="LangDownloadShaderTypeLow">低</s:String>
+    <s:String x:Key="LangDownloadShaderTypeMedium">中</s:String>
+    <s:String x:Key="LangDownloadShaderTypeHigh">高</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeWorldgen">世界元素</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeTechnology">科技</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeGameMechanics">游戏机制</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeTransportation">运输</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeStorage">仓储</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeMagic">魔法</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeAdventure">冒险</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeFantasy">幻想</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeDecoration">装饰</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeMobs">生物</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeUtility">实用</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeEquipment">装备与工具</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeOptimization">性能优化</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeSocial">服务器</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeLibrary">支持库</s:String>
+    <s:String x:Key="LangDownloadDatapackTypeMod">Mod 相关</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">Не удалось подключиться к Modrinth, поэтому в данный момент отображается только контент с CurseForge, результаты могут быть неполными.
 Пожалуйста, проверьте интернет и попробуйте снова.</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">Не удалось подключиться к CurseForge, поэтому в данный момент отображается только контент с Modrinth, результаты могут быть неполными.
@@ -635,6 +686,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameYearn">渴望披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Нет</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Выбор</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Свойства</s:String>
@@ -701,10 +753,10 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageLoginMsAddAccount">Новый аккаунт</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Пожалуйста, войдите в свой аккаунт перед запуском игры!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">Вход отменён!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">Не удалось пройти верификацию входа Microsoft. Пожалуйста, попробуйте отключить "Проверку SSL-сертификатов" в "Настройки → Запускатель" и попробуйте снова.
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">Не удалось пройти верификацию входа Microsoft. Пожалуйста, попробуйте отключить "Проверку SSL-сертификатов" в "Настройки → Запускатель" и попробуйте снова.
 
     Оригинальное сообщение об ошибке: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Вход отменён!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">Вход отменён!</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Загрузка...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Кожа и плащи</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Изменить кожу</s:String>
@@ -951,6 +1003,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Зеркало (версии могут задерживаться)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Баланс (переключение на зеркало при медленной загрузке официального источника)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Официальный (версии самые свежие)</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Имя мода</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Определяет расположение и стиль написания для китайского перевода мода, который будет скачан.
 Эта опция действительна только при языке, установленном на упрощенный китайский.</s:String>
