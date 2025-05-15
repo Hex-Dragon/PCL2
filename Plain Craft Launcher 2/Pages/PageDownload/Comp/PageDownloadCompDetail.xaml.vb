@@ -312,7 +312,7 @@
                 Dim Desc As String = Nothing
                 Select Case File.Type
                     Case CompType.ModPack : Desc = GetLang("LangDownloadPageLeftModpack")
-                    Case CompType.Mod : Desc = GetLang("LangDownloadPageLeftMods") & " "
+                    Case CompType.Mod : Desc = GetLang("LangDownloadPageLeftMods")
                     Case CompType.ResourcePack : Desc = GetLang("LangDownloadPageLeftResourcepack")
                     Case CompType.Shader : Desc = GetLang("LangDownloadPageLeftShader")
                     Case CompType.DataPack : Desc = GetLang("LangDownloadPageLeftDatapack")

@@ -47,7 +47,7 @@
                                 </local:ValidateExcept>
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchJava}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" MaxDropDownHeight="240"
                                           ToolTip="{StaticResource LangPageSetupLaunchLaunchJavaToolTip}">
                             <ComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchJavaLoading}" IsSelected="True" />

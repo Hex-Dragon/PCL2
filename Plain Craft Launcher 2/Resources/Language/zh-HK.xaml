@@ -422,6 +422,7 @@
     <s:String x:Key="LangDownloadChangelog">更新日誌</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存新檔</s:String>
     <s:String x:Key="LangDownloadReleaseOn">發佈於</s:String>
+    <s:String x:Key="LangDownloadReleaseOnU">發佈於</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">與 Forge 不相容</s:String>
     <s:String x:Key="LangDownloadRecommendForge">推薦 Forge 版本：</s:String>
     <s:String x:Key="LangDownloadShowAll">檢視全部版本</s:String>
@@ -701,10 +702,10 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageLoginMsAddAccount">添加新帳户</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請在登入帳户後再啟動遊戲！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登入！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登入驗證失敗，請嘗試在「設定 → 啟動器」中關閉「驗證 SSL 認證」然後再試。
+    <s:String x:Key="LangPageLoginMsAddAccountFailA">正版登入驗證失敗，請嘗試在「設定 → 啟動器」中關閉「驗證 SSL 認證」然後再試。
 
 原始錯誤資訊：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登入！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailB">已取消登入！</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加載中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">皮膚與披風</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改皮膚</s:String>
