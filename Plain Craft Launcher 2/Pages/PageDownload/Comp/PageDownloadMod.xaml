@@ -5,7 +5,7 @@
     mc:Ignorable="d" x:Class="PageDownloadMod"
     PanScroll="{Binding ElementName=Content}">
     <local:PageComp x:Name="Content" PageType="Mod" TypeName="Mod" TypeNameSpaced=" Mod ">
-        <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeAll}" Tag="" IsSelected="True" />
+        <local:MyComboBoxItem Content="{StaticResource LangDownloadResourceTypeAll}" Tag="" IsSelected="True" />
         <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeWorldElement}" Tag="406/worldgen" />
         <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeBiome}" Tag="407/" Margin="15,0,0,0" />
         <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeDimension}" Tag="410/" Margin="15,0,0,0" />

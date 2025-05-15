@@ -5,7 +5,7 @@
     mc:Ignorable="d" x:Class="PageDownloadPack"
     PanScroll="{Binding ElementName=Content}">
     <local:PageComp x:Name="Content" PageType="ModPack" TypeName="{StaticResource LangDownloadPageLeftModpack}" TypeNameSpaced="{StaticResource LangDownloadPageLeftModpack}">
-        <local:MyComboBoxItem Tag="" Content="{StaticResource LangDownloadModpackTypeAll}" IsSelected="True" />
+        <local:MyComboBoxItem Tag="" Content="{StaticResource LangDownloadResourceTypeAll}" IsSelected="True" />
         <local:MyComboBoxItem Tag="4484/" Content="{StaticResource LangDownloadModpackTypeMulti}" />
         <local:MyComboBoxItem Tag="/optimization" Content="{StaticResource LangDownloadModpackTypeOptimization}" />
         <local:MyComboBoxItem Tag="4479/challenging" Content="{StaticResource LangDownloadModpackTypeChallenging}" />
