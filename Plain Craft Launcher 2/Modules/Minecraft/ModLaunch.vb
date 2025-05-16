@@ -523,6 +523,14 @@ NextInner:
         For Each Profile In ProfileList
             If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
                 IsNewProfile = False
+                If IsCreatingProfile Then
+                    Dim ProfileIndex = ProfileList.IndexOf(Profile)
+                    ProfileList(ProfileIndex).Username = Result(1)
+                    ProfileList(ProfileIndex).AccessToken = AccessToken
+                    ProfileList(ProfileIndex).IdentityId = OAuthId
+                    Hint("你已经添加了这个档案...")
+                    GoTo SkipLogin
+                End If
             End If
         Next
         '输出登录结果
@@ -538,6 +546,8 @@ NextInner:
                 .RawJson = Result(2)
             }
             ProfileList.Add(NewProfile)
+            SelectedProfile = NewProfile
+            IsCreatingProfile = False
         Else
             Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
             ProfileList(ProfileIndex).Username = Result(1)
@@ -546,10 +556,10 @@ NextInner:
         End If
         SaveProfile()
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
+SkipLogin:
         '结束
         McLoginMsRefreshTime = GetTimeTick()
         ProfileLog("正版验证完成")
-SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
         If IsSkipAuth Then
             Data.Progress = 0.99
@@ -936,22 +946,6 @@ Refresh:
         End If
 LoginFinish:
         Data.Progress = 0.95
-        '保存启动记录
-        Dim Dict As New Dictionary(Of String, String)
-        Dim Emails As New List(Of String)
-        Dim Passwords As New List(Of String)
-        Try
-            For i = 0 To Emails.Count - 1
-                Dict.Add(Emails(i), Passwords(i))
-            Next
-            Dict.Remove(Input.UserName)
-            Emails = New List(Of String)(Dict.Keys)
-            Emails.Insert(0, Input.UserName)
-            Passwords = New List(Of String)(Dict.Values)
-            Passwords.Insert(0, Input.Password)
-        Catch ex As Exception
-            Log(ex, "保存启动记录失败", LogLevel.Hint)
-        End Try
     End Sub
     'Server 登录：三种验证方式的请求
     Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
@@ -1108,6 +1102,7 @@ LoginFinish:
                 }
                 ProfileList.Add(NewProfile)
                 SelectedProfile = NewProfile
+                IsCreatingProfile = False
             End If
             SaveProfile()
             ProfileLog("登录成功（Login, Authlib）")

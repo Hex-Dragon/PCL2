@@ -64,7 +64,12 @@
         ToolTipService.SetPlacement(BtnUUID, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnUUID, 30)
         ToolTipService.SetHorizontalOffset(BtnUUID, 2)
-        AddHandler BtnUUID.Click, AddressOf EditProfile
+        AddHandler BtnUUID.Click, AddressOf EditProfileUuid
+        Dim BtnServerName As New MyIconButton With {.Logo = Logo.IconButtonInfo, .ToolTip = "更改验证服务器名称", .Tag = sender.Tag}
+        ToolTipService.SetPlacement(BtnServerName, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnServerName, 30)
+        ToolTipService.SetHorizontalOffset(BtnServerName, 2)
+        AddHandler BtnServerName.Click, AddressOf EditProfileServer
         Dim BtnDelete As New MyIconButton With {.Logo = Logo.IconButtonDelete, .ToolTip = "删除档案", .Tag = sender.Tag}
         ToolTipService.SetPlacement(BtnDelete, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnDelete, 30)
@@ -85,9 +90,16 @@
                            RunInUi(Sub() RefreshProfileList())
                        End Sub)
     End Sub
-    '编辑档案
-    Private Sub EditProfile(sender As Object, e As EventArgs)
+    '编辑 UUID
+    Private Sub EditProfileUuid(sender As Object, e As EventArgs)
         EditOfflineUuid(sender.Tag)
+    End Sub
+    '编辑验证服务器名称
+    Private Sub EditProfileServer(sender As Object, e As EventArgs)
+        Dim Name As String = MyMsgBoxInput("修改验证服务器名称", $"请输入新的验证服务器名称", sender.Tag.ServerName)
+        If Name IsNot Nothing Then
+            EditAuthServerName(sender.Tag, Name)
+        End If
     End Sub
     '删除档案
     Private Sub DeleteProfile(sender As Object, e As EventArgs)
