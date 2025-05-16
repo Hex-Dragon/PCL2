@@ -10,8 +10,10 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="10" />
         <RowDefinition Height="Auto" />
+        <RowDefinition Height="10" />
+        <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <local:MyScrollViewer x:Name="ScrollList" MaxHeight="190" Margin="10,0,10,0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+    <local:MyScrollViewer x:Name="ScrollList" MaxHeight="190" Margin="10,0,10,0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
         <StackPanel x:Name="StackProfile">
             <local:MyListItem Title="LTCat" Info="离线验证 / 当前选择"
     Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
@@ -24,14 +26,14 @@
     Logo="pack://application:,,,/images/Blocks/Grass.png" />
         </StackPanel>
     </local:MyScrollViewer>
-    <Path Name="PathTitle" Grid.Row="0" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="50,10,0,0" Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" MaxHeight="18" MaxWidth="18" VerticalAlignment="Center"
+    <Path Name="PathTitle" Grid.Row="2" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="50,10,0,0" Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" MaxHeight="18" MaxWidth="18" VerticalAlignment="Center"
       Data="M660.338 528.065c63.61-46.825 105.131-121.964 105.131-206.83 0-141.7-115.29-256.987-256.997-256.987-141.706 0-256.998 115.288-256.998 256.987 0 85.901 42.52 161.887 107.456 208.562-152.1 59.92-260.185 207.961-260.185 381.077 0 21.276 17.253 38.53 38.53 38.53 21.278 0 38.53-17.254 38.53-38.53 0-183.426 149.232-332.671 332.667-332.671 1.589 0 3.113-0.207 4.694-0.244 0.8 0.056 1.553 0.244 2.362 0.244 183.434 0 332.664 149.245 332.664 332.671 0 21.276 17.255 38.53 38.533 38.53 21.277 0 38.53-17.254 38.53-38.53 0-174.885-110.354-324.13-264.917-382.809z m-331.803-206.83c0-99.22 80.72-179.927 179.935-179.927s179.937 80.708 179.937 179.927c0 99.203-80.721 179.91-179.937 179.91s-179.935-80.708-179.935-179.91z">
         <Path.RenderTransform>
             <ScaleTransform ScaleX="1.05" ScaleY="1.05" />
         </Path.RenderTransform>
     </Path>
-    <TextBlock Name="LabTitle" Text="档案管理" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Foreground="{DynamicResource ColorBrush3}" Margin="75,8,0,0" Grid.ColumnSpan="2" SnapsToDevicePixels="False" UseLayoutRounding="False" />
-    <Border Grid.Row="0" HorizontalAlignment="Right" x:Name="PanButtons" Opacity="10"
+    <TextBlock Name="LabTitle" Grid.Row="2" Text="档案管理" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush3}" Margin="75,8,0,0" SnapsToDevicePixels="False" UseLayoutRounding="False" />
+    <Border Grid.Row="2" HorizontalAlignment="Right" x:Name="PanButtons" Opacity="10"
         CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,0,3" Margin="0,8,4,0">
         <StackPanel Orientation="Horizontal">
             <local:MyIconButton Height="24" Margin="0,0.5,9,0"  x:Name="BtnNew"
