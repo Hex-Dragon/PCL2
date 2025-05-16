@@ -133,12 +133,12 @@ WaitRetry:
             Dim IS_WINDOWS_MEET_REQUIRE As Boolean = Environment.OSVersion.Version.Major >= 10
             Dim IS_FRAMEWORK_MEET_REQUIRE As Boolean = Val(Microsoft.Win32.Registry.GetValue("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full", "Release", "528049").ToString.AfterFirst("(").BeforeFirst(")")) >= 533320
             Dim ProblemList As New List(Of String)
-            If Not IS_WINDOWS_MEET_REQUIRE Then ProblemList.Add("你的 Windows 版本没有达到运行次程序的最低需求（最低需要 Windows 10 20H2）")
-            If Not IS_FRAMEWORK_MEET_REQUIRE Then ProblemList.Add("你的 .NET Framework 运行时版本没有达到运行此程序的最低要求（最低需要 .NET Framework 4.8.1）")
+            If Not IS_WINDOWS_MEET_REQUIRE Then ProblemList.Add("Windows 版本不满足最低要求，最低需要 Windows 10 20H2")
+            If Not IS_FRAMEWORK_MEET_REQUIRE Then ProblemList.Add(".NET Framework 版本不满足要求，需要 .NET Framework 4.8.1")
             If ProblemList.Count <> 0 Then
-                MyMsgBox("在加载程序时检测到了一些环境问题：" & vbCrLf & vbCrLf &
+                MyMsgBox("PCL CE 在启动时检测到环境问题：" & vbCrLf & vbCrLf &
                          ProblemList.Join(vbCrLf) & vbCrLf & vbCrLf &
-                         "需要解决这些问题才能够正常使用此程序……",
+                         "需要解决这些问题才能正常使用启动器……",
                         Button2:=If(IS_WINDOWS_MEET_REQUIRE, String.Empty, "升级系统"),
                         Button2Action:=Sub() OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10"),
                         Button3:=If(IS_FRAMEWORK_MEET_REQUIRE, String.Empty, "安装框架"),
