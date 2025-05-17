@@ -731,7 +731,19 @@ Retry:
         If Len(Uuid) = 32 Then Return Uuid
         '从官网获取
         Try
-            Dim GotJson As JObject = NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" & Name, IsJson:=True)
+            Dim GotJson As JObject = Nothing
+            Dim Finished = False
+            RunInNewThread(Sub()
+                               Try
+                                   GotJson = NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" & Name, IsJson:=True)
+                               Catch ex As Exception
+                               Finally
+                                   Finished = True
+                               End Try
+                           End Sub, $"{Name} Uuid Get")
+            While Not Finished
+                Thread.Sleep(50)
+            End While
             If GotJson Is Nothing Then Throw New FileNotFoundException("正版玩家档案不存在（" & Name & "）")
             Uuid = If(GotJson("id"), "")
         Catch ex As Exception
