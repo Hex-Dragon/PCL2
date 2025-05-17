@@ -1925,12 +1925,11 @@ NextVersion:
     Private Sub McLaunchPrerun()
 
         '要求 Java 使用高性能显卡
-        If Setup.Get("LaunchAdvanceGraphicCard") Then
-            Try
-                SetGPUPreference(McLaunchJavaSelected.PathJavaw)
-                SetGPUPreference(PathWithName)
-            Catch ex As Exception
-                If IsAdmin() Then
+        Try
+            SetGPUPreference(McLaunchJavaSelected.PathJavaw, Setup.Get("LaunchAdvanceGraphicCard"))
+            SetGPUPreference(PathWithName, Setup.Get("LaunchAdvanceGraphicCard"))
+        Catch ex As Exception
+            If IsAdmin() Then
                     Log(ex, "直接调整显卡设置失败")
                 Else
                     Log(ex, "直接调整显卡设置失败，将以管理员权限重启 PCL 再次尝试")
@@ -1945,7 +1944,6 @@ NextVersion:
                     End Try
                 End If
             End Try
-        End If
 
         '更新 launcher_profiles.json
         Try

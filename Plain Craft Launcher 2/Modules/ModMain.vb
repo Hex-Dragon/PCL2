@@ -830,28 +830,34 @@ NextFile:
     ''' 将特定程序设置为使用高性能显卡启动。
     ''' 如果失败，则抛出异常。
     ''' </summary>
-    Public Sub SetGPUPreference(Executeable As String)
-        Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
-        Const REG_VALUE As String = "GpuPreference=2;"
+    Public Sub SetGPUPreference(Executeable As String, Optional WantHighPerformance As Boolean = True)
+        Const GPU_PERFERENCE_REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
+        Const GPU_PERFERENCE_REG_VALUE_HIGH As String = "GpuPreference=2;"
+        Const GPU_PERFERENCE_REG_VALUE_DEFAULT As String = "GpuPreference=0;"
+        'Const GPU_PERFERENCE_REG_VALUE_POWER_SAVING As String = "GpuPreference=1;"
+
+        Dim IsCurrentHighPerformance As Boolean = False
         '查看现有设置
-        Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
+        Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(GPU_PERFERENCE_REG_KEY, False)
             If ReadOnlyKey IsNot Nothing Then
                 Dim CurrentValue = ReadOnlyKey.GetValue(Executeable)
-                If REG_VALUE = CurrentValue?.ToString() Then
-                    Log($"[System] 无需调整显卡设置：{Executeable}")
-                    Return
+                If GPU_PERFERENCE_REG_VALUE_HIGH = CurrentValue?.ToString() Then
+                    IsCurrentHighPerformance = True
+                    Log($"[System] 当前程序 ({Executeable}) 的显卡设置为高性能")
                 End If
             Else
                 '创建父级键
                 Log($"[System] 需要创建显卡设置的父级键")
-                My.Computer.Registry.CurrentUser.CreateSubKey(REG_KEY)
+                My.Computer.Registry.CurrentUser.CreateSubKey(GPU_PERFERENCE_REG_KEY)
             End If
         End Using
-        '写入新设置
-        Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, True)
-            WriteKey.SetValue(Executeable, REG_VALUE)
-            Log($"[System] 已调整显卡设置：{Executeable}")
-        End Using
+        If IsCurrentHighPerformance Xor WantHighPerformance Then
+            '写入新设置
+            Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(GPU_PERFERENCE_REG_KEY, True)
+                WriteKey.SetValue(Executeable, If(WantHighPerformance, GPU_PERFERENCE_REG_VALUE_HIGH, GPU_PERFERENCE_REG_VALUE_DEFAULT))
+                Log($"[System] 已调整显卡设置：{Executeable}")
+            End Using
+        End If
     End Sub
 
 #End Region
