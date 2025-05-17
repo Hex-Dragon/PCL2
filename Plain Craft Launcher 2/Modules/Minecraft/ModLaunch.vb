@@ -1339,6 +1339,54 @@ LoginFinish:
 
 #Region "启动参数"
 
+    Public Class LaunchArgument
+        Private _features As New Dictionary(Of String, String)
+        Public Sub New(Minecraft As McVersion)
+            Dim curArgu As String = String.Empty
+            If Minecraft.IsOldJson Then
+                '分隔开参数
+                Dim param = Minecraft.JsonObject("minecraftArguments").ToString.Split(" "c).ToList()
+                For Each p In param
+                    If p.StartsWithF("--") Then
+                        curArgu = p
+                        Continue For
+                    End If
+                    If p.StartsWithF("$") Then
+                        _features.Add(curArgu, p)
+                    End If
+                Next
+            Else
+                For Each item In Minecraft.JsonObject("arguments")("game")
+                    If item.Type = JTokenType.String Then
+                        If item.ToString().StartsWithF("$") Then
+                            curArgu = item.ToString()
+                            Continue For
+                        End If
+                        If item.ToString().StartsWithF("--") Then
+                            _features.Add(curArgu, item.ToString())
+                        End If
+                    ElseIf item.Type = JTokenType.Object Then
+                        For Each values In item("value")
+                            If values.ToString().StartsWithF("--") Then
+                                curArgu = values.ToString()
+                                _features.Add(curArgu, String.Empty)
+                            End If
+                            If values.ToString().StartsWithF("$") AndAlso
+                                _features.ContainsKey(curArgu) AndAlso
+                                String.IsNullOrEmpty(_features(curArgu)) Then
+                                _features(curArgu) = values.ToString()
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+        End Sub
+
+        Public Function HasArguments(key As String)
+            Return _features.ContainsKey(key)
+        End Function
+    End Class
+
     Private McLaunchArgument As String
 
     ''' <summary>
