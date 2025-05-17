@@ -212,6 +212,7 @@
             PanList.Visibility = Visibility.Visible
             PanList.Children.Clear()
             For Each TargetMod In ShowingMods
+                If Not ModItems.ContainsKey(TargetMod.RawFileName) Then Continue For
                 Dim Item As MyLocalCompItem = ModItems(TargetMod.RawFileName)
                 Item.Checked = SelectedMods.Contains(TargetMod.RawFileName) '更新选中状态
                 PanList.Children.Add(Item)
