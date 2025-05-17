@@ -129,8 +129,6 @@
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                         <RowDefinition Height="5" />
-                        <RowDefinition Height="28" />
-                        <RowDefinition Height="32" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -153,26 +151,20 @@
                         <local:MyComboBoxItem Content="仅在有重要通知时显示公告" />
                         <local:MyComboBoxItem Content="关闭所有公告" />
                     </local:MyComboBox>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="更新和公告服务器" Margin="0,0,25,0" Grid.Row="6" />
-                    <local:MyComboBox x:Name="ComboSystemServer" Tag="SystemSystemServer" Grid.Column="1" Grid.Row="6" 
-                        ToolTip="选择启动器的更新和公告服务器。&#xa;一般情况下，Pysio 服务器可以提供较为快速和稳定的服务。&#xa;如果出现问题，你可以尝试切换到 GitHub 服务器。&#xa;&#xa;如果你不知道你在干什么，请选择 Pysio。">
-                        <local:MyComboBoxItem Content="Pysio" />
-                        <local:MyComboBoxItem Content="GitHub" />
-                    </local:MyComboBox>
-                    <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Text="缓存文件夹" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="8" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL 后生效。" HintText="默认">
+                    <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="缓存文件夹" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="6" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL 后生效。" HintText="默认">
                         <local:MyTextBox.ValidateRules>
                             <local:ValidateNullable />
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
-                    <TextBlock Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
-                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="10" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
+                    <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
+                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="8" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
 ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
-                    <local:MyCheckBox Grid.Row="11" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
-                    <local:MyCheckBox Grid.Row="11" Grid.Column="1" Text="参与 PCL CE 软硬件调查" x:Name="CheckSystemTelemetry" Tag="SystemTelemetry" 
+                    <local:MyCheckBox Grid.Row="10" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <local:MyCheckBox Grid.Row="10" Grid.Column="1" Text="参与 PCL CE 软硬件调查" x:Name="CheckSystemTelemetry" Tag="SystemTelemetry" 
                                       ToolTip="这是一项与 Steam 硬件调查类似的计划，参与调查可以帮助我们更好的进行规划和开发，且我们会不定期发布该调查的统计结果。&#xa;如果选择参与调查，我们将会收集以下信息：&#xa;启动器版本信息与识别码，使用的 Windows 系统版本与架构，已安装的物理内存大小，NAT 与 IPv6 支持情况，是否使用过官方版 PCL、HMCL 或 BakaXL&#xa;&#xa;这些数据均不与你关联，我们也绝不会向第三方出售数据。不参与调查不会影响你使用其他功能。"/>
-                    <Grid Height="35" Grid.Row="12" Grid.ColumnSpan="5" Margin="0,8,0,0">
+                    <Grid Height="35" Grid.Row="11" Grid.ColumnSpan="5" Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

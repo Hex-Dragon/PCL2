@@ -559,7 +559,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public RemoteAnnounceData As AnnouncementInfo = Nothing
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
-    Public RemoteServerBaseurl As New Dictionary(Of Integer, String) From {{1, "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/"}, {0, "https://s3.pysio.online/pcl2-ce/"}}
+    Public RemoteServerBaseurl As New List(Of String) From {"https://s3.pysio.online/pcl2-ce/", "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/"}
 
     Public Sub UpdateCheckByButton()
         If IsUpdateStarted Then
@@ -577,26 +577,34 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                            End Try
                        End Sub)
     End Sub
-    Private Sub RefreshUpdatesCache()
+    Private Sub RefreshUpdatesCache(Optional offset As Integer = 0)
         Try
+            If offset >= RemoteServerBaseurl.Count Then
+                Log("[System] 更新源偏移值错误")
+                Exit Sub
+            End If
             Dim UpdCaches As JObject = Nothing
-            UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json"), IsJson:=True)
+            UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json", offset), IsJson:=True)
             Dim UpdatesCacheFile = PathTemp & "Cache/updates.json"
             Dim AnnouncementCacheFile = PathTemp & "Cache/announcement.json"
             If GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
-                WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/updates.json")))
+                WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/updates.json", offset)))
             End If
             If GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
-                WriteFile(AnnouncementCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/announcement.json")))
+                WriteFile(AnnouncementCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/announcement.json", offset)))
             End If
             RemoteVersionData = CType(GetJson(ReadFile(UpdatesCacheFile)), JObject).ToObject(Of UpdateInfo)()
             RemoteAnnounceData = CType(GetJson(ReadFile(AnnouncementCacheFile)), JObject).ToObject(Of AnnouncementInfo)()
         Catch ex As Exception
             Log(ex, "[System] 刷新更新信息失败……")
+            If offset < RemoteServerBaseurl.Count - 1 Then
+                Log("[System] 尝试换源")
+                RefreshUpdatesCache(offset + 1)
+            End If
         End Try
     End Sub
-    Private Function GetRemotePath(path As String) As String
-        Return RemoteServerBaseurl(Setup.Get("SystemSystemServer")) & path
+    Private Function GetRemotePath(path As String, Optional offset As Integer = 0) As String
+        Return RemoteServerBaseurl.ElementAt(offset) & path
     End Function
     Public Function GetChannelInfo(Optional TargetMainChannel As String = Nothing) As UpdateAssetInfo
         If RemoteVersionData Is Nothing Then

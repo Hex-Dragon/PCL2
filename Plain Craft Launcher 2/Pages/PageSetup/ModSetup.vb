@@ -42,7 +42,6 @@ Public Class ModSetup
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemUpdateBranch", New SetupEntry(0)},
-        {"SystemSystemServer", New SetupEntry(If(IsRestrictedFeatAllowed, 0, 1))},
         {"SystemSystemActivity", New SetupEntry(0)},
         {"SystemSystemAnnouncement", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
