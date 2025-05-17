@@ -130,8 +130,19 @@ WaitRetry:
             If Is32BitSystem Then
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
             End If
-            If Not Val(Microsoft.Win32.Registry.GetValue("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full", "Release", "528049").ToString.AfterFirst("(").BeforeFirst(")")) >= 533320 Then
-                MyMsgBox($"PCL CE 不再支持你当前使用的系统，部分功能将无法使用。{vbCrLf}PCL CE 要求系统版本至少为 Windows 10 20H2 且安装有 .NET Framework 4.8.1。{vbCrLf}非常建议升级到最新版本的 Windows 10 或 Windows 11！", "环境警告", "我知道了", IsWarn:=True)
+            Dim IS_WINDOWS_MEET_REQUIRE As Boolean = Environment.OSVersion.Version.Major >= 10
+            Dim IS_FRAMEWORK_MEET_REQUIRE As Boolean = Val(Microsoft.Win32.Registry.GetValue("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full", "Release", "528049").ToString.AfterFirst("(").BeforeFirst(")")) >= 533320
+            Dim ProblemList As New List(Of String)
+            If Not IS_WINDOWS_MEET_REQUIRE Then ProblemList.Add("Windows 版本不满足最低要求，最低需要 Windows 10 20H2")
+            If Not IS_FRAMEWORK_MEET_REQUIRE Then ProblemList.Add(".NET Framework 版本不满足要求，需要 .NET Framework 4.8.1")
+            If ProblemList.Count <> 0 Then
+                MyMsgBox("PCL CE 在启动时检测到环境问题：" & vbCrLf & vbCrLf &
+                         ProblemList.Join(vbCrLf) & vbCrLf & vbCrLf &
+                         "需要解决这些问题才能正常使用启动器……",
+                        Button2:=If(IS_WINDOWS_MEET_REQUIRE, String.Empty, "升级系统"),
+                        Button2Action:=Sub() OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10"),
+                        Button3:=If(IS_FRAMEWORK_MEET_REQUIRE, String.Empty, "安装框架"),
+                        Button3Action:=Sub() OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net481-offline-installer"))
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")
