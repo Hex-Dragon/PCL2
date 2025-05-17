@@ -56,15 +56,12 @@ Public Class PageVersionWorld
     End Sub
 
     Private Sub CheckQuickPlay()
-        Dim VersionJson = PageVersionLeft.Version.JsonObject
-        If VersionJson("arguments") IsNot Nothing AndAlso VersionJson("arguments")("game") IsNot Nothing
-            For Each Argument In VersionJson("arguments")("game")
-                If Argument.Type = JTokenType.Object AndAlso JObject.FromObject(Argument).ContainsKey("value") AndAlso Argument("value").ToString().Contains("--quickPlaySingleplayer") Then
-                    QuickPlayFeature = True
-                    Exit For
-                End If
-            Next
-        End If
+        Try
+            Dim cur As New LaunchArgument(PageVersionLeft.Version)
+            QuickPlayFeature = cur.HasArguments("--quickPlaySingleplayer")
+        Catch ex As Exception
+            Log(ex, "检查存档快捷启动失败", LogLevel.Hint)
+        End Try
     End Sub
 
     Private Sub LoadFileList()
@@ -118,7 +115,7 @@ Public Class PageVersionWorld
             AddHandler BtnInfo.Click, AddressOf BtnInfo_Click
 
             Dim BtnLaunch As New MyIconButton With {
-                    .Logo = Logo.IconPlay,
+                    .Logo = Logo.IconPlayGame,
                     .ToolTip = "快捷启动",
                     .Tag = i
                 }
