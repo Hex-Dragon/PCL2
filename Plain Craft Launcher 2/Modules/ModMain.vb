@@ -843,7 +843,6 @@ NextFile:
                 Dim CurrentValue = ReadOnlyKey.GetValue(Executeable)
                 If GPU_PERFERENCE_REG_VALUE_HIGH = CurrentValue?.ToString() Then
                     IsCurrentHighPerformance = True
-                    Log($"[System] 当前程序 ({Executeable}) 的显卡设置为高性能")
                 End If
             Else
                 '创建父级键
@@ -851,11 +850,12 @@ NextFile:
                 My.Computer.Registry.CurrentUser.CreateSubKey(GPU_PERFERENCE_REG_KEY)
             End If
         End Using
+        Log($"[System] 当前程序 ({Executeable}) 的显卡设置为高性能: {IsCurrentHighPerformance}")
         If IsCurrentHighPerformance Xor WantHighPerformance Then
             '写入新设置
             Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(GPU_PERFERENCE_REG_KEY, True)
                 WriteKey.SetValue(Executeable, If(WantHighPerformance, GPU_PERFERENCE_REG_VALUE_HIGH, GPU_PERFERENCE_REG_VALUE_DEFAULT))
-                Log($"[System] 已调整显卡设置：{Executeable}")
+                Log($"[System] 已调整程序 ({Executeable}) 显卡设置: {WantHighPerformance}")
             End Using
         End If
     End Sub
