@@ -520,27 +520,27 @@ Refresh:
 
     '主题自定义
     Private Sub RadioLauncherTheme14_Change(sender As Object, e As RouteEventArgs) Handles RadioLauncherTheme14.Changed
-        If RadioLauncherTheme14.Checked Then
-            If LabLauncherHue.Visibility = Visibility.Visible Then Exit Sub
-            LabLauncherHue.Visibility = Visibility.Visible
-            SliderLauncherHue.Visibility = Visibility.Visible
-            LabLauncherSat.Visibility = Visibility.Visible
-            SliderLauncherSat.Visibility = Visibility.Visible
-            LabLauncherDelta.Visibility = Visibility.Visible
-            SliderLauncherDelta.Visibility = Visibility.Visible
-            LabLauncherLight.Visibility = Visibility.Visible
-            SliderLauncherLight.Visibility = Visibility.Visible
-        Else
-            If LabLauncherHue.Visibility = Visibility.Collapsed Then Exit Sub
-            LabLauncherHue.Visibility = Visibility.Collapsed
-            SliderLauncherHue.Visibility = Visibility.Collapsed
-            LabLauncherSat.Visibility = Visibility.Collapsed
-            SliderLauncherSat.Visibility = Visibility.Collapsed
-            LabLauncherDelta.Visibility = Visibility.Collapsed
-            SliderLauncherDelta.Visibility = Visibility.Collapsed
-            LabLauncherLight.Visibility = Visibility.Collapsed
-            SliderLauncherLight.Visibility = Visibility.Collapsed
-        End If
+        'If RadioLauncherTheme14.Checked Then
+        '    If LabLauncherHue.Visibility = Visibility.Visible Then Exit Sub
+        '    LabLauncherHue.Visibility = Visibility.Visible
+        '    SliderLauncherHue.Visibility = Visibility.Visible
+        '    LabLauncherSat.Visibility = Visibility.Visible
+        '    SliderLauncherSat.Visibility = Visibility.Visible
+        '    LabLauncherDelta.Visibility = Visibility.Visible
+        '    SliderLauncherDelta.Visibility = Visibility.Visible
+        '    LabLauncherLight.Visibility = Visibility.Visible
+        '    SliderLauncherLight.Visibility = Visibility.Visible
+        'Else
+        If LabLauncherHue.Visibility = Visibility.Collapsed Then Exit Sub
+        LabLauncherHue.Visibility = Visibility.Collapsed
+        SliderLauncherHue.Visibility = Visibility.Collapsed
+        LabLauncherSat.Visibility = Visibility.Collapsed
+        SliderLauncherSat.Visibility = Visibility.Collapsed
+        LabLauncherDelta.Visibility = Visibility.Collapsed
+        SliderLauncherDelta.Visibility = Visibility.Collapsed
+        LabLauncherLight.Visibility = Visibility.Collapsed
+        SliderLauncherLight.Visibility = Visibility.Collapsed
+        'End If
         CardLauncher.TriggerForceResize()
     End Sub
     Private Sub HSL_Change() Handles SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
