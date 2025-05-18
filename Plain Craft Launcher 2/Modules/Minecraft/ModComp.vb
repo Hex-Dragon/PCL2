@@ -2087,7 +2087,7 @@ Retry:
                     Dim Ids As New List(Of String)({ProjectId})
                     Dim CompProjects = CompRequest.GetCompProjectsByIds(Ids)
                     RunInUi(Sub() FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-                               .Additional = {CompProjects.First(), New List(Of String), String.Empty, CompLoaderType.Any}}))
+                               .Additional = {CompProjects.First(), New List(Of String), String.Empty, CompLoaderType.Any, CompType.Any}}))
                 End If
             End While
         End Sub
