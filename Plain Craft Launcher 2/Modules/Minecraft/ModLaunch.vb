@@ -975,7 +975,7 @@ LoginFinish:
             Method:="POST",
             Data:=RequestData.ToString(0),
             Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-            ContentType:="application/json; charset=utf-8") '没有返回值的
+            ContentType:="application/json") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
         Data.Output.ClientToken = ClientToken
@@ -1000,7 +1000,7 @@ LoginFinish:
                Method:="POST",
                Data:=RefreshInfo.ToString(0),
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-               ContentType:="application/json; charset=utf-8"))
+               ContentType:="application/json"))
         '将登录结果输出
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & SelectedProfile.Username & " 无效！")
         Data.Output.AccessToken = LoginJson("accessToken").ToString
@@ -1032,7 +1032,7 @@ LoginFinish:
                 Method:="POST",
                 Data:=RequestData.ToString(0),
                 Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
-                ContentType:="application/json; charset=utf-8"))
+                ContentType:="application/json"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
                 If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
