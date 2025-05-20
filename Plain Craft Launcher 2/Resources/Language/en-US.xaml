@@ -1034,7 +1034,7 @@ If login fails with an error like "Could not establish trust relationship for th
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Release update</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Display a hint when a new Minecraft release is released.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Game language</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Synchronous game language</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Synchronize game language</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">System</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Update</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Download when a update is available</s:String>
