@@ -119,6 +119,9 @@ Public Class MyCard
             RunInUi(Sub() UseAnimation = RawUseAnimation, True)
         End If
     End Sub
+    Private Sub Dispose() Handles Me.Unloaded
+        RemoveHandler ModSecret.ThemeChanged, AddressOf _ThemeChanged
+    End Sub
     Public Sub StackInstall()
         StackInstall(SwapControl, InstallMethod)
         TriggerForceResize()

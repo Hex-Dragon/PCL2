@@ -117,6 +117,10 @@ Public Class MyHint
 
     End Sub
 
+    Private Sub Dispose() Handles Me.Unloaded
+        RemoveHandler ModSecret.ThemeChanged, AddressOf _ThemeChanged
+    End Sub
+
     Private Sub SetStyle()
         If Type = HintType.Note Then
             If IsWarn Then
