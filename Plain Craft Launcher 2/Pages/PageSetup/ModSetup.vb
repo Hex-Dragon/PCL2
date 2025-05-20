@@ -189,7 +189,21 @@ Public Class ModSetup
 
 #Region "Register 存储"
 
-    Private LocalRegisterData As New LocalJsonFileConfig(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & $"\.{RegFolder}\Config.json")
+    Private _LocalRegisterData As LocalJsonFileConfig = Nothing
+    Private ReadOnly Property LocalRegisterData As LocalJsonFileConfig
+        Get
+            Dim ConfigFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & $"\.{RegFolder}\Config.json"
+            Try
+                If _LocalRegisterData Is Nothing Then _LocalRegisterData = New LocalJsonFileConfig(ConfigFilePath)
+            Catch ex As Exception
+                Rename(ConfigFilePath, $"{ConfigFilePath}.{GetStringMD5(DateTime.Now.ToString())}.bak")
+                _LocalRegisterData = New LocalJsonFileConfig(ConfigFilePath)
+                MsgBox("读取本地配置文件失败，可能文件损坏。" & vbCrLf & "原配置文件已自动备份并换用新配置文件", MsgBoxStyle.Critical)
+            End Try
+            Return _LocalRegisterData
+        End Get
+    End Property
+
 
     Public Class LocalJsonFileConfig
         Private ReadOnly _ConfigData As JObject
@@ -202,7 +216,7 @@ Public Class ModSetup
                     Dim JsonText = ReadFile(JsonFilePath)
                     _ConfigData = JObject.Parse(JsonText)
                 Catch ex As Exception
-                    Log(ex, "读取配置项数据失败", LogLevel.Feedback)
+                    Throw
                 End Try
             Else
                 _ConfigData = New JObject()
