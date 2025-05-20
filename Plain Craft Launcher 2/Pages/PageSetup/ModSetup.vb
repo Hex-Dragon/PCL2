@@ -198,7 +198,10 @@ Public Class ModSetup
             Catch ex As Exception
                 Rename(ConfigFilePath, $"{ConfigFilePath}.{GetStringMD5(DateTime.Now.ToString())}.bak")
                 _LocalRegisterData = New LocalJsonFileConfig(ConfigFilePath)
-                MsgBox("读取本地配置文件失败，可能文件损坏。" & vbCrLf & "原配置文件已自动备份并换用新配置文件", MsgBoxStyle.Critical)
+                MsgBox("读取本地配置文件失败，可能文件损坏。" & vbCrLf &
+                       $"请将 {_LocalRegisterData} 文件删除，并使用备份配置文件 {_LocalRegisterData}.bak",
+                        MsgBoxStyle.Critical)
+                FormMain.EndProgramForce(ProcessReturnValues.Fail)
             End Try
             Return _LocalRegisterData
         End Get
@@ -224,7 +227,21 @@ Public Class ModSetup
         End Sub
 
         Private Sub Save()
-            WriteFile(_ConfigFilePath, _ConfigData.ToString())
+            Dim tempPath = _ConfigFilePath & ".tmp"
+            Dim backupPath = _ConfigFilePath & ".bak"
+            Try
+                ' 先写入临时文件
+                WriteFile(tempPath, _ConfigData.ToString())
+                ' 原子化替换文件
+                If File.Exists(_ConfigFilePath) Then
+                    File.Replace(tempPath, _ConfigFilePath, backupPath)
+                Else
+                    File.Move(tempPath, _ConfigFilePath)
+                End If
+            Catch ex As Exception
+                If File.Exists(tempPath) Then File.Delete(tempPath)
+                Throw
+            End Try
         End Sub
 
         Private ReadOnly _SetLock As New Object()
