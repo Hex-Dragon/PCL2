@@ -189,7 +189,24 @@ Public Class ModSetup
 
 #Region "Register 存储"
 
-    Private LocalRegisterData As New LocalJsonFileConfig(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & $"\.{RegFolder}\Config.json")
+    Private _LocalRegisterData As LocalJsonFileConfig = Nothing
+    Private ReadOnly Property LocalRegisterData As LocalJsonFileConfig
+        Get
+            Dim ConfigFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & $"\.{RegFolder}\Config.json"
+            Try
+                If _LocalRegisterData Is Nothing Then _LocalRegisterData = New LocalJsonFileConfig(ConfigFilePath)
+            Catch ex As Exception
+                Rename(ConfigFilePath, $"{ConfigFilePath}.{GetStringMD5(DateTime.Now.ToString())}.bak")
+                _LocalRegisterData = New LocalJsonFileConfig(ConfigFilePath)
+                MsgBox("读取本地配置文件失败，可能文件损坏。" & vbCrLf &
+                       $"请将 {_LocalRegisterData} 文件删除，并使用备份配置文件 {_LocalRegisterData}.bak",
+                        MsgBoxStyle.Critical)
+                FormMain.EndProgramForce(ProcessReturnValues.Fail)
+            End Try
+            Return _LocalRegisterData
+        End Get
+    End Property
+
 
     Public Class LocalJsonFileConfig
         Private ReadOnly _ConfigData As JObject
@@ -202,7 +219,7 @@ Public Class ModSetup
                     Dim JsonText = ReadFile(JsonFilePath)
                     _ConfigData = JObject.Parse(JsonText)
                 Catch ex As Exception
-                    Log(ex, "读取配置项数据失败", LogLevel.Feedback)
+                    Throw
                 End Try
             Else
                 _ConfigData = New JObject()
@@ -210,7 +227,21 @@ Public Class ModSetup
         End Sub
 
         Private Sub Save()
-            WriteFile(_ConfigFilePath, _ConfigData.ToString())
+            Dim tempPath = _ConfigFilePath & ".tmp"
+            Dim backupPath = _ConfigFilePath & ".bak"
+            Try
+                ' 先写入临时文件
+                WriteFile(tempPath, _ConfigData.ToString())
+                ' 原子化替换文件
+                If File.Exists(_ConfigFilePath) Then
+                    File.Replace(tempPath, _ConfigFilePath, backupPath)
+                Else
+                    File.Move(tempPath, _ConfigFilePath)
+                End If
+            Catch ex As Exception
+                If File.Exists(tempPath) Then File.Delete(tempPath)
+                Throw
+            End Try
         End Sub
 
         Private ReadOnly _SetLock As New Object()
