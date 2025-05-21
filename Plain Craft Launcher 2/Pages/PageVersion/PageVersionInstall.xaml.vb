@@ -810,6 +810,37 @@ Public Class PageVersionInstall
     '版本名处理
     Private IsSelectNameEdited As Boolean = False
     Private IsSelectNameChanging As Boolean = False
+    
+    '通过文件名前缀比如 'fabric-api' 来获取给定版本 mods 目录中某个 mod 的 LocalCompFile 对象，若没有则返回空值
+    '因为实在看不懂龙猫的代码所以自己实现了一个，不知道有没有现成的
+    Private Shared Function GetModLocalCompByPrefix(prefix As String, Optional version As McVersion = Nothing) As LocalCompFile
+        If version Is Nothing Then version = PageVersionLeft.Version
+        If Not version.Modable Then Return Nothing '跳过不可安装 mod 版本
+        Dim modFolder = $"{version.Path}mods"
+        If Not Directory.Exists(modFolder) Then Return Nothing '确保 mods 目录存在
+        Dim modFile = Directory.EnumerateFiles(modFolder, $"{prefix}*").GetEnumerator().Current
+        If modFile Is Nothing Then Return Nothing
+        Dim localCompFile = New LocalCompFile(modFile)
+        localCompFile.Load()
+        Return localCompFile
+    End Function
+    
+    Private _currentFabricApi As CompFile = Nothing '加载完成后直接调用以提高性能
+    Private _currentFabricApiPath As String = Nothing
+    Private Function GetCurrentFabricApi() '进入页面和联网加载时调用
+        Dim localComp = GetModLocalCompByPrefix("fabric-api")
+        If localComp Is Nothing Then Return Nothing
+        Dim result = DlFabricApiLoader.Output?.FirstOrDefault(Function(comp)
+            Dim displayName = comp.DisplayName
+            Dim version = displayName.Substring(displayName.LastIndexOf(" "c) + 1)
+            Return version = localComp.Version
+        End Function)
+        If result IsNot Nothing Then
+            _currentFabricApi = result
+            _currentFabricApiPath = localComp.Path
+        End If
+        Return result
+    End Function
 
     '当前信息获取
     Public Sub GetCurrentInfo()
@@ -832,7 +863,7 @@ Public Class PageVersionInstall
         ElseIf CurrentVersion.HasFabric Then
             SelectedLoaderName = "Fabric"
             SelectedFabric = CurrentVersion.FabricVersion
-            SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
+            SelectedFabricApi = GetCurrentFabricApi()
         ElseIf CurrentVersion.HasNeoForge Then '此处有 BUG
             SelectedLoaderName = "NeoForge"
             SelectedNeoForge = New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.ForgeType = DlForgelikeEntry.ForgelikeType.NeoForge, .Inherit = CurrentVersion.McName, .ApiName = If(CurrentVersion.McName = "1.20.1", "1.20.1-", "") & CurrentVersion.NeoForgeVersion}
@@ -1509,8 +1540,14 @@ Public Class PageVersionInstall
                 If Not IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Continue For
                 PanFabricApi.Children.Add(FabricApiDownloadListItem(Version, AddressOf FabricApi_Selected))
             Next
+            '检测已经存在的 Fabric API
+            Dim currentInstalled = GetCurrentFabricApi()
+            If currentInstalled IsNot Nothing Then
+                SelectedFabricApi = currentInstalled
+                SelectedAPIName = "Fabric API"
+                SelectReload()
             '自动选择 Fabric API
-            If (Not AutoSelectedFabricApi AndAlso SelectedQuilt Is Nothing) OrElse (SelectedQuilt IsNot Nothing AndAlso LoadQSLGetError() Is "没有可用版本") Then
+            ElseIf (Not AutoSelectedFabricApi AndAlso SelectedQuilt Is Nothing) OrElse (SelectedQuilt IsNot Nothing AndAlso LoadQSLGetError() Is "没有可用版本") Then
                 AutoSelectedFabricApi = True
                 Log($"[Download] 已自动选择 Fabric API：{CType(PanFabricApi.Children(0), MyListItem).Title}")
                 FabricApi_Selected(PanFabricApi.Children(0), Nothing)
@@ -1528,8 +1565,8 @@ Public Class PageVersionInstall
         SelectReload()
     End Sub
     Private Sub FabricApi_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricApiClear.MouseLeftButtonUp
-        SelectedFabricApi = Nothing
-        SelectedAPIName = Nothing
+        SelectedFabricApi = _currentFabricApi
+        SelectedAPIName = If(SelectedFabricApi Is Nothing, Nothing, "Fabric API")
         CardFabricApi.IsSwaped = True
         e.Handled = True
         SelectReload()
@@ -1916,6 +1953,8 @@ Public Class PageVersionInstall
         If String.IsNullOrWhiteSpace(PageVersionLeft.Version.InheritVersion) Then
             CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
         End If
+        '确认独立 API (如 Fabric API 等) 是否需要被修改
+        If SelectedFabricApi.Hash = _currentFabricApi.Hash Then SelectedFabricApi = Nothing
         '提交安装申请
         Dim Request As New McInstallRequest With {
             .TargetVersionName = PageVersionLeft.Version.Name,
@@ -1937,6 +1976,9 @@ Public Class PageVersionInstall
         }
         BtnSelectStart.IsEnabled = False
         If Not McInstall(Request, BtnSelectStart.Text.AfterFirst("开始")) Then Exit Sub
+        '删除旧的独立 API 文件
+        If SelectedFabricApi IsNot Nothing And _currentFabricApiPath IsNot Nothing Then File.Delete(_currentFabricApiPath)
+        '返回主页
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 
