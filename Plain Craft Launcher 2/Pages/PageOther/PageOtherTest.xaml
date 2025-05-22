@@ -19,7 +19,7 @@
                     <TextBlock Text="使用 PCL 的高速多线程下载引擎下载任意文件。请注意，部分网站（例如百度网盘）可能会报错 (403) 已禁止，无法正常下载。" TextWrapping="Wrap"/>
                     <Grid Margin="0,10,0,0">
                         <Grid.Resources>
-                            <Style TargetType="{x:Type TextBlock}">
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BasedOnTextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="Margin" Value="0,0,25,0"/>
                                 <Setter Property="FontSize" Value="13"/>
