@@ -813,10 +813,16 @@ Public Class PageVersionInstall
     Private IsSelectNameEdited As Boolean = False
     Private IsSelectNameChanging As Boolean = False
     
-    '通过文件名关键词和 mod id 比如 'fabric' 'api' 和 'fabric-api' 来获取给定版本 mods 目录中某个 mod 的 LocalCompFile 对象
-    '如果文件名包含主关键字，以及其他关键字 (为了不浪费性能统一用小写) 中的任意一个，同时 mod id 一致，即认为匹配，若没有匹配的文件则返回空值
-    '因为实在看不懂龙猫的代码所以自己实现了一个，不知道有没有现成的
     Private Shared ReadOnly RegexIsJarFile As New Regex("\.jar(\.disabled)?$")
+    
+    ''' <summary>
+    ''' 通过文件名关键词和 mod id 比如 <c>fabric</c> <c>api</c> 和 <c>fabric-api</c> 来获取给定版本 mods 目录中某个 mod 的 <see cref="LocalCompFile"/> 对象。<br />
+    ''' <b>为了不浪费性能，关键字统一用小写</b> 
+    ''' </summary>
+    ''' <returns>
+    ''' 如果文件名包含主关键字，以及其他关键字中的任意一个，同时 mod id 一致，即认为匹配，返回对应的对象，若没有匹配的文件则返回空值。
+    ''' </returns>
+    '因为实在看不懂龙猫的代码所以自己实现了一个，不知道有没有现成的
     Private Shared Function GetModLocalCompByKeywords(modId As String, mainKeyword As String, ParamArray keywords As String()) As LocalCompFile
         Dim version = PageVersionLeft.Version
         If Not version.Modable Then Return Nothing '跳过不可安装 mod 版本
@@ -836,9 +842,11 @@ Public Class PageVersionInstall
     Private _currentFabricApi As CompFile = Nothing '加载完成后直接调用以提高性能
     Private _currentFabricApiPath As String = Nothing
     Private Function GetCurrentFabricApi() '进入页面和联网加载时调用
+        Dim loaderOutput = DlFabricApiLoader.Output
+        If loaderOutput Is Nothing Then Return Nothing '确保联网信息已加载
         Dim localComp = GetModLocalCompByKeywords("fabric-api", "fabric", "api")
         If localComp Is Nothing Then Return Nothing
-        Dim result = DlFabricApiLoader.Output?.FirstOrDefault(Function(comp)
+        Dim result = loaderOutput.FirstOrDefault(Function(comp)
             Dim displayName = comp.DisplayName
             Dim version = displayName.Substring(displayName.LastIndexOf(" "c) + 1)
             Return version = localComp.Version
