@@ -214,6 +214,8 @@
             For Each TargetMod In ShowingMods
                 If Not ModItems.ContainsKey(TargetMod.RawFileName) Then Continue For
                 Dim Item As MyLocalCompItem = ModItems(TargetMod.RawFileName)
+                MinecraftFormatter.SetColorfulTextLab(Item.LabTitle.Text, Item.LabTitle)
+                MinecraftFormatter.SetColorfulTextLab(Item.LabInfo.Text, Item.LabInfo)
                 Item.Checked = SelectedMods.Contains(TargetMod.RawFileName) '更新选中状态
                 PanList.Children.Add(Item)
             Next
