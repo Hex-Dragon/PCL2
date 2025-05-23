@@ -48,6 +48,7 @@ Public Class ModSetup
         {"SystemUseDefaultProxy", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemTelemetry", New SetupEntry(Nothing, Source:=SetupSource.Registry)},
+        {"SystemMirrorChyanKey", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},

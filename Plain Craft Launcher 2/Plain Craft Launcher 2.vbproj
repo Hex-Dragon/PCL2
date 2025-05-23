@@ -286,6 +286,13 @@
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\Minecraft\ModProfile.vb" />
     <Compile Include="Modules\Minecraft\ModStyle.vb" />
+    <Compile Include="Modules\Updates\AnnouncementDataModel.vb" />
+    <Compile Include="Modules\Updates\EnumUpdateChannel.vb" />
+    <Compile Include="Modules\Updates\IUpdateSource.vb" />
+    <Compile Include="Modules\Updates\UpdateInfoModel.vb" />
+    <Compile Include="Modules\Updates\UpdatesMinioModel.vb" />
+    <Compile Include="Modules\Updates\UpdatesMirrorChyanModel.vb" />
+    <Compile Include="Modules\Updates\VersionDataModel.vb" />
     <Compile Include="Pages\PageLaunch\PageLoginOffline.xaml.vb">
       <DependentUpon>PageLoginOffline.xaml</DependentUpon>
     </Compile>

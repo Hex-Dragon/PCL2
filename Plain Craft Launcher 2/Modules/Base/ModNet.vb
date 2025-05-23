@@ -1033,7 +1033,8 @@ Capture:
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
                     If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("bmclapi") OrElse TargetUrl.Contains("github.com") OrElse
-                       TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") OrElse TargetUrl.Contains("gitcode") Then Return Nothing
+                       TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") OrElse TargetUrl.Contains("gitcode") OrElse
+                       TargetUrl.Contains("pysio.online") OrElse TargetUrl.Contains("mirrorchyan.com") Then Return Nothing
                     '寻找最大碎片
                     'FUTURE: 下载引擎重做，计算下载源平均链接时间和线程下载速度，按最高时间节省来开启多线程
                     Dim FilePieceMax As NetThread = Threads

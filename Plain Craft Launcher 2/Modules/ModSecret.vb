@@ -194,7 +194,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             ))
 
         Client.Headers.Add("Referer", "http://" & VersionCode & ".ce.open.pcl2.server/")
-        If Url.Contains("pcl2ce.pysio.online/post") Then Client.Headers.Add("Authorization", TelemetryKey)
+        If Url.Contains("pcl2ce.pysio.online/post") AndAlso Not String.IsNullOrEmpty(TelemetryKey) Then Client.Headers.Add("Authorization", TelemetryKey)
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -518,51 +518,18 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
 #Region "更新"
 
-    Public Class UpdateInfo
-        Public Property assets As List(Of UpdateAssetInfo)
-    End Class
-
-    Public Class UpdateAssetInfo
-        Public Property file_name As String
-        Public Property version As UpdateAssetVersionInfo
-        Public Property upd_time As String
-        Public Property downloads As List(Of String)
-        Public Property sha256 As String
-    End Class
-
-    Public Class UpdateAssetVersionInfo
-        Public Property channel As String
-        Public Property name As String
-        Public Property code As Integer
-    End Class
-
-    Public Class AnnouncementDetialInfo
-        Public Property title As String
-        Public Property detail As String
-        Public Property id As String
-        Public Property [date] As String
-        Public Property btn1 As AnnouncementBtnInfo
-        Public Property btn2 As AnnouncementBtnInfo
-    End Class
-
-    Public Class AnnouncementBtnInfo
-        Public Property text As String
-        Public Property command As String
-        Public Property command_paramter As String
-    End Class
-
-    Public Class AnnouncementInfo
-        Public Property content As List(Of AnnouncementDetialInfo)
-    End Class
-
-    Public RemoteVersionData As UpdateInfo = Nothing
-    Public RemoteAnnounceData As AnnouncementInfo = Nothing
-    Public IsUpdateStarted As Boolean = False
+    Public IsCheckingUpdates As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
-    Public RemoteServerBaseurl As New List(Of String) From {"https://s3.pysio.online/pcl2-ce/", "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/"}
+    Public RemoteServer As New List(Of IUpdateSource) From {
+        New UpdatesMirrorChyanModel(),
+        New UpdatesMinioModel("https://s3.pysio.online/pcl2-ce/") With {.SourceName = "Pysio"},
+        New UpdatesMinioModel("https://github.com/PCL-Community/PCL2_CE_Server/raw/main/") With {.SourceName = "GitHub"}
+    }
+    Public LatestVersion As VersionDataModel = Nothing
+    Public LatestAnnouncement As AnnouncementInfoModel = Nothing
 
     Public Sub UpdateCheckByButton()
-        If IsUpdateStarted Then
+        If IsCheckingUpdates Then
             Hint("正在检查更新中，请稍后再试……")
             Exit Sub
         End If
@@ -577,57 +544,56 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                            End Try
                        End Sub)
     End Sub
-    Private Sub RefreshUpdatesCache(Optional offset As Integer = 0)
-        Try
-            If offset >= RemoteServerBaseurl.Count Then
-                Log("[System] 更新源偏移值错误")
-                Exit Sub
-            End If
-            Dim UpdCaches As JObject = Nothing
-            UpdCaches = NetGetCodeByRequestRetry(GetRemotePath("api/cache.json", offset), IsJson:=True)
-            Dim UpdatesCacheFile = PathTemp & "Cache/updates.json"
-            Dim AnnouncementCacheFile = PathTemp & "Cache/announcement.json"
-            If GetFileMD5(UpdatesCacheFile) <> UpdCaches("updates") Then
-                WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/updates.json", offset)))
-            End If
-            If GetFileMD5(AnnouncementCacheFile) <> UpdCaches("announcement") Then
-                WriteFile(AnnouncementCacheFile, NetGetCodeByRequestRetry(GetRemotePath("api/announcement.json", offset)))
-            End If
-            RemoteVersionData = CType(GetJson(ReadFile(UpdatesCacheFile)), JObject).ToObject(Of UpdateInfo)()
-            RemoteAnnounceData = CType(GetJson(ReadFile(AnnouncementCacheFile)), JObject).ToObject(Of AnnouncementInfo)()
-        Catch ex As Exception
-            Log(ex, "[System] 刷新更新信息失败……")
-            If offset < RemoteServerBaseurl.Count - 1 Then
-                Log("[System] 尝试换源")
-                RefreshUpdatesCache(offset + 1)
-            End If
-        End Try
-    End Sub
-    Private Function GetRemotePath(path As String, Optional offset As Integer = 0) As String
-        Return RemoteServerBaseurl.ElementAt(offset) & path
-    End Function
-    Public Function GetChannelInfo(Optional TargetMainChannel As String = Nothing) As UpdateAssetInfo
-        If RemoteVersionData Is Nothing Then
-            Log("[Update] 未获取到远程版本信息，尝试重新获取")
-            RefreshUpdatesCache()
-        End If
+    Private Sub RefreshUpdatesCache()
         Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch") = 1
-        Dim targetChannel As UpdateAssetInfo = Nothing
-        Dim targetMainChannelName = If(TargetMainChannel, If(IsBeta, "fr", "sr"))
-        Log($"[System] 返回 {targetMainChannelName} 通道的更新信息")
-        targetChannel = RemoteVersionData.assets.Where(Function(x) x.version.channel = targetMainChannelName & If(IsArm64System, "arm64", "x64")).First()
-        Return targetChannel
+        '更新源
+        For Each source In RemoteServer
+            Try
+                If Not source.IsAvailable() Then Throw New Exception("此更新源不可用")
+                source.EnsureLatestData()
+                LatestVersion = source.GetLatestVersion(If(IsBeta, UpdateChannel.beta, UpdateChannel.stable), If(IsArm64System, UpdateArch.arm64, UpdateArch.x64))
+                Exit For
+            Catch ex As Exception
+                Log(ex, $"[System] 更新：{source.SourceName} 不可用，换下一个")
+                Continue For
+            End Try
+        Next
+        If LatestVersion Is Nothing Then
+            Log("[System] 无法找到有效更新源……")
+            Throw New Exception("无法获取有效更新源")
+        End If
+    End Sub
+    Private Sub RefreshAnnouncementCache()
+        For Each source In RemoteServer
+            Try
+                If Not source.IsAvailable() OrElse source.SourceName = "MirrorChyan" Then Throw New Exception("此源无法获取公告")
+                source.EnsureLatestData()
+                LatestAnnouncement = source.GetAnnouncementList()
+                Exit For
+            Catch ex As Exception
+                Log(ex, $"[System] 公告：{source.SourceName} 不可用，换下一个")
+                Continue For
+            End Try
+        Next
+        If LatestAnnouncement Is Nothing Then
+            Log("[System] 无法找到有效公告源……")
+            Throw New Exception("无法获取有效公告源")
+        End If
+    End Sub
+    Public Function IsVerisonLatest() As Boolean
+        If LatestVersion.Source = "MirrorChyan" Then
+            Return LatestVersion.version_name = VersionBaseName
+        Else
+            Return LatestVersion.version_code <= VersionCode
+        End If
     End Function
-
     Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
-        Dim LatestVersion = GetChannelInfo()
-        Log($"[System] 获取到最新版本号 {LatestVersion.version.code.ToString()}")
-        If LatestVersion.version.code > VersionCode Then
-            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.version.name.StartsWithF("2.9.") Then
-                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.version.name}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+        If Not IsVerisonLatest() Then
+            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.version_name.StartsWithF("2.9.") Then
+                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.version_name}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
-            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version.name}, 发布于 {DateTime.Parse(LatestVersion.upd_time).ToLocalTime()}){vbCrLf}是否立即更新？", "启动器更新", "更新", "取消") = 1 Then
+            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version_name}){vbCrLf}是否立即更新？{vbCrLf}{vbCrLf}{LatestVersion.Desc}", "启动器更新", "更新", "取消") = 1 Then
                 UpdateStart(LatestVersion, False)
             End If
         Else
@@ -635,7 +601,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
     End Sub
 
-    Public Sub UpdateStart(Version As UpdateAssetInfo, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
+    Public Sub UpdateStart(Version As VersionDataModel, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
         Dim DlTargetPath As String = Path + "PCL\Plain Craft Launcher Community Edition.exe"
         Dim DlTempPath As String = PathTemp & "Cache\CEUpdates.zip"
         RunInNewThread(Sub()
@@ -643,17 +609,12 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                                '构造步骤加载器
                                Dim Loaders As New List(Of LoaderBase)
                                '下载
-                               Loaders.Add(New LoaderDownload("下载更新文件", New List(Of NetFile) From {New NetFile(Version.downloads, DlTempPath, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
-                               Loaders.Add(New LoaderTask(Of Integer, Integer)("检查更新文件", Sub()
-                                                                                             Dim NewFileSha256 = GetFileSHA256(DlTempPath)
-                                                                                             If String.IsNullOrWhiteSpace(NewFileSha256) Then
-                                                                                                 Throw New Exception("计算已下载文件 SHA256 失败")
-                                                                                             End If
-                                                                                             If NewFileSha256 <> Version.sha256 Then
-                                                                                                 Throw New Exception($"文件检验不通过，更新文件 SHA256 为 {NewFileSha256}，实际需要 {Version.sha256}")
-                                                                                             End If
-                                                                                         End Sub))
+                               Loaders.Add(New LoaderDownload("下载更新文件", New List(Of NetFile) From {New NetFile(Version.download_url, DlTempPath, New FileChecker(MinSize:=1024 * 64, Hash:=Version.sha256))}) With {.ProgressWeight = 15})
                                Loaders.Add(New LoaderTask(Of Integer, Integer)("解压更新文件", Sub()
+                                                                                             If Not Version.IsArchive Then
+                                                                                                 File.Move(DlTempPath, DlTargetPath)
+                                                                                                 Exit Sub
+                                                                                             End If
                                                                                              Using archive = New ZipArchive(New FileStream(DlTempPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), ZipArchiveMode.Read)
                                                                                                  Dim entry As ZipArchiveEntry = archive.Entries.FirstOrDefault(Function(x) x.FullName.EndsWithF("Plain Craft Launcher Community Edition.exe"))
                                                                                                  entry.ExtractToFile(DlTargetPath, True)
@@ -764,16 +725,26 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         '注意：如果要自行实现这个功能，请换用另一个文件路径，以免与官方版本冲突
         Dim LatestPCLPath As String = PathTemp & "CE-Latest.exe"
         Dim LatestPCLTempPath As String = PathTemp & "CE-Latest.zip"
-        Dim LatestInfo As UpdateAssetInfo = GetChannelInfo("sr")
-        If File.Exists(LatestPCLPath) AndAlso GetFileSHA256(LatestPCLPath) = LatestInfo.sha256 Then
+        Dim target As VersionDataModel
+        For Each source In RemoteServer
+            Try
+                If Not source.IsAvailable() Then Throw New Exception("不可用")
+                source.EnsureLatestData()
+                target = source.GetLatestVersion(UpdateChannel.stable, UpdateArch.x64)
+            Catch ex As Exception
+                Continue For
+            End Try
+        Next
+        If target Is Nothing Then Throw New Exception("无法获取更新")
+        If File.Exists(LatestPCLPath) AndAlso GetFileSHA256(LatestPCLPath) = target.sha256 Then
             Log("[System] 最新版 PCL 已存在，跳过下载")
             Exit Sub
         End If
-        If GetFileSHA256(PathWithName) = LatestInfo.sha256 Then
+        If GetFileSHA256(PathWithName) = target.sha256 Then '正在使用的版本符合要求，直接拿来用
             CopyFile(PathWithName, LatestPCLPath)
             Exit Sub
         End If
-        NetDownloadByLoader(LatestInfo.downloads, LatestPCLTempPath, LoaderToSyncProgress)
+        NetDownloadByLoader(target.download_url, LatestPCLTempPath, LoaderToSyncProgress)
         Using archive = New ZipArchive(New FileStream(LatestPCLTempPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), ZipArchiveMode.Read)
             Dim entry As ZipArchiveEntry = archive.Entries.FirstOrDefault(Function(x) x.FullName.EndsWithF("Plain Craft Launcher Community Edition.exe"))
             If entry IsNot Nothing Then
@@ -792,13 +763,15 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Private Sub LoadOnlineInfo()
         Dim UpdateDesire = Setup.Get("SystemSystemUpdate")
         Dim AnnouncementDesire = Setup.Get("SystemSystemActivity")
-        If UpdateDesire <= 1 OrElse AnnouncementDesire <= 1 Then
+        If UpdateDesire <= 1 Then
             RefreshUpdatesCache()
+        End If
+        If AnnouncementDesire <= 1 Then
+            RefreshAnnouncementCache()
         End If
         Select Case UpdateDesire
             Case 0
-                Dim LatestVersion = GetChannelInfo()
-                If LatestVersion.version.code > VersionCode Then
+                If Not IsVerisonLatest() Then
                     UpdateStart(LatestVersion, True) '静默更新
                 End If
             Case 1
@@ -808,7 +781,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End Select
         If AnnouncementDesire <= 1 Then
             Dim ShowedAnnounced = Setup.Get("SystemSystemAnnouncement").ToString().Split("|").ToList()
-            Dim ShowAnnounce = RemoteAnnounceData.content.Where(Function(x) Not ShowedAnnounced.Contains(x.id)).ToList()
+            Dim ShowAnnounce = LatestAnnouncement.content.Where(Function(x) Not ShowedAnnounced.Contains(x.id)).ToList()
             Log("[System] 需要展示的公告数量：" + ShowAnnounce.Count.ToString())
             RunInNewThread(Sub()
                                For Each item In ShowAnnounce
