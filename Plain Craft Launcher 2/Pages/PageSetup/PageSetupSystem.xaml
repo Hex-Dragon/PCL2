@@ -164,17 +164,23 @@ ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧�
                     <local:MyCheckBox Grid.Row="10" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
                     <local:MyCheckBox Grid.Row="10" Grid.Column="1" Text="参与 PCL CE 软硬件调查" x:Name="CheckSystemTelemetry" Tag="SystemTelemetry" 
                                       ToolTip="这是一项与 Steam 硬件调查类似的计划，参与调查可以帮助我们更好的进行规划和开发，且我们会不定期发布该调查的统计结果。&#xa;如果选择参与调查，我们将会收集以下信息：&#xa;启动器版本信息与识别码，使用的 Windows 系统版本与架构，已安装的物理内存大小，NAT 与 IPv6 支持情况，是否使用过官方版 PCL、HMCL 或 BakaXL&#xa;&#xa;这些数据均不与你关联，我们也绝不会向第三方出售数据。不参与调查不会影响你使用其他功能。"/>
-                    <Grid Height="35" Grid.Row="11" Grid.ColumnSpan="5" Margin="0,8,0,0">
+                    <Grid Grid.Row="11" Grid.ColumnSpan="5" Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
                         <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="100" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemMirrorChyanKey" MinWidth="100" Text="设置 Mirror 酱 CDK" Padding="13,0" Margin="0,0,20,0" ToolTip="设置用于 Mirror 酱服务器请求的 CDK"/>
-                        <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingExp" MinWidth="100" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="3" x:Name="BtnSystemSettingImp" MinWidth="100" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="2" x:Name="BtnSystemMirrorChyanGetKey" MinWidth="100" Text="获取 Mirror 酱 CDK" Padding="13,0" Margin="0,0,20,0" ToolTip="获取用于 Mirror 酱服务器请求的 CDK"/>
+                        <local:MyButton Grid.Column="0" Grid.Row="2" x:Name="BtnSystemSettingExp" MinWidth="100" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="1" Grid.Row="2" x:Name="BtnSystemSettingImp" MinWidth="100" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                 </Grid>
             </local:MyCard>

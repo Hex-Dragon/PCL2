@@ -211,6 +211,9 @@
         Setup.Set("SystemMirrorChyanKey", ret)
         Hint("设置 Mirror 酱 CDK 成功！", HintType.Finish)
     End Sub
+    Private Sub BtnSystemMirrorChyanGetKey_Click(sender As Object, e As EventArgs) Handles BtnSystemMirrorChyanGetKey.Click
+        OpenWebsite("https://mirrorchyan.com/")
+    End Sub
     ''' <summary>
     ''' 启动器是否已经是最新版？
     ''' 若返回 Nothing，则代表无更新缓存文件或出错。
