@@ -27,19 +27,6 @@
         <local:MyButton Grid.Row="3" Grid.Column="2" x:Name="BtnVersion" Height="35" Margin="0,10,10,0" Text="版本选择" IsEnabled="False" />
         <local:MyButton Grid.Row="3" Grid.Column="3" x:Name="BtnMore" Visibility="Collapsed" Height="35" Margin="0,10,10,0" TextPadding="36" Text="版本设置" />
         <Grid Grid.ColumnSpan="5" Grid.Row="1" Margin="20,0" VerticalAlignment="Center" x:Name="PanLogin" />
-        <Grid Grid.ColumnSpan="5" Margin="20,24,20,-4" Name="PanTypeOne">
-            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="{StaticResource ColorBrushSemiTransparent}" CornerRadius="13" MinHeight="27" MaxHeight="27">
-                <StackPanel Orientation="Horizontal">
-                    <Path Name="PathTypeOne" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="12,0,0,0" Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" MaxHeight="16" MaxWidth="16" VerticalAlignment="Center"
-                          Data="">
-                        <Path.RenderTransform>
-                            <ScaleTransform ScaleX="1.05" ScaleY="1.05" />
-                        </Path.RenderTransform>
-                    </Path>
-                    <TextBlock Name="LabTypeOne" Text="" FontSize="14" VerticalAlignment="Center" Grid.Column="1" Foreground="{DynamicResource ColorBrush3}" Margin="15,0,12,0" Grid.ColumnSpan="2" SnapsToDevicePixels="False" UseLayoutRounding="False" />
-                </StackPanel>
-            </Border>
-        </Grid>
         <Grid Grid.ColumnSpan="5" Grid.Row="2" RenderTransformOrigin="0.5,0.5">
             <Grid.RenderTransform>
                 <TransformGroup>

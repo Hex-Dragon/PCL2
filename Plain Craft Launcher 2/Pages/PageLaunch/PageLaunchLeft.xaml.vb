@@ -267,15 +267,11 @@
         Else
             If SelectedProfile IsNot Nothing Then
                 Type = PageType.ProfileSkin
-                PanTypeOne.Visibility = Visibility.Hidden
                 BtnLaunch.IsEnabled = True
             Else
                 Type = PageType.Profile
-                PanTypeOne.Visibility = Visibility.Visible
                 If Not BtnLaunch.Text = "下载游戏" Then BtnLaunch.IsEnabled = False
             End If
-            PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
-            LabTypeOne.Text = "档案管理"
         End If
         '刷新页面
         If PageCurrent = Type Then Exit Sub

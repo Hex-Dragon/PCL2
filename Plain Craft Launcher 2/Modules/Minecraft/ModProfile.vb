@@ -229,6 +229,7 @@ Public Module ModProfile
                         SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消")
                     End Sub)
         If SelectedAuthTypeNum Is Nothing Then Exit Sub
+        IsCreatingProfile = True
         If SelectedAuthTypeNum = 1 Then '正版验证
             RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, McLoginType.Ms))
         ElseIf SelectedAuthTypeNum = 2 Then '第三方验证
@@ -314,6 +315,15 @@ Public Module ModProfile
 Write:
         ProfileList(ProfileIndex).Uuid = NewUuid
         SelectedProfile = ProfileList(ProfileIndex)
+        SaveProfile()
+        Hint("档案信息已保存！", HintType.Finish)
+    End Sub
+    ''' <summary>
+    ''' 编辑指定档案的验证服务器显示名称
+    ''' </summary>
+    Public Sub EditAuthServerName(Profile As McProfile, ServerName As String)
+        Dim ProfileIndex = ProfileList.IndexOf(Profile)
+        ProfileList(ProfileIndex).ServerName = ServerName
         SaveProfile()
         Hint("档案信息已保存！", HintType.Finish)
     End Sub
@@ -662,7 +672,7 @@ Retry:
 
 #Region "旧版迁移"
     ''' <summary>
-    ''' 从旧版配置文件迁移档案
+    ''' 从旧版配置文件迁移档案，不能在 UI 线程调用
     ''' </summary>
     Public Sub MigrateOldProfile()
         ProfileLog("开始从旧版配置迁移档案")
