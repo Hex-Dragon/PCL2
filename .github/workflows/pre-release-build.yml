@@ -88,3 +88,11 @@ jobs:
           Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Trigger MirrorChyanUploading
+      shell: bash
+      run: |
+        gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_uploading -f channel=${{ matrix.configuration == 'Release' && 'stable' || 'beta' }} -f arch=${{ matrix.architecture == 'x64' && 'x64' || 'arm64' }}
+        gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_release_note
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

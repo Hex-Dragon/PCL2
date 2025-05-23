@@ -1,0 +1,38 @@
+name: mirrorchyan_uploading
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        required: true
+        default: 'stable'
+        type: choice
+        options:
+          - stable
+          - beta
+      arch:
+        required: true
+        default: 'x64'
+        type: choice
+        options:
+          - x64
+          - arm64
+
+jobs:
+  mirrorchyan_uploading:
+    runs-on: macos-latest
+
+    steps:
+      - uses: MirrorChyan/uploading-action@v1
+        with:
+          filetype: latest-release
+          filename: "PCL2_CE${{ inputs.channel == 'stable' && '_' || '_Beta_' }}${{ inputs.arch == 'x64' && 'x64' || 'ARM64' }}.exe"
+          mirrorchyan_rid: PCL2-CE
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: PCL-Community
+          repo: PCL2-CE
+          upload_token: ${{ secrets.MirrorChyanUploadToken }}
+          os: win
+          arch: ${{ inputs.arch }}
+          channel: ${{ inputs.channel }}
