@@ -2074,26 +2074,26 @@ Retry:
         End Sub
 
         <DllImport("dnsapi", EntryPoint:="DnsQuery_W", CharSet:=CharSet.Unicode, SetLastError:=True, ExactSpelling:=True)>
-        Private Shared Function DnsQuery(ByRef pszName As String, wType As QueryTypes, options As QueryOptions, aipServers As Integer, ByRef ppQueryResults As IntPtr, pReserved As Integer) As Integer
+        Private Shared Function DnsQuery(ByVal pszName As String, wType As QueryTypes, options As QueryOptions, aipServers As Integer, ByRef ppQueryResults As IntPtr, pReserved As Integer) As Integer
         End Function
 
         <DllImport("dnsapi", CharSet:=CharSet.Auto, SetLastError:=True)>
         Private Shared Sub DnsRecordListFree(pRecordList As IntPtr, FreeType As Integer)
         End Sub
 
-        Public Shared Function GetSRVRecords(needle As String) As String()
+        Public Shared Function GetSRVRecords(needle As String) As List(Of String)
             Dim ptr1 As IntPtr = IntPtr.Zero
             Dim ptr2 As IntPtr = IntPtr.Zero
             Dim recSRV As SRVRecord
             If Environment.OSVersion.Platform <> PlatformID.Win32NT Then
                 Throw New NotSupportedException()
             End If
-            Dim list1 As New ArrayList()
+            Dim res As New List(Of String)
             Try
-                Dim num1 As Integer = DnsQuery(needle, QueryTypes.DNS_TYPE_SRV, QueryOptions.DNS_QUERY_BYPASS_CACHE, 0, ptr1, 0)
+                Dim num1 As Integer = DnsQuery(needle, QueryTypes.DNS_TYPE_SRV, QueryOptions.DNS_QUERY_STANDARD, 0, ptr1, 0)
                 If num1 <> 0 Then
                     If num1 = 9003 Then
-                        list1.Add("DNS record does not exist")
+                        Return New List(Of String)
                     Else
                         Throw New Win32Exception(num1)
                     End If
@@ -2102,16 +2102,16 @@ Retry:
                 While Not ptr2.Equals(IntPtr.Zero)
                     recSRV = CType(Marshal.PtrToStructure(ptr2, GetType(SRVRecord)), SRVRecord)
                     If recSRV.wType = CShort(QueryTypes.DNS_TYPE_SRV) Then
-                        Dim text1 As String = Marshal.PtrToStringAuto(recSRV.pNameTarget)
-                        text1 += ":" & recSRV.wPort.ToString()
-                        list1.Add(text1)
+                        Dim targetIp As String = Marshal.PtrToStringUni(recSRV.pNameTarget)
+                        Dim targetPort As String = recSRV.wPort.ToString()
+                        res.Add($"{targetIp}:{targetPort}")
                     End If
                     ptr2 = recSRV.pNext
                 End While
             Finally
                 DnsRecordListFree(ptr1, 0)
             End Try
-            Return CType(list1.ToArray(GetType(String)), String())
+            Return res
         End Function
 
         Private Enum QueryOptions As Integer
@@ -2140,17 +2140,17 @@ Retry:
         <StructLayout(LayoutKind.Sequential)>
         Private Structure SRVRecord
             Public pNext As IntPtr
-            Public pName As String
-            Public wType As Short
-            Public wDataLength As Short
+            Public pName As IntPtr
+            Public wType As UShort
+            Public wDataLength As UShort
             Public flags As Integer
             Public dwTtl As Integer
             Public dwReserved As Integer
             Public pNameTarget As IntPtr
-            Public wPriority As Short
-            Public wWeight As Short
-            Public wPort As Short
-            Public Pad As Short
+            Public wPriority As UShort
+            Public wWeight As UShort
+            Public wPort As UShort
+            Public Pad As UShort
         End Structure
 
     End Class

@@ -414,28 +414,44 @@ Public Class PageOtherTest
             Exit Sub
         End If
         Dim url = LabServerIp.Text
+        Log($"查询服务器：{url}")
+        Dim IsIp As Boolean = RegexCheck(url, "^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(:(0|[1-9]\d{0,3}|[1-4]\d{4}|5[0-9]{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$")
         _IsQueryServer = True
         RunInNewThread(Sub()
                            Try
-                               Dim needSRV = False
-                               Try
-                                   Dns.GetHostAddresses(url)
-                               Catch ex As Exception
-                                   needSRV = True
-                               End Try
-                               If needSRV Then
-                                   Log($"需要获取 {url} 的 SRV 记录")
-                                   url = nDnsQuery.GetSRVRecords(url).First()
-                                   Log($"获取到的 SRV 记录为 {url}")
+                               '处理 SRV 解析
+                               If Not IsIp Then
+                                   Dim needSRV = False
+                                   Try
+                                       Dns.GetHostAddresses(url)
+                                   Catch ex As Exception
+                                       needSRV = True
+                                   End Try
+                                   If needSRV Then
+                                       Log($"需要获取 {url} 的 SRV 记录")
+                                       url = nDnsQuery.GetSRVRecords($"_minecraft._tcp.{url}").FirstOrDefault()
+                                       If url.Count() = 0 Then Throw New Exception("查询不到 SRV 记录")
+                                       Log($"获取到的 SRV 记录为 {url}")
+                                   End If
                                End If
-                               Dim query As New ModLink.MCPing(url)
+                               '查询信息
+                               Dim ip As String = url
+                               Dim port As Integer = 25565
+                               If url.Contains(":") Then
+                                   Dim res = url.Split({":"}, StringSplitOptions.None)
+                                   ip = res(0)
+                                   port = res(1)
+                               End If
+                               Dim query As New ModLink.MCPing(ip, port)
                                Dim ret = query.GetInfo().Result
                                If ret Is Nothing Then Throw New Exception("没有查询到信息")
+                               'Base64 图像转换
                                Dim base64String = ret.Favicon
                                If base64String.Contains(",") Then
                                    base64String = base64String.Split(","c)(1)
                                End If
                                Dim imageBytes As Byte() = Convert.FromBase64String(base64String)
+                               '设置 UI
                                RunInUi(Sub()
                                            MinecraftFormatter.SetColorfulTextLab(ret.Description, LabServerDesc)
                                            LabServerPlayer.Text = $"{ret.PlayerOnline}/{ret.PlayerMax}"
@@ -453,7 +469,7 @@ Public Class PageOtherTest
                                        End Sub)
                                Hint("查询完成", HintType.Finish)
                            Catch ex As Exception
-                               Log(ex, "Thread 查询失败", LogLevel.Hint)
+                               Log(ex, "查询失败", LogLevel.Hint)
                            Finally
                                _IsQueryServer = False
                            End Try

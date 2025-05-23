@@ -82,7 +82,15 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <local:MyTextBox x:Name="LabServerIp" HintText="输入服务器 IP 地址" Margin="0,0,15,0" Grid.Column="0"/>
+                    <local:MyTextBox x:Name="LabServerIp" HintText="输入服务器地址" Margin="0,0,15,0" Grid.Column="0">
+                        <local:MyTextBox.ValidateRules>
+                            <local:ValidateExcept>
+                                <local:ValidateExcept.Excepts>
+                                    <sys:String>/</sys:String>
+                                </local:ValidateExcept.Excepts>
+                            </local:ValidateExcept>
+                        </local:MyTextBox.ValidateRules>
+                    </local:MyTextBox>
                     <local:MyButton x:Name="BtnServerQuery" Text="查询" Width="60" Grid.Column="1"/>
                     <Border x:Name="ServerInfo" Margin="0,15,0,0" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ColorBrush7}">
                         <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
