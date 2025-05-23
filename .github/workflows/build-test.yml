@@ -1,0 +1,34 @@
+name: Build Test
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - configuration: Beta
+            architecture: x64
+          - configuration: Beta
+            architecture: ARM64
+          - configuration: Release
+            architecture: x64
+          - configuration: Release
+            architecture: ARM64
+      fail-fast: false
+
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      configuration: ${{ matrix.configuration }}
+      architecture: ${{ matrix.architecture }}
+    secrets: inherit

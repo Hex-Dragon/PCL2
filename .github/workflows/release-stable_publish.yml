@@ -1,0 +1,68 @@
+name: release-stable_publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    if: ${{ !github.event.release.prerelease }}
+    strategy:
+      matrix:
+        include:
+          - configuration: Release
+            architecture: x64
+          - configuration: Release
+            architecture: ARM64
+          - configuration: Beta
+            architecture: x64
+          - configuration: Beta
+            architecture: ARM64
+      fail-fast: false
+
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      configuration: ${{ matrix.configuration }}
+      architecture: ${{ matrix.architecture }}
+    secrets: inherit
+
+  rename_and_release:
+    needs: build
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - configuration: Release
+            architecture: x64
+          - configuration: Release
+            architecture: ARM64
+          - configuration: Beta
+            architecture: x64
+          - configuration: Beta
+            architecture: ARM64
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}
+          path: ./artifact
+
+      - name: Rename binaries
+        run: |
+          mv "./artifact/Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe"
+
+      - name: Upload binary to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger MirrorChyanUploading
+        shell: bash
+        run: |
+          gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_uploading -f channel=${{ matrix.configuration == 'Release' && 'stable' || 'beta' }} -f arch=${{ matrix.architecture == 'x64' && 'x64' || 'arm64' }}
+          gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_release_note
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

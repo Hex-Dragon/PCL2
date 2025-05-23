@@ -26,7 +26,7 @@ jobs:
       - uses: MirrorChyan/uploading-action@v1
         with:
           filetype: latest-release
-          filename: "PCL2_CE${{ inputs.channel == 'stable' && '_' || '_Beta_' }}${{ inputs.arch == 'x64' && 'x64' || 'ARM64' }}.exe"
+          filename: "PCL2_CE_${{ inputs.channel == 'stable' && 'Release' || 'Beta' }}_${{ inputs.arch == 'x64' && 'x64' || 'ARM64' }}.exe"
           mirrorchyan_rid: PCL2-CE
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
