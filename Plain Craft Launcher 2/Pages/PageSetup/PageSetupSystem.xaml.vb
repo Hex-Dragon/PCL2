@@ -220,16 +220,7 @@
     ''' </summary>
     Public Shared Function IsLauncherNewest() As Boolean?
         Try
-            '确认服务器公告是否正常
-            Dim ServerContent As String = ReadFile(PathTemp & "Cache\Notice.cfg")
-            If ServerContent.Split("|").Count < 3 Then Return Nothing
-            '确认是否为最新
-#If RELEASE Then
-            Dim NewVersionCode As Integer = ServerContent.Split("|")(2)
-#Else
-            Dim NewVersionCode As Integer = ServerContent.Split("|")(1)
-#End If
-            Return NewVersionCode <= VersionCode
+            Return IsVerisonLatest()
         Catch ex As Exception
             Log(ex, "确认启动器更新失败", LogLevel.Feedback)
             Return Nothing
