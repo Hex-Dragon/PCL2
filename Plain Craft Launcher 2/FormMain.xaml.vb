@@ -10,6 +10,12 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 357 Then 'Release 2.10.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：下载资源包、光影包、数据包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新增：允许设置文件下载源"))
+            FeatureCount += 9
+            BugCount += 26
+        End If
         If LastVersion < 355 Then 'Release 2.9.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
@@ -66,6 +72,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 356 Then 'Snapshot 2.10.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：下载资源包、光影包、数据包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新增：允许设置文件下载源"))
+            FeatureCount += 9
+            BugCount += 26
+        End If
         If LastVersion < 354 Then 'Snapshot 2.9.3
             If LastVersion = 352 Then
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：低版本 MC 没有声音"))
@@ -74,7 +86,7 @@ Public Class FormMain
             FeatureCount += 8
             BugCount += 8
         End If
-        If LastVersion < 353 Then 'Snapshot 2.9.2
+        If LastVersion < 352 Then 'Snapshot 2.9.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：Minecraft 会优先使用独立显卡运行"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：简化下载新版本第二步的 UI"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化：使用新的版本隔离策略"))
@@ -145,7 +157,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = FeatureList.OrderByDescending(Function(f) f.Key).ToList
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("没有更新日志……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
@@ -311,8 +323,8 @@ Public Class FormMain
             '启动加载器池
             Try
                 JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
-                Thread.Sleep(200)
-                DlClientListMojangLoader.Start(1)
+                Thread.Sleep(100)
+                DlClientListMojangLoader.Start(1) 'PCL 会同时根据这里的加载结果决定是否使用官方源进行下载
                 RunCountSub()
                 ServerLoader.Start(1)
                 RunInNewThread(AddressOf TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
@@ -743,12 +755,12 @@ Public Class FormMain
                     End If
                 Next
             End If
-            '自定义主页
+            '主页
             Dim Extension As String = FilePath.AfterLast(".").ToLower
             If Extension = "xaml" Then
-                Log("[System] 文件后缀为 XAML，作为自定义主页加载")
+                Log("[System] 文件后缀为 XAML，作为主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
-                    If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
+                    If MyMsgBox("已存在一个主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
                         Exit Sub
                     End If
                 End If
@@ -927,9 +939,9 @@ Public Class FormMain
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
-        DownloadResourcePack = 13
-        DownloadShader = 14
-        DownloadDataPack = 15
+        DownloadDataPack = 13
+        DownloadResourcePack = 14
+        DownloadShader = 15
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -960,26 +972,9 @@ Public Class FormMain
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
-                Dim Project As CompProject = Stack.Additional(0)
-                Select Case Project.Type
-                    Case CompType.Mod
-                        Return "Mod 下载 - " & Project.TranslatedName
-                    Case CompType.ModPack
-                        Return "整合包下载 - " & Project.TranslatedName
-                    Case CompType.DataPack
-                        If Project.IsMix Then
-                            Return "Mod / 数据包下载 - " & Project.TranslatedName
-                        Else
-                            Return "数据包下载 - " & Project.TranslatedName
-                        End If
-                    Case CompType.ResourcePack
-                        Return "资源包下载 - " & Project.TranslatedName
-                    Case Else 'CompType.Shader
-                        Return "光影包下载 - " & Project.TranslatedName
-                End Select
+                Return "资源下载 - " & CType(Stack.Additional(0), CompProject).TranslatedName
             Case PageType.HelpDetail
-                Dim Entry As HelpEntry = Stack.Additional(0)
-                Return Entry.Title
+                Return CType(Stack.Additional(0), HelpEntry).Title
             Case Else
                 Return ""
         End Select
