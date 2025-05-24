@@ -820,6 +820,10 @@ Public Class PageVersionInstall
     ''' </returns>
     Private Shared Function GetModLocalCompByKeywords(modId As String, mainKeyword As String, ParamArray keywords As String()) As LocalCompFile
         If modId Is Nothing Then Return Nothing
+        Return GetModLocalCompByKeywords({ modId }, mainKeyword, keywords)
+    End Function
+    
+    Private Shared Function GetModLocalCompByKeywords(modIds As String(), mainKeyword As String, ParamArray keywords As String()) As LocalCompFile
         Dim version = PageVersionLeft.Version
         If Not version.Modable Then Return Nothing '跳过不可安装 mod 版本
         Dim modFolder = $"{version.Path}mods"
@@ -830,7 +834,7 @@ Public Class PageVersionInstall
             If keywords.Length > 0 And Not keywords.Any(Function(keyword) lowerFilePath.Contains(keyword)) Then Continue For '检查是否包含关键字
             Dim localComp = New LocalCompFile(file)
             localComp.Load()
-            If (localComp.ModId = modId) Then Return localComp
+            If (modIds.Any(Function(modId) localComp.ModId = modId)) Then Return localComp
         Next
         Return Nothing
     End Function
@@ -840,13 +844,9 @@ Public Class PageVersionInstall
     Private Function GetCurrentFabricApi() '进入页面和联网加载时调用
         Dim loaderOutput = DlFabricApiLoader.Output
         If loaderOutput Is Nothing Then Return Nothing '确保联网信息已加载
-        Dim localComp = GetModLocalCompByKeywords("fabric-api", "fabric", "api")
+        Dim localComp = GetModLocalCompByKeywords({ "fabric-api", "fabric" }, "fabric", "api")
         If localComp Is Nothing Then Return Nothing
-        Dim result = loaderOutput.FirstOrDefault(Function(comp)
-            Dim displayName = comp.DisplayName
-            Dim version = displayName.Substring(displayName.LastIndexOf(" "c) + 1)
-            Return version = localComp.Version
-        End Function)
+        Dim result = loaderOutput.FirstOrDefault(Function(comp) comp.Hash = localComp.ModrinthHash)
         If result IsNot Nothing Then
             _currentFabricApi = result
             _currentFabricApiPath = localComp.Path
@@ -854,9 +854,6 @@ Public Class PageVersionInstall
         Return result
     End Function
     
-    '我实在不理解 QSL 这玩意到底怎么设计成这么阴间的
-    '由于 DlQslLoader 用的 Modrinth 下载源所以目前的方法是判断 Hash
-    '不确定如果改用 CurseForge 下载源还能不能用
     Private _currentQsl As CompFile = Nothing
     Private _currentQslPath As String = Nothing
     Private Function GetCurrentQsl()
@@ -866,9 +863,7 @@ Public Class PageVersionInstall
         '兼容测试版的文件名 没错这玩意测试版命名方式甚至与正式版不一样
         If localComp Is Nothing Then localComp = GetModLocalCompByKeywords("quilted_fabric_api", "quilted-fabric-api")
         If localComp Is Nothing Then Return Nothing
-        Dim result = loaderOutput.FirstOrDefault(Function(comp)
-            Return comp.Hash = localComp.ModrinthHash
-        End Function)
+        Dim result = loaderOutput.FirstOrDefault(Function(comp) comp.Hash = localComp.ModrinthHash)
         If result IsNot Nothing Then
             _currentQsl = result
             _currentQslPath = localComp.Path
