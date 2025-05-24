@@ -725,7 +725,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         '注意：如果要自行实现这个功能，请换用另一个文件路径，以免与官方版本冲突
         Dim LatestPCLPath As String = PathTemp & "CE-Latest.exe"
         Dim LatestPCLTempPath As String = PathTemp & "CE-Latest.zip"
-        Dim target As VersionDataModel
+        Dim target As VersionDataModel = Nothing
         For Each source In RemoteServer
             Try
                 If Not source.IsAvailable() Then Throw New Exception("不可用")
