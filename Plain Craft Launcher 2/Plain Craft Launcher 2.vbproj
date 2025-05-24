@@ -199,6 +199,15 @@
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
+    <Compile Include="Pages\PageVersion\Comp\PageVersionMod.xaml.vb">
+      <DependentUpon>PageVersionMod.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\Comp\PageVersionResourcepack.xaml.vb">
+      <DependentUpon>PageVersionResourcepack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageVersion\Comp\PageVersionShader.xaml.vb">
+      <DependentUpon>PageVersionShader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageVersion\MyLocalModItem.xaml.vb">
       <DependentUpon>MyLocalModItem.xaml</DependentUpon>
     </Compile>
@@ -308,7 +317,7 @@
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionComp.xaml.vb">
+    <Compile Include="Pages\PageVersion\Comp\PageVersionComp.xaml.vb">
       <DependentUpon>PageVersionComp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionModDisabled.xaml.vb">
@@ -501,6 +510,18 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\PageVersion\Comp\PageVersionMod.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PageVersion\Comp\PageVersionResourcepack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\Comp\PageVersionShader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageVersion\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -710,7 +731,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageVersion\PageVersionComp.xaml">
+    <Page Include="Pages\PageVersion\Comp\PageVersionComp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

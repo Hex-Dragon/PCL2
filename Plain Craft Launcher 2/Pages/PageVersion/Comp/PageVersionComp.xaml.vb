@@ -1,30 +1,32 @@
 ﻿Public Class PageVersionComp
     Implements IRefreshable
 
+#Region "属性"
+    Public Property TargetType As CompType = CompType.Mod
+
+    Public Property TypeName As String = "模组"
+
+    Public Property CompFolderName As String = "mods"
+#End Region
+
 #Region "初始化"
-
-    Public Sub New(ResourceType As CompType)
-
-        ' 此调用是设计器所必需的。
-        InitializeComponent()
-
-        ' 在 InitializeComponent() 调用之后添加任何初始化。
-
-    End Sub
 
     Private IsLoad As Boolean = False
     Public Sub PageOther_Loaded() Handles Me.Loaded
+        UpdateUIText()
 
         If FrmMain.PageLast.Page <> FormMain.PageType.CompDetail Then PanBack.ScrollToHome()
         AniControlEnabled += 1
         SelectedMods.Clear()
-        ReloadModList()
+        ReloadList()
         ChangeAllSelected(False)
         AniControlEnabled -= 1
 
         '非重复加载部分
         If IsLoad Then Exit Sub
         IsLoad = True
+
+        CType(Parent, MyPageRight).PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, McLocalCompLoader, AddressOf LoadUIFromLoaderOutput, AutoRun:=False)
 
         '调整按钮边距（这玩意儿没法从 XAML 改）
         For Each Btn As MyRadioButton In PanFilter.Children
@@ -39,7 +41,7 @@
     ''' <summary>
     ''' 刷新 Mod 列表。
     ''' </summary>
-    Public Sub ReloadModList(Optional ForceReload As Boolean = False)
+    Public Sub ReloadList(Optional ForceReload As Boolean = False)
         If LoaderRun(If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             Filter = FilterType.All
@@ -61,21 +63,20 @@
         Catch ex As Exception
             Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
         End Try
-        If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
+        If FrmVersionMod IsNot Nothing Then FrmVersionMod.Content.ReloadList(True) '无需 Else，还没加载刷个鬼的新
         FrmVersionLeft.ItemMod.Checked = True
         Hint("正在刷新……", Log:=False)
     End Sub
 
-    Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, McModLoader, AddressOf LoadUIFromLoaderOutput, AutoRun:=False)
-    End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
-        If McModLoader.State = LoadState.Failed Then
+        If McLocalCompLoader.State = LoadState.Failed Then
             LoaderRun(LoaderFolderRunType.ForceRun)
         End If
     End Sub
     Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
-        Return LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", Type)
+        Dim Path = $"{PageVersionLeft.Version.PathIndie}{CompFolderName}\"
+        Dim Data As New Tuple(Of CompType, String)(TargetType, Path)
+        Return LoaderFolderRun(McLocalCompLoader, Path, Type, DataInput:=Data)
     End Function
 
 #End Region
@@ -92,7 +93,7 @@
     Private Sub LoadUIFromLoaderOutput()
         Try
             '判断应该显示哪一个页面
-            If McModLoader.Output.Any() Then
+            If McLocalCompLoader.Output.Any() Then
                 PanBack.Visibility = Visibility.Visible
                 PanEmpty.Visibility = Visibility.Collapsed
             Else
@@ -102,7 +103,7 @@
             End If
             '修改缓存
             ModItems.Clear()
-            For Each ModEntity As McComp In McModLoader.Output
+            For Each ModEntity As McComp In McLocalCompLoader.Output
                 ModItems(ModEntity.RawFileName) = McModListItem(ModEntity)
             Next
             '显示结果
@@ -110,8 +111,16 @@
             SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
             RefreshUI()
         Catch ex As Exception
-            Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)
+            Log(ex, "加载资源列表 UI 失败", LogLevel.Feedback)
         End Try
+    End Sub
+    Private Sub UpdateUIText()
+        SearchBox.HintText = $"搜索{TypeName}的 名称 / 描述 / 标签"
+        BtnManageDownload.Text = $"下载新{TypeName}"
+        Load.Text = $"正在加载{TypeName}列表"
+        BtnHintDownload.Text = $"下载{TypeName}"
+        BtnHintInstall.Text = $"从文件安装{TypeName}"
+        BtnHintOpen.Text = $"打开{TypeName}文件夹"
     End Sub
     Private Function McModListItem(Entry As McComp) As MyLocalModItem
         AniControlEnabled += 1
@@ -152,7 +161,8 @@
         ToolTipService.SetVerticalOffset(BtnED, 30)
         ToolTipService.SetHorizontalOffset(BtnED, 2)
         AddHandler BtnED.Click, AddressOf ED_Click
-        If sender.Entry.State = McComp.McModState.Unavailable Then
+        Dim IsEDFetureEnabled = TargetType = CompType.Mod
+        If sender.Entry.State = McComp.McModState.Unavailable AndAlso IsEDFetureEnabled Then
             sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
         Else
             sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
@@ -164,7 +174,7 @@
     ''' </summary>
     Public Sub RefreshUI()
         If PanList Is Nothing Then Exit Sub
-        Dim ShowingMods = If(IsSearching, SearchResult, If(McModLoader.Output, New List(Of McComp))).Where(Function(m) CanPassFilter(m)).ToList
+        Dim ShowingMods = If(IsSearching, SearchResult, If(McLocalCompLoader.Output, New List(Of McComp))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
         If ShowingMods.Any() Then
@@ -197,7 +207,7 @@
         Dim DisabledCount As Integer = 0
         Dim UpdateCount As Integer = 0
         Dim UnavalialeCount As Integer = 0
-        For Each ModItem In If(IsSearching, SearchResult, If(McModLoader.Output, New List(Of McComp)))
+        For Each ModItem In If(IsSearching, SearchResult, If(McLocalCompLoader.Output, New List(Of McComp)))
             AnyCount += 1
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(McComp.McModState.Fine) Then EnabledCount += 1
@@ -214,7 +224,9 @@
         BtnFilterDisabled.Visibility = If(Filter = FilterType.Disabled OrElse DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterError.Text = $"错误 ({UnavalialeCount})"
         BtnFilterError.Visibility = If(Filter = FilterType.Unavailable OrElse UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
-
+        Dim IsEDFetureEnabled = TargetType = CompType.Mod
+        BtnSelectEnable.Visibility = If(IsEDFetureEnabled, Visibility.Visible, Visibility.Collapsed)
+        BtnSelectDisable.Visibility = If(IsEDFetureEnabled, Visibility.Visible, Visibility.Collapsed)
         '-----------------
         ' 底部栏
         '-----------------
@@ -228,7 +240,7 @@
             Dim HasUpdate As Boolean = False
             Dim HasEnabled As Boolean = False
             Dim HasDisabled As Boolean = False
-            For Each ModEntity In McModLoader.Output
+            For Each ModEntity In McLocalCompLoader.Output
                 If SelectedMods.Contains(ModEntity.RawFileName) Then
                     If ModEntity.CanUpdate Then HasUpdate = True
                     If ModEntity.State = McComp.McModState.Fine Then
@@ -297,10 +309,11 @@
     ''' </summary>
     Private Sub BtnManageOpen_Click(sender As Object, e As EventArgs) Handles BtnManageOpen.Click, BtnHintOpen.Click
         Try
-            Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "mods\")
-            OpenExplorer(PageVersionLeft.Version.PathIndie & "mods\")
+            Dim path = $"{PageVersionLeft.Version.PathIndie}{CompFolderName}\"
+            Directory.CreateDirectory(path)
+            OpenExplorer(path)
         Catch ex As Exception
-            Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
+            Log(ex, "打开资源文件夹失败", LogLevel.Msgbox)
         End Try
     End Sub
 
@@ -376,7 +389,7 @@ Install:
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
-                    LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                    LoaderFolderRun(McLocalCompLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
                 End If
             Catch ex As Exception
                 Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
@@ -390,7 +403,16 @@ Install:
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
         PageComp.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
-        FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
+        Dim DesirePageId As FormMain.PageSubType = FormMain.PageSubType.DownloadMod
+        Select Case TargetType
+            Case CompType.Mod
+                DesirePageId = FormMain.PageSubType.DownloadMod
+            Case CompType.ResourcePack
+                DesirePageId = FormMain.PageSubType.DownloadResourcePack
+            Case CompType.Shader
+                DesirePageId = FormMain.PageSubType.DownloadShader
+        End Select
+        FrmMain.PageChange(FormMain.PageType.Download, DesirePageId)
     End Sub
 
 #End Region
@@ -426,7 +448,7 @@ Install:
         AniControlEnabled -= 1
         RefreshBars()
     End Sub
-    Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged, Me.PageExit
+    Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged
         Dim CacheAniControlEnabled = AniControlEnabled
         AniControlEnabled = 0
         ChangeAllSelected(False)
@@ -503,7 +525,7 @@ Install:
 
     '启用 / 禁用
     Private Sub BtnSelectED_Click(sender As MyIconTextButton, e As RouteEventArgs) Handles BtnSelectEnable.Click, BtnSelectDisable.Click
-        EDMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
+        EDMods(McLocalCompLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
                Not sender.Equals(BtnSelectDisable))
         ChangeAllSelected(False)
     End Sub
@@ -540,7 +562,7 @@ Install:
                 FileSystem.Rename(ModEntity.Path, NewPath)
             Catch ex As FileNotFoundException
                 Log(ex, $"未找到需要重命名的 Mod（{If(ModEntity.Path, "null")}）", LogLevel.Feedback)
-                ReloadModList(True)
+                ReloadList(True)
                 Return
             Catch ex As Exception
                 Log(ex, $"重命名 Mod 失败（{If(ModEntity.Path, "null")}）")
@@ -549,10 +571,10 @@ Install:
             '更改 Loader 中的列表
             Dim NewModEntity As New McComp(NewPath)
             NewModEntity.FromJson(ModEntity.ToJson)
-            If McModLoader.Output.Contains(ModEntity) Then
-                Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
-                McModLoader.Output.RemoveAt(IndexOfLoader)
-                McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            If McLocalCompLoader.Output.Contains(ModEntity) Then
+                Dim IndexOfLoader As Integer = McLocalCompLoader.Output.IndexOf(ModEntity)
+                McLocalCompLoader.Output.RemoveAt(IndexOfLoader)
+                McLocalCompLoader.Output.Insert(IndexOfLoader, NewModEntity)
             End If
             If SearchResult IsNot Nothing AndAlso SearchResult.Contains(ModEntity) Then '#4862
                 Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
@@ -571,14 +593,14 @@ Install:
             RefreshBars()
         Else
             Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-            ReloadModList(True)
+            ReloadList(True)
         End If
         LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
 
     '更新
     Private Sub BtnSelectUpdate_Click() Handles BtnSelectUpdate.Click
-        Dim UpdateList As List(Of McComp) = McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
+        Dim UpdateList As List(Of McComp) = McLocalCompLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
         If Not UpdateList.Any() Then Return
         UpdateMods(UpdateList)
         ChangeAllSelected(False)
@@ -637,21 +659,21 @@ Install:
             '构造加载器
             Dim InstallLoaders As New List(Of LoaderBase)
             Dim FinishedFileNames As New List(Of String)
-            InstallLoaders.Add(New LoaderDownload("下载新版 Mod 文件", FileList) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
-            InstallLoaders.Add(New LoaderTask(Of Integer, Integer)("替换旧版 Mod 文件",
+            InstallLoaders.Add(New LoaderDownload($"下载新版{TypeName}文件", FileList) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
+            InstallLoaders.Add(New LoaderTask(Of Integer, Integer)($"替换旧版{TypeName}文件",
             Sub()
                 Try
                     For Each Entry As McComp In ModList
                         If File.Exists(Entry.Path) Then
                             My.Computer.FileSystem.DeleteFile(Entry.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                         Else
-                            Log($"[Mod] 未找到更新前的 Mod 文件，跳过对它的删除：{Entry.Path}", LogLevel.Debug)
+                            Log($"[Mod] 未找到更新前的资源文件，跳过对它的删除：{Entry.Path}", LogLevel.Debug)
                         End If
                     Next
                     For Each Entry As KeyValuePair(Of String, String) In FileCopyList
                         If File.Exists(Entry.Value) Then
                             My.Computer.FileSystem.DeleteFile(Entry.Value, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                            Log($"[Mod] 更新后的 Mod 文件已存在，将会把它放入回收站：{Entry.Value}", LogLevel.Debug)
+                            Log($"[Mod] 更新后的资源文件已存在，将会把它放入回收站：{Entry.Value}", LogLevel.Debug)
                         End If
                         If Directory.Exists(GetPathFromFullPath(Entry.Value)) Then
                             File.Move(Entry.Key, Entry.Value)
@@ -661,11 +683,11 @@ Install:
                         End If
                     Next
                 Catch ex As OperationCanceledException
-                    Log(ex, "替换旧版 Mod 文件时被主动取消")
+                    Log(ex, "替换旧版资源文件时被主动取消")
                 End Try
             End Sub))
             '结束处理
-            Dim Loader As New LoaderCombo(Of IEnumerable(Of McComp))("Mod 更新：" & PageVersionLeft.Version.Name, InstallLoaders)
+            Dim Loader As New LoaderCombo(Of IEnumerable(Of McComp))($"{TypeName}更新：" & PageVersionLeft.Version.Name, InstallLoaders)
             Dim PathMods As String = PageVersionLeft.Version.PathIndie & "mods\"
             Loader.OnStateChanged =
             Sub()
@@ -673,21 +695,21 @@ Install:
                 Select Case Loader.State
                     Case LoadState.Finished
                         Select Case FinishedFileNames.Count
-                            Case 0 '一般是由于 Mod 文件被占用，然后玩家主动取消
-                                Log($"[Mod] 没有 Mod 被成功更新")
+                            Case 0 '一般是由于资源文件被占用，然后玩家主动取消
+                                Log($"[Mod] 没有资源被成功更新")
                             Case 1
                                 Hint($"已成功更新 {FinishedFileNames.Single}！", HintType.Finish)
                             Case Else
-                                Hint($"已成功更新 {FinishedFileNames.Count} 个 Mod！", HintType.Finish)
+                                Hint($"已成功更新 {FinishedFileNames.Count} 个资源！", HintType.Finish)
                         End Select
                     Case LoadState.Failed
-                        Hint("Mod 更新失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
+                        Hint("资源更新失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint("Mod 更新已中止！", HintType.Info)
+                        Hint("资源更新已中止！", HintType.Info)
                     Case Else
                         Exit Sub
                 End Select
-                Log($"[Mod] 已从正在进行 Mod 更新的文件夹列表移除：{PathMods}")
+                Log($"[Mod] 已从正在进行资源更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
                 '清理缓存
                 RunInNewThread(
@@ -697,26 +719,26 @@ Install:
                             If File.Exists(TempFile) Then File.Delete(TempFile)
                         Next
                     Catch ex As Exception
-                        Log(ex, "清理 Mod 更新缓存失败")
+                        Log(ex, "清理资源更新缓存失败")
                     End Try
-                End Sub, "Clean Mod Update Cache", ThreadPriority.BelowNormal)
+                End Sub, "Clean Comp Update Cache", ThreadPriority.BelowNormal)
             End Sub
             '启动加载器
-            Log($"[Mod] 开始更新 {ModList.Count} 个 Mod：{PathMods}")
+            Log($"[Mod] 开始更新 {ModList.Count} 个资源：{PathMods}")
             UpdatingVersions.Add(PathMods)
             Loader.Start()
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
-            ReloadModList(True)
+            ReloadList(True)
         Catch ex As Exception
-            Log(ex, "初始化 Mod 更新失败")
+            Log(ex, "初始化资源更新失败")
         End Try
     End Sub
 
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
-        DeleteMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
+        DeleteMods(McLocalCompLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
         ChangeAllSelected(False)
     End Sub
     Private Sub DeleteMods(ModList As IEnumerable(Of McComp))
@@ -742,17 +764,17 @@ Install:
                         My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                     End If
                 Catch ex As OperationCanceledException
-                    Log(ex, "删除 Mod 被主动取消")
-                    ReloadModList(True)
+                    Log(ex, "删除资源被主动取消")
+                    ReloadList(True)
                     Return
                 Catch ex As Exception
-                    Log(ex, $"删除 Mod 失败（{ModEntity.Path}）", LogLevel.Msgbox)
+                    Log(ex, $"删除资源失败（{ModEntity.Path}）", LogLevel.Msgbox)
                     IsSuccessful = False
                 End Try
                 '取消选中
                 SelectedMods.Remove(ModEntity.RawFileName)
                 '更改 Loader 和 UI 中的列表
-                McModLoader.Output.Remove(ModEntity)
+                McLocalCompLoader.Output.Remove(ModEntity)
                 SearchResult?.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
                 Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
@@ -760,10 +782,10 @@ Install:
             Next
             RefreshBars()
             If Not IsSuccessful Then
-                Hint("由于文件被占用，Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-                ReloadModList(True)
+                Hint("由于文件被占用，资源删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+                ReloadList(True)
             ElseIf PanList.Children.Count = 0 Then
-                ReloadModList(True) '删除了全部文件
+                ReloadList(True) '删除了全部文件
             Else
                 RefreshBars()
             End If
@@ -783,11 +805,11 @@ Install:
                 End If
             End If
         Catch ex As OperationCanceledException
-            Log(ex, "删除 Mod 被主动取消")
-            ReloadModList(True)
+            Log(ex, "删除资源被主动取消")
+            ReloadList(True)
         Catch ex As Exception
-            Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
-            ReloadModList(True)
+            Log(ex, "删除资源出现未知错误", LogLevel.Feedback)
+            ReloadList(True)
         End Try
         LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
@@ -808,17 +830,17 @@ Install:
             Dim ModEntry As McComp = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
             If ModEntry.State = McComp.McModState.Unavailable Then
-                MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
+                MyMsgBox($"无法读取此{TypeName}的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If
             If ModEntry.Comp IsNot Nothing Then
-                '跳转到 Mod 下载页面
+                '跳转到下载页面
                 FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
                         If(PageVersionLeft.Version.Version.HasForge, CompModLoaderType.Forge,
                         If(PageVersionLeft.Version.Version.HasNeoForge, CompModLoaderType.NeoForge,
                         If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any))),
-                        CompType.Mod}})
+                        TargetType}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)
@@ -868,7 +890,7 @@ Install:
                 End If
             End If
         Catch ex As Exception
-            Log(ex, "获取 Mod 详情失败", LogLevel.Feedback)
+            Log(ex, "获取资源详情失败", LogLevel.Feedback)
         End Try
     End Sub
     '打开文件所在的位置
@@ -877,7 +899,7 @@ Install:
             Dim ListItem As MyLocalModItem = sender.Tag
             OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
-            Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
+            Log(ex, "打开资源文件位置失败", LogLevel.Feedback)
         End Try
     End Sub
     '删除
@@ -905,7 +927,7 @@ Install:
         If IsSearching Then
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of McComp))
-            For Each Entry As McComp In McModLoader.Output
+            For Each Entry As McComp In McLocalCompLoader.Output
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Name, 1))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.FileName, 1))

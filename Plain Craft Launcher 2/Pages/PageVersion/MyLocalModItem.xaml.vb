@@ -126,14 +126,14 @@ Public Class MyLocalModItem
         SwipeEnd = Index
         Swiping = True
         SwipToState = Not Checked
-        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+        'FrmVersionMod.Content.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
         If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '结束滑动
         If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
             Swiping = False
-            FrmVersionMod.CardSelect.IsHitTestVisible = True
+            'FrmVersionMod.Content.CardSelect.IsHitTestVisible = True
             Exit Sub
         End If
         '计算滑动范围
@@ -485,7 +485,7 @@ Public Class MyLocalModItem
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
         Select Case MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "查看更新日志", "取消")
             Case 1 '更新
-                FrmVersionMod.UpdateMods({Entry})
+                FrmVersionMod.Content.UpdateMods({Entry})
             Case 2 '查看更新日志
                 ShowUpdateLog()
             Case 3 '取消
