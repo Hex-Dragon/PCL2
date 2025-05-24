@@ -523,6 +523,14 @@ NextInner:
         For Each Profile In ProfileList
             If Profile.Type = McLoginType.Ms AndAlso Profile.Username = Result(1) AndAlso Profile.Uuid = Result(0) Then
                 IsNewProfile = False
+                If IsCreatingProfile Then
+                    Dim ProfileIndex = ProfileList.IndexOf(Profile)
+                    ProfileList(ProfileIndex).Username = Result(1)
+                    ProfileList(ProfileIndex).AccessToken = AccessToken
+                    ProfileList(ProfileIndex).IdentityId = OAuthId
+                    Hint("你已经添加了这个档案...")
+                    GoTo SkipLogin
+                End If
             End If
         Next
         '输出登录结果
@@ -538,6 +546,8 @@ NextInner:
                 .RawJson = Result(2)
             }
             ProfileList.Add(NewProfile)
+            SelectedProfile = NewProfile
+            IsCreatingProfile = False
         Else
             Dim ProfileIndex = ProfileList.IndexOf(SelectedProfile)
             ProfileList(ProfileIndex).Username = Result(1)
@@ -546,10 +556,10 @@ NextInner:
         End If
         SaveProfile()
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
+SkipLogin:
         '结束
         McLoginMsRefreshTime = GetTimeTick()
         ProfileLog("正版验证完成")
-SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
         If IsSkipAuth Then
             Data.Progress = 0.99
@@ -639,28 +649,40 @@ Retry:
                                                                 End Function).ExecuteAsync().GetAwaiter().GetResult()
             End If
             Hint("网页登录成功！", HintType.Finish)
-        Catch ClientEx As MsalClientException
-            If ClientEx.Message.Contains("User canceled authentication") Then
+        Catch ex As MsalClientException
+            If ex.Message.Contains("User canceled authentication") Then
                 Hint("你关闭了验证弹窗...", HintType.Critical)
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ClientEx.ToString().Replace(OAuthClientId, ""))
+                If Setup.Get("LoginMsAuthType") = 0 Then
+                    Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                Else
+                    Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                End If
                 GoTo Exception
             End If
-        Catch ServiceEx As MsalServiceException
-            If ServiceEx.Message.Contains("authorization_declined") Or ServiceEx.Message.Contains("access_denied") Then
+        Catch ex As MsalServiceException
+            If ex.Message.Contains("authorization_declined") Or ex.Message.Contains("access_denied") Then
                 Hint("你拒绝了 PCL 申请的权限……", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("expired_token") Then
+            ElseIf ex.Message.Contains("expired_token") Then
                 Hint("登录用时太长啦，重新试试吧！", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("service abuse") Then
+            ElseIf ex.Message.Contains("service abuse") Then
                 Hint("非常抱歉，该账号已被微软封禁，无法登录", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
+            ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                 GoTo Retry
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ServiceEx.ToString().Replace(OAuthClientId, ""))
+                If Setup.Get("LoginMsAuthType") = 0 Then
+                    Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                Else
+                    Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                End If
                 GoTo Exception
             End If
         Catch ex As Exception
-            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString().Replace(OAuthClientId, ""))
+            If Setup.Get("LoginMsAuthType") = 0 Then
+                Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+            Else
+                Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+            End If
             GoTo Exception
         End Try
         FrmMain.ShowWindowToTop()
@@ -936,22 +958,6 @@ Refresh:
         End If
 LoginFinish:
         Data.Progress = 0.95
-        '保存启动记录
-        Dim Dict As New Dictionary(Of String, String)
-        Dim Emails As New List(Of String)
-        Dim Passwords As New List(Of String)
-        Try
-            For i = 0 To Emails.Count - 1
-                Dict.Add(Emails(i), Passwords(i))
-            Next
-            Dict.Remove(Input.UserName)
-            Emails = New List(Of String)(Dict.Keys)
-            Emails.Insert(0, Input.UserName)
-            Passwords = New List(Of String)(Dict.Values)
-            Passwords.Insert(0, Input.Password)
-        Catch ex As Exception
-            Log(ex, "保存启动记录失败", LogLevel.Hint)
-        End Try
     End Sub
     'Server 登录：三种验证方式的请求
     Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
@@ -1108,6 +1114,7 @@ LoginFinish:
                 }
                 ProfileList.Add(NewProfile)
                 SelectedProfile = NewProfile
+                IsCreatingProfile = False
             End If
             SaveProfile()
             ProfileLog("登录成功（Login, Authlib）")
@@ -2279,7 +2286,7 @@ NextVersion:
 
         '获取窗口标题
         Dim WindowTitle As String = Setup.Get("VersionArgumentTitle", Version:=McVersionCurrent)
-        If WindowTitle = "" Then WindowTitle = Setup.Get("LaunchArgumentTitle")
+        If WindowTitle = "" AndAlso Not Setup.Get("VersionArgumentTitleEmpty", Version:=McVersionCurrent) Then WindowTitle = Setup.Get("LaunchArgumentTitle")
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
         'JStack 路径

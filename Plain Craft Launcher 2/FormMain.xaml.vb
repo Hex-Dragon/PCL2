@@ -534,7 +534,7 @@ Public Class FormMain
         End If
         '迁移旧版用户档案
         If LastVersionCode <= 368 Then
-            MigrateOldProfile()
+            RunInNewThread(Sub() MigrateOldProfile())
         End If
         'Mod 命名设置迁移
         If Not Setup.IsUnset("ToolDownloadTranslate") AndAlso Setup.IsUnset("ToolDownloadTranslateV2") Then
