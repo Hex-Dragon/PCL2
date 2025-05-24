@@ -649,28 +649,40 @@ Retry:
                                                                 End Function).ExecuteAsync().GetAwaiter().GetResult()
             End If
             Hint("网页登录成功！", HintType.Finish)
-        Catch ClientEx As MsalClientException
-            If ClientEx.Message.Contains("User canceled authentication") Then
+        Catch ex As MsalClientException
+            If ex.Message.Contains("User canceled authentication") Then
                 Hint("你关闭了验证弹窗...", HintType.Critical)
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ClientEx.ToString().Replace(OAuthClientId, ""))
+                If Setup.Get("LoginMsAuthType") = 0 Then
+                    Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                Else
+                    Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                End If
                 GoTo Exception
             End If
-        Catch ServiceEx As MsalServiceException
-            If ServiceEx.Message.Contains("authorization_declined") Or ServiceEx.Message.Contains("access_denied") Then
+        Catch ex As MsalServiceException
+            If ex.Message.Contains("authorization_declined") Or ex.Message.Contains("access_denied") Then
                 Hint("你拒绝了 PCL 申请的权限……", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("expired_token") Then
+            ElseIf ex.Message.Contains("expired_token") Then
                 Hint("登录用时太长啦，重新试试吧！", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("service abuse") Then
+            ElseIf ex.Message.Contains("service abuse") Then
                 Hint("非常抱歉，该账号已被微软封禁，无法登录", HintType.Critical)
-            ElseIf ServiceEx.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
+            ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
                 GoTo Retry
             Else
-                ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ServiceEx.ToString().Replace(OAuthClientId, ""))
+                If Setup.Get("LoginMsAuthType") = 0 Then
+                    Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                Else
+                    Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+                End If
                 GoTo Exception
             End If
         Catch ex As Exception
-            ProfileLog("进行正版验证 Step 1 时发生了意外错误: " + ex.ToString().Replace(OAuthClientId, ""))
+            If Setup.Get("LoginMsAuthType") = 0 Then
+                Hint("正版验证出错，你可以前往启动器设置 - 启动，将正版验证方式改为⌈设备代码流⌋再试！" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+            Else
+                Hint("正版验证出错，请重新尝试：" & ex.ToString().Replace(OAuthClientId, ""), HintType.Critical)
+            End If
             GoTo Exception
         End Try
         FrmMain.ShowWindowToTop()
