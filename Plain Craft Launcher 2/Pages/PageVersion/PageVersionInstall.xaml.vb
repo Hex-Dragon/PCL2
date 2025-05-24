@@ -675,11 +675,6 @@ Public Class PageVersionInstall
             End If
         End If
         '主警告
-        If SelectedFabric IsNot Nothing OrElse SelectedQuilt IsNot Nothing Then
-            HintEdit.Visibility = Visibility.Visible
-        Else
-            HintEdit.Visibility = Visibility.Collapsed
-        End If
         If SelectedFabric IsNot Nothing AndAlso SelectedFabricApi Is Nothing Then
             HintFabricAPI.Visibility = Visibility.Visible
         Else
