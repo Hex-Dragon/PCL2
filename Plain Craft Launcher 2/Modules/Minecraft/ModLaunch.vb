@@ -2274,7 +2274,7 @@ NextVersion:
 
         '获取窗口标题
         Dim WindowTitle As String = Setup.Get("VersionArgumentTitle", Version:=McVersionCurrent)
-        If WindowTitle = "" Then WindowTitle = Setup.Get("LaunchArgumentTitle")
+        If WindowTitle = "" AndAlso Not Setup.Get("VersionArgumentTitleEmpty", Version:=McVersionCurrent) Then WindowTitle = Setup.Get("LaunchArgumentTitle")
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
         'JStack 路径
