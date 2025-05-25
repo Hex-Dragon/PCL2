@@ -173,14 +173,14 @@ ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧�
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35"/>
-                            <RowDefinition Height="0"/>
-                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
                         <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="100" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemMirrorChyanKey" MinWidth="100" Text="设置 Mirror 酱 CDK" Padding="13,0" Margin="0,0,20,0" ToolTip="设置用于 Mirror 酱服务器请求的 CDK"/>
                         <local:MyButton Grid.Column="2" x:Name="BtnSystemMirrorChyanGetKey" MinWidth="100" Text="获取 Mirror 酱 CDK" Padding="13,0" Margin="0,0,20,0" ToolTip="获取用于 Mirror 酱服务器请求的 CDK"/>
-                        <local:MyButton Grid.Column="0" Grid.Row="2" x:Name="BtnSystemSettingExp" MinWidth="100" Text="导出设置" Padding="13,0" Margin="0,0,20,0" Visibility="Collapsed"/>
-                        <local:MyButton Grid.Column="1" Grid.Row="2" x:Name="BtnSystemSettingImp" MinWidth="100" Text="导入设置" Padding="13,0" Margin="0,0,20,0" Visibility="Collapsed"/>
+                        <local:MyButton Grid.Column="0" Grid.Row="2" x:Name="BtnSystemSettingExp" MinWidth="100" Text="导出设置" Padding="13,0" Margin="0,0,20,0"/>
+                        <local:MyButton Grid.Column="1" Grid.Row="2" x:Name="BtnSystemSettingImp" MinWidth="100" Text="导入设置" Padding="13,0" Margin="0,0,20,0"/>
                     </Grid>
                 </Grid>
             </local:MyCard>

@@ -230,10 +230,19 @@
 #Region "导出 / 导入设置"
 
     Private Sub BtnSystemSettingExp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingExp.Click
-        Hint("该功能尚在开发中！")
+        Dim savePath As String = SelectSaveFile("选择保存位置", "PCL 全局配置.json", "PCL 配置文件(*.json)|*.json", Path).Replace("/", "\")
+        If savePath = "" Then Exit Sub
+        File.Copy(PathAppdataConfig & "Config.json", savePath, True)
+        Hint("配置导出成功！", HintType.Finish)
+        OpenExplorer(savePath)
     End Sub
     Private Sub BtnSystemSettingImp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingImp.Click
-        Hint("该功能尚在开发中！")
+        Dim sourcePath As String = SelectFile("PCL 配置文件(*.json)|*.json", "选择配置文件")
+        If sourcePath = "" Then Exit Sub
+        File.Copy(sourcePath, PathAppdataConfig & "Config.json", True)
+        MyMsgBox("配置导入成功！请重启 PCL 以应用配置……", Button1:="重启", ForceWait:=True)
+        Process.Start(New ProcessStartInfo(PathWithName))
+        FormMain.EndProgramForce(ProcessReturnValues.Success)
     End Sub
 
 #End Region
