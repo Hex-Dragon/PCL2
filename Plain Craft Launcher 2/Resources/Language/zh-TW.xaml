@@ -27,7 +27,7 @@
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化錯誤</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">執行環境錯誤</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本過低或損壞，請下載並重新安裝 .NET Framework 4.6.2 ！</s:String>
-    <s:String x:Key="LangApplicationDialogTitleUnknownError">嚙踝蕭昍昍昍</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">銝�銵䔶�蝣�</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程式出現未知錯誤</s:String>
     <s:String x:Key="LangApplicationDialogContentMemReduceFail">記憶體最佳化失敗</s:String>
     <s:String x:Key="LangTitleDownload">下載</s:String>
@@ -118,10 +118,10 @@
 檔案：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">重新整理背景圖片失敗（{0}）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknown">重新整理背景圖片時出現未知錯誤</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailA">改變標題欄圖片失敗，該圖像檔案可能並非標準格式。
+    <s:String x:Key="LangDialogTitlePicChangeFailA">改變標題欄圖片失敗，該圖片檔案可能並非標準格式。
 你可以嘗試使用小畫家開啟該檔案並重新儲存，這會讓圖片變為標準格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">設定標題欄圖片失敗</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailC">調整標題欄圖片失敗，該圖像檔案可能並非標準格式。
+    <s:String x:Key="LangDialogTitlePicChangeFailC">調整標題欄圖片失敗，該圖片檔案可能並非標準格式。
 你可以嘗試使用小畫家開啟該檔案並重新儲存，這會讓圖片變為標準格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailD">調整標題欄圖片失敗</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailE">清理錯誤的標題欄圖片失敗</s:String>
@@ -195,13 +195,13 @@
     <s:String x:Key="LangSetBackgroundPic">背景圖片</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">自適應方式</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">智慧</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveAutoToolTip">當圖像較小時選擇並排，較大時選擇全螢幕</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveAutoToolTip">當圖片較小時選擇平鋪；較大時選擇適應</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveCentered">置中</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveAdapt">全螢幕</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveAdapt">適應</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAdaptToolTip">延展圖片並保持長寬比不變，直至填滿整個視窗</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveStretch">延展</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveStretchToolTip">延展圖片使其恰好填滿整個視窗，很可能會導致長寬比的改變</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveTile">並排</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveTile">平鋪</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosA">置於左上</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosB">置於右上</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosC">置於左下</s:String>
@@ -493,7 +493,7 @@
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返回自動安裝</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">繼續下載手動安裝包</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">手動安裝包</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">社區資源</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">社群資源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">模組</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">模組包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">資源包</s:String>
@@ -724,7 +724,7 @@
     <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自動安裝模組包失敗：{0}</s:String>
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
-    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作模組包哦！</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請勿發給其他人或者用來製作模組包哦！</s:String>
     <s:String x:Key="LangLaunchRightLabHint2">若已累計贊助￥23.33，在愛發電私訊發送「解锁码」即可永久隱藏此提示。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">正在載入首頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
@@ -921,7 +921,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">進階啟動選項</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在實例獨立設定中找到更多進階啟動選項。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參數標頭</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，除非有確定把握，否則請不要修改</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，除非有確定把握，否則請勿修改</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">還原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">遊戲參數尾部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文字框中的內容將會被直接拼合在啟動參數的末尾。
@@ -1200,7 +1200,7 @@
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">愚人節實例</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">修改實例名</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">修改實例描述</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">加入我的最愛</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">加入我最愛</s:String>
     <s:String x:Key="LangPageVersionOverallCancelFavorite">從我的最愛中移除</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">捷徑</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">實例資料夾</s:String>
@@ -1240,7 +1240,7 @@
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">已初始化實例獨立設定！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始化實例獨立設定失敗</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">即將把第三方登入設定覆蓋為 LittleSkin 登入。
-除非你是服主，或者服主要求你這樣做，否則請不要繼續。
+除非你是服主，或者服主要求你這樣做，否則請勿繼續。
 
 是否確實需要覆蓋目前設定？</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">設定覆蓋確認</s:String>
@@ -1290,7 +1290,7 @@
 用英文冒號間隔 IP 與埠，例如「233.233.233.233:12345」。</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">服主後台</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">設定為 LittleSkin</s:String>
-    <s:String x:Key="LangPageVersionSetupJVMHead">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確認把握的情況下請不要嘗試修改。
+    <s:String x:Key="LangPageVersionSetupJVMHead">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確認把握的情況下請勿嘗試修改。
 若留空，則使用全域設定的值。</s:String>
     <s:String x:Key="LangPageVersionSetupJVMTail">文字框中的內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。
@@ -1384,13 +1384,13 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL 沒有對該資料夾的存取權限，請右鍵以系統管理員身分執行 PCL</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">需要安裝前置版本：</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusUnknownError">未知錯誤：</s:String>
-    <s:String x:Key="LangModMinecraftSkinSizeErrorA">外觀圖像大小應為 64x32 像素或 64x64 像素！</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">外觀圖片大小應為 64x32 像素或 64x64 像素！</s:String>
     <s:String x:Key="LangModMinecraftSkinSizeErrorB">外觀檔案大小需小於 24 KB，而所選檔案大小為</s:String>
     <s:String x:Key="LangModMinecraftSkinErrorFile">外觀檔案存在錯誤</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">此外觀為寬型（粗手臂）還是纖細（細手臂）？</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">此外觀為 Steve 模型（粗手臂）還是 Alex 模型（細手臂）？</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">選擇外觀種類</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">寬型（粗手臂）</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">纖細（細手臂）</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve 模型（粗手臂）</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型（細手臂）</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不知道</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">請在外觀下載畫面確認外觀種類後再使用此外觀！</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentA">新版本：</s:String>
@@ -1484,7 +1484,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackTitle">出現錯誤</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">回報</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogContent">若你在匯報一個程式錯誤，請點擊「開啟資料夾」按鈕，並上傳「Log(1~5).txt」中包含錯誤資訊的檔案。
-遊戲崩潰一般與啟動器無關，請不要因為遊戲崩潰而提交回報。</s:String>
+遊戲崩潰一般與啟動器無關，請勿因為遊戲崩潰而提交回報。</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">回報提交提醒</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">開啟資料夾</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
@@ -1697,7 +1697,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">無法連接到第三方登入伺服器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 檔案（{0}），該檔案可能已損壞，請重新嘗試啟動遊戲</s:String>
-    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援纖細外觀，你的外觀可能會顯示為寬型！</s:String>
+    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援 Alex 外觀，你的外觀可能會顯示為 Steve！</s:String>
     <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">你必須先登入正版帳號，才能進行離線登入！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">正版驗證</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">購買正版</s:String>
@@ -1858,7 +1858,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">構建伺服器端</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">該伺服器端正在下載中！</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下載伺服器端檔案</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Mojang 沒有給 Minecraft {0} 提供官方伺服器端下載，無法下載，撤退！</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Mojang 沒有給 Minecraft {0} 提供官方伺服器端下載，下不了，撤退！</s:String>
     <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">開始合併安裝失敗</s:String>
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">錯誤報告分析結果</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出現錯誤</s:String>
@@ -2087,7 +2087,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangPageVersionExportGameProfileDesc">指令歷史、已儲存的快捷欄</s:String>
     <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine 設定</s:String>
     <s:String x:Key="LangPageVersionExportMod">模組</s:String>
-    <s:String x:Key="LangPageVersionExportModDesc"> </s:String>
+    <s:String x:Key="LangPageVersionExportModDesc">模組</s:String>
     <s:String x:Key="LangPageVersionExportModDisabled">已停用的模組</s:String>
     <s:String x:Key="LangPageVersionExportPackAddons">模組包重要資料</s:String>
     <s:String x:Key="LangPageVersionExportPackAddonsDesc">腳本文件、內建資源包、資料包等</s:String>
