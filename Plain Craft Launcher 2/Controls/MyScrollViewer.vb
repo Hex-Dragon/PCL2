@@ -1,22 +1,32 @@
 ﻿Public Class MyScrollViewer
     Inherits ScrollViewer
+    Public Sub New()
+        [AddHandler](MouseWheelEvent, New MouseWheelEventHandler(AddressOf MouseWheelEventSub), handledEventsToo:=True)
+    End Sub
 
     Public Property DeltaMult As Double = 1
 
 
     Private RealOffset As Double
-    Private Sub MyScrollViewer_PreviewMouseWheel(sender As Object, e As MouseWheelEventArgs) Handles Me.PreviewMouseWheel
-        If e.Delta = 0 OrElse ActualHeight = 0 OrElse ScrollableHeight = 0 Then Exit Sub
-        Dim SourceType = e.Source.GetType
-        If Content.TemplatedParent Is Nothing AndAlso (
-                (GetType(ComboBox).IsAssignableFrom(SourceType) AndAlso CType(e.Source, ComboBox).IsDropDownOpen) OrElse
-                (GetType(TextBox).IsAssignableFrom(SourceType) AndAlso CType(e.Source, TextBox).AcceptsReturn) OrElse
-                GetType(ComboBoxItem).IsAssignableFrom(SourceType) OrElse
-                TypeOf e.Source Is CheckBox) Then
-            '如果当前是在对有滚动条的下拉框或文本框执行，则不接管操作
-            Exit Sub
+    Protected Overrides Sub OnMouseWheel(e As MouseWheelEventArgs)
+        'ScrollViewer 会直接把事件移交 ScrollInfo 并 Handle 掉，在此覆盖掉它的行为
+    End Sub
+    Private Sub MouseWheelEventSub(sender As Object, e As MouseWheelEventArgs)
+        If e.Handled Then
+            Dim ShouldProcess As Boolean = False
+            '特判：如果事件被处理但是鼠标处在一个没有垂直滚动栏的 FlowDocumentScrollViewer 上，依然处理该事件
+            Dim Element = TryCast(e.Source, DependencyObject)
+            While Element IsNot Nothing
+                If TypeOf Element Is FlowDocumentScrollViewer Then
+                    If CType(Element, FlowDocumentScrollViewer).VerticalScrollBarVisibility = ScrollBarVisibility.Hidden Then ShouldProcess = True
+                    Exit While
+                End If
+                Element = If(TryCast(Element, FrameworkContentElement)?.Parent, TryCast(Element, FrameworkElement)?.Parent)
+            End While
+            If Not ShouldProcess Then Exit Sub
         End If
         e.Handled = True
+        If e.Delta = 0 OrElse ActualHeight = 0 OrElse ScrollableHeight = 0 Then Exit Sub
         PerformVerticalOffsetDelta(-e.Delta)
         '关闭 Tooltip (#2552)
         For Each TooltipBorder In Application.ShowingTooltips
