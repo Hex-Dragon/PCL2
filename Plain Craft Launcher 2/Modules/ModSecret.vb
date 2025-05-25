@@ -582,7 +582,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     Public Function IsVerisonLatest() As Boolean
         If LatestVersion.Source = "MirrorChyan" Then
-            Return LatestVersion.version_name = VersionBaseName
+            Return SemVer.Parse(LatestVersion.version_name) <= SemVer.Parse(VersionBaseName)
         Else
             Return LatestVersion.version_code <= VersionCode
         End If
