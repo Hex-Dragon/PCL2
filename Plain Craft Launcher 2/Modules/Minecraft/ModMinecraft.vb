@@ -696,7 +696,7 @@ Recheck:
                     Case Else '根据 API 进行筛选
                         Dim RealJson As String = If(JsonObject, JsonText).ToString
                         '愚人节与快照版本
-                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName, ) <> "" Then
+                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName) <> "" Then
                             State = McVersionState.Fool
                         ElseIf Version.McName.ContainsF("w", True) OrElse Name.ContainsF("combat", True) OrElse Version.McName.ContainsF("rc", True) OrElse Version.McName.ContainsF("pre", True) OrElse Version.McName.ContainsF("experimental", True) OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
                             State = McVersionState.Snapshot
@@ -816,7 +816,7 @@ ExitDataLoad:
                 Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                     Info = Version.ToString
                 Case McVersionState.Fool
-                    Info = GetMcFoolName(Version.McName, )
+                    Info = GetMcFoolName(Version.McName)
                 Case McVersionState.Error
                     Return Me.Info '已有错误信息
                 Case Else
