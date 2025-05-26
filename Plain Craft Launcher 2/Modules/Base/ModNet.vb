@@ -1,13 +1,9 @@
-﻿Imports System.Net.Http
-
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
-    Public ReadOnly Client As New HttpClient()
-    Public ReadOnly ClientHandler As New HttpClientHandler() With {.AllowAutoRedirect = False}
+
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
-    '''
     Public Function Ping(Ip As String, Optional Timeout As Integer = 10000, Optional MakeLog As Boolean = True) As Integer
         Dim PingResult As NetworkInformation.PingReply
         Try
@@ -65,17 +61,21 @@ Retry:
             End Select
         End Try
     End Function
-    Public Async Function NetGetCodeByClient(Url As String, Encoding As Encoding, Timeout As Integer, Accept As String, Optional UseBrowserUserAgent As Boolean = False) As Tasks.Task(Of String)
+    Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Timeout As Integer, Accept As String, Optional UseBrowserUserAgent As Boolean = False) As String
         Url = SecretCdnSign(Url)
         Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
-
+        Dim Request As CookieWebClient
+        Dim res As HttpWebResponse = Nothing
+        Dim HttpStream As Stream = Nothing
         Try
-            SecretHeadersSign(Url, Client, UseBrowserUserAgent)
-            Client.DefaultRequestHeaders.Accept.Add(New Headers.MediaTypeWithQualityHeaderValue(Accept))
-            Client.DefaultRequestHeaders.AcceptLanguage.Add(New Headers.StringWithQualityHeaderValue("en-US,en;q=0.5"))
-            Client.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest")
-            Dim Result = Await Client.GetAsync(Url)
-
+            Request = New CookieWebClient With {
+                .Encoding = Encoding,
+                .Timeout = Timeout
+            }
+            Request.Headers("Accept") = Accept
+            Request.Headers("Accept-Language") = "en-US,en;q=0.5"
+            Request.Headers("X-Requested-With") = "XMLHttpRequest"
+            SecretHeadersSign(Url, Request, UseBrowserUserAgent)
             Return Request.DownloadString(Url)
         Catch ex As Exception
             If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
