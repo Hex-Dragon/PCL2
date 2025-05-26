@@ -420,7 +420,7 @@ Public Class PageOtherTest
         RunInNewThread(Sub()
                            Try
                                '处理 SRV 解析
-                               If Not IsIp Then
+                               If Not IsIp AndAlso Not url.ContainsF(":") Then
                                    Dim needSRV = False
                                    Try
                                        Dns.GetHostAddresses(url)
