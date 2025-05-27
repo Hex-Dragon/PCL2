@@ -147,7 +147,7 @@
             Filter = FilterType.All
             SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
             RefreshUI()
-            SetSortMethod(SortMethod.ModName)
+            SetSortMethod(SortMethod.CompName)
         Catch ex As Exception
             Log(ex, $"加载 {CurrentCompType} 列表 UI 失败", LogLevel.Feedback)
         End Try
@@ -611,7 +611,7 @@ Install:
 #End Region
 
 #Region "排序"
-    Private CurrentSortMethod As SortMethod = SortMethod.FileName
+    Private CurrentSortMethod As SortMethod = SortMethod.CompName
 
     Private Sub SetSortMethod(Target As SortMethod)
         CurrentSortMethod = Target
@@ -622,7 +622,7 @@ Install:
 
     Private Enum SortMethod
         FileName
-        ModName
+        CompName
         TagNums
         CreateTime
         ModFileSize
@@ -631,7 +631,7 @@ Install:
     Private Function GetSortName(Method As SortMethod) As String
         Select Case Method
             Case SortMethod.FileName : Return "文件名"
-            Case SortMethod.ModName : Return "资源名称"
+            Case SortMethod.CompName : Return "资源名称"
             Case SortMethod.TagNums : Return "标签数量"
             Case SortMethod.CreateTime : Return "加入时间"
             Case SortMethod.ModFileSize : Return "文件大小"
@@ -689,7 +689,7 @@ Install:
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return String.Compare(b.FileName, a.FileName, StringComparison.OrdinalIgnoreCase)
                        End Function
-            Case SortMethod.ModName
+            Case SortMethod.CompName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return String.Compare(b.Name, a.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
@@ -707,7 +707,7 @@ Install:
                        End Function
             Case Else
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return -StrComp(a.Name, b.Name)
+                           Return String.Compare(b.Name, a.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
         End Select
     End Function
