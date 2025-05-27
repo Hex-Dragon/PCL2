@@ -2355,22 +2355,6 @@ Retry:
             Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
-        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("下载 LabyMod 资源",
-            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                'WriteFile($"{VersionFolder}labymod-neo\configs\labymod\settings.json", "{""appearance"":{""theme"":""FANCY""}}")
-                Directory.CreateDirectory($"{PathMcFolder}labymod-neo\libraries")
-                Dim manifest As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{LabyChannel}/latest.json", IsJson:=True)
-                Dim LabyAssets As JObject = manifest("assets")
-                Dim ret As New List(Of NetFile)
-                For Each Asset In LabyAssets
-                    Dim AssetName As String = Asset.Key
-                    Dim AssetSHA1 As String = Asset.Value.ToString()
-                    Dim AssetPath As String = $"{PathMcFolder}labymod-neo\assets\{AssetName}.jar"
-                    Dim AssetUrl As String = $"https://releases.r2.labymod.net/api/v1/download/assets/labymod4/{LabyChannel}/{LabyCommitRef}/{AssetName}/{AssetSHA1}.jar"
-                    ret.Add(New NetFile(New List(Of String) From {AssetUrl}, AssetPath, New FileChecker(Hash:=AssetSHA1)))
-                Next
-                Task.Output = ret
-            End Sub))
         LoadersAssets.Add(New LoaderDownload("下载 LabyMod 资源", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
