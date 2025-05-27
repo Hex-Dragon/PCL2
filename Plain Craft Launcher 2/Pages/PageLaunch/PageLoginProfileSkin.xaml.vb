@@ -89,6 +89,8 @@
     Private Sub BtnSkinCape_Click(sender As Object, e As RoutedEventArgs)
         If SelectedProfile.Type = McLoginType.Ms Then
             Skin.BtnSkinCape_Click()
+        ElseIf SelectedProfile.Type = McLoginType.Auth Then
+            OpenWebsite(SelectedProfile.Server.BeforeFirst("api/yggdrasil/authserver") + "user/closet")
         Else
             Hint("当前档案不支持修改披风！")
         End If
