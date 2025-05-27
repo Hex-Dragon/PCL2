@@ -1306,40 +1306,33 @@ Re:
                 Dim Info As New FileInfo(LocalPath)
                 If Not Info.Exists Then Return "文件不存在：" & LocalPath
                 Dim FileSize As Long = Info.Length
-                Dim ErrorMessage = ""
-                Dim Passed As Integer = 0
+                Dim ErrorMessage As New List(Of String)
+                Dim AllowIgnore As Boolean = False '允许相信哈希正确但是大小不正确
                 If Not String.IsNullOrEmpty(Hash) Then
-                    Passed += 1
                     If Hash.Length < 35 Then 'MD5
                         If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then
-                            ErrorMessage += "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath) & vbCrLf
-                            Passed -= 1
+                            ErrorMessage.Add("文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath))
                         End If
                     ElseIf Hash.Length = 64 Then 'SHA256
                         If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then
-                            ErrorMessage += "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath) & vbCrLf
-                            Passed -= 1
+                            ErrorMessage.Add("文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath))
                         End If
                     Else 'SHA1 (40)
                         If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then
-                            ErrorMessage += "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath) & vbCrLf
-                            Passed -= 1
+                            ErrorMessage.Add("文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath))
                         End If
                     End If
+                    AllowIgnore = ErrorMessage.Count = 0
                 End If
 
-                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then
-                    ErrorMessage += $"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
-                Else
-                    Passed += 1
+                If ActualSize >= 0 AndAlso ActualSize <> FileSize AndAlso Not AllowIgnore Then '不允许忽略大小不正确的情况
+                    ErrorMessage.Add($"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为" & ReadFile(LocalPath), ""))
                 End If
 
                 If MinSize >= 0 AndAlso MinSize > FileSize Then
-                    ErrorMessage += $"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
-                Else
-                    Passed += 1
+                    ErrorMessage.Add($"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), ""))
                 End If
 
                 If IsJson Then
@@ -1351,7 +1344,7 @@ Re:
                         Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
-                If Passed = 0 Then Return ErrorMessage
+                If ErrorMessage.Count <> 0 Then Return ErrorMessage.Join(vbCrLf)
                 Return Nothing
             Catch ex As Exception
                 Log(ex, "检查文件出错")
