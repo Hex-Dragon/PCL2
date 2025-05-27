@@ -2029,7 +2029,7 @@ OnLoaded:
         End Try
 
         'Library 文件
-        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False)))
+        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), Version.Path))
 
         'Authlib-Injector 文件
         Dim AuthlibTargetFile = PathPure & "\authlib-injector.jar"
@@ -2057,6 +2057,25 @@ OnLoaded:
                         DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
                     }, AuthlibTargetFile, New FileChecker(Hash:=AuthlibDownloadInfo("checksums")("sha256").ToString)))
             End If
+        End If
+
+        'LabyMod Assets 文件
+        If Version.Version.HasLabyMod Then
+            Dim ChannelType = Version.JsonObject("labymod_data")("channelType").ToString()
+            Directory.CreateDirectory($"{PathMcFolder}labymod-neo\libraries")
+            Dim manifest As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{ChannelType}/latest.json", IsJson:=True)
+            Dim LabyAssets As JObject = manifest("assets")
+            Dim LabyModCommitRef As String = manifest("commitReference").ToString()
+            For Each Asset In LabyAssets
+                Dim AssetName As String = Asset.Key
+                Dim AssetSHA1 As String = Asset.Value.ToString()
+                Dim AssetPath As String = $"{PathMcFolder}labymod-neo\assets\{AssetName}.jar"
+                Dim AssetUrl As String = $"https://releases.r2.labymod.net/api/v1/download/assets/labymod4/{ChannelType}/{LabyModCommitRef}/{AssetName}/{AssetSHA1}.jar"
+                Result.Add(New NetFile(
+                           {AssetUrl},
+                           AssetPath,
+                           New FileChecker(Hash:=AssetSHA1)))
+            Next
         End If
 
         '跳过校验
@@ -2120,6 +2139,11 @@ OnLoaded:
                 OptiFineBase = "/maven/com/optifine/" & OptiFineBase
                 If OptiFineBase.Contains("_pre") Then OptiFineBase = OptiFineBase.Replace("com/optifine/", "com/optifine/preview_")
                 Urls.Add("https://bmclapi2.bangbang93.com" & OptiFineBase)
+            ElseIf Token.Name.Contains("LabyMod") Then
+                'LabyMod 只有一个下载源
+                Urls.Add(Token.Url)
+                Log($"[Download] 获取到 LabyMod 主要库文件的 Size = {Token.Size},SHA1 = {Token.SHA1}，由于 LabyMod 乱写 Size，已忽略 Size")
+                Checker = New FileChecker(Hash:=Token.SHA1) '只校验 SHA1
             ElseIf Urls.Count <= 2 Then
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(CustomMcFolder & "libraries", "").Replace("\", "/")))

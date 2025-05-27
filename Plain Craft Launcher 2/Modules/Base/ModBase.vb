@@ -1139,14 +1139,15 @@ Re:
         Try
             '获取 MD5
             Dim Result As New StringBuilder()
-            Dim File As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-            Dim MD5 As MD5 = New MD5CryptoServiceProvider()
-            Dim Retval As Byte() = MD5.ComputeHash(File)
-            File.Close()
-            For i = 0 To Retval.Length - 1
-                Result.Append(Retval(i).ToString("x2"))
-            Next
-            Return Result.ToString
+            Using fs As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                Using hasher = MD5.Create()
+                    Dim Retval As Byte() = hasher.ComputeHash(fs)
+                    For i = 0 To Retval.Length - 1
+                        Result.Append(Retval(i).ToString("x2"))
+                    Next
+                    Return Result.ToString
+                End Using
+            End Using
         Catch ex As Exception
             If Retry OrElse TypeOf ex Is FileNotFoundException Then
                 Log(ex, "获取文件 MD5 失败：" & FilePath)
@@ -1169,15 +1170,16 @@ Re:
             ''检测该文件是否在下载中，若在下载则放弃检测
             'If IgnoreOnDownloading AndAlso NetManage.Files.ContainsKey(FilePath) AndAlso NetManage.Files(FilePath).State <= NetState.Merge Then Return ""
             '获取 SHA512
-            Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-            Dim sha512 As SHA512 = New SHA512CryptoServiceProvider()
-            Dim retval As Byte() = sha512.ComputeHash(file)
-            file.Close()
-            Dim Result As New StringBuilder()
-            For i As Integer = 0 To retval.Length - 1
-                Result.Append(retval(i).ToString("x2"))
-            Next
-            Return Result.ToString
+            Using fs As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                Using hasher = SHA512.Create()
+                    Dim retval As Byte() = hasher.ComputeHash(fs)
+                    Dim Result As New StringBuilder(retval.Length * 2) '预设容量，避免多次扩容导致性能问题
+                    For i As Integer = 0 To retval.Length - 1
+                        Result.Append(retval(i).ToString("x2"))
+                    Next
+                    Return Result.ToString
+                End Using
+            End Using
         Catch ex As Exception
             If Retry OrElse TypeOf ex Is FileNotFoundException Then
                 Log(ex, "获取文件 SHA512 失败：" & FilePath)
@@ -1200,15 +1202,16 @@ Re:
             ''检测该文件是否在下载中，若在下载则放弃检测
             'If IgnoreOnDownloading AndAlso NetManage.Files.ContainsKey(FilePath) AndAlso NetManage.Files(FilePath).State <= NetState.Merge Then Return ""
             '获取 SHA256
-            Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-            Dim sha256 As SHA256 = New SHA256CryptoServiceProvider()
-            Dim retval As Byte() = sha256.ComputeHash(file)
-            file.Close()
-            Dim Result As New StringBuilder()
-            For i As Integer = 0 To retval.Length - 1
-                Result.Append(retval(i).ToString("x2"))
-            Next
-            Return Result.ToString
+            Using fs As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                Using hasher = sha256.Create()
+                    Dim retval As Byte() = hasher.ComputeHash(fs)
+                    Dim Result As New StringBuilder(retval.Length * 2) '预设容量，避免多次扩容导致性能问题
+                    For i As Integer = 0 To retval.Length - 1
+                        Result.Append(retval(i).ToString("x2"))
+                    Next
+                    Return Result.ToString
+                End Using
+            End Using
         Catch ex As Exception
             If Retry OrElse TypeOf ex Is FileNotFoundException Then
                 Log(ex, "获取文件 SHA256 失败：" & FilePath)
@@ -1229,15 +1232,16 @@ Re:
 Re:
         Try
             '获取 SHA1
-            Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-            Dim sha1 As SHA1 = New SHA1CryptoServiceProvider()
-            Dim retval As Byte() = sha1.ComputeHash(file)
-            file.Close()
-            Dim Result As New StringBuilder()
-            For i As Integer = 0 To retval.Length - 1
-                Result.Append(retval(i).ToString("x2"))
-            Next
-            Return Result.ToString
+            Using fs As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+                Using hasher = sha1.Create()
+                    Dim retval As Byte() = hasher.ComputeHash(fs)
+                    Dim Result As New StringBuilder(retval.Length * 2) '预设容量，避免多次扩容导致性能问题
+                    For i As Integer = 0 To retval.Length - 1
+                        Result.Append(retval(i).ToString("x2"))
+                    Next
+                    Return Result.ToString
+                End Using
+            End Using
         Catch ex As Exception
             If Retry OrElse TypeOf ex Is FileNotFoundException Then
                 Log(ex, "获取文件 SHA1 失败：" & FilePath)
@@ -1255,13 +1259,14 @@ Re:
     ''' </summary>
     Public Function GetAuthSHA1(Stream As Stream) As String
         Try
-            Dim sha1 As SHA1 = New SHA1CryptoServiceProvider()
-            Dim retval As Byte() = sha1.ComputeHash(Stream)
-            Dim Result As New StringBuilder()
-            For i As Integer = 0 To retval.Length - 1
-                Result.Append(retval(i).ToString("x2"))
-            Next
-            Return Result.ToString
+            Using hasher = SHA1.Create()
+                Dim retval As Byte() = hasher.ComputeHash(Stream)
+                Dim Result As New StringBuilder(retval.Length * 2) '预设容量，避免多次扩容导致性能问题
+                For i As Integer = 0 To retval.Length - 1
+                    Result.Append(retval(i).ToString("x2"))
+                Next
+                Return Result.ToString
+            End Using
         Catch ex As Exception
             Log(ex, "获取流 SHA1 失败")
             Return ""
@@ -1306,40 +1311,36 @@ Re:
                 Dim Info As New FileInfo(LocalPath)
                 If Not Info.Exists Then Return "文件不存在：" & LocalPath
                 Dim FileSize As Long = Info.Length
-                Dim ErrorMessage = ""
-                Dim Passed As Integer = 0
+                Dim ErrorMessage As New List(Of String)
+                Dim AllowIgnore As Boolean = False '允许相信哈希正确但是大小不正确
                 If Not String.IsNullOrEmpty(Hash) Then
-                    Passed += 1
                     If Hash.Length < 35 Then 'MD5
-                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then
-                            ErrorMessage += "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath) & vbCrLf
-                            Passed -= 1
+                        Dim ComputedHash As String = GetFileMD5(LocalPath)
+                        If Hash.ToLowerInvariant <> ComputedHash Then
+                            ErrorMessage.Add("文件 MD5 应为 " & Hash & "，实际为 " & ComputedHash)
                         End If
                     ElseIf Hash.Length = 64 Then 'SHA256
-                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then
-                            ErrorMessage += "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath) & vbCrLf
-                            Passed -= 1
+                        Dim ComputedHash As String = GetFileSHA256(LocalPath)
+                        If Hash.ToLowerInvariant <> ComputedHash Then
+                            ErrorMessage.Add("文件 SHA256 应为 " & Hash & "，实际为 " & ComputedHash)
                         End If
                     Else 'SHA1 (40)
-                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then
-                            ErrorMessage += "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath) & vbCrLf
-                            Passed -= 1
+                        Dim ComputedHash As String = GetFileSHA1(LocalPath)
+                        If Hash.ToLowerInvariant <> ComputedHash Then
+                            ErrorMessage.Add("文件 SHA1 应为 " & Hash & "，实际为 " & ComputedHash)
                         End If
                     End If
+                    AllowIgnore = ErrorMessage.Count = 0
                 End If
 
-                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then
-                    ErrorMessage += $"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
-                Else
-                    Passed += 1
+                If ActualSize >= 0 AndAlso ActualSize <> FileSize AndAlso Not AllowIgnore Then '不允许忽略大小不正确的情况
+                    ErrorMessage.Add($"文件大小应为 {ActualSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为" & ReadFile(LocalPath), ""))
                 End If
 
                 If MinSize >= 0 AndAlso MinSize > FileSize Then
-                    ErrorMessage += $"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
-                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), "") & vbCrLf
-                Else
-                    Passed += 1
+                    ErrorMessage.Add($"文件大小应大于 {MinSize} B，实际为 {FileSize} B" &
+                        If(FileSize < 2000, "，内容为：" & ReadFile(LocalPath), ""))
                 End If
 
                 If IsJson Then
@@ -1351,7 +1352,10 @@ Re:
                         Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
-                If Passed = 0 Then Return ErrorMessage
+                If ErrorMessage.Count <> 0 Then
+                    ErrorMessage.Insert(0, $"实际校验地址：{LocalPath}")
+                    Return ErrorMessage.Join(";")
+                End If
                 Return Nothing
             Catch ex As Exception
                 Log(ex, "检查文件出错")
