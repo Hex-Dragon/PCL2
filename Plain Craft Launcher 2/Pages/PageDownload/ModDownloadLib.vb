@@ -2355,7 +2355,6 @@ Retry:
             Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
-        LoadersAssets.Add(New LoaderDownload("下载 LabyMod 资源", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
         Return Loaders

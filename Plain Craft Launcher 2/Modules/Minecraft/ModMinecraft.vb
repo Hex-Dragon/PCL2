@@ -2061,16 +2061,16 @@ OnLoaded:
 
         'LabyMod Assets 文件
         If Version.Version.HasLabyMod Then
+            Dim ChannelType = Version.JsonObject("labymod_data")("channelType").ToString()
             Directory.CreateDirectory($"{PathMcFolder}labymod-neo\libraries")
-            'assets 不管 production 还是 snapshot 似乎都是一样的
-            Dim manifest As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/production/latest.json", IsJson:=True)
+            Dim manifest As JObject = NetGetCodeByRequestRetry($"https://releases.r2.labymod.net/api/v1/manifest/{ChannelType}/latest.json", IsJson:=True)
             Dim LabyAssets As JObject = manifest("assets")
             Dim LabyModCommitRef As String = manifest("commitReference").ToString()
             For Each Asset In LabyAssets
                 Dim AssetName As String = Asset.Key
                 Dim AssetSHA1 As String = Asset.Value.ToString()
                 Dim AssetPath As String = $"{PathMcFolder}labymod-neo\assets\{AssetName}.jar"
-                Dim AssetUrl As String = $"https://releases.r2.labymod.net/api/v1/download/assets/labymod4/production/{LabyModCommitRef}/{AssetName}/{AssetSHA1}.jar"
+                Dim AssetUrl As String = $"https://releases.r2.labymod.net/api/v1/download/assets/labymod4/{ChannelType}/{LabyModCommitRef}/{AssetName}/{AssetSHA1}.jar"
                 Result.Add(New NetFile(New List(Of String) From {AssetUrl}, AssetPath, New FileChecker(Hash:=AssetSHA1)))
             Next
         End If
