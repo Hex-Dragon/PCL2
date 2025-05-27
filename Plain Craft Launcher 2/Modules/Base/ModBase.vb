@@ -1352,7 +1352,10 @@ Re:
                         Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
-                If ErrorMessage.Count <> 0 Then Return ErrorMessage.Join(vbCrLf)
+                If ErrorMessage.Count <> 0 Then
+                    ErrorMessage.Insert(0, $"实际校验地址：{LocalPath}")
+                    Return ErrorMessage.Join(";")
+                End If
                 Return Nothing
             Catch ex As Exception
                 Log(ex, "检查文件出错")

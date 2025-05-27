@@ -1472,7 +1472,7 @@ Retry:
                             Exit For
                         End If
                     Next
-                    Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
+                    Task.Output = McLibFixFromLibToken(Libs)
                 Catch ex As Exception
                     Throw New Exception($"获取{If(ForgeType = "Forge", "新版 Forge", " " & ForgeType)} 支持库列表失败", ex)
                 Finally
@@ -2983,7 +2983,7 @@ LabyModSkip:
                             ""path"": ""net/labymod/LabyMod/4/LabyMod-4.jar"",
                             ""sha1"": ""{LabyModCore("sha1")}"",
                             ""size"": {LabyModCore("size")},
-                            ""url"": ""https://releases.r2.labymod.net/api/v1/download/labymod4/{LabyModChannel}/{LabyModCore("commitReference")}.jar""
+                            ""url"": ""https://releases.r2.labymod.net/api/v1/download/labymod4/{LabyModChannel.ToString()}/{LabyModCore("commitReference").ToString()}.jar""
                         }}
                     }}
                 }}"))
