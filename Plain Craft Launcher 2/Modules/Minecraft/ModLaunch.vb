@@ -1567,9 +1567,7 @@ LoginFinish:
 
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
-            Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
-                Setup.Get("VersionServerAuthServer", McVersionCurrent))
+            Dim Server As String = McLoginAuthLoader.Input.BaseUrl.Replace("/authserver", "")
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
                 DataList.Insert(0, "-javaagent:""" & PathPure & "authlib-injector.jar""=" & Server &
@@ -1638,11 +1636,9 @@ NextVersion:
 
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
-            Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
-                Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
+            Dim Server As String = McLoginAuthLoader.Input.BaseUrl.Replace("/authserver", "")
             Try
-                Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
+            Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
                 DataList.Insert(0, "-javaagent:""" & PathPure & "authlib-injector.jar""=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
