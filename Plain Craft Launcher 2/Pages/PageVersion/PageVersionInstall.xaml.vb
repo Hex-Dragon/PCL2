@@ -1839,7 +1839,7 @@ Public Class PageVersionInstall
             CardLabyMod.SwapControl = PanLabyMod
             CardLabyMod.InstallMethod = Sub(Stack As StackPanel)
                                             For Each item As JObject In Stack.Tag
-                                                Stack.Children.Add(LabyModDownloadListItem(item, AddressOf FrmDownloadInstall.LabyMod_Selected))
+                                                Stack.Children.Add(LabyModDownloadListItem(item, AddressOf LabyMod_Selected))
                                             Next
                                         End Sub
         Catch ex As Exception
