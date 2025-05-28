@@ -256,6 +256,8 @@ Public Class PageVersionExport
             Yield "!*.log"
             Yield "!*.dat_old"
             Yield "!*.BakaCoreInfo"
+            Yield "!hmclversion.cfg"
+            Yield "!log4j2.xml"
             Yield ""
         End If
     End Function
