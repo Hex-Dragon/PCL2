@@ -211,6 +211,9 @@ Public Class FormMain
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")
+        '注册一些事件
+        [AddHandler](DragDrop.DragEnterEvent, New DragEventHandler(AddressOf HandleDragEnter), handledEventsToo:=True)
+        [AddHandler](DragDrop.DragOverEvent, New DragEventHandler(AddressOf HandleDragOver), handledEventsToo:=True)
         '加载 UI
         InitializeComponent()
         Opacity = 0
@@ -651,14 +654,46 @@ Public Class FormMain
     End Sub
 
     '文件拖放
-    Private Sub FrmMain_PreviewDragOver(sender As Object, e As DragEventArgs) Handles Me.PreviewDragOver
-        If e.Data.GetFormats.Contains("FileDrop") Then
-            e.Effects = DragDropEffects.Link
-        Else
-            e.Effects = DragDropEffects.None
-        End If
+    Private Sub HandleDragEnter(sender As Object, e As DragEventArgs)
+        ProcessDragEventLast(sender, e)
     End Sub
-    Private Sub FrmMain_Drop(sender As Object, e As DragEventArgs) Handles Me.PreviewDrop
+    Private Sub HandleDragOver(sender As Object, e As DragEventArgs)
+        ProcessDragEventLast(sender, e)
+    End Sub
+    ''' <summary>
+    ''' 被窗口关心的文件拖动，以及它们对应的拖动类型
+    ''' </summary>
+    Private Function ComputeMouseEffectFromDraggingData(Data As IDataObject) As DragDropEffects
+        If Data.GetDataPresent(DataFormats.Text) Then
+            Dim Str As String = Data.GetData(DataFormats.Text)
+            If Str.StartsWithF("authlib-injector:yggdrasil-server:") Then Return DragDropEffects.Copy
+            If Str.StartsWithF("file:///") Then Return DragDropEffects.Copy
+        ElseIf Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim Files As String() = Data.GetData(DataFormats.FileDrop)
+            If Files IsNot Nothing AndAlso Files.Length > 0 Then Return DragDropEffects.Link
+        End If
+        Return DragDropEffects.None
+    End Function
+    ''' <summary>
+    ''' 在子元素完成处理之后处理那些子元素不关心或子元素无法接收的拖拽文件
+    ''' </summary>
+    Private Sub ProcessDragEventLast(sender As Object, e As DragEventArgs)
+        Try
+            If e.Handled AndAlso (e.Effects <> DragDropEffects.None) Then Exit Sub
+            If Not e.Handled Then e.Handled = True
+            Static PrevData As IDataObject, PrevEffects As DragDropEffects '不知道这 cache 会不会出问题，但是这段代码调用频率挺高的
+            If e.Data Is PrevData Then
+                e.Effects = PrevEffects
+            Else
+                e.Effects = ComputeMouseEffectFromDraggingData(e.Data)
+                PrevData = e.Data
+                PrevEffects = e.Effects
+            End If
+        Catch ex As Exception
+            Log(ex, "处理文件拖放鼠标效果时的未知错误", LogLevel.Feedback)
+        End Try
+    End Sub
+    Private Sub FrmMain_Drop(sender As Object, e As DragEventArgs) Handles Me.Drop
         Try
             If e.Data.GetDataPresent(DataFormats.Text) Then
                 '获取文本
@@ -668,6 +703,7 @@ Public Class FormMain
                     If Str.StartsWithF("authlib-injector:yggdrasil-server:") Then
                         'Authlib 拖拽
                         e.Handled = True
+                        e.Effects = DragDropEffects.Copy
                         Dim AuthlibServer As String = Net.WebUtility.UrlDecode(Str.Substring("authlib-injector:yggdrasil-server:".Length))
                         Log("[System] Authlib 拖拽：" & AuthlibServer)
                         If Not String.IsNullOrEmpty(New ValidateHttp().Validate(AuthlibServer)) Then
@@ -712,6 +748,7 @@ Public Class FormMain
                         '文件拖拽（例如从浏览器下载窗口拖入）
                         Dim FilePath = Net.WebUtility.UrlDecode(Str).Substring("file:///".Length).Replace("/", "\")
                         e.Handled = True
+                        e.Effects = DragDropEffects.Copy
                         FileDrag(New List(Of String) From {FilePath})
                     End If
                 Catch ex As Exception
@@ -726,6 +763,7 @@ Public Class FormMain
                     Exit Sub
                 End If
                 e.Handled = True
+                e.Effects = DragDropEffects.Link
                 FileDrag(CType(FilePathRaw, IEnumerable(Of String)))
             End If
         Catch ex As Exception
