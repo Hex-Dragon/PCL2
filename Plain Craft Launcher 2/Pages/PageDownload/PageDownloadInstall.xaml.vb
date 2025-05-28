@@ -1775,7 +1775,7 @@ Public Class PageDownloadInstall
             If LoadLabyMod.State.LoadingState = MyLoading.MyLoadingState.Run Then Exit Sub
             '获取版本列表
             Dim Versions As JObject = DlLabyModListLoader.Output.Value
-            If Versions("production") Is Nothing OrElse Versions("snapshot") Is Nothing Then Exit Sub
+            If Versions Is Nothing OrElse Versions("production") Is Nothing OrElse Versions("snapshot") Is Nothing Then Exit Sub
             '可视化
             Dim ProcessedVersions As New JArray
             For Each Production As JObject In Versions("production")("minecraftVersions")
