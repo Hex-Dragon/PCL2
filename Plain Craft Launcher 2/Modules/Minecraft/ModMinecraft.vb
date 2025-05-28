@@ -1595,7 +1595,7 @@ OnLoaded:
         Try
             For Each SkinProperty In GetJson(SkinString)("properties")
                 If SkinProperty("name") = "textures" Then
-                    SkinValue = SkinProperty("value")
+                    SkinValue = SkinProperty("value").Replace("http:","https:")
                     Exit Try
                 End If
             Next
