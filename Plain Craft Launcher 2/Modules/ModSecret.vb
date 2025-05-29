@@ -10,20 +10,39 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-#If RELEASE Or BETA Then
-    Public Const RegFolder As String = "PCLCE" 'PCL 社区版的注册表与 PCL 的注册表隔离，以防数据冲突
-#Else
+#If DEBUG Then
     Public Const RegFolder As String = "PCLCEDebug" '社区开发版的注册表与社区常规版的注册表隔离，以防数据冲突
+#Else
+    Public Const RegFolder As String = "PCLCE" 'PCL 社区版的注册表与 PCL 的注册表隔离，以防数据冲突
 #End If
 
     '用于微软登录的 ClientId
+#If DEBUG Then
+    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "")
+#Else
     Public Const OAuthClientId As String = ""
+#End If
+
     'CurseForge API Key
+#If DEBUG Then
+    Public CurseForgeAPIKey = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "")
+#Else
     Public Const CurseForgeAPIKey As String = ""
+#End If
+
     'LittleSkin OAuth ClientId
+#If DEBUG Then
+    Public LittleSkinClientId = If(Environment.GetEnvironmentVariable("PCL_LITTLESKIN_CLIENT_ID"), "")
+#Else
     Public Const LittleSkinClientId As String = ""
+#End If
+
     '遥测鉴权密钥
+#If DEBUG Then
+    Public TelemetryKey = If(Environment.GetEnvironmentVariable("PCL_TELEMETRY_KEY"), "")
+#Else
     Public Const TelemetryKey As String = ""
+#End If
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
