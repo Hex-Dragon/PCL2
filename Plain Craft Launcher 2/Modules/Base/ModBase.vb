@@ -401,6 +401,16 @@ Public Module ModBase
             A = 255
             Return Me
         End Function
+        
+        Public Function Alpha(sA As Double) As MyColor
+            A = sA
+            Return Me
+        End Function
+        
+        Public Function LightAdjust(sLj As Integer) As MyColor
+            'TODO
+            Return Me
+        End Function
 
         Public Overrides Function ToString() As String
             Return "(" & A & "," & R & "," & G & "," & B & ")"
