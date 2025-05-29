@@ -360,7 +360,7 @@
         End Try
     End Sub
 
-#If DEBUG Then
+#If DEBUG1 Then
     ''' <summary>
     ''' 检查 Mod。
     ''' </summary>
