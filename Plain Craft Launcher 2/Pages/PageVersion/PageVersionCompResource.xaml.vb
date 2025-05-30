@@ -669,7 +669,7 @@ Install:
                 Dim invalid = items.Where(Function(i) i.Entry Is Nothing OrElse (CurrentSortMethod = SortMethod.TagNums AndAlso i.Entry.Comp Is Nothing)).ToList()
                 Dim valid = items.Except(invalid).ToList()
                 ' 仅对有效项进行排序
-                valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
+                valid.Sort(Function(x, y) Method(x.Entry, y.Entry))
                 ' 合并保持无效项的原始顺序
                 items = valid.Concat(invalid).ToList()
 
@@ -687,11 +687,11 @@ Install:
         Select Case Method
             Case SortMethod.FileName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return String.Compare(b.FileName, a.FileName, StringComparison.OrdinalIgnoreCase)
+                           Return String.Compare(a.FileName, b.FileName, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.CompName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return String.Compare(b.Name, a.Name, StringComparison.OrdinalIgnoreCase)
+                           Return String.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.TagNums
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
@@ -699,7 +699,9 @@ Install:
                        End Function
             Case SortMethod.CreateTime
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return If((New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime, 1, -1)
+                           Dim aDate = New FileInfo(a.Path).CreationTime
+                           Dim bDate = New FileInfo(b.Path).CreationTime
+                           Return If(aDate = bDate, 0, If(aDate > bDate, 1, -1))
                        End Function
             Case SortMethod.ModFileSize
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
@@ -707,7 +709,7 @@ Install:
                        End Function
             Case Else
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return String.Compare(b.Name, a.Name, StringComparison.OrdinalIgnoreCase)
+                           Return String.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
         End Select
     End Function
