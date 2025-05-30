@@ -89,7 +89,7 @@
             Catch
                 Setup.Reset("UiCustomPreset")
             End Try
-            CType(FindName("RadioCustomType" & Setup.Load("UiCustomType")), MyRadioBox).Checked = True
+            CType(FindName("RadioCustomType" & Setup.Load("UiCustomType",ForceReload:=True)), MyRadioBox).Checked = True
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 
             '功能隐藏
@@ -281,6 +281,7 @@
             File.Delete(Path & "PCL\Logo.png")
             CopyFile(FileName, Path & "PCL\Logo.png")
             '设置当前显示
+            FrmMain.ImageTitleLogo.Source = Nothing '防止因为 Source 属性前后的值相同而不更新 (#5628)
             FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
         Catch ex As Exception
             If ex.Message.Contains("参数无效") Then

@@ -326,6 +326,7 @@
                         If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
                         "版本删除确认", , "取消",, IsHintIndie OrElse IsShiftPressed)
                 Case 1
+                    IniClearCache(PageVersionLeft.Version.PathIndie & "options.txt")
                     IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
                         DeleteDirectory(PageVersionLeft.Version.Path)
