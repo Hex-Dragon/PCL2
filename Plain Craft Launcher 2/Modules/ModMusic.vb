@@ -107,6 +107,52 @@ Public Module ModMusic
                 Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
             End Try
         End Sub)
+        Dim SMTCUpdater = _smtc?.DisplayUpdater
+        If SMTCUpdater IsNot Nothing Then
+            Try
+                Using TagInfo = TagLib.File.Create(MusicCurrent)
+                    Dim Tags = TagInfo.Tag
+                    ' 标题
+                    SMTCUpdater.MusicProperties.Title = If(Not String.IsNullOrEmpty(Tags.Title),
+                                                  Tags.Title,
+                                                  GetFileNameWithoutExtentionFromPath(MusicCurrent))
+                    ' 作者
+                    Dim firstArtist As String = If(Tags.Performers.Any(),
+                                          Tags.Performers(0),
+                                          If(Not String.IsNullOrEmpty(Tags.FirstPerformer),
+                                             Tags.FirstPerformer,
+                                             ""))
+                    SMTCUpdater.MusicProperties.Artist = firstArtist
+                    ' 专辑作者
+                    Dim albumArtist As String = If(Tags.AlbumArtists.Any(),
+                                           Tags.AlbumArtists(0),
+                                           If(Not String.IsNullOrEmpty(Tags.FirstAlbumArtist),
+                                              Tags.FirstAlbumArtist,
+                                              ""))
+                    SMTCUpdater.MusicProperties.AlbumArtist = albumArtist
+                    SMTCUpdater.MusicProperties.AlbumTitle = If(Tags.Album, "")
+                    ' 处理专辑封面（使用嵌入的图片数据）
+                    If Tags.Pictures.Any() Then
+                        Dim firstPicture = Tags.Pictures(0)
+                        Dim targetPath = $"{PathTemp}Cache\albumcover.jpg"
+                        File.WriteAllBytes(targetPath, firstPicture.Data.Data)
+                        Dim tempFile = StorageFile.GetFileFromPathAsync(targetPath).GetResults()
+                        ' 写入图片数据
+                        SMTCUpdater.Thumbnail = RandomAccessStreamReference.CreateFromFile(tempFile)
+                    Else
+                        SMTCUpdater.Thumbnail = Nothing
+                    End If
+                End Using
+            Catch ex As Exception
+                SMTCUpdater.MusicProperties.Title = GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                SMTCUpdater.MusicProperties.Artist = ""
+                SMTCUpdater.MusicProperties.AlbumArtist = ""
+                SMTCUpdater.MusicProperties.AlbumTitle = ""
+                SMTCUpdater.Thumbnail = Nothing
+                Log(ex, "[SMTC] 读取音乐详细信息出错")
+            End Try
+            SMTCUpdater.Update()
+        End If
     End Sub
 
     ''' <summary>
@@ -282,11 +328,19 @@ Public Module ModMusic
             Log("[SMTC] 用户已关闭 SMTC 支持，不进行初始化")
             Exit Sub
         End If
+        If _smtc IsNot Nothing AndAlso _smtc.IsEnabled Then
+            Log("[SMTC] 已存在 SMTC 信息源，无需重复初始化")
+            Exit Sub
+        End If
         Log("[SMTC] 初始化 SMTC 支持")
         '初始化
         _player.CommandManager.IsEnabled = False
         _smtc = _player.SystemMediaTransportControls
         _smtc.IsEnabled = True
+        Dim updater = _smtc.DisplayUpdater
+        updater.AppMediaId = "Plain Craft Launcher Community Edition" '媒体来源信息
+        updater.Type = MediaPlaybackType.Music '指定媒体类型
+        updater.Update()
 
         '设置可交互性
         _smtc.IsPlayEnabled = True
