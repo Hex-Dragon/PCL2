@@ -417,7 +417,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             White = NewColor.FromHSL2(0, 0, style.G2)
             HalfWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&H55)
             SemiWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HBB)
-            Transparent = NewColor.Alpha(0)
+            Transparent = NewColor.FromHSL2(0, 0, style.L8).Alpha(0)
             Memory = NewColor.FromHSL2(0, 0, style.G3)
             Tooltip = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HE5)
             BackgroundTransparentSidebar = NewColor.FromHSL2(0, 0, style.G1).Alpha(&HD2)
