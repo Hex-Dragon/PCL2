@@ -579,7 +579,7 @@ Public Class FormMain
                 Exit Sub
             ElseIf e.Key = Key.Escape Then
                 Dim Msg As Object = PanMsg.Children(0)
-                If TypeOf Msg IsNot MyMsgInput AndAlso TypeOf Msg IsNot MyMsgSelect AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
+                If TypeOf Msg IsNot MyMsgSelect AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
                     Msg.Btn3_Click()
                 ElseIf Msg.Btn2.Visibility = Visibility.Visible Then
                     Msg.Btn2_Click()

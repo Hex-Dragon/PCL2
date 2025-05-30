@@ -5,10 +5,10 @@
 
     Public Sub New(Converter As MyMsgBoxConverter)
         Try
-
             InitializeComponent()
             Btn1.Name = Btn1.Name & GetUuid()
             Btn2.Name = Btn2.Name & GetUuid()
+            Btn3.Name = Btn3.Name & GetUuid()
             MyConverter = Converter
             LabTitle.Text = Converter.Title
             LabText.Text = Converter.Text
@@ -23,8 +23,9 @@
             End If
             Btn2.Text = Converter.Button2
             Btn2.Visibility = If(Converter.Button2 = "", Visibility.Collapsed, Visibility.Visible)
+            Btn3.Text = Converter.Button3
+            Btn3.Visibility = If(Converter.Button3 = "" OrElse Converter.Button2 = "取消", Visibility.Collapsed, Visibility.Visible)
             ShapeLine.StrokeThickness = GetWPFSize(1)
-
         Catch ex As Exception
             Log(ex, "输入弹窗初始化失败", LogLevel.Hint)
         End Try
@@ -32,7 +33,6 @@
 
     Private Sub Load(sender As Object, e As EventArgs) Handles MyBase.Loaded
         Try
-
             'UI 初始化
             If Btn2.IsVisible AndAlso Not Btn1.ColorType = MyButton.ColorState.Red Then Btn1.ColorType = MyButton.ColorState.Highlight
             TextArea.Focus()
@@ -74,11 +74,33 @@
     Public Sub Btn1_Click() Handles Btn1.Click
         TextArea.Validate() '#5773
         If MyConverter.IsExited OrElse Not TextArea.IsValidated Then Exit Sub
-        MyConverter.IsExited = True
-        MyConverter.Result = TextArea.Text
+        If MyConverter.Button1Action IsNot Nothing Then
+            MyConverter.Button1Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = TextArea.Text
+        End If
         Close()
     End Sub
     Public Sub Btn2_Click() Handles Btn2.Click
+        If MyConverter.Button2Action IsNot Nothing Then
+            MyConverter.Button2Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = Nothing
+            Close()
+        End If
+        If MyConverter.IsExited Then Exit Sub
+    End Sub
+
+    Public Sub Btn3_Click() Handles Btn3.Click
+        If MyConverter.Button3Action IsNot Nothing Then
+            MyConverter.Button3Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = Nothing
+            Close()
+        End If
         If MyConverter.IsExited Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = Nothing
