@@ -368,19 +368,19 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     
     Public ReadOnly Property ColorGray1 As MyColor
         Get
-            Return StaticColors.Gray1
+            Return If(StaticColors?.Gray1, LightStaticColors.Gray1)
         End Get
     End Property
     
     Public ReadOnly Property ColorGray4 As MyColor
         Get
-            Return StaticColors.Gray4
+            Return If(StaticColors?.Gray4, LightStaticColors.Gray4)
         End Get
     End Property
 
     Public ReadOnly Property ColorGray5 As MyColor
         Get
-            Return StaticColors.Gray5
+            Return If(StaticColors?.Gray5, LightStaticColors.Gray5)
         End Get
     End Property
     
@@ -489,7 +489,24 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             BackgroundTransparentSidebarBrush = New SolidColorBrush(BackgroundTransparentSidebar)
         End Sub
     End Class
-    
+
+    '基于对数分布的亮度调整（看起来很高级，实际上对比线性分布性能稀烂）
+    Private Const LogLightBaseNumber = 4.61512051684126 'Math.Log(101)
+    Private Const HighestLight = 94
+    Private Const LowestLight = 10
+    Public Function AdjustLight(origin As Integer, adjust As Integer) As Integer
+        If origin < 0 Then Return 0 '保证不炸定义域（虽然不会有人传个负的亮度过来吧，应该...不会吧）
+        If adjust = 0 Then Return origin '节省性能
+        If origin > HighestLight Or origin < LowestLight Then Return origin '亮度阈值
+        Dim originF = Math.Log(origin + 1) / LogLightBaseNumber
+        Dim adjustF = adjust / 40.0
+        Dim resultF = originF * (adjustF * 0.75 + 1)
+        Dim result As Integer = Math.Exp(resultF * LogLightBaseNumber) - 1
+        If result > HighestLight Then Return HighestLight
+        If result < LowestLight Then Return LowestLight
+        Return result
+    End Function
+
     Public Class ThemeStyleDynamicColors
         Public ReadOnly Color1 As Color
         Public ReadOnly Color2 As Color
@@ -517,16 +534,16 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         
         Public Sub New(style As ThemeStyle, hue As Integer, sat As Integer, lightAdjust As Integer)
             Color1 = NewColor.FromHSL2(hue, 15, style.L1)
-            Color2 = NewColor.FromHSL2(hue, sat, style.L2).LightAdjust(lightAdjust)
-            Color3 = NewColor.FromHSL2(hue, sat, style.L3).LightAdjust(lightAdjust)
-            Color4 = NewColor.FromHSL2(hue, sat, style.L4).LightAdjust(lightAdjust)
-            Color5 = NewColor.FromHSL2(hue, sat, style.L5).LightAdjust(lightAdjust)
-            Color6 = NewColor.FromHSL2(hue, sat, style.L6).LightAdjust(lightAdjust)
-            Color7 = NewColor.FromHSL2(hue, sat, style.L7).LightAdjust(lightAdjust)
-            Color8 = NewColor.FromHSL2(hue, sat, style.L8).LightAdjust(lightAdjust)
-            ColorBg0 = NewColor.FromHSL2(hue, sat, style.Lb0).LightAdjust(lightAdjust)
-            ColorBg1 = NewColor.FromHSL2(hue, sat, style.Lb1).LightAdjust(lightAdjust).Alpha(&HBE)
-            SemiTransparent = NewColor.FromHSL2(hue, sat, style.L8).LightAdjust(lightAdjust).Alpha(&H01)
+            Color2 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L2, lightAdjust))
+            Color3 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L3, lightAdjust))
+            Color4 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L4, lightAdjust))
+            Color5 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L5, lightAdjust))
+            Color6 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L6, lightAdjust))
+            Color7 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L7, lightAdjust))
+            Color8 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust))
+            ColorBg0 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb0, lightAdjust))
+            ColorBg1 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb1, lightAdjust)).Alpha(&HBE)
+            SemiTransparent = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust)).Alpha(&H01)
             
             Color1Brush = New SolidColorBrush(Color1)
             Color2Brush = New SolidColorBrush(Color2)
@@ -547,17 +564,17 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         .L5 = 80, .L6 = 92, .L7 = 94, .L8 = 96,
         .G1 = 100, .G2 = 98, .G3 = 0
     }
-    
-    Public ReadOnly LightStaticColors = New ThemeStyleStaticColors(LightStyle)
-    
+
+    Public ReadOnly LightStaticColors As New ThemeStyleStaticColors(LightStyle)
+
     Public ReadOnly DarkStyle = New ThemeStyle With {
-        .L1 = 75, .L2 = 55, .L3 = 45, .L4 = 35,
-        .L5 = 20, .L6 = 8, .L7 = 6, .L8 = 4,
+        .L1 = 96, .L2 = 75, .L3 = 60, .L4 = 65,
+        .L5 = 40, .L6 = 35, .L7 = 30, .L8 = 25,
         .G1 = 15, .G2 = 35, .G3 = 100
     }
-    
-    Public ReadOnly DarkStaticColors = New ThemeStyleStaticColors(DarkStyle)
-    
+
+    Public ReadOnly DarkStaticColors As New ThemeStyleStaticColors(DarkStyle)
+
     Public Property StaticColors As ThemeStyleStaticColors = Nothing
     
     Public Property DynamicColors As ThemeStyleDynamicColors = Nothing
