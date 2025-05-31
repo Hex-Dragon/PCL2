@@ -1596,7 +1596,7 @@ OnLoaded:
         Try
             For Each SkinProperty In GetJson(SkinString)("properties")
                 If SkinProperty("name") = "textures" Then
-                    SkinValue = SkinProperty("value").Replace("http:", "https:")
+                    SkinValue = SkinProperty("value")
                     Exit Try
                 End If
             Next
@@ -1610,7 +1610,7 @@ OnLoaded:
         If SkinJson("textures") Is Nothing OrElse SkinJson("textures")("skin") Is Nothing OrElse SkinJson("textures")("skin")("url") Is Nothing Then
             Throw New Exception("用户未设置自定义皮肤")
         Else
-            SkinValue = SkinJson("textures")("skin")("url").ToString
+            SkinValue = SkinJson("textures")("skin")("url").ToString.Replace("http:", "https:")
         End If
         '保存缓存
         WriteIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", Uuid, SkinValue)
