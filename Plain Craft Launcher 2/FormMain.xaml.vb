@@ -78,7 +78,7 @@ Public Class FormMain
         '模式提醒
 #If DEBUG Then
         'Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
-        If Environment.GetEnvironmentVariable("PCL_DISABLE_DEBUG_HINT") Is Nothing Then
+        If Not Environment.GetEnvironmentVariable("PCL_DISABLE_DEBUG_HINT") = "True" Then
             MyMsgBox("当前运行的 PCL2 社区版为开发者版本, " & vbCrLf &
                      "如果不是社区开发者要求您这么做或您自己想要这么做，请向开发者反馈这个问题" & vbCrLf &
                      "可以添加 PCL_DISABLE_DEBUG_HINT 环境变量来隐藏这个提示", "开发者版本提示", IsWarn:=True)
