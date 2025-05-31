@@ -136,7 +136,6 @@
                 Setup.Set("LaunchFolderSelect", McFolderList(0).Path.Replace(Path, "$"))
                 CType(FrmSelectLeft.PanList.Children(1), MyListItem).Checked = True
             End If
-
         Catch ex As Exception
             Log(ex, "构建 Minecraft 文件夹列表 UI 出错", LogLevel.Feedback)
         Finally
@@ -158,6 +157,21 @@
             NewFolder = SelectFolder()
             If NewFolder = "" Then Exit Sub
             If NewFolder.Contains("!") OrElse NewFolder.Contains(";") Then Hint("Minecraft 文件夹路径中不能含有感叹号或分号！", HintType.Critical) : Exit Sub
+            '特殊目录检查（#6133）
+            If NewFolder.Contains(IO.Path.GetTempPath()) OrElse
+            NewFolder.ContainsF("WeChat") OrElse 
+            NewFolder.ContainsF("Tencent") OrElse 
+            NewFolder.ContainsF("Documents") OrElse 
+            NewFolder.ContainsF("cache") OrElse
+            NewFolder.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) OrElse
+            NewFolder.ContainsF("temp") Then
+                Select Case MyMsgBox($"在此处建立版本文件夹可能会导致清理系统垃圾时丢失游戏存档或游戏崩溃！{vbCrLf}强烈建议更换目录后再添加。", "环境警告", "继续添加","取消添加", IsWarn:=True)
+                Case 0
+
+                Case 1
+                    Exit Sub
+                End Select
+            End If
             '要求输入显示名称
             Dim SplitedNames As String() = NewFolder.TrimEnd("\").Split("\")
             Dim DefaultName As String = If(SplitedNames.Last = ".minecraft", If(SplitedNames.Count >= 3, SplitedNames(SplitedNames.Count - 2), ""), SplitedNames.Last)
