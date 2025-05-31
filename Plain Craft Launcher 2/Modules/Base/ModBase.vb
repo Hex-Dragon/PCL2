@@ -3420,6 +3420,7 @@ Public Class AsyncImageSource
         Dim TargetUrl As String = Source, Retried As Boolean = False
         Try
 DownloadRetry:
+            Directory.CreateDirectory(IO.Path.GetDirectoryName(_TempDownloadingPath))
             Using Client As New WebClient()
                 Client.DownloadFile(TargetUrl, _TempDownloadingPath)
             End Using
