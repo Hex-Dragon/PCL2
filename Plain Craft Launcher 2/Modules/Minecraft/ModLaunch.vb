@@ -910,9 +910,7 @@ Exception:
     Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
         Dim Input As McLoginServer = Data.Input
         Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
-        Dim LogUsername As String = Input.UserName
-        If LogUsername.Contains("@") Then LogUsername = AccountFilter(LogUsername)
-        ProfileLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
+        ProfileLog("验证方式：" & Input.Description)
         Data.Progress = 0.05
         '尝试登录
         If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) Then

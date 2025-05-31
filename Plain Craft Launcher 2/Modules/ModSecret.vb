@@ -402,9 +402,6 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         ColorGray7 = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
         ColorGray8 = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
 
-        If ThemeNow = NewTheme AndAlso NewTheme >= 0 Then Return
-        If NewTheme >= 0 Then ThemeNow = NewTheme
-
         Color1 = New MyColor().FromHSL2(ColorHue, ColorSat * 0.2, 25 + ColorLightAdjust * 0.3)
         Color2 = New MyColor().FromHSL2(ColorHue, ColorSat, 45 + ColorLightAdjust)
         Color3 = New MyColor().FromHSL2(ColorHue, ColorSat, 55 + ColorLightAdjust)

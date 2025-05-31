@@ -150,7 +150,7 @@ Public Class MyLocalCompItem
         If Parent Is Nothing Then Return 'Mod 可能已被删除（#3824）
         '结束滑动
         If Mouse.LeftButton <> MouseButtonState.Pressed OrElse
-           TypeOf Mouse.DirectlyOver IsNot MyLocalModItem Then '#5771
+           TypeOf Mouse.DirectlyOver IsNot MyLocalCompItem Then '#5771
             Swiping = False
             Return
         End If
@@ -162,7 +162,7 @@ Public Class MyLocalCompItem
         '勾选所有范围中的项
         If SwipeStart = SwipeEnd Then Return
         For i = SwipeStart To SwipeEnd
-            Dim Item As MyLocalModItem = Elements(i)
+            Dim Item As MyLocalCompItem = Elements(i)
             Item.InitLate(Item, e)
             Item.Checked = CurrentSwipe.SwipeToState
         Next

@@ -1057,7 +1057,7 @@ NoSubtitle:
 
 #Region "拒绝 1.13- Quilt（这个版本根本没有 Quilt）"
 
-        If Request.ModLoader = CompModLoaderType.Quilt AndAlso VersionSortInteger(If(Request.GameVersion, "1.15"), "1.14") = -1 Then
+        If Request.ModLoader = CompLoaderType.Quilt AndAlso VersionSortInteger(If(Request.GameVersion, "1.15"), "1.14") = -1 Then
             Throw New Exception("Quilt 不支持 Minecraft " & Request.GameVersion)
         End If
 
@@ -1150,11 +1150,11 @@ Retry:
 
         '在 1.14-，部分老 Mod 没有设置支持的加载器，因此添加 Forge 筛选就会出现遗漏
         '所以，在发起请求时不筛选加载器，然后在返回的结果中自行筛除不是 Forge 的 Mod
-        Dim IsOldForgeRequest = Request.ModLoader = CompModLoaderType.Forge AndAlso Request.GameVersion?.Contains(".") AndAlso Val(Request.GameVersion.Split(".")(1)) < 14
-        If IsOldForgeRequest Then Request.ModLoader = CompModLoaderType.Any
+        Dim IsOldForgeRequest = Request.ModLoader = CompLoaderType.Forge AndAlso Request.GameVersion?.Contains(".") AndAlso Val(Request.GameVersion.Split(".")(1)) < 14
+        If IsOldForgeRequest Then Request.ModLoader = CompLoaderType.Any
         Dim CurseForgeUrl As String = Request.GetCurseForgeAddress()
         Dim ModrinthUrl As String = Request.GetModrinthAddress()
-        If IsOldForgeRequest Then Request.ModLoader = CompModLoaderType.Forge '设置回去
+        If IsOldForgeRequest Then Request.ModLoader = CompLoaderType.Forge '设置回去
 
         Try
 
@@ -1259,7 +1259,7 @@ Retry:
 
         '筛除不是 Forge 的 Mod
         If IsOldForgeRequest Then
-            RawResults = RawResults.Where(Function(p) Not p.ModLoaders.Any() OrElse p.ModLoaders.Contains(CompModLoaderType.Forge)).ToList
+            RawResults = RawResults.Where(Function(p) Not p.ModLoaders.Any() OrElse p.ModLoaders.Contains(CompLoaderType.Forge)).ToList
         End If
 
 #End Region
