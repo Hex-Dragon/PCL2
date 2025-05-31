@@ -363,6 +363,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 Return L7
             End Get
         End Property
+        
+        Public Property Sa0 As Double
+        Public Property Sa1 As Double
     End Class
     
     Private ReadOnly Property NewColor As MyColor
@@ -415,7 +418,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Gray8 = NewColor.FromHSL2(0, 0, style.L8)
             White = NewColor.FromHSL2(0, 0, style.G2)
             HalfWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&H55)
-            SemiWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HBB)
+            SemiWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HDB)
             Transparent = NewColor.FromHSL2(0, 0, style.L8).Alpha(0)
             Memory = NewColor.FromHSL2(0, 0, style.G3)
             Tooltip = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HE5)
@@ -482,14 +485,17 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Public ReadOnly SemiTransparentBrush As SolidColorBrush
         
         Public Sub New(style As ThemeStyle, hue As Integer, sat As Integer, lightAdjust As Integer)
-            Color1 = NewColor.FromHSL2(hue, 15, style.L1)
-            Color2 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L2, lightAdjust))
-            Color3 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L3, lightAdjust))
-            Color4 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L4, lightAdjust))
-            Color5 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L5, lightAdjust))
-            Color6 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L6, lightAdjust))
-            Color7 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L7, lightAdjust))
-            Color8 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust))
+            Dim sat0 = sat * style.Sa0
+            Dim sat1 = sat * style.Sa1
+            
+            Color1 = NewColor.FromHSL2(hue, sat0 * 0.2, style.L1)
+            Color2 = NewColor.FromHSL2(hue, sat0, AdjustLight(style.L2, lightAdjust))
+            Color3 = NewColor.FromHSL2(hue, sat0, AdjustLight(style.L3, lightAdjust))
+            Color4 = NewColor.FromHSL2(hue, sat0, AdjustLight(style.L4, lightAdjust))
+            Color5 = NewColor.FromHSL2(hue, sat1, AdjustLight(style.L5, lightAdjust))
+            Color6 = NewColor.FromHSL2(hue, sat1, AdjustLight(style.L6, lightAdjust))
+            Color7 = NewColor.FromHSL2(hue, sat1, AdjustLight(style.L7, lightAdjust))
+            Color8 = NewColor.FromHSL2(hue, sat1, AdjustLight(style.L8, lightAdjust))
             ColorBg0 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb0, lightAdjust))
             ColorBg1 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb1, lightAdjust)).Alpha(&HBE)
             SemiTransparent = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust)).Alpha(&H01)
@@ -510,16 +516,16 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     
     Public ReadOnly LightStyle = New ThemeStyle With {
         .L1 = 25, .L2 = 45, .L3 = 55, .L4 = 65,
-        .L5 = 80, .L6 = 92, .L7 = 94, .L8 = 96,
-        .G1 = 100, .G2 = 98, .G3 = 0
+        .L5 = 80, .L6 = 91, .L7 = 95, .L8 = 97,
+        .G1 = 100, .G2 = 98, .G3 = 0, .Sa0 = 1, .Sa1 = 1
     }
 
     Public ReadOnly LightStaticColors As New ThemeStyleStaticColors(LightStyle)
 
     Public ReadOnly DarkStyle = New ThemeStyle With {
         .L1 = 96, .L2 = 75, .L3 = 60, .L4 = 65,
-        .L5 = 40, .L6 = 35, .L7 = 30, .L8 = 25,
-        .G1 = 15, .G2 = 35, .G3 = 100
+        .L5 = 45, .L6 = 25, .L7 = 22, .L8 = 20,
+        .G1 = 15, .G2 = 20, .G3 = 100, .Sa0 = 1, .Sa1 = 0.4
     }
 
     Public ReadOnly DarkStaticColors As New ThemeStyleStaticColors(DarkStyle)
@@ -558,6 +564,14 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Function
     
     Public Sub ThemeRefreshColor()
+        If IsDarkMode Then
+            ColorHue = 205
+            ColorSat = 90
+        Else
+            ColorHue = 210
+            ColorSat = 85
+        End If
+        
         Dim res = Application.Current.Resources
         StaticColors = If(IsDarkMode, DarkStaticColors, LightStaticColors)
         DynamicColors = New ThemeStyleDynamicColors(If(IsDarkMode, DarkStyle, LightStyle), ColorHue, ColorSat, ColorLightAdjust)
