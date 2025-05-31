@@ -8,6 +8,7 @@ Public Class UpdateAssetInfo
     Public Property upd_time As String
     Public Property downloads As List(Of String)
     Public Property sha256 As String
+    Public Property changelog As String
 End Class
 
 Public Class UpdateAssetVersionInfo

@@ -246,9 +246,9 @@ Public Class ModSetup
             End Try
         End Sub
 
-        Private ReadOnly _SetLock As New Object()
+        Private ReadOnly _OpLock As New Object()
         Public Sub [Set](key As String, value As String)
-            SyncLock _SetLock
+            SyncLock _OpLock
                 _ConfigData(key) = value
                 Save()
             End SyncLock
@@ -263,8 +263,10 @@ Public Class ModSetup
         End Function
 
         Public Sub Remove(key As String)
-            _ConfigData.Remove(key)
-            Save()
+            SyncLock _OpLock
+                _ConfigData.Remove(key)
+                Save()
+            End SyncLock
         End Sub
 
         Public Function Contains(key As String) As Boolean

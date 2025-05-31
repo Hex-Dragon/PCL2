@@ -293,6 +293,7 @@
     <Compile Include="Modules\Updates\EnumUpdateChannel.vb" />
     <Compile Include="Modules\Updates\IUpdateSource.vb" />
     <Compile Include="Modules\Updates\UpdateInfoModel.vb" />
+    <Compile Include="Modules\Updates\UpdatesRandomModel.vb" />
     <Compile Include="Modules\Updates\UpdatesMinioModel.vb" />
     <Compile Include="Modules\Updates\UpdatesMirrorChyanModel.vb" />
     <Compile Include="Modules\Updates\VersionDataModel.vb" />

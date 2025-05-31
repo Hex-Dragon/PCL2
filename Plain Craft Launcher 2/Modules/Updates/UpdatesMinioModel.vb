@@ -2,8 +2,9 @@
     Implements IUpdateSource
 
     Private _baseUrl As String
-    Public Sub New(BaseUrl As String)
+    Public Sub New(BaseUrl As String, Optional Name As String = "Minio")
         _baseUrl = BaseUrl
+        SourceName = Name
     End Sub
     Public Function IsAvailable() As Boolean Implements IUpdateSource.IsAvailable
         Return Not String.IsNullOrWhiteSpace(_baseUrl)
@@ -45,7 +46,7 @@
             .sha256 = targetData.sha256,
             .version_code = targetData.version.code,
             .version_name = targetData.version.name,
-            .Desc = $"此版本发布于 {DateTime.Parse(targetData.upd_time).ToLocalTime().ToString()}"}
+            .Desc = targetData.changelog}
     End Function
 
     Public Function GetAnnouncementList() As AnnouncementInfoModel Implements IUpdateSource.GetAnnouncementList
