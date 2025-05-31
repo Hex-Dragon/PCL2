@@ -15,7 +15,6 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="卡通风" Tag="/cartoon" />
 
         <local:MyComboBoxItem Content="特性" IsEnabled="False" />
-        <local:MyComboBoxItem Margin="15,0,0,0" Content="原版可用" Tag="/vanilla" ToolTip="作为资源包加载，可以直接在原版游戏里使用。" ToolTipService.HorizontalOffset="70" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="彩色光照" Tag="/colored-lighting" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="路径追踪" Tag="/path-tracing" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="PBR" Tag="/pbr" />
@@ -26,6 +25,10 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="低" Tag="/low" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="中" Tag="/medium" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="高" Tag="/high" />
-        
+
+        <local:MyComboBoxItem Content="加载器" IsEnabled="False" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="原版可用s" Tag="/vanilla" ToolTip="作为资源包加载，可以直接在原版游戏里使用。" ToolTipService.HorizontalOffset="70" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="Iris" Tag="/iris" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="OptiFine" Tag="/optifine" />
     </local:PageComp>
 </local:MyPageRight>

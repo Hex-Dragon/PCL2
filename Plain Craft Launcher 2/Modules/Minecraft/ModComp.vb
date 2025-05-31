@@ -491,6 +491,9 @@
                             Case "path-tracing" : Tags.Add("路径追踪")
                             Case "pbr" : Tags.Add("PBR")
                             Case "reflections" : Tags.Add("反射")
+
+                            Case "iris" : Tags.Add("Iris")
+                            Case "optifine" : Tags.Add("OptiFine")
                             Case "vanilla" : Tags.Add("原版可用")
                         End Select
                     Next
@@ -947,38 +950,39 @@ NoSubtitle:
     ''' 根据搜索请求获取一系列的工程列表。需要基于加载器运行。
     ''' </summary>
     Public Sub CompProjectsGet(Task As LoaderTask(Of CompProjectRequest, Integer))
-        Dim Storage = Task.Input.Storage '避免多线程问题
+        Dim Request As CompProjectRequest = Task.Input
+        Dim Storage = Request.Storage '避免多线程问题
 
-        If Task.Input.Storage.Results.Count >= Task.Input.TargetResultCount Then
-            Log($"[Comp] 已有 {Task.Input.Storage.Results.Count} 个结果，多于所需的 {Task.Input.TargetResultCount} 个结果，结束处理")
-            Exit Sub
-        ElseIf Not Task.Input.CanContinue Then
-            If Not Task.Input.Storage.Results.Any() Then
+        If Request.Storage.Results.Count >= Request.TargetResultCount Then
+            Log($"[Comp] 已有 {Request.Storage.Results.Count} 个结果，多于所需的 {Request.TargetResultCount} 个结果，结束处理")
+            Return
+        ElseIf Not Request.CanContinue Then
+            If Not Request.Storage.Results.Any() Then
                 Throw New Exception("没有符合条件的结果")
             Else
-                Log($"[Comp] 已有 {Task.Input.Storage.Results.Count} 个结果，少于所需的 {Task.Input.TargetResultCount} 个结果，但无法继续获取，结束处理")
-                Exit Sub
+                Log($"[Comp] 已有 {Request.Storage.Results.Count} 个结果，少于所需的 {Request.TargetResultCount} 个结果，但无法继续获取，结束处理")
+                Return
             End If
         End If
 
 #Region "拒绝 1.13- Quilt（这个版本根本没有 Quilt）"
 
-        If Task.Input.ModLoader = CompModLoaderType.Quilt AndAlso VersionSortInteger(If(Task.Input.GameVersion, "1.15"), "1.14") = -1 Then
-            Throw New Exception("Quilt 不支持 Minecraft " & Task.Input.GameVersion)
+        If Request.ModLoader = CompModLoaderType.Quilt AndAlso VersionSortInteger(If(Request.GameVersion, "1.15"), "1.14") = -1 Then
+            Throw New Exception("Quilt 不支持 Minecraft " & Request.GameVersion)
         End If
 
 #End Region
 
 #Region "处理搜索文本，赋值回 Task.Input.SearchText"
 
-        Dim RawFilter As String = If(Task.Input.SearchText, "").Trim
-        Task.Input.SearchText = RawFilter
+        Dim RawFilter As String = If(Request.SearchText, "").Trim
+        Request.SearchText = RawFilter
         RawFilter = RawFilter.ToLower
         Log("[Comp] 工程列表搜索原始文本：" & RawFilter)
 
         '中文请求关键字处理
         Dim IsChineseSearch As Boolean = RegexCheck(RawFilter, "[\u4e00-\u9fbb]") AndAlso Not String.IsNullOrEmpty(RawFilter)
-        If IsChineseSearch AndAlso (Task.Input.Type = CompType.Mod OrElse Task.Input.Type = CompType.DataPack) Then
+        If IsChineseSearch AndAlso (Request.Type = CompType.Mod OrElse Request.Type = CompType.DataPack) Then
             '构造搜索请求
             Dim SearchEntries As New List(Of SearchEntry(Of CompDatabaseEntry))
             For Each Entry In CompDatabase
@@ -991,7 +995,7 @@ NoSubtitle:
                 })
             Next
             '获取搜索结果
-            Dim SearchResults = Search(SearchEntries, Task.Input.SearchText, 3)
+            Dim SearchResults = Search(SearchEntries, Request.SearchText, 3)
             If Not SearchResults.Any() Then Throw New Exception("无搜索结果，请尝试搜索英文名称")
             Dim SearchResult As String = ""
             For i = 0 To Math.Min(4, SearchResults.Count - 1) '就算全是准确的，也最多只要 5 个
@@ -1009,14 +1013,14 @@ NoSubtitle:
                 If SearchResult.Split(" ").Count > 3 AndAlso {"ftb"}.Contains(Word.ToLower) Then Continue For
                 RealFilter += Word.TrimStart("{[(").TrimEnd("}])") & " "
             Next
-            Task.Input.SearchText = RealFilter
+            Request.SearchText = RealFilter
             Log("[Comp] 中文搜索最终关键词：" & RealFilter, LogLevel.Developer)
         End If
 
         '驼峰英文请求关键字处理
-        Dim SpacedKeywords = Task.Input.SearchText.RegexReplace("([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)", "$& ")
-        Dim ConnectedKeywords = Task.Input.SearchText.Replace(" ", "")
-        Dim AllPossibleKeywords = (SpacedKeywords & " " & If(IsChineseSearch, Task.Input.SearchText, ConnectedKeywords & " " & RawFilter)).ToLower
+        Dim SpacedKeywords = Request.SearchText.RegexReplace("([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)", "$& ")
+        Dim ConnectedKeywords = Request.SearchText.Replace(" ", "")
+        Dim AllPossibleKeywords = (SpacedKeywords & " " & If(IsChineseSearch, Request.SearchText, ConnectedKeywords & " " & RawFilter)).ToLower
 
         '最终处理关键字：分割、去重
         Dim RightKeywords As New List(Of String)
@@ -1030,15 +1034,15 @@ NoSubtitle:
             RightKeywords.Add(Keyword)
         Next
         If RawFilter.Length > 0 AndAlso Not RightKeywords.Any() Then
-            Task.Input.SearchText = RawFilter '全都被过滤掉了
+            Request.SearchText = RawFilter '全都被过滤掉了
         Else
-            Task.Input.SearchText = Join(RightKeywords.Distinct.ToList, " ").ToLower
+            Request.SearchText = Join(RightKeywords.Distinct.ToList, " ").ToLower
         End If
 
         '例外项：OptiForge、OptiFabric（拆词后因为包含 Forge/Fabric 导致无法搜到实际的 Mod）
-        If RawFilter.Replace(" ", "").ContainsF("optiforge", True) Then Task.Input.SearchText = "optiforge"
-        If RawFilter.Replace(" ", "").ContainsF("optifabric", True) Then Task.Input.SearchText = "optifabric"
-        Log("[Comp] 工程列表搜索最终文本：" & Task.Input.SearchText, LogLevel.Debug)
+        If RawFilter.Replace(" ", "").ContainsF("optiforge", True) Then Request.SearchText = "optiforge"
+        If RawFilter.Replace(" ", "").ContainsF("optifabric", True) Then Request.SearchText = "optifabric"
+        Log("[Comp] 工程列表搜索最终文本：" & Request.SearchText, LogLevel.Debug)
         Task.Progress = 0.1
 
 #End Region
@@ -1054,10 +1058,17 @@ Retry:
         Dim ModrinthThread As Thread = Nothing
         Dim ResultsLock As New Object
 
+        '在 1.14-，部分老 Mod 没有设置支持的加载器，因此添加 Forge 筛选就会出现遗漏
+        '所以，在发起请求时不筛选加载器，然后在返回的结果中自行筛除不是 Forge 的 Mod
+        Dim IsOldForgeRequest = Request.ModLoader = CompModLoaderType.Forge AndAlso Request.GameVersion?.Contains(".") AndAlso Val(Request.GameVersion.Split(".")(1)) < 14
+        If IsOldForgeRequest Then Request.ModLoader = CompModLoaderType.Any
+        Dim CurseForgeUrl As String = Request.GetCurseForgeAddress()
+        Dim ModrinthUrl As String = Request.GetModrinthAddress()
+        If IsOldForgeRequest Then Request.ModLoader = CompModLoaderType.Forge '设置回去
+
         Try
 
             '启动 CurseForge 线程
-            Dim CurseForgeUrl As String = Task.Input.GetCurseForgeAddress()
             Dim CurseForgeFailed As Boolean = False
             If CurseForgeUrl IsNot Nothing Then
                 CurseForgeThread = RunInNewThread(
@@ -1070,7 +1081,7 @@ Retry:
                         Dim ProjectList As New List(Of CompProject)
                         For Each JsonEntry As JObject In RequestResult("data")
                             Dim Project As New CompProject(JsonEntry)
-                            If Task.Input.Type = CompType.ResourcePack AndAlso Project.Tags.Contains("数据包") Then Continue For 'CurseForge 将一些数据包分类成了资源包
+                            If Request.Type = CompType.ResourcePack AndAlso Project.Tags.Contains("数据包") Then Continue For 'CurseForge 将一些数据包分类成了资源包
                             ProjectList.Add(Project)
                         Next
                         '更新结果
@@ -1090,7 +1101,6 @@ Retry:
             End If
 
             '启动 Modrinth 线程
-            Dim ModrinthUrl As String = Task.Input.GetModrinthAddress()
             Dim ModrinthFailed As Boolean = False
             If ModrinthUrl IsNot Nothing Then
                 ModrinthThread = RunInNewThread(
@@ -1123,9 +1133,9 @@ Retry:
 
             '等待线程结束
             If CurseForgeThread IsNot Nothing Then CurseForgeThread.Join()
-            If Task.IsAborted Then Exit Sub '会自动触发 Finally
+            If Task.IsAborted Then Return '会自动触发 Finally
             If ModrinthThread IsNot Nothing Then ModrinthThread.Join()
-            If Task.IsAborted Then Exit Sub
+            If Task.IsAborted Then Return
 
             '确保存在结果
             Storage.ErrorMessage = Nothing
@@ -1133,11 +1143,11 @@ Retry:
                 If [Error] IsNot Nothing Then
                     Throw [Error]
                 Else
-                    If IsChineseSearch AndAlso Not (Task.Input.Type = CompType.Mod OrElse Task.Input.Type = CompType.DataPack) Then
+                    If IsChineseSearch AndAlso Not (Request.Type = CompType.Mod OrElse Request.Type = CompType.DataPack) Then
                         Throw New Exception("没有搜索结果，请尝试使用英文搜索")
-                    ElseIf Task.Input.Source = CompSourceType.CurseForge AndAlso Task.Input.Tag.StartsWithF("/") Then
+                    ElseIf Request.Source = CompSourceType.CurseForge AndAlso Request.Tag.StartsWithF("/") Then
                         Throw New Exception("CurseForge 不兼容所选的类型")
-                    ElseIf Task.Input.Source = CompSourceType.Modrinth AndAlso Task.Input.Tag.EndsWithF("/") Then
+                    ElseIf Request.Source = CompSourceType.Modrinth AndAlso Request.Tag.EndsWithF("/") Then
                         Throw New Exception("Modrinth 不兼容所选的类型")
                     Else
                         Throw New Exception("没有搜索结果")
@@ -1146,16 +1156,21 @@ Retry:
             ElseIf [Error] IsNot Nothing Then
                 '有结果但是有错误
                 If CurseForgeFailed Then
-                    Storage.ErrorMessage = $"无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
+                    Storage.ErrorMessage = $"无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，搜索结果可能不全。{vbCrLf}请稍后重试，或使用 VPN 以改善网络环境。"
                 Else
-                    Storage.ErrorMessage = $"无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
+                    Storage.ErrorMessage = $"无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，搜索结果可能不全。{vbCrLf}请稍后重试，或使用 VPN 以改善网络环境。"
                 End If
             End If
 
         Finally
-            If CurseForgeThread IsNot Nothing Then CurseForgeThread.Interrupt()
-            If ModrinthThread IsNot Nothing Then ModrinthThread.Interrupt()
+            CurseForgeThread?.Interrupt()
+            ModrinthThread?.Interrupt()
         End Try
+
+        '筛除不是 Forge 的 Mod
+        If IsOldForgeRequest Then
+            RawResults = RawResults.Where(Function(p) Not p.ModLoaders.Any() OrElse p.ModLoaders.Contains(CompModLoaderType.Forge)).ToList
+        End If
 
 #End Region
 
@@ -1177,9 +1192,9 @@ Retry:
 
 #Region "检查结果数量，如果不足且可继续，会继续加载下一页"
 
-        If RealResults.Count + Storage.Results.Count < Task.Input.TargetResultCount Then
-            Log($"[Comp] 总结果数需求最少 {Task.Input.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
-            If Task.Input.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
+        If RealResults.Count + Storage.Results.Count < Request.TargetResultCount Then
+            Log($"[Comp] 总结果数需求最少 {Request.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
+            If Request.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
                 Log("[Comp] 将继续尝试加载下一页")
                 GoTo Retry
             Else
@@ -1194,7 +1209,7 @@ Retry:
         Dim Scores As New Dictionary(Of CompProject, Double) '排序分
         Dim GetDownloadCountMult =
         Function(Project As CompProject) As Double
-            Select Case Task.Input.Type
+            Select Case Request.Type
                 Case CompType.Mod, CompType.ModPack
                     Return If(Project.FromCurseForge, 1, 7)
                 Case CompType.DataPack
@@ -1205,7 +1220,7 @@ Retry:
                     Return 1
             End Select
         End Function
-        If String.IsNullOrEmpty(Task.Input.SearchText) Then
+        If String.IsNullOrEmpty(Request.SearchText) Then
             '如果没有搜索文本，按下载量将结果排序
             For Each Result As CompProject In RealResults
                 Scores.Add(Result, Result.DownloadCount * GetDownloadCountMult(Result))
@@ -1638,7 +1653,7 @@ Retry:
         '如果为整合包就不会有 Dependencies 信息，所以不用管
         Dim Deps As List(Of String) = Files.SelectMany(Function(f) f.Dependencies).Distinct.ToList()
         Deps.Sort()
-        If Not Deps.Any() Then Exit Sub
+        If Not Deps.Any() Then Return
         Deps = Deps.Where(
         Function(dep)
             If Not CompProjectCache.ContainsKey(dep) Then Log($"[Comp] 未找到 ID {dep} 的前置信息", LogLevel.Debug)

@@ -127,7 +127,7 @@ Public Module ModMinecraft
     ''' </summary>
     Public Sub McFolderLauncherProfilesJsonCreate(Folder As String)
         Try
-            If File.Exists(Folder & "launcher_profiles.json") Then Exit Sub
+            If File.Exists(Folder & "launcher_profiles.json") Then Return
             Dim ResultJson As String =
 "{
     ""profiles"":  {
@@ -165,10 +165,10 @@ Public Module ModMinecraft
             Return _McVersionCurrent
         End Get
         Set(value As McVersion)
-            If ReferenceEquals(_McVersionLast, value) Then Exit Property
+            If ReferenceEquals(_McVersionLast, value) Then Return
             _McVersionCurrent = value '由于有可能是 Nothing，导致无法初始化，才得这样弄一圈
             _McVersionLast = value
-            If value Is Nothing Then Exit Property
+            If value Is Nothing Then Return
             '重置缓存的 Mod 文件夹
             PageDownloadCompDetail.CachedFolder = Nothing
             '统一通行证重判
@@ -208,6 +208,7 @@ Public Module ModMinecraft
         Public ReadOnly Property PathIndie As String
             Get
                 If Setup.IsUnset("VersionArgumentIndieV2", Version:=Me) Then
+                    If Not IsLoaded Then Load()
                     '决定该版本是否应该被隔离
                     Dim ShouldBeIndie =
                     Function() As Boolean
@@ -224,17 +225,17 @@ Public Module ModMinecraft
                             Return True
                         End If
                         '根据全局的默认设置决定是否隔离
-                        Log($"[Minecraft] 版本隔离初始化（{Name}）：从全局默认设置中（{Setup.Get("LaunchArgumentIndieV2")}）判断")
-                        Dim IsRelease As Boolean = State = McVersionState.Fool OrElse State = McVersionState.Old OrElse State = McVersionState.Snapshot
+                        Dim IsRelease As Boolean = State <> McVersionState.Fool AndAlso State <> McVersionState.Old AndAlso State <> McVersionState.Snapshot
+                        Log($"[Minecraft] 版本隔离初始化（{Name}）：从全局默认设置中（{Setup.Get("LaunchArgumentIndieV2")}）判断，State {GetStringFromEnum(State)}，IsRelease {IsRelease}，Modable {Modable}")
                         Select Case Setup.Get("LaunchArgumentIndieV2")
                             Case 0 '关闭
                                 Return False
                             Case 1 '仅隔离可安装 Mod 的版本
                                 Return Modable
                             Case 2 '仅隔离非正式版
-                                Return IsRelease
+                                Return Not IsRelease
                             Case 3 '隔离非正式版与可安装 Mod 的版本
-                                Return Modable OrElse IsRelease
+                                Return Not IsRelease OrElse Modable
                             Case Else '隔离所有版本
                                 Return True
                         End Select
@@ -1133,7 +1134,7 @@ Reload:
 
             '改变当前选择的版本
 OnLoaded:
-            If Loader.IsAborted Then Exit Sub
+            If Loader.IsAborted Then Return
             If McVersionList.Any(Function(v) v.Key <> McVersionCardType.Error) Then
                 '尝试读取已储存的选择
                 Dim SavedSelection As String = ReadIni(Path & "PCL.ini", "Version")
@@ -1145,7 +1146,7 @@ OnLoaded:
                                 McVersionCurrent = Version
                                 Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
                                 Log("[Minecraft] 选择该文件夹储存的 Minecraft 版本：" & McVersionCurrent.Path)
-                                Exit Sub
+                                Return
                             End If
                         Next
                     Next
@@ -1595,7 +1596,7 @@ OnLoaded:
         Try
             For Each SkinProperty In GetJson(SkinString)("properties")
                 If SkinProperty("name") = "textures" Then
-                    SkinValue = SkinProperty("value")
+                    SkinValue = SkinProperty("value").Replace("http:", "https:")
                     Exit Try
                 End If
             Next
@@ -2263,7 +2264,7 @@ OnLoaded:
                 End If
             Next
             '进行提示
-            If Version Is Nothing Then Exit Sub
+            If Version Is Nothing Then Return
             Dim Time As Date = Version("releaseTime")
             Dim MsgBoxText As String = $"新版本：{VersionName}{vbCrLf}" &
                 If((Date.Now - Time).TotalDays > 1, "更新时间：" & Time.ToString, "更新于：" & GetTimeSpanString(Time - Date.Now, False))
@@ -2368,26 +2369,33 @@ NextEntry:
     End Function
 
     ''' <summary>
-    ''' 为邮箱地址或手机号账号进行部分打码。
+    ''' 打码字符串中的 AccessToken。
     ''' </summary>
-    Public Function AccountFilter(Account As String) As String
-        If Account.Contains("@") Then
-            '是邮箱
-            Dim Splits = Account.Split("@")
-            'If Splits(0).Count >= 6 Then
-            '    '前半部分至少 6 位，屏蔽后 4 位
-            '    Return Mid(Splits(0), 1, Splits(0).Count - 4) & "****" & "@" & Splits(1)
-            'Else
-            '前半部分不到 6 位，返回全 *
-            Return "".PadLeft(Splits(0).Count, "*") & "@" & Splits(1)
-            'End If
-        ElseIf Account.Count >= 6 Then
-            '至少 6 位，屏蔽后 4 位
-            Return Mid(Account, 1, Account.Count - 4) & "****"
-        Else
-            '不到 6 位，返回全 *
-            Return "".PadLeft(Account.Count, "*")
+    Public Function FilterAccessToken(Raw As String, FilterChar As Char) As String
+        '打码 "accessToken " 后的内容
+        If Raw.Contains("accessToken ") Then
+            For Each Token In RegexSearch(Raw, "(?<=accessToken ([^ ]{5}))[^ ]+(?=[^ ]{5})")
+                Raw = Raw.Replace(Token, New String(FilterChar, Token.Count))
+            Next
         End If
+        '打码当前登录的结果
+        Dim AccessToken As String = McLoginLoader.Output.AccessToken
+        If AccessToken IsNot Nothing AndAlso AccessToken.Length >= 10 AndAlso Raw.ContainsF(AccessToken, True) AndAlso
+            McLoginLoader.Output.Uuid <> McLoginLoader.Output.AccessToken Then 'UUID 和 AccessToken 一样则不打码
+            Raw = Raw.Replace(AccessToken, Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Right(AccessToken, 5))
+        End If
+        Return Raw
+    End Function
+    ''' <summary>
+    ''' 打码字符串中的 Windows 用户名。
+    ''' </summary>
+    Public Function FilterUserName(Raw As String, FilterChar As Char) As String
+        If Raw.Contains(":\Users\") Then
+            For Each Token In RegexSearch(Raw, "(?<=:\\Users\\)[^\\]+")
+                Raw = Raw.Replace(Token, New String(FilterChar, Token.Count))
+            Next
+        End If
+        Return Raw
     End Function
 
 End Module

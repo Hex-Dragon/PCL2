@@ -98,7 +98,7 @@
         ''' 检查并获取 Java 详细信息。在 Java 存在异常时抛出错误。
         ''' </summary>
         Public Sub Check()
-            If IsChecked Then Exit Sub
+            If IsChecked Then Return
             Dim Output As String = Nothing
             Try
                 '确定文件存在
@@ -107,6 +107,9 @@
                 End If
                 If Not File.Exists(PathFolder & "java.exe") Then
                     Throw New FileNotFoundException("未找到 java.exe 文件", PathFolder & "java.exe")
+                End If
+                If File.Exists(PathFolder & "pdf-bookmark") Then
+                    Throw New Exception("不兼容 PDF Bookmark 的 Java") '#5326
                 End If
                 IsJre = Not File.Exists(PathFolder & "javac.exe")
                 '运行 -version
@@ -668,7 +671,7 @@ Wait:
     Private Sub JavaSearchFolder(OriginalPath As DirectoryInfo, ByRef Results As Dictionary(Of String, Boolean), Source As Boolean, Optional IsFullSearch As Boolean = False)
         Try
             '确认目录存在
-            If Not OriginalPath.Exists Then Exit Sub
+            If Not OriginalPath.Exists Then Return
             Dim Path As String = OriginalPath.FullName.Replace("\\", "\")
             If Not Path.EndsWithF("\") Then Path += "\"
             '若该目录有 Java，则加入结果

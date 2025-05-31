@@ -71,7 +71,7 @@
             </StackPanel>
         </local:MyCard>
         <StackPanel x:Name="PanContent">
-            <local:MyHint x:Name="HintError" Text="无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。" IsWarn="True" Margin="0,0,0,15" />
+            <local:MyHint x:Name="HintError" HasBorder="True" Text="无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，搜索结果可能不全。&#xa;请稍后重试，或使用 VPN 以改善网络环境。" Theme="Yellow" Margin="0,0,0,15" />
             <local:MyCard x:Name="CardProjects" UseAnimation="False">
                 <StackPanel x:Name="PanProjects" Margin="12" />
             </local:MyCard>
