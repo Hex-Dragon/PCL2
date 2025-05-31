@@ -314,56 +314,219 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 #Region "主题"
 
     Public IsDarkMode As Boolean = False
+    
+    Public ReadOnly Property ColorGray1 As MyColor
+        Get
+            Return If(StaticColors?.Gray1, LightStaticColors.Gray1)
+        End Get
+    End Property
+    
+    Public ReadOnly Property ColorGray4 As MyColor
+        Get
+            Return If(StaticColors?.Gray4, LightStaticColors.Gray4)
+        End Get
+    End Property
 
-    Public ColorDark1 As New MyColor(235, 235, 235)
-    Public ColorDark2 As New MyColor(102, 204, 255)
-    Public ColorDark3 As New MyColor(51, 187, 255)
-    Public ColorDark6 As New MyColor(93, 101, 103)
-    Public ColorDark7 As New MyColor(69, 75, 79)
-    Public ColorDark8 As New MyColor(59, 64, 65)
-    Public ColorLight1 As New MyColor(52, 61, 74)
-    Public ColorLight2 As New MyColor(11, 91, 203)
-    Public ColorLight3 As New MyColor(19, 112, 243)
-    Public ColorLight6 As New MyColor(213, 230, 253)
-    Public ColorLight7 As New MyColor(222, 236, 253)
-    Public ColorLight8 As New MyColor(234, 242, 254)
-    Public Color1 As MyColor = If(IsDarkMode, ColorDark1, ColorLight1)
-    Public Color2 As MyColor = If(IsDarkMode, ColorDark2, ColorLight2)
-    Public Color3 As MyColor = If(IsDarkMode, ColorDark3, ColorLight3)
-    'Public Color2 As New MyColor(11, 91, 203)
-    'Public Color3 As New MyColor(19, 112, 243)
-    Public Color4 As New MyColor(72, 144, 245)
-    Public Color5 As New MyColor(150, 192, 249)
-    Public Color6 As MyColor = If(IsDarkMode, ColorDark6, ColorLight6)
-    Public Color7 As MyColor = If(IsDarkMode, ColorDark7, ColorLight7)
-    Public Color8 As MyColor = If(IsDarkMode, ColorDark8, ColorLight8)
-    Public ColorBg0 As New MyColor(150, 192, 249)
-    Public ColorBg1 As New MyColor(190, Color7)
-    Public ColorGrayDark1 As New MyColor(245, 245, 245)
-    Public ColorGrayDark2 As New MyColor(240, 240, 240)
-    Public ColorGrayDark3 As New MyColor(235, 235, 235)
-    Public ColorGrayDark4 As New MyColor(204, 204, 204)
-    Public ColorGrayDark5 As New MyColor(166, 166, 166)
-    Public ColorGrayDark6 As New MyColor(140, 140, 140)
-    Public ColorGrayDark7 As New MyColor(115, 115, 115)
-    Public ColorGrayDark8 As New MyColor(64, 64, 64)
-    Public ColorGrayLight1 As New MyColor(64, 64, 64)
-    Public ColorGrayLight2 As New MyColor(115, 115, 115)
-    Public ColorGrayLight3 As New MyColor(140, 140, 140)
-    Public ColorGrayLight4 As New MyColor(166, 166, 166)
-    Public ColorGrayLight5 As New MyColor(204, 204, 204)
-    Public ColorGrayLight6 As New MyColor(235, 235, 235)
-    Public ColorGrayLight7 As New MyColor(240, 240, 240)
-    Public ColorGrayLight8 As New MyColor(245, 245, 245)
-    Public ColorGray1 As MyColor = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
-    Public ColorGray2 As MyColor = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
-    Public ColorGray3 As MyColor = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
-    Public ColorGray4 As MyColor = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
-    Public ColorGray5 As MyColor = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
-    Public ColorGray6 As MyColor = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
-    Public ColorGray7 As MyColor = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
-    Public ColorGray8 As MyColor = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
-    Public ColorSemiTransparent As New MyColor(1, Color8)
+    Public ReadOnly Property ColorGray5 As MyColor
+        Get
+            Return If(StaticColors?.Gray5, LightStaticColors.Gray5)
+        End Get
+    End Property
+    
+    Public ReadOnly Property ColorSemiTransparent As MyColor
+        Get
+            Return DynamicColors.SemiTransparent
+        End Get
+    End Property
+
+    Public Class ThemeStyle
+        Public Property L1 As Integer
+        Public Property L2 As Integer
+        Public Property L3 As Integer
+        Public Property L4 As Integer
+        Public Property L5 As Integer
+        Public Property L6 As Integer
+        Public Property L7 As Integer
+        Public Property L8 As Integer
+        Public Property G1 As Integer
+        Public Property G2 As Integer
+        Public Property G3 As Integer
+        
+        Public ReadOnly Property Lb0 As Integer
+            Get
+                Return L5
+            End Get
+        End Property
+        
+        Public ReadOnly Property Lb1 As Integer
+            Get
+                Return L7
+            End Get
+        End Property
+    End Class
+    
+    Private ReadOnly Property NewColor As MyColor
+        Get
+            Return New MyColor()
+        End Get
+    End Property
+    
+    Public Class ThemeStyleStaticColors
+        Public ReadOnly Gray1 As Color
+        Public ReadOnly Gray2 As Color
+        Public ReadOnly Gray3 As Color
+        Public ReadOnly Gray4 As Color
+        Public ReadOnly Gray5 As Color
+        Public ReadOnly Gray6 As Color
+        Public ReadOnly Gray7 As Color
+        Public ReadOnly Gray8 As Color
+        Public ReadOnly White As Color
+        Public ReadOnly HalfWhite As Color
+        Public ReadOnly SemiWhite As Color
+        Public ReadOnly Transparent As Color
+        Public ReadOnly Memory As Color
+        Public ReadOnly Tooltip As Color
+        Public ReadOnly BackgroundTransparentSidebar As Color
+        
+        Public ReadOnly Gray1Brush As SolidColorBrush
+        Public ReadOnly Gray2Brush As SolidColorBrush
+        Public ReadOnly Gray3Brush As SolidColorBrush
+        Public ReadOnly Gray4Brush As SolidColorBrush
+        Public ReadOnly Gray5Brush As SolidColorBrush
+        Public ReadOnly Gray6Brush As SolidColorBrush
+        Public ReadOnly Gray7Brush As SolidColorBrush
+        Public ReadOnly Gray8Brush As SolidColorBrush
+        Public ReadOnly WhiteBrush As SolidColorBrush
+        Public ReadOnly HalfWhiteBrush As SolidColorBrush
+        Public ReadOnly SemiWhiteBrush As SolidColorBrush
+        Public ReadOnly TransparentBrush As SolidColorBrush
+        Public ReadOnly MemoryBrush As SolidColorBrush
+        Public ReadOnly TooltipBrush As SolidColorBrush
+        Public ReadOnly BackgroundTransparentSidebarBrush As SolidColorBrush
+        
+        Public Sub New(style As ThemeStyle)
+            Gray1 = NewColor.FromHSL2(0, 0, style.L1)
+            Gray2 = NewColor.FromHSL2(0, 0, style.L2)
+            Gray3 = NewColor.FromHSL2(0, 0, style.L3)
+            Gray4 = NewColor.FromHSL2(0, 0, style.L4)
+            Gray5 = NewColor.FromHSL2(0, 0, style.L5)
+            Gray6 = NewColor.FromHSL2(0, 0, style.L6)
+            Gray7 = NewColor.FromHSL2(0, 0, style.L7)
+            Gray8 = NewColor.FromHSL2(0, 0, style.L8)
+            White = NewColor.FromHSL2(0, 0, style.G2)
+            HalfWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&H55)
+            SemiWhite = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HBB)
+            Transparent = NewColor.FromHSL2(0, 0, style.L8).Alpha(0)
+            Memory = NewColor.FromHSL2(0, 0, style.G3)
+            Tooltip = NewColor.FromHSL2(0, 0, style.G2).Alpha(&HE5)
+            BackgroundTransparentSidebar = NewColor.FromHSL2(0, 0, style.G1).Alpha(&HD2)
+            
+            Gray1Brush = New SolidColorBrush(Gray1)
+            Gray2Brush = New SolidColorBrush(Gray2)
+            Gray3Brush = New SolidColorBrush(Gray3)
+            Gray4Brush = New SolidColorBrush(Gray4)
+            Gray5Brush = New SolidColorBrush(Gray5)
+            Gray6Brush = New SolidColorBrush(Gray6)
+            Gray7Brush = New SolidColorBrush(Gray7)
+            Gray8Brush = New SolidColorBrush(Gray8)
+            WhiteBrush = New SolidColorBrush(White)
+            HalfWhiteBrush = New SolidColorBrush(HalfWhite)
+            SemiWhiteBrush = New SolidColorBrush(SemiWhite)
+            TransparentBrush = New SolidColorBrush(Transparent)
+            MemoryBrush = New SolidColorBrush(Memory)
+            TooltipBrush = New SolidColorBrush(Tooltip)
+            BackgroundTransparentSidebarBrush = New SolidColorBrush(BackgroundTransparentSidebar)
+        End Sub
+    End Class
+
+    '基于对数分布的亮度调整（看起来很高级，实际上对比线性分布性能稀烂）
+    Private Const LogLightBaseNumber = 4.61512051684126 'Math.Log(101)
+    Private Const HighestLight = 94
+    Private Const LowestLight = 10
+    Public Function AdjustLight(origin As Integer, adjust As Integer) As Integer
+        If origin < 0 Then Return 0 '保证不炸定义域（虽然不会有人传个负的亮度过来吧，应该...不会吧）
+        If adjust = 0 Then Return origin '节省性能
+        If origin > HighestLight Or origin < LowestLight Then Return origin '亮度阈值
+        Dim originF = Math.Log(origin + 1) / LogLightBaseNumber
+        Dim adjustF = adjust / 40.0
+        Dim resultF = originF * (adjustF * 0.75 + 1)
+        Dim result As Integer = Math.Exp(resultF * LogLightBaseNumber) - 1
+        If result > HighestLight Then Return HighestLight
+        If result < LowestLight Then Return LowestLight
+        Return result
+    End Function
+
+    Public Class ThemeStyleDynamicColors
+        Public ReadOnly Color1 As Color
+        Public ReadOnly Color2 As Color
+        Public ReadOnly Color3 As Color
+        Public ReadOnly Color4 As Color
+        Public ReadOnly Color5 As Color
+        Public ReadOnly Color6 As Color
+        Public ReadOnly Color7 As Color
+        Public ReadOnly Color8 As Color
+        Public ReadOnly ColorBg0 As Color
+        Public ReadOnly ColorBg1 As Color
+        Public ReadOnly SemiTransparent As Color
+        
+        Public ReadOnly Color1Brush As SolidColorBrush
+        Public ReadOnly Color2Brush As SolidColorBrush
+        Public ReadOnly Color3Brush As SolidColorBrush
+        Public ReadOnly Color4Brush As SolidColorBrush
+        Public ReadOnly Color5Brush As SolidColorBrush
+        Public ReadOnly Color6Brush As SolidColorBrush
+        Public ReadOnly Color7Brush As SolidColorBrush
+        Public ReadOnly Color8Brush As SolidColorBrush
+        Public ReadOnly ColorBg0Brush As SolidColorBrush
+        Public ReadOnly ColorBg1Brush As SolidColorBrush
+        Public ReadOnly SemiTransparentBrush As SolidColorBrush
+        
+        Public Sub New(style As ThemeStyle, hue As Integer, sat As Integer, lightAdjust As Integer)
+            Color1 = NewColor.FromHSL2(hue, 15, style.L1)
+            Color2 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L2, lightAdjust))
+            Color3 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L3, lightAdjust))
+            Color4 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L4, lightAdjust))
+            Color5 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L5, lightAdjust))
+            Color6 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L6, lightAdjust))
+            Color7 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L7, lightAdjust))
+            Color8 = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust))
+            ColorBg0 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb0, lightAdjust))
+            ColorBg1 = NewColor.FromHSL2(hue, sat, AdjustLight(style.Lb1, lightAdjust)).Alpha(&HBE)
+            SemiTransparent = NewColor.FromHSL2(hue, sat, AdjustLight(style.L8, lightAdjust)).Alpha(&H01)
+            
+            Color1Brush = New SolidColorBrush(Color1)
+            Color2Brush = New SolidColorBrush(Color2)
+            Color3Brush = New SolidColorBrush(Color3)
+            Color4Brush = New SolidColorBrush(Color4)
+            Color5Brush = New SolidColorBrush(Color5)
+            Color6Brush = New SolidColorBrush(Color6)
+            Color7Brush = New SolidColorBrush(Color7)
+            Color8Brush = New SolidColorBrush(Color8)
+            ColorBg0Brush = New SolidColorBrush(ColorBg0)
+            ColorBg1Brush = New SolidColorBrush(ColorBg1)
+            SemiTransparentBrush = New SolidColorBrush(SemiTransparent)
+        End Sub
+    End Class
+    
+    Public ReadOnly LightStyle = New ThemeStyle With {
+        .L1 = 25, .L2 = 45, .L3 = 55, .L4 = 65,
+        .L5 = 80, .L6 = 92, .L7 = 94, .L8 = 96,
+        .G1 = 100, .G2 = 98, .G3 = 0
+    }
+
+    Public ReadOnly LightStaticColors As New ThemeStyleStaticColors(LightStyle)
+
+    Public ReadOnly DarkStyle = New ThemeStyle With {
+        .L1 = 96, .L2 = 75, .L3 = 60, .L4 = 65,
+        .L5 = 40, .L6 = 35, .L7 = 30, .L8 = 25,
+        .G1 = 15, .G2 = 35, .G3 = 100
+    }
+
+    Public ReadOnly DarkStaticColors As New ThemeStyleStaticColors(DarkStyle)
+
+    Public Property StaticColors As ThemeStyleStaticColors = Nothing
+    
+    Public Property DynamicColors As ThemeStyleDynamicColors = Nothing
 
     Public ThemeNow As Integer = -1
     'Public ColorHue As Integer = If(IsDarkMode, 200, 210), ColorSat As Integer = If(IsDarkMode, 100, 85), ColorLightAdjust As Integer = If(IsDarkMode, 15, 0), ColorHueTopbarDelta As Object = 0
@@ -385,6 +548,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         ThemeRefreshColor()
         ThemeRefreshMain()
     End Sub
+    
     Public Function GetDarkThemeLight(OriginalLight As Double) As Double
         If IsDarkMode Then
             Return OriginalLight * 0.1
@@ -392,82 +556,64 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Return OriginalLight
         End If
     End Function
+    
     Public Sub ThemeRefreshColor()
-        ColorGray1 = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
-        ColorGray2 = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
-        ColorGray3 = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
-        ColorGray4 = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
-        ColorGray5 = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
-        ColorGray6 = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
-        ColorGray7 = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
-        ColorGray8 = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
+        Dim res = Application.Current.Resources
+        StaticColors = If(IsDarkMode, DarkStaticColors, LightStaticColors)
+        DynamicColors = New ThemeStyleDynamicColors(If(IsDarkMode, DarkStyle, LightStyle), ColorHue, ColorSat, ColorLightAdjust)
 
-        Color1 = New MyColor().FromHSL2(ColorHue, ColorSat * 0.2, 25 + ColorLightAdjust * 0.3)
-        Color2 = New MyColor().FromHSL2(ColorHue, ColorSat, 45 + ColorLightAdjust)
-        Color3 = New MyColor().FromHSL2(ColorHue, ColorSat, 55 + ColorLightAdjust)
-        Color4 = New MyColor().FromHSL2(ColorHue, ColorSat, 65 + ColorLightAdjust)
-        Color5 = New MyColor().FromHSL2(ColorHue, ColorSat, 80 + ColorLightAdjust * 0.4)
-        Color6 = New MyColor().FromHSL2(ColorHue, ColorSat, 91 + ColorLightAdjust * 0.1)
-        Color7 = New MyColor().FromHSL2(ColorHue, ColorSat, 95)
-        Color8 = New MyColor().FromHSL2(ColorHue, ColorSat, 97)
-        ColorBg0 = Color4 * 0.4 + Color5 * 0.4 + ColorGray4 * 0.2
-        ColorBg1 = New MyColor(190, Color7)
+        res("ColorObjectGray1") = StaticColors.Gray1
+        res("ColorObjectGray2") = StaticColors.Gray2
+        res("ColorObjectGray3") = StaticColors.Gray3
+        res("ColorObjectGray4") = StaticColors.Gray4
+        res("ColorObjectGray5") = StaticColors.Gray5
+        res("ColorObjectGray6") = StaticColors.Gray6
+        res("ColorObjectGray7") = StaticColors.Gray7
+        res("ColorObjectGray8") = StaticColors.Gray8
 
-        ColorSemiTransparent = New MyColor(1, Color8)
-
-        If IsDarkMode Then
-            Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
-            Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorDark6)
-            Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorDark7)
-            Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorDark8)
-            Application.Current.Resources("ColorBrushGray1") = New SolidColorBrush(ColorGrayDark1)
-            Application.Current.Resources("ColorBrushGray2") = New SolidColorBrush(ColorGrayDark2)
-            Application.Current.Resources("ColorBrushGray3") = New SolidColorBrush(ColorGrayDark3)
-            Application.Current.Resources("ColorBrushGray4") = New SolidColorBrush(ColorGrayDark4)
-            Application.Current.Resources("ColorBrushGray5") = New SolidColorBrush(ColorGrayDark5)
-            Application.Current.Resources("ColorBrushGray6") = New SolidColorBrush(ColorGrayDark6)
-            Application.Current.Resources("ColorBrushGray7") = New SolidColorBrush(ColorGrayDark7)
-            Application.Current.Resources("ColorBrushGray8") = New SolidColorBrush(ColorGrayDark8)
-            Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 90, 90, 90))
-            Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorDark2)
-            Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(Color.FromArgb(190, 90, 90, 90))
-            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(235, 43, 43, 43))
-            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 43, 43, 43))
-            Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 90, 90, 90))
-            Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
-            Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
-            Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorDark1)
-            Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
-        Else
-            Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorLight1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
-            Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorLight6)
-            Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorLight7)
-            Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorLight8)
-            Application.Current.Resources("ColorBrushGray1") = New SolidColorBrush(ColorGrayLight1)
-            Application.Current.Resources("ColorBrushGray2") = New SolidColorBrush(ColorGrayLight2)
-            Application.Current.Resources("ColorBrushGray3") = New SolidColorBrush(ColorGrayLight3)
-            Application.Current.Resources("ColorBrushGray4") = New SolidColorBrush(ColorGrayLight4)
-            Application.Current.Resources("ColorBrushGray5") = New SolidColorBrush(ColorGrayLight5)
-            Application.Current.Resources("ColorBrushGray6") = New SolidColorBrush(ColorGrayLight6)
-            Application.Current.Resources("ColorBrushGray7") = New SolidColorBrush(ColorGrayLight7)
-            Application.Current.Resources("ColorBrushGray8") = New SolidColorBrush(ColorGrayLight8)
-            Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 255, 255, 255))
-            Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorBg0)
-            Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(ColorBg1)
-            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(210, 255, 255, 255))
-            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 255, 255, 255))
-            Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 255, 255, 255))
-            Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
-            Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(251, 251, 251))
-            Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorLight1)
-            Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(0, 0, 0))
-            ThemeRefreshMain()
-        End If
+        res("ColorBrushGray1") = StaticColors.Gray1Brush
+        res("ColorBrushGray2") = StaticColors.Gray2Brush
+        res("ColorBrushGray3") = StaticColors.Gray3Brush
+        res("ColorBrushGray4") = StaticColors.Gray4Brush
+        res("ColorBrushGray5") = StaticColors.Gray5Brush
+        res("ColorBrushGray6") = StaticColors.Gray6Brush
+        res("ColorBrushGray7") = StaticColors.Gray7Brush
+        res("ColorBrushGray8") = StaticColors.Gray8Brush
+        
+        res("ColorObject1") = DynamicColors.Color1
+        res("ColorObject2") = DynamicColors.Color2
+        res("ColorObject3") = DynamicColors.Color3
+        res("ColorObject4") = DynamicColors.Color4
+        res("ColorObject5") = DynamicColors.Color5
+        res("ColorObject6") = DynamicColors.Color6
+        res("ColorObject7") = DynamicColors.Color7
+        res("ColorObject8") = DynamicColors.Color8
+        res("ColorObjectBg0") = DynamicColors.ColorBg0
+        res("ColorObjectBg1") = DynamicColors.ColorBg1
+        
+        res("ColorBrush1") = DynamicColors.Color1Brush
+        res("ColorBrush2") = DynamicColors.Color2Brush
+        res("ColorBrush3") = DynamicColors.Color3Brush
+        res("ColorBrush4") = DynamicColors.Color4Brush
+        res("ColorBrush5") = DynamicColors.Color5Brush
+        res("ColorBrush6") = DynamicColors.Color6Brush
+        res("ColorBrush7") = DynamicColors.Color7Brush
+        res("ColorBrush8") = DynamicColors.Color8Brush
+        res("ColorBrushBg0") = DynamicColors.ColorBg0Brush
+        res("ColorBrushBg1") = DynamicColors.ColorBg1Brush
+        
+        res("ColorBrushWhite") = StaticColors.WhiteBrush
+        res("ColorBrushHalfWhite") = StaticColors.HalfWhiteBrush
+        res("ColorBrushSemiWhite") = StaticColors.SemiWhiteBrush
+        res("ColorBrushBackgroundTransparentSidebar") = StaticColors.BackgroundTransparentSidebarBrush
+        res("ColorBrushTransparent") = StaticColors.TransparentBrush
+        res("ColorBrushSemiTransparent") = DynamicColors.SemiTransparentBrush
+        res("ColorBrushToolTip") = StaticColors.TooltipBrush
+        res("ColorBrushMemory") = StaticColors.MemoryBrush
+        res("ColorBrushMsgBox") = StaticColors.WhiteBrush
+        res("ColorBrushMsgBoxText") = res("ColorBrush1")
     End Sub
+    
     Public Sub ThemeRefreshMain()
         RunInUi(
         Sub()
