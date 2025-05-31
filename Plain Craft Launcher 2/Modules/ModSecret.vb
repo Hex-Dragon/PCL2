@@ -544,8 +544,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        RaiseThemeChanged(IsDarkMode)
         ThemeRefreshColor()
+        RaiseThemeChanged(IsDarkMode)
         ThemeRefreshMain()
     End Sub
     
