@@ -120,7 +120,7 @@ Public Class PageComp
             .SearchText = PanSearchBox.Text
             .GameVersion = GameVersion
             .Tag = ComboSearchTag.SelectedItem.Tag
-            .ModLoader = If(PageType = CompType.Mod, Val(ComboSearchLoader.SelectedItem.Tag), CompModLoaderType.Any)
+            .ModLoader = If(PageType = CompType.Mod, Val(ComboSearchLoader.SelectedItem.Tag), CompLoaderType.Any)
             .Source = CType(Val(ComboSearchSource.SelectedItem.Tag), CompSourceType)
         End With
         Return Request

@@ -75,8 +75,6 @@
             <SolidColorBrush x:Key="ColorBrushInfo">#000000</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushDebug">#95a5a6</SolidColorBrush>
 
-            <SolidColorBrush x:Key="ColorBrushBackgroundTransparentSidebar" Color="#F1FFFFFF" />
-
             <!-- Window -->
             <Style TargetType="{x:Type Window}" x:Key="MyWindow">
                 <Setter Property="OverridesDefaultStyle" Value="True"/>

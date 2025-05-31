@@ -343,7 +343,7 @@
                     End Select
                     Dim IsVersionSuitable As Func(Of McVersion, Boolean) = Nothing
                     '获取资源所需的加载器
-                    Dim AllowedLoaders As New List(Of CompModLoaderType)
+                    Dim AllowedLoaders As New List(Of CompLoaderType)
                     If File.ModLoaders.Any Then
                         AllowedLoaders = File.ModLoaders
                     ElseIf Project.ModLoaders.Any Then
@@ -361,10 +361,10 @@
                         End If
                         '加载器
                         If Not AllowedLoaders.Any() Then Return True '无要求
-                        If AllowedLoaders.Contains(CompModLoaderType.Forge) AndAlso Version.Version.HasForge Then Return True
-                        If AllowedLoaders.Contains(CompModLoaderType.Fabric) AndAlso Version.Version.HasFabric Then Return True
-                        If AllowedLoaders.Contains(CompModLoaderType.NeoForge) AndAlso Version.Version.HasNeoForge Then Return True
-                        If AllowedLoaders.Contains(CompModLoaderType.LiteLoader) AndAlso Version.Version.HasLiteLoader Then Return True
+                        If AllowedLoaders.Contains(CompLoaderType.Forge) AndAlso Version.Version.HasForge Then Return True
+                        If AllowedLoaders.Contains(CompLoaderType.Fabric) AndAlso Version.Version.HasFabric Then Return True
+                        If AllowedLoaders.Contains(CompLoaderType.NeoForge) AndAlso Version.Version.HasNeoForge Then Return True
+                        If AllowedLoaders.Contains(CompLoaderType.LiteLoader) AndAlso Version.Version.HasLiteLoader Then Return True
                         Return False
                     End Function
                     '获取常规资源默认下载位置
@@ -392,19 +392,12 @@
                             DefaultFolder = SelectedVersion.FullName
                             Directory.CreateDirectory(DefaultFolder)
                             Log($"[Comp] 使用适合的游戏版本作为默认下载位置：{DefaultFolder}")
-                        Else '选择资源数量最多的版本
+                        Else
+                            DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                DefaultFolder = PathMcFolder
                                 Hint("当前 MC 文件夹中没有找到适合此资源文件的版本！")
                             Else
-                                Dim SelectedVersion = SuitableVersions.OrderBy(
-                                Function(v)
-                                    Dim Info As New DirectoryInfo(v.PathIndie & $"{ResourceName}\")
-                                    Return If(Info.Exists, Info.GetFiles().Length, -1)
-                                End Function).LastOrDefault()
-                                DefaultFolder = SelectedVersion.PathIndie & $"{ResourceName}\"
-                                Directory.CreateDirectory(DefaultFolder)
-                                Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
+                                Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
                         End If
                     End If
