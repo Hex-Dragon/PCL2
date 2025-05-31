@@ -743,6 +743,10 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
     End Sub
     Public Function IsVerisonLatest() As Boolean
+        If LatestVersion Is Nothing Then
+            Hint("无法获取最新版本信息，请检查网络连接", HintType.Critical)
+            Return False
+        End If
         If LatestVersion.Source = "MirrorChyan" Then
             Return SemVer.Parse(LatestVersion.version_name) <= SemVer.Parse(VersionBaseName)
         Else
