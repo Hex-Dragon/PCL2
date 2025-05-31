@@ -529,6 +529,12 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     }
 
     Public ReadOnly DarkStaticColors As New ThemeStyleStaticColors(DarkStyle)
+    
+    Public ReadOnly Property CurrentStyle As ThemeStyle
+        Get
+            Return If(IsDarkMode, DarkStyle, LightStyle)
+        End Get
+    End Property
 
     Public Property StaticColors As ThemeStyleStaticColors = Nothing
     
@@ -574,7 +580,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         
         Dim res = Application.Current.Resources
         StaticColors = If(IsDarkMode, DarkStaticColors, LightStaticColors)
-        DynamicColors = New ThemeStyleDynamicColors(If(IsDarkMode, DarkStyle, LightStyle), ColorHue, ColorSat, ColorLightAdjust)
+        DynamicColors = New ThemeStyleDynamicColors(CurrentStyle, ColorHue, ColorSat, ColorLightAdjust)
 
         res("ColorObjectGray1") = StaticColors.Gray1
         res("ColorObjectGray2") = StaticColors.Gray2
