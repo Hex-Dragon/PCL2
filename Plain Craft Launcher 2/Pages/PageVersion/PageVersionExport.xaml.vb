@@ -409,7 +409,6 @@ Public Class PageVersionExport
         Next
 
         '确认导出位置
-        Dim Extension As String = If(CheckOptionsPcl.Checked, ".zip", ".mrpack")
         Dim PackPath As String = Nothing
         If Not String.IsNullOrWhiteSpace(ConfigPackPath) AndAlso
            (Not ConfigPackPath.EndsWithF("\") AndAlso Not ConfigPackPath.EndsWithF("/")) Then
@@ -423,9 +422,11 @@ Public Class PageVersionExport
             End Try
         End If
         If PackPath Is Nothing Then
+            Dim Extensions As New List(Of String)
+            If Not CheckAdvancedModrinth.Checked Then Extensions.Add("压缩文件(*.zip)|*.zip")
+            If Not CheckOptionsPcl.Checked Then Extensions.Add("Modrinth 整合包文件(*.mrpack)|*.mrpack")
             PackPath = SelectSaveFile("选择导出位置",
-                PackName & If(String.IsNullOrEmpty(TextExportVersion.Text), "", " " & TextExportVersion.Text),
-                $"整合包文件(*{Extension})|*{Extension}")
+                PackName & If(String.IsNullOrEmpty(TextExportVersion.Text), "", " " & TextExportVersion.Text), Extensions.Join("|"))
             Log($"[Export] 手动指定的导出路径：{PackPath}")
         End If
         If String.IsNullOrEmpty(PackPath) Then Return
@@ -614,7 +615,7 @@ Public Class PageVersionExport
 
             '等待线程结束
             Do Until EndedThreadCount = 2
-                If Loader.IsAborted Then Exit Sub
+                If Loader.IsAborted Then Return
                 Thread.Sleep(10)
             Loop
 
