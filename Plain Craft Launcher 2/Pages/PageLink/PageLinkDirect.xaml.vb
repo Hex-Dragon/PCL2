@@ -112,7 +112,7 @@ Public Class PageLinkDirect
 
     '每 1 秒执行的 Timer
     Private Sub WatcherTimer1()
-        If HiperState <> LoadState.Finished Then Exit Sub
+        If HiperState <> LoadState.Finished Then Return
         RunInUi(Sub()
                     '网络质量
                     Dim QualityScore As Integer = 0
@@ -199,7 +199,7 @@ Public Class PageLinkDirect
 
     '承接重试
     Private Sub CardLoad_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles CardLoad.MouseLeftButtonUp
-        If Not InitLoader.State = LoadState.Failed Then Exit Sub
+        If Not InitLoader.State = LoadState.Failed Then Return
         InitLoader.Start(IsForceRestart:=True)
     End Sub
 
@@ -217,7 +217,7 @@ Public Class PageLinkDirect
     Private Sub UpdateProgress(Optional Value As Double = -1)
         If Value = -1 Then Value = InitLoader.Progress
         Dim DisplayingProgress As Double = ColumnProgressA.Width.Value
-        If Math.Round(Value - DisplayingProgress, 3) = 0 Then Exit Sub
+        If Math.Round(Value - DisplayingProgress, 3) = 0 Then Return
         If DisplayingProgress > Value Then
             ColumnProgressA.Width = New GridLength(Value, GridUnitType.Star)
             ColumnProgressB.Width = New GridLength(1 - Value, GridUnitType.Star)
@@ -255,7 +255,7 @@ Public Class PageLinkDirect
     'Ping 房主
     Private Sub BtnFinishPing_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishPing.MouseLeftButtonUp
         LabFinishPing.Text = "检测中"
-        If TaskPingHost.State = LoadState.Loading Then Exit Sub
+        If TaskPingHost.State = LoadState.Loading Then Return
         TaskPingHost.Start(True, IsForceRestart:=True)
     End Sub
     Private Shared TaskPingHost As New LoaderTask(Of Boolean, Integer)("HiPer Ping Host",
@@ -278,7 +278,7 @@ Public Class PageLinkDirect
             Return _CurrentSubpage
         End Get
         Set(value As Subpages)
-            If _CurrentSubpage = value Then Exit Property
+            If _CurrentSubpage = value Then Return
             _CurrentSubpage = value
             Log("[Hiper] 子页面更改为 " & GetStringFromEnum(value))
             PageOnContentExit()

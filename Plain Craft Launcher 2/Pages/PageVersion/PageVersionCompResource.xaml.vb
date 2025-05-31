@@ -51,7 +51,7 @@
         AniControlEnabled -= 1
 
         '非重复加载部分
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
 
         '调整按钮边距（这玩意儿没法从 XAML 改）
@@ -136,7 +136,7 @@
             Else
                 PanEmpty.Visibility = Visibility.Visible
                 PanBack.Visibility = Visibility.Collapsed
-                Exit Sub
+                Return
             End If
             '修改缓存
             ModItems.Clear()
@@ -204,7 +204,7 @@
     ''' 刷新整个 UI。
     ''' </summary>
     Public Sub RefreshUI()
-        If PanList Is Nothing Then Exit Sub
+        If PanList Is Nothing Then Return
         Dim ShowingMods = If(IsSearching, SearchResult, If(CompResourceListLoader.Output, New List(Of LocalCompFile))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
@@ -809,7 +809,7 @@ Install:
             If MyMsgBox($"新版本 Mod 可能不兼容旧存档或者其他 Mod，这可能导致游戏崩溃，甚至永久损坏存档！{vbCrLf}如果你在游玩整合包，请千万不要自行更新 Mod！{vbCrLf}{vbCrLf}在更新前，请先备份存档，并检查 Mod 的更新日志。{vbCrLf}如果更新后出现问题，你也可以在回收站找回更新前的 Mod。", "Mod 更新警告", "我已了解风险，继续更新", "取消", IsWarn:=True) = 1 Then
                 Setup.Set("HintUpdateMod", True)
             Else
-                Exit Sub
+                Return
             End If
         End If
         Try
@@ -901,7 +901,7 @@ Install:
                     Case LoadState.Aborted
                         Hint("资源更新已中止！", HintType.Info)
                     Case Else
-                        Exit Sub
+                        Return
                 End Select
                 Log($"[CompUpdate] 已从正在进行资源更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
@@ -984,7 +984,7 @@ Install:
                 RefreshBars()
             End If
             '显示结果提示
-            If Not IsSuccessful Then Exit Sub
+            If Not IsSuccessful Then Return
             If IsShiftPressed Then
                 If ModList.Count = 1 Then
                     Hint($"已彻底删除 {ModList.Single.FileName}！", HintType.Finish)

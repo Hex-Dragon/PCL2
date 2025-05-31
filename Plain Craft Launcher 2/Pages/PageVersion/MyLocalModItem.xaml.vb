@@ -32,7 +32,7 @@ Public Class MyLocalCompItem
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
-            If LabTitle.Text = value Then Exit Property
+            If LabTitle.Text = value Then Return
             LabTitle.Text = value
             _Title = RawValue
         End Set
@@ -44,7 +44,7 @@ Public Class MyLocalCompItem
             Return If(LabSubtitle?.Text, "")
         End Get
         Set(value As String)
-            If LabSubtitle.Text = value Then Exit Property
+            If LabSubtitle.Text = value Then Return
             LabSubtitle.Text = value
             LabSubtitle.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
         End Set
@@ -56,7 +56,7 @@ Public Class MyLocalCompItem
             Return LabInfo.Text
         End Get
         Set(value As String)
-            If LabInfo.Text = value Then Exit Property
+            If LabInfo.Text = value Then Return
             LabInfo.Text = value
         End Set
     End Property
@@ -97,7 +97,7 @@ Public Class MyLocalCompItem
     Private Sub Button_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonUp
         If IsMouseDown Then
             RaiseEvent Click(sender, e)
-            If e.Handled Then Exit Sub
+            If e.Handled Then Return
             Log("[Control] 按下本地 Mod 列表项：" & LabTitle.Text)
         End If
     End Sub
@@ -105,7 +105,7 @@ Public Class MyLocalCompItem
     '鼠标点击判定
     Private IsMouseDown As Boolean = False
     Private Sub Button_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonDown
-        If Not IsMouseDirectlyOver Then Exit Sub
+        If Not IsMouseDirectlyOver Then Return
         IsMouseDown = True
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = False
     End Sub
@@ -125,23 +125,34 @@ Public Class MyLocalCompItem
     Public Property CurrentSwipe As SwipeSelect
 
     '滑动选中
+    Private Shared SwipeStart As Integer, SwipeEnd As Integer
+    Private Shared _Swiping As Boolean = False
+    Private Shared Property Swiping As Boolean
+        Get
+            Return _Swiping
+        End Get
+        Set(value As Boolean)
+            _Swiping = value
+            FrmVersionMod.CardSelect.IsHitTestVisible = Not value
+        End Set
+    End Property
+    Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
     Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
-        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        If Parent Is Nothing Then Return 'Mod 可能已被删除（#3824）
         '开始滑动
         Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        CurrentSwipe.Start = Index
-        CurrentSwipe.End = Index
-        CurrentSwipe.Swiping = True
-        CurrentSwipe.SwipeToState = Not Checked
-        CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+        SwipeStart = Index
+        SwipeEnd = Index
+        Swiping = True
+        SwipToState = Not Checked
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
-        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        If Parent Is Nothing Then Return 'Mod 可能已被删除（#3824）
         '结束滑动
-        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not CurrentSwipe.Swiping Then
-            CurrentSwipe.Swiping = False
-            CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = True
-            Exit Sub
+        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse
+           TypeOf Mouse.DirectlyOver IsNot MyLocalModItem Then '#5771
+            Swiping = False
+            Return
         End If
         '计算滑动范围
         Dim Elements = CType(Parent, StackPanel).Children
@@ -149,9 +160,9 @@ Public Class MyLocalCompItem
         CurrentSwipe.Start = MathClamp(Math.Min(CurrentSwipe.Start, Index), 0, Elements.Count - 1)
         CurrentSwipe.End = MathClamp(Math.Max(CurrentSwipe.End, Index), 0, Elements.Count - 1)
         '勾选所有范围中的项
-        If CurrentSwipe.Start = CurrentSwipe.End Then Exit Sub
-        For i = CurrentSwipe.Start To CurrentSwipe.End
-            Dim Item As MyLocalCompItem = Elements(i)
+        If SwipeStart = SwipeEnd Then Return
+        For i = SwipeStart To SwipeEnd
+            Dim Item As MyLocalModItem = Elements(i)
             Item.InitLate(Item, e)
             Item.Checked = CurrentSwipe.SwipeToState
         Next
@@ -169,20 +180,20 @@ Public Class MyLocalCompItem
             Try
                 '触发属性值修改
                 Dim RawValue = _Checked
-                If value = _Checked Then Exit Property
+                If value = _Checked Then Return
                 _Checked = value
                 Dim ChangedEventArgs As New RouteEventArgs(False)
                 If IsInitialized Then
                     RaiseEvent Changed(Me, ChangedEventArgs)
                     If ChangedEventArgs.Handled Then
                         _Checked = RawValue
-                        Exit Property
+                        Return
                     End If
                 End If
                 If value Then
                     Dim CheckEventArgs As New RouteEventArgs(False)
                     RaiseEvent Check(Me, CheckEventArgs)
-                    If CheckEventArgs.Handled Then Exit Property
+                    If CheckEventArgs.Handled Then Return
                 End If
                 '更改动画
                 If IsVisibleInForm() Then
@@ -277,7 +288,7 @@ Public Class MyLocalCompItem
                 Children.Remove(ButtonStack)
                 ButtonStack = Nothing
             End If
-            If Not value.Any() Then Exit Property
+            If Not value.Any() Then Return
             '添加新 Stack
             ButtonStack = New StackPanel With {.Opacity = 0, .Margin = New Thickness(0, 0, 5, 0), .SnapsToDevicePixels = False, .Orientation = Orientation.Horizontal,
                 .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Center, .UseLayoutRounding = False}

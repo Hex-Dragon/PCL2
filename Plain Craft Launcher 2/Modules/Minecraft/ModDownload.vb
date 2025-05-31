@@ -272,13 +272,9 @@
             '检查是否有要求的版本（#5195）
             If Not String.IsNullOrEmpty(Loader.Input) Then
                 Dim Id = Loader.Input
-                Try
-                    If Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
-                        Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
-                    End If
-                Catch ex As Exception
-                    Log("检查 BMCLAPI 包含版本失败: " & ex.ToString())
-                End Try
+                If DlClientListLoader.Output.Value IsNot Nothing AndAlso Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
+                    Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
+                End If
             End If
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
@@ -1578,7 +1574,7 @@
                     '检查加载器成功
                     MainLoader.Output = SubLoader.Key.Output
                     DlSourceLoaderAbort(LoaderList)
-                    Exit Sub
+                    Return
                 ElseIf BeforeLoadersAllFailed Then
                     '此前的加载器全部失败，直接启动后续加载器
                     If WaitCycle < SubLoader.Value * 100 Then WaitCycle = SubLoader.Value * 100
@@ -1620,7 +1616,7 @@
             '检查父加载器中断
             If MainLoader.IsAborted Then
                 DlSourceLoaderAbort(LoaderList)
-                Exit Sub
+                Return
             End If
         Loop
     End Sub

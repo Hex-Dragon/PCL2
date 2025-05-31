@@ -188,9 +188,9 @@ Public Module ModLocalComp
         Private _Dependencies As New Dictionary(Of String, String)
         Private Sub AddDependency(ModID As String, Optional VersionRequirement As String = Nothing)
             '确保信息正确
-            If ModID Is Nothing OrElse ModID.Count < 2 Then Exit Sub
+            If ModID Is Nothing OrElse ModID.Count < 2 Then Return
             ModID = ModID.ToLower
-            If ModID = "name" OrElse Val(ModID).ToString = ModID Then Exit Sub '跳过 name 与纯数字 id
+            If ModID = "name" OrElse Val(ModID).ToString = ModID Then Return '跳过 name 与纯数字 id
             If VersionRequirement Is Nothing OrElse ((Not VersionRequirement.Contains(".")) AndAlso (Not VersionRequirement.Contains("-"))) OrElse VersionRequirement.Contains("$") Then
                 VersionRequirement = Nothing
             Else
@@ -279,7 +279,7 @@ Public Module ModLocalComp
         ''' 进行文件可用性检查与 .class 以外的信息获取。
         ''' </summary>
         Public Sub Load(Optional ForceReload As Boolean = False)
-            If IsLoaded AndAlso Not ForceReload Then Exit Sub
+            If IsLoaded AndAlso Not ForceReload Then Return
             '初始化
             Init()
             Dim Jar As ZipArchive = Nothing
@@ -851,7 +851,7 @@ Finished:
                 Try
                     RunInUiWait(Sub() If Loader.Input.Frm IsNot Nothing Then Loader.Input.Frm.Load.Text = "正在更新资源")
                     Do Until Not PageVersionCompResource.UpdatingVersions.Contains(Loader.Input.CompPath)
-                        If Loader.IsAborted Then Exit Sub
+                        If Loader.IsAborted Then Return
                         Thread.Sleep(100)
                     Loop
                 Finally
@@ -904,7 +904,7 @@ Finished:
             Dim ModUpdateList As New List(Of LocalCompFile)
             For Each ModFile As FileInfo In ModFileList
                 Loader.Progress += 0.94 / ModFileList.Count
-                If Loader.IsAborted Then Exit Sub
+                If Loader.IsAborted Then Return
                 '加载 McMod 对象
                 Dim ModEntry As New LocalCompFile(ModFile.FullName)
                 ModEntry.Load()
@@ -944,7 +944,7 @@ Finished:
                 End Function)
 
             '回设
-            If Loader.IsAborted Then Exit Sub
+            If Loader.IsAborted Then Return
             Loader.Output = ModList
 
             '开始联网加载
@@ -1146,13 +1146,13 @@ Finished:
             End Sub, "Mod List Detail Loader CurseForge")
         '等待线程结束
         Do Until EndedThreadCount = 2
-            If Loader.IsAborted Then Exit Sub
+            If Loader.IsAborted Then Return
             Thread.Sleep(10)
         Loop
         '保存缓存
         Mods = Mods.Where(Function(m) m.Comp IsNot Nothing).ToList()
         Log($"[Mod] 联网获取本地 Mod 信息完成，为 {Mods.Count} 个 Mod 更新缓存")
-        If Not Mods.Any() Then Exit Sub
+        If Not Mods.Any() Then Return
         For Each Entry In Mods
             Entry.CompLoaded = Not IsFailed
             Cache(Entry.ModrinthHash & McVersion & ModLoaders.Join("")) = Entry.ToJson()

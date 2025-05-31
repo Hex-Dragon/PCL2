@@ -170,26 +170,6 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         If Not DataList.Any(Function(d) d.Contains("-Dlog4j2.formatMsgNoLookups=true")) Then DataList.Add("-Dlog4j2.formatMsgNoLookups=true")
     End Sub
 
-    ''' <summary>
-    ''' 打码字符串中的 AccessToken。
-    ''' </summary>
-    Friend Function SecretFilter(Raw As String, FilterChar As Char) As String
-        '打码 "accessToken " 后的内容
-        If Raw.Contains("accessToken ") Then
-            For Each Token In RegexSearch(Raw, "(?<=accessToken ([^ ]{5}))[^ ]+(?=[^ ]{5})")
-                Raw = Raw.Replace(Token, New String(FilterChar, Token.Count))
-            Next
-        End If
-        '打码当前登录的结果
-        Dim AccessToken As String = McLoginLoader.Output.AccessToken
-        If AccessToken Is Nothing OrElse AccessToken.Length < 10 OrElse Not Raw.ContainsF(AccessToken, True) OrElse
-            McLoginLoader.Output.Uuid = McLoginLoader.Output.AccessToken Then 'UUID 和 AccessToken 一样则不打码
-            Return Raw
-        Else
-            Return Raw.Replace(AccessToken, Strings.Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Strings.Right(AccessToken, 5))
-        End If
-    End Function
-
 #End Region
 
 #Region "网络鉴权"
@@ -422,6 +402,22 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         ColorGray7 = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
         ColorGray8 = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
 
+        If ThemeNow = NewTheme AndAlso NewTheme >= 0 Then Return
+        If NewTheme >= 0 Then ThemeNow = NewTheme
+
+        Color1 = New MyColor().FromHSL2(ColorHue, ColorSat * 0.2, 25 + ColorLightAdjust * 0.3)
+        Color2 = New MyColor().FromHSL2(ColorHue, ColorSat, 45 + ColorLightAdjust)
+        Color3 = New MyColor().FromHSL2(ColorHue, ColorSat, 55 + ColorLightAdjust)
+        Color4 = New MyColor().FromHSL2(ColorHue, ColorSat, 65 + ColorLightAdjust)
+        Color5 = New MyColor().FromHSL2(ColorHue, ColorSat, 80 + ColorLightAdjust * 0.4)
+        Color6 = New MyColor().FromHSL2(ColorHue, ColorSat, 91 + ColorLightAdjust * 0.1)
+        Color7 = New MyColor().FromHSL2(ColorHue, ColorSat, 95)
+        Color8 = New MyColor().FromHSL2(ColorHue, ColorSat, 97)
+        ColorBg0 = Color4 * 0.4 + Color5 * 0.4 + ColorGray4 * 0.2
+        ColorBg1 = New MyColor(190, Color7)
+
+        ColorSemiTransparent = New MyColor(1, Color8)
+
         If IsDarkMode Then
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
             Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
@@ -472,12 +468,13 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(251, 251, 251))
             Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorLight1)
             Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(0, 0, 0))
+            ThemeRefreshMain()
         End If
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
         Sub()
-            If Not FrmMain.IsLoaded Then Exit Sub
+            If Not FrmMain.IsLoaded Then Return
             '顶部条背景
             Dim Brush = New LinearGradientBrush With {.EndPoint = New Point(1, 0), .StartPoint = New Point(0, 0)}
             If ThemeNow = 5 Then
@@ -508,9 +505,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             '主页面背景
             If Setup.Get("UiBackgroundColorful") Then
                 Brush = New LinearGradientBrush With {.EndPoint = New Point(0.1, 1), .StartPoint = New Point(0.9, 0)}
-                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.9, GetDarkThemeLight(90))})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 15, ColorSat * 0.8, GetDarkThemeLight(80))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.8, GetDarkThemeLight(90))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 15, ColorSat * 0.8, GetDarkThemeLight(80))})
                 FrmMain.PanForm.Background = Brush
             Else
                 FrmMain.PanForm.Background = New MyColor(If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245))
