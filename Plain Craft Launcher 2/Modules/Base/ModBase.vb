@@ -3186,7 +3186,7 @@ Retry:
 
         '输出提示
         Select Case Level
-#If DEBUG Then
+#If DEBUGRESERVED Then
             Case LogLevel.Developer
                 Hint("[开发者模式] " & Text, HintType.Info, False)
             Case LogLevel.Debug
@@ -3253,7 +3253,7 @@ Retry:
         '输出提示
         Select Case Level
             Case LogLevel.Normal
-#If DEBUG Then
+#If DEBUGRESERVED Then
             Case LogLevel.Developer
                 Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 Hint("[开发者模式] " & ExLine, HintType.Info, False)

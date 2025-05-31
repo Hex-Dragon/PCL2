@@ -1186,7 +1186,7 @@ Finished:
         Return "Nothing"
     End Function
 
-#If DEBUG Then
+#If DEBUGRESERVED Then
     ''' <summary>
     ''' 检查 Mod 列表中存在的错误，返回错误信息的集合。
     ''' </summary>

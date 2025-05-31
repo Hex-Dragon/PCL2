@@ -5,7 +5,7 @@ Imports System.IO.Compression
 
 Public Class Application
 
-#If DEBUG Then
+#If DEBUGRESERVED Then
     ''' <summary>
     ''' 用于开始程序时的一些测试。
     ''' </summary>
@@ -53,7 +53,7 @@ Public Class Application
                     Else
                         Environment.Exit((My.Computer.Info.AvailablePhysicalMemory - Ram) / 1024) '返回清理的内存量（K）
                     End If
-#If DEBUG Then
+#If DEBUGRESERVED Then
                     '制作更新包
                 ElseIf e.Args(0) = "--edit1" Then
                     ExeEdit(e.Args(1), True)
@@ -83,7 +83,7 @@ Public Class Application
             Directory.CreateDirectory(PathTemp & "Download")
             Directory.CreateDirectory(PathAppdata)
             '检测单例
-#If Not DEBUG Then
+#If Not DEBUGRESERVED Then
             Dim ShouldWaitForExit As Boolean = e.Args.Length > 0 AndAlso e.Args(0) = "--wait" '要求等待已有的 PCL 退出
             Dim WaitRetryCount As Integer = 0
 WaitRetry:
@@ -185,7 +185,7 @@ WaitRetry:
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()
             '执行测试
-#If DEBUG Then
+#If DEBUGRESERVED Then
             Test()
 #End If
             AniControlEnabled += 1
