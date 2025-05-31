@@ -429,7 +429,7 @@ Write:
             Dim OutputNum As Integer = 0
             For Each Profile In ProfileList
                 Dim NewProfile As JObject = Nothing
-                If Profile.Type = 5 Then
+                If Profile.Type = McLoginType.Ms Then
                     NewProfile = New JObject From {
                                            {"uuid", Profile.Uuid},
                                            {"displayName", Profile.Username},
@@ -440,7 +440,7 @@ Write:
                                            {"userid", ""},
                                            {"type", "microsoft"}
                                        }
-                ElseIf Profile.Type = 3 Then
+                ElseIf Profile.Type = McLoginType.Auth Then
                     NewProfile = New JObject From {
                                            {"serverBaseURL", Profile.Server},
                                            {"clientToken", ""},

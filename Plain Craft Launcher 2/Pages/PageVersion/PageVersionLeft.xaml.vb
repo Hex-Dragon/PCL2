@@ -96,7 +96,7 @@ Public Class PageVersionLeft
     ''' 切换现有页面。
     ''' </summary>
     Public Sub PageChange(ID As FormMain.PageSubType)
-        If PageID = ID Then Exit Sub
+        If PageID = ID Then Return
         AniControlEnabled += 1
         Try
             PageChangeRun(PageGet(ID))

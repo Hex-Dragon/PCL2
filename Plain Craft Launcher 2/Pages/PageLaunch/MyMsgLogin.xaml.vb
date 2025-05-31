@@ -107,7 +107,7 @@
 
     Private Sub WorkThread()
         Thread.Sleep(3000)
-        If MyConverter.IsExited Then Exit Sub
+        If MyConverter.IsExited Then Return
         OpenWebsite(Website)
         ClipboardSet(UserCode)
         Thread.Sleep((Data("interval").ToObject(Of Integer) - 1) * 1000)

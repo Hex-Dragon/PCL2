@@ -10,20 +10,39 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-#If RELEASE Or BETA Then
-    Public Const RegFolder As String = "PCLCE" 'PCL 社区版的注册表与 PCL 的注册表隔离，以防数据冲突
-#Else
+#If DEBUG Then
     Public Const RegFolder As String = "PCLCEDebug" '社区开发版的注册表与社区常规版的注册表隔离，以防数据冲突
+#Else
+    Public Const RegFolder As String = "PCLCE" 'PCL 社区版的注册表与 PCL 的注册表隔离，以防数据冲突
 #End If
 
     '用于微软登录的 ClientId
+#If DEBUG Then
+    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "")
+#Else
     Public Const OAuthClientId As String = ""
+#End If
+
     'CurseForge API Key
+#If DEBUG Then
+    Public CurseForgeAPIKey = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "")
+#Else
     Public Const CurseForgeAPIKey As String = ""
+#End If
+
     'LittleSkin OAuth ClientId
+#If DEBUG Then
+    Public LittleSkinClientId = If(Environment.GetEnvironmentVariable("PCL_LITTLESKIN_CLIENT_ID"), "")
+#Else
     Public Const LittleSkinClientId As String = ""
+#End If
+
     '遥测鉴权密钥
+#If DEBUG Then
+    Public TelemetryKey = If(Environment.GetEnvironmentVariable("PCL_TELEMETRY_KEY"), "")
+#Else
     Public Const TelemetryKey As String = ""
+#End If
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -150,26 +169,6 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         DataList.Add("-Xmx" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent) * 1024) & "m")
         If Not DataList.Any(Function(d) d.Contains("-Dlog4j2.formatMsgNoLookups=true")) Then DataList.Add("-Dlog4j2.formatMsgNoLookups=true")
     End Sub
-
-    ''' <summary>
-    ''' 打码字符串中的 AccessToken。
-    ''' </summary>
-    Friend Function SecretFilter(Raw As String, FilterChar As Char) As String
-        '打码 "accessToken " 后的内容
-        If Raw.Contains("accessToken ") Then
-            For Each Token In RegexSearch(Raw, "(?<=accessToken ([^ ]{5}))[^ ]+(?=[^ ]{5})")
-                Raw = Raw.Replace(Token, New String(FilterChar, Token.Count))
-            Next
-        End If
-        '打码当前登录的结果
-        Dim AccessToken As String = McLoginLoader.Output.AccessToken
-        If AccessToken Is Nothing OrElse AccessToken.Length < 10 OrElse Not Raw.ContainsF(AccessToken, True) OrElse
-            McLoginLoader.Output.Uuid = McLoginLoader.Output.AccessToken Then 'UUID 和 AccessToken 一样则不打码
-            Return Raw
-        Else
-            Return Raw.Replace(AccessToken, Strings.Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Strings.Right(AccessToken, 5))
-        End If
-    End Function
 
 #End Region
 
@@ -618,7 +617,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public Sub ThemeRefreshMain()
         RunInUi(
         Sub()
-            If Not FrmMain.IsLoaded Then Exit Sub
+            If Not FrmMain.IsLoaded Then Return
             '顶部条背景
             Dim Brush = New LinearGradientBrush With {.EndPoint = New Point(1, 0), .StartPoint = New Point(0, 0)}
             If ThemeNow = 5 Then
@@ -649,9 +648,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             '主页面背景
             If Setup.Get("UiBackgroundColorful") Then
                 Brush = New LinearGradientBrush With {.EndPoint = New Point(0.1, 1), .StartPoint = New Point(0.9, 0)}
-                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.9, GetDarkThemeLight(90))})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 15, ColorSat * 0.8, GetDarkThemeLight(80))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.8, GetDarkThemeLight(90))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 15, ColorSat * 0.8, GetDarkThemeLight(80))})
                 FrmMain.PanForm.Background = Brush
             Else
                 FrmMain.PanForm.Background = New MyColor(If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245))

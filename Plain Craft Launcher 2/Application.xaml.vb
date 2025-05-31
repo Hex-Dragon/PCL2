@@ -5,7 +5,7 @@ Imports System.IO.Compression
 
 Public Class Application
 
-#If DEBUG Then
+#If DEBUGRESERVED Then
     ''' <summary>
     ''' 用于开始程序时的一些测试。
     ''' </summary>
@@ -53,7 +53,7 @@ Public Class Application
                     Else
                         Environment.Exit((My.Computer.Info.AvailablePhysicalMemory - Ram) / 1024) '返回清理的内存量（K）
                     End If
-#If DEBUG Then
+#If DEBUGRESERVED Then
                     '制作更新包
                 ElseIf e.Args(0) = "--edit1" Then
                     ExeEdit(e.Args(1), True)
@@ -83,7 +83,7 @@ Public Class Application
             Directory.CreateDirectory(PathTemp & "Download")
             Directory.CreateDirectory(PathAppdata)
             '检测单例
-#If Not DEBUG Then
+#If Not DEBUGRESERVED Then
             Dim ShouldWaitForExit As Boolean = e.Args.Length > 0 AndAlso e.Args(0) = "--wait" '要求等待已有的 PCL 退出
             Dim WaitRetryCount As Integer = 0
 WaitRetry:
@@ -185,7 +185,7 @@ WaitRetry:
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()
             '执行测试
-#If DEBUG Then
+#If DEBUGRESERVED Then
             Test()
 #End If
             AniControlEnabled += 1
@@ -206,28 +206,18 @@ WaitRetry:
     End Sub
 
     '异常
-    Private IsCritErrored As Boolean = False
     Private Sub Application_DispatcherUnhandledException(sender As Object, e As DispatcherUnhandledExceptionEventArgs) Handles Me.DispatcherUnhandledException
         On Error Resume Next
         e.Handled = True
-        If IsProgramEnded Then Exit Sub
-        If IsCritErrored Then
-            '在汇报错误后继续引发错误，知道这次压不住了
-            FormMain.EndProgramForce(ProcessReturnValues.Exception)
-            Exit Sub
-        End If
-        IsCritErrored = True
-        Dim ExceptionString As String = GetExceptionDetail(e.Exception, True)
-        If ExceptionString.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse
-           ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
-           ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
-           ExceptionString.Contains("未能加载文件或程序集") Then
+        If IsProgramEnded Then Return
+        FeedbackInfo()
+        Dim Detail As String = GetExceptionDetail(e.Exception, True)
+        If Detail.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse Detail.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse Detail.Contains("未能加载文件或程序集") OrElse
+           Detail.Contains(".NET Framework") Then ' “自动错误判断” 的结果分析
             OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net481-offline-installer")
-            MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.8.1！", MsgBoxStyle.Information, "运行环境错误")
-            FormMain.EndProgramForce(ProcessReturnValues.Cancel)
+            Log(e.Exception, "你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.8.1！" & vbCrLf & "若无法安装，可卸载高版本的 .NET Framework 后再试。", LogLevel.Critical, "运行环境错误")
         Else
-            FeedbackInfo()
-            Log(e.Exception, "程序出现未知错误", LogLevel.Assert, "锟斤拷烫烫烫")
+            Log(e.Exception, "程序出现未知错误", LogLevel.Critical, "锟斤拷烫烫烫")
         End If
     End Sub
 

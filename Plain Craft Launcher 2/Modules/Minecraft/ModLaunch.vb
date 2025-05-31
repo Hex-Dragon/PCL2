@@ -81,7 +81,7 @@ Public Module ModLaunch
     ''' 记录启动日志。
     ''' </summary>
     Public Sub McLaunchLog(Text As String)
-        Text = SecretFilter(Text, "*")
+        Text = FilterUserName(FilterAccessToken(Text, "*"), "*")
         RunInUi(Sub() FrmLaunchRight.LabLog.Text += vbCrLf & "[" & GetTimeNow() & "] " & Text)
         Log("[Launch] " & Text)
     End Sub
@@ -767,7 +767,7 @@ Exception:
                 End If
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916235") Then
-                MyMsgBox($"你的网络所在的国家或地区无法登录微软账号。{vbCrLf}请尝试使用加速器或 VPN。", "登录失败", "我知道了")
+                MyMsgBox($"你的网络所在的国家或地区无法登录微软账号。{vbCrLf}请使用加速器或 VPN。", "登录失败", "我知道了")
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916238") Then
                 If MyMsgBox("该账号年龄不足，你需要先修改出生日期，然后才能登录。" & vbCrLf &
@@ -910,9 +910,7 @@ Exception:
     Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
         Dim Input As McLoginServer = Data.Input
         Dim NeedRefresh As Boolean = False, WasRefreshed As Boolean = False
-        Dim LogUsername As String = Input.UserName
-        If LogUsername.Contains("@") Then LogUsername = AccountFilter(LogUsername)
-        ProfileLog("验证方式：" & Input.Description & "（" & LogUsername & "）")
+        ProfileLog("验证方式：" & Input.Description)
         Data.Progress = 0.05
         '尝试登录
         If (Not Data.Input.ForceReselectProfile) AndAlso (Not IsCreatingProfile) Then
@@ -1267,14 +1265,14 @@ LoginFinish:
             '选择 Java
             McLaunchLog("Java 版本需求：最低 " & MinVer.ToString & "，最高 " & MaxVer.ToString)
             McLaunchJavaSelected = JavaSelect("$$", MinVer, MaxVer, McVersionCurrent)
-            If Task.IsAborted Then Exit Sub
+            If Task.IsAborted Then Return
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
-                Exit Sub
+                Return
             End If
 
             '无合适的 Java
-            If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
+            If Task.IsAborted Then Return '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
             McLaunchLog("无合适的 Java，需要确认是否自动下载")
             Dim JavaCode As String
             If MinVer >= New Version(1, 22) Then '潜在的向后兼容
@@ -1322,7 +1320,7 @@ LoginFinish:
             '检查下载结果
             If JavaSearchLoader.State <> LoadState.Loading Then JavaSearchLoader.State = LoadState.Waiting '2872#
             McLaunchJavaSelected = JavaSelect("$$", MinVer, MaxVer, McVersionCurrent)
-            If Task.IsAborted Then Exit Sub
+            If Task.IsAborted Then Return
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
             Else
@@ -1492,11 +1490,11 @@ LoginFinish:
         End If
         '编码参数（#4700、#5892、#5909）
         If McLaunchJavaSelected.VersionCode > 8 Then
-            If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments += " -Dstdout.encoding=UTF-8"
-            If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments += " -Dstderr.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments = "-Dstdout.encoding=UTF-8 " & Arguments
+            If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments = "-Dstderr.encoding=UTF-8 " & Arguments
         End If
         If McLaunchJavaSelected.VersionCode >= 18 Then
-            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=COMPAT"
+            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments = "-Dfile.encoding=COMPAT " & Arguments
         End If
         '替换参数
         Dim ReplaceArguments = McLaunchArgumentsReplace(McVersionCurrent, Loader)
@@ -1841,7 +1839,7 @@ NextVersion:
             Case 3 '自定义
                 GameSize = New Size(Math.Max(100, Setup.Get("LaunchArgumentWindowWidth")), Math.Max(100, Setup.Get("LaunchArgumentWindowHeight")))
             Case Else
-                GameSize = New Size(875, 540)
+                GameSize = New Size(854, 480)
         End Select
         If McVersionCurrent.Version.McCodeMain <= 12 AndAlso
             McLaunchJavaSelected.VersionCode <= 8 AndAlso McLaunchJavaSelected.Version.Revision >= 200 AndAlso McLaunchJavaSelected.Version.Revision <= 321 AndAlso
@@ -1953,7 +1951,7 @@ NextVersion:
             Catch ex As UnauthorizedAccessException
                 McLaunchLog("删除多余文件访问被拒绝，跳过删除步骤")
                 McLaunchLog("实际的错误信息：" & GetExceptionSummary(ex))
-                Exit Sub
+                Return
             End Try
         Next
 
@@ -2130,25 +2128,24 @@ NextVersion:
         '输出 bat
         Try
             Dim CmdString As String =
-                $"{If(McLaunchJavaSelected.VersionCode > 8 AndAlso McLaunchJavaSelected.VersionCode < 18, "chcp 65001>nul" & vbCrLf, "")}" &
+                $"{If(McLaunchJavaSelected.VersionCode > 8, "chcp 65001>nul" & vbCrLf, "")}" &
                 "@echo off" & vbCrLf &
                 $"title 启动 - {McVersionCurrent.Name}" & vbCrLf &
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
-                $"set APPDATA=""{ShortenPath(McVersionCurrent.PathIndie)}""" & vbCrLf &
                 $"cd /D ""{ShortenPath(McVersionCurrent.PathIndie)}""" & vbCrLf &
                 CustomCommandGlobal & vbCrLf &
                 CustomCommandVersion & vbCrLf &
                 $"""{McLaunchJavaSelected.PathJava}"" {McLaunchArgument}" & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
-            WriteFile(If(CurrentLaunchOptions.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString, "F"),
+            WriteFile(If(CurrentLaunchOptions.SaveBatch, Path & "PCL\LatestLaunch.bat"), FilterAccessToken(CmdString, "F"),
                       Encoding:=If(McLaunchJavaSelected.VersionCode > 8, Encoding.UTF8, Encoding.Default))
             If CurrentLaunchOptions.SaveBatch IsNot Nothing Then
                 McLaunchLog("导出启动脚本完成，强制结束启动过程")
                 AbortHint = "导出启动脚本成功！"
                 OpenExplorer(CurrentLaunchOptions.SaveBatch)
                 Loader.Parent.Abort()
-                Exit Sub '导出脚本完成
+                Return '导出脚本完成
             End If
         Catch ex As Exception
             Log(ex, "输出启动脚本失败")
@@ -2219,8 +2216,6 @@ NextVersion:
         StartInfo.EnvironmentVariables("appdata") = ShortenPath(PathMcFolder)
 
         '设置其他参数
-        StartInfo.StandardErrorEncoding = If(McLaunchJavaSelected.VersionCode > 8, Encoding.UTF8, Nothing)
-        StartInfo.StandardOutputEncoding = If(McLaunchJavaSelected.VersionCode > 8, Encoding.UTF8, Nothing)
         StartInfo.WorkingDirectory = ShortenPath(McVersionCurrent.PathIndie)
         StartInfo.UseShellExecute = False
         StartInfo.RedirectStandardOutput = True
@@ -2235,7 +2230,7 @@ NextVersion:
         If Loader.IsAborted Then
             McLaunchLog("由于取消启动，已强制结束游戏进程") '#1631
             GameProcess.Kill()
-            Exit Sub
+            Return
         End If
         Loader.Output = GameProcess
         McLaunchProcess = GameProcess

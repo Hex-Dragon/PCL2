@@ -1,6 +1,6 @@
 ﻿Public Module ModDevelop
 
-#If DEBUG Then
+#If DEBUGRESERVED Then
     Public Sub Start()
     End Sub
 #End If
