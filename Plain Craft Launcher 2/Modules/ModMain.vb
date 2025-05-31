@@ -438,6 +438,10 @@ EndHint:
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionSetup As PageVersionSetup
     Public FrmVersionExport As PageVersionExport
+    Public FrmVersionScreenshot As PageVersionScreenshot
+    Public FrmVersionResourcepack As PageVersionResourcepack
+    Public FrmVersionShader As PageVersionShader
+
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail

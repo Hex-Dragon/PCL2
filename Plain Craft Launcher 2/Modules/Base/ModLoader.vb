@@ -655,7 +655,7 @@ Restart:
     ''' 返回是否执行了加载器。
     ''' </summary>
     ''' <param name="ExtraPath">用于检查文件夹修改的额外路径。该路径不会传入加载器。</param>
-    Public Function LoaderFolderRun(Loader As LoaderBase, FolderPath As String, Type As LoaderFolderRunType, Optional MaxDepth As Integer = 0, Optional ExtraPath As String = "", Optional WaitForExit As Boolean = False) As Boolean
+    Public Function LoaderFolderRun(Loader As LoaderBase, FolderPath As String, Type As LoaderFolderRunType, Optional MaxDepth As Integer = 0, Optional ExtraPath As String = "", Optional WaitForExit As Boolean = False, Optional DataInput As Object = Nothing) As Boolean
         Dim FolderInfo As DirectoryInfo
         Dim Value As New LoaderFolderDictionaryEntry With {.FolderPath = FolderPath & ExtraPath, .LastCheckTime = Nothing}
         Try
@@ -679,9 +679,9 @@ Restart:
         '开始检查
         If Type = LoaderFolderRunType.UpdateOnly Then Return False
         If WaitForExit Then
-            Loader.WaitForExit(FolderPath, IsForceRestart:=True)
+            Loader.WaitForExit(If(DataInput, FolderPath), IsForceRestart:=True)
         Else
-            Loader.Start(FolderPath, IsForceRestart:=True)
+            Loader.Start(If(DataInput, FolderPath), IsForceRestart:=True)
         End If
         Return True
     End Function

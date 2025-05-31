@@ -643,7 +643,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.ReloadModList()
+                FrmVersionMod.Content.ReloadList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -812,7 +812,7 @@ Public Class FormMain
                 Exit Sub
             End If
             '安装 Mod
-            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
+            If PageVersionComp.InstallMods(FilePathList) Then Exit Sub
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
@@ -994,9 +994,12 @@ Public Class FormMain
         OtherTest = 2
         VersionOverall = 0
         VersionSetup = 1
-        VersionMod = 2
-        VersionModDisabled = 3
-        VersionExport = 4
+        VersionExport = 2
+        VersionScreenshot = 3
+        VersionMod = 4
+        VersionModDisabled = 5
+        VersionResourcepack = 6
+        VersionShader = 7
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
@@ -1132,7 +1135,15 @@ Public Class FormMain
             Select Case Stack.Page
                 Case PageType.VersionSetup
                     If FrmVersionLeft Is Nothing Then FrmVersionLeft = New PageVersionLeft
-                    CType(FrmVersionLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    For Each item In FrmVersionLeft.PanItem.Children
+                        If item.GetType() = GetType(MyListItem) Then
+                            Dim target As MyListItem = item
+                            If CType(target.Tag, PageSubType) = SubType Then
+                                target.SetChecked(True, True, Stack = PageCurrent)
+                                Exit For
+                            End If
+                        End If
+                    Next
             End Select
             PageChangeActual(Stack, SubType)
         End If
