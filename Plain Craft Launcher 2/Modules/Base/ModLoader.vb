@@ -576,7 +576,7 @@ Restart:
     Private LoaderTaskbarProgressLast As Shell.TaskbarItemProgressState = Shell.TaskbarItemProgressState.None
 
     Public Sub LoaderTaskbarAdd(Of T)(Loader As LoaderCombo(Of T))
-        If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRemove(Loader)
+        FrmSpeedRight?.TaskRemove(Loader)
         LoaderTaskbar.Add(Loader)
         Log($"[Taskbar] {Loader.Name} 已加入任务列表")
     End Sub
@@ -593,7 +593,7 @@ Restart:
             '若单个任务已中止或全部任务已完成，则刷新并移除
             For Each Task In LoaderTaskbar.ToList()
                 If IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting Then
-                    If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
+                    FrmSpeedRight?.TaskRefresh(Task)
                     LoaderTaskbar.Remove(Task)
                     Log($"[Taskbar] {Task.Name} 已移出任务列表")
                 End If
