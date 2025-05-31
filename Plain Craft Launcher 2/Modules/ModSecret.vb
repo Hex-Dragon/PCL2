@@ -312,6 +312,18 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 #End Region
 
 #Region "主题"
+    
+#If DEBUG Then
+    Private ReadOnly EnableCustomTheme As Boolean = Environment.GetEnvironmentVariable("PCL_CUSTOM_THEME") IsNot Nothing
+    Private ReadOnly EnvThemeHue = Environment.GetEnvironmentVariable("PCL_THEME_HUE") '0 ~ 359
+    Private ReadOnly EnvThemeSat = Environment.GetEnvironmentVariable("PCL_THEME_SAT") '0 ~ 100
+    Private ReadOnly EnvThemeLight = Environment.GetEnvironmentVariable("PCL_THEME_LIGHT") '-20 ~ 20
+    Private ReadOnly EnvThemeHueDelta = Environment.GetEnvironmentVariable("PCL_THEME_HUE_DELTA") '-90 ~ 90
+    Private ReadOnly CustomThemeHue = If(EnvThemeHue Is Nothing, 210, Integer.Parse(EnvThemeHue))
+    Private ReadOnly CustomThemeSat = If(EnvThemeSat Is Nothing, 85, Integer.Parse(EnvThemeSat))
+    Private ReadOnly CustomThemeLight = If(EnvThemeLight Is Nothing, 0, Integer.Parse(EnvThemeLight))
+    Private ReadOnly CustomThemeHueDelta = If(EnvThemeHueDelta Is Nothing, 0, Integer.Parse(EnvThemeHueDelta))
+#End If
 
     Public IsDarkMode As Boolean = False
     
@@ -570,12 +582,25 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Function
     
     Public Sub ThemeRefreshColor()
+#If DEBUG Then
+        If EnableCustomTheme Then
+            ColorHue = CustomThemeHue
+            ColorSat = CustomThemeSat
+            ColorLightAdjust = CustomThemeLight
+            ColorHueTopbarDelta = CustomThemeHueDelta
+        ElseIf IsDarkMode Then
+#Else
         If IsDarkMode Then
+#End If
             ColorHue = 205
             ColorSat = 90
+            ColorLightAdjust = 0
+            ColorHueTopbarDelta = 0
         Else
             ColorHue = 210
             ColorSat = 85
+            ColorLightAdjust = 0
+            ColorHueTopbarDelta = 0
         End If
         
         Dim res = Application.Current.Resources
@@ -635,6 +660,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     
     Public Sub ThemeRefreshMain()
+#If DEBUG Then
+        If EnableCustomTheme Then ThemeNow = 14
+#End If
         RunInUi(
         Sub()
             If Not FrmMain.IsLoaded Then Return
