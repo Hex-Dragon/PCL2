@@ -3042,7 +3042,12 @@ Retry:
         End Select
 
     End Sub
+    Public Function Base64Decode(Text As String) As String
 
+        Dim decodedBytes As Byte() = Convert.FromBase64String(Text)
+        Return System.Text.Encoding.UTF8.GetString(decodedBytes)
+
+    End Function
     '反馈
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
