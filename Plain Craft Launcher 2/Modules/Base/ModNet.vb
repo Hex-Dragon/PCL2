@@ -1,4 +1,4 @@
-﻿Public Module ModNet
+Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
