@@ -1330,15 +1330,6 @@ LoginFinish:
 
         End SyncLock
     End Sub
-    ''' <summary>
-    ''' 指定 Java 使用高性能显卡
-    ''' </summary>
-    ''' <param name="JavawPath"></param>
-    Public Sub ModifyJavaGPUPreferences(JavawPath As String)
-        If Not ReadReg(JavawPath, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
-            WriteReg(JavawPath, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
-        End If
-    End Sub
 
 #End Region
 
@@ -2058,9 +2049,6 @@ NextVersion:
                 Log(exx, "更新 launcher_profiles.json 失败", LogLevel.Feedback)
             End Try
         End Try
-
-        '设置 Java 选项为高性能
-        ModifyJavaGPUPreferences(McLaunchJavaSelected.PathJavaw)
 
         '更新 options.txt
         Dim SetupFileAddress As String = McVersionCurrent.PathIndie & "options.txt"
