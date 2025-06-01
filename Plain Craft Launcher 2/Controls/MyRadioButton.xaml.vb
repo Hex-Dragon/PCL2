@@ -238,8 +238,8 @@ Public Class MyRadioButton
                     Case ColorState.White
                         If Checked Then
                             Background = New MyColor(255, 255, 255)
-                            ShapeLogo.Fill = New MyColor(19, 112, 243)
-                            LabText.Foreground = New MyColor(19, 112, 243)
+                            ShapeLogo.SetResourceReference(Shapes.Path.FillProperty, "ColorBrush3")
+                            LabText.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush3")
                         Else
                             Background = ColorSemiTransparent
                             ShapeLogo.Fill = New MyColor(255, 255, 255)

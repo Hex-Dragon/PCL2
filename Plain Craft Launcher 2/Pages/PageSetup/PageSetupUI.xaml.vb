@@ -24,6 +24,15 @@ Public Class PageSetupUI
                 End If
             Next
         End If
+        
+#If DEBUG Then
+        If EnableCustomTheme Then
+            LabLauncherDelta.Visibility = Visibility.Visible
+            SliderLauncherDelta.Visibility = Visibility.Visible
+            LabLauncherLight.Visibility = Visibility.Visible
+            SliderLauncherLight.Visibility = Visibility.Visible
+        End If
+#End If
 
         AniControlEnabled += 1
         Reload() '#4826，在每次进入页面时都刷新一下
@@ -217,7 +226,7 @@ Public Class PageSetupUI
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderBackgroundOpacity.Change, SliderBackgroundBlur.Change, SliderLauncherOpacity.Change, SliderMusicVolume.Change, SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
+    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderBackgroundOpacity.Change, SliderBackgroundBlur.Change, SliderLauncherOpacity.Change, SliderMusicVolume.Change ', SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDarkMode.SelectionChanged, ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
@@ -547,6 +556,12 @@ Refresh:
     End Sub
     Private Sub HSL_Change() Handles SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
         If AniControlEnabled <> 0 OrElse SliderLauncherSat Is Nothing OrElse Not SliderLauncherSat.IsLoaded Then Return
+#If DEBUG Then
+        If EnableCustomTheme Then
+            ColorHueTopbarDelta = SliderLauncherDelta.Value - 90
+            ColorLightAdjust = SliderLauncherLight.Value - 20
+        End If
+#End If
         ThemeRefresh()
     End Sub
 

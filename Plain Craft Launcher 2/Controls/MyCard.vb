@@ -65,18 +65,12 @@ Public Class MyCard
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyCard), New PropertyMetadata(""))
 
     Private Async Sub _ThemeChanged(sender As Object, e As Boolean)
-        If e Then
-            IsThemeChanging = True
-            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(235, 43, 43, 43) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
-            Await Task.Delay(300)
-            IsThemeChanging = False
-        Else
-            IsThemeChanging = True
-            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
-            Await Task.Delay(300)
-            IsThemeChanging = False
-
-        End If
+        Dim bgBrush As SolidColorBrush = Application.Current.Resources("ColorBrushSemiWhite")
+        IsThemeChanging = True
+        AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(bgBrush) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
+        Await Task.Delay(300)
+        MainBorder.Background = bgBrush
+        IsThemeChanging = False
     End Sub
 
     'UI 建立
@@ -85,13 +79,14 @@ Public Class MyCard
             .Margin = New Thickness(-3, -3, -3, -3 - GetWPFSize(1)), .ShadowRadius = 3, .Opacity = DropShadowIdleOpacity, .CornerRadius = New CornerRadius(5)}
         MainChrome.SetResourceReference(MyDropShadow.ColorProperty, "ColorObject1")
         Children.Insert(0, MainChrome)
-        MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(If(IsDarkMode, 235, 205), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255))), .CornerRadius = New CornerRadius(5), .IsHitTestVisible = False}
+        MainBorder = New Border With {.CornerRadius = New CornerRadius(5), .IsHitTestVisible = False}
         Children.Insert(1, MainBorder)
         MainGrid = New Grid
         Children.Add(MainGrid)
     End Sub
     Private IsLoad As Boolean = False
     Private Sub Init() Handles Me.Loaded
+        AddHandler ThemeChanged, AddressOf _ThemeChanged
         If IsLoad Then Return
         IsLoad = True
         '初次加载限定
@@ -107,6 +102,8 @@ Public Class MyCard
             MainSwap.SetResourceReference(Shapes.Path.FillProperty, "ColorBrush1")
             MainGrid.Children.Add(MainSwap)
         End If
+        '更新背景色
+        MainBorder.Background = Application.Current.Resources("ColorBrushSemiWhite")
         '改变默认的折叠
         If IsSwaped AndAlso SwapControl IsNot Nothing Then
             MainSwap.RenderTransform = New RotateTransform(If(SwapLogoRight, 270, 0))
