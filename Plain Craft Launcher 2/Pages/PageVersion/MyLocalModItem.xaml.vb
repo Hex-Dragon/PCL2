@@ -114,44 +114,41 @@ Public Class MyLocalCompItem
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
 
+    '滑动选中
     Public Class SwipeSelect
         Public Property Start As Integer
         Public Property [End] As Integer
+        Private _Swiping As Boolean = False
         Public Property Swiping As Boolean
+            Get
+                Return _Swiping
+            End Get
+            Set(value As Boolean)
+                _Swiping = value
+                TargetFrm.CardSelect.IsHitTestVisible = Not value
+            End Set
+        End Property
         Public Property SwipeToState As Boolean
         Public Property TargetFrm As PageVersionCompResource
     End Class
 
     Public Property CurrentSwipe As SwipeSelect
 
-    '滑动选中
-    Private Shared SwipeStart As Integer, SwipeEnd As Integer
-    Private Shared _Swiping As Boolean = False
-    Private Shared Property Swiping As Boolean
-        Get
-            Return _Swiping
-        End Get
-        Set(value As Boolean)
-            _Swiping = value
-            FrmVersionMod.CardSelect.IsHitTestVisible = Not value
-        End Set
-    End Property
-    Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
     Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
         If Parent Is Nothing Then Return 'Mod 可能已被删除（#3824）
         '开始滑动
         Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Index
-        SwipeEnd = Index
-        Swiping = True
-        SwipToState = Not Checked
+        CurrentSwipe.Start = Index
+        CurrentSwipe.End = Index
+        CurrentSwipe.Swiping = True
+        CurrentSwipe.SwipeToState = Not Checked
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
         If Parent Is Nothing Then Return 'Mod 可能已被删除（#3824）
         '结束滑动
         If Mouse.LeftButton <> MouseButtonState.Pressed OrElse
            TypeOf Mouse.DirectlyOver IsNot MyLocalCompItem Then '#5771
-            Swiping = False
+            CurrentSwipe.Swiping = False
             Return
         End If
         '计算滑动范围
@@ -160,8 +157,8 @@ Public Class MyLocalCompItem
         CurrentSwipe.Start = MathClamp(Math.Min(CurrentSwipe.Start, Index), 0, Elements.Count - 1)
         CurrentSwipe.End = MathClamp(Math.Max(CurrentSwipe.End, Index), 0, Elements.Count - 1)
         '勾选所有范围中的项
-        If SwipeStart = SwipeEnd Then Return
-        For i = SwipeStart To SwipeEnd
+        If CurrentSwipe.Start = CurrentSwipe.End Then Return
+        For i = CurrentSwipe.Start To CurrentSwipe.End
             Dim Item As MyLocalCompItem = Elements(i)
             Item.InitLate(Item, e)
             Item.Checked = CurrentSwipe.SwipeToState
