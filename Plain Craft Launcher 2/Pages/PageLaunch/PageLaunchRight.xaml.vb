@@ -65,7 +65,7 @@ Download:
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
                     OnlineLoader.Start(Url) '下载完成后将会再次触发更新
-                    Exit Sub
+                    Return
                 End If
             Case 3
                 Select Case Setup.Get("UiCustomPreset")
@@ -146,7 +146,7 @@ Download:
                 VersionAddress = Address.BeforeFirst("?")
                 If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
                 VersionAddress += "version"
-                If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
+                If Address.Contains("?") Then VersionAddress += "?" & Address.AfterFirst("?")
             End If
             '校验版本
             Dim Version As String = ""
@@ -174,7 +174,7 @@ Download:
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
             End If
             '要求刷新
-            Refresh()
+            RunInUi(AddressOf Refresh) '不直接调用 Refresh，以防止死循环（#6245）
         Catch ex As Exception
             Log(ex, $"下载主页失败（{Address}）", If(ModeDebug, LogLevel.Msgbox, LogLevel.Hint))
         End Try
@@ -215,7 +215,7 @@ Download:
         SyncLock LoadContentLock
             '如果加载目标内容一致则不加载
             Dim Hash = Content.GetHashCode()
-            If Hash = LoadedContentHash Then Exit Sub
+            If Hash = LoadedContentHash Then Return
             LoadedContentHash = Hash
             '实际加载内容
             PanCustom.Children.Clear()
@@ -223,6 +223,7 @@ Download:
                 Log($"[Page] 实例化：清空主页 UI，来源为空")
                 Return
             End If
+            Dim LoadStartTime As Date = Date.Now
             Try
                 '修改时应同时修改 PageOtherHelpDetail.Init
                 Content = HelpArgumentReplace(Content)
@@ -240,8 +241,11 @@ Download:
                 Else
                     Log(ex, "加载主页界面失败", LogLevel.Hint)
                 End If
+                Return
             End Try
-            Log($"[Page] 实例化：加载主页 UI 完成")
+            Dim LoadCostTime = (Date.Now - LoadStartTime).Milliseconds
+            Log($"[Page] 实例化：加载主页 UI 完成，耗时 {LoadCostTime}ms")
+            If LoadCostTime > 3000 Then Hint($"主页加载过于缓慢（花费了 {Math.Round(LoadCostTime / 1000, 1)} 秒），请向主页作者反馈此问题，或暂时停止使用该主页")
         End SyncLock
         Return
 Refresh:
