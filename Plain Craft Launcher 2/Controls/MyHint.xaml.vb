@@ -35,23 +35,20 @@ Public Class MyHint
     End Property
     Private _ColorType As Themes = Themes.Red
     Private Sub UpdateUI() Handles Me.Loaded
+        Dim hue As Double
         Select Case Theme
             Case Themes.Blue
-                Background = New MyColor("#d9ecff")
-                BorderBrush = New MyColor("#1172D4")
-                LabText.Foreground = New MyColor("#0F64B8")
-                BtnClose.Foreground = New MyColor("#0F64B8")
+                hue = 210
             Case Themes.Red
-                Background = New MyColor("#ffdddf")
-                BorderBrush = New MyColor("#d82929")
-                LabText.Foreground = New MyColor("#bf0b0b")
-                BtnClose.Foreground = New MyColor("#bf0b0b")
+                hue = 355
             Case Themes.Yellow
-                Background = New MyColor("#ffebd7")
-                BorderBrush = New MyColor("#f57a00")
-                LabText.Foreground = New MyColor("#d86c00")
-                BtnClose.Foreground = New MyColor("#d86c00")
+                hue = 40
         End Select
+        Dim s As ThemeStyle = CurrentStyle
+        Background = New MyColor().FromHSL2(hue, 90, s.L7)
+        BorderBrush = New MyColor().FromHSL2(hue, 90, s.L2)
+        LabText.Foreground = New MyColor().FromHSL2(hue, 90, s.L2)
+        BtnClose.Foreground = New MyColor().FromHSL2(hue, 90, s.L2)
     End Sub
     <Obsolete("IsWarn 已过时。请换用 Theme 属性。")>
     Public Property IsWarn As Boolean
@@ -99,6 +96,7 @@ Public Class MyHint
     End Property
     Public Property RelativeSetup As String = ""
     Private Sub MyHint_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        AddHandler ThemeChanged, AddressOf _ThemeChanged
         If CanClose AndAlso Setup.Get(RelativeSetup) Then Visibility = Visibility.Collapsed
     End Sub
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
@@ -147,8 +145,6 @@ Public Class MyHint
     Public Sub New()
         InitializeComponent()
         UpdateUI()
-        AddHandler ModSecret.ThemeChanged, AddressOf _ThemeChanged
-
     End Sub
 
     Private Sub Dispose() Handles Me.Unloaded
