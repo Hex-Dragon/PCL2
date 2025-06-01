@@ -130,9 +130,17 @@ Retry:
                     request.Headers.Accept.ParseAdd(Accept)
                     request.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.5")
                     request.Headers.Add("X-Requested-With", "XMLHttpRequest")
-                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
+                    Using response = GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).Result
                         response.EnsureSuccessStatusCode()
-                        Return Encoding.GetString(response.Content.ReadAsByteArrayAsync().Result)
+                        Using responseStream As Stream = response.Content.ReadAsStreamAsync().Result
+                            If Encoding Is Nothing Then Encoding = Encoding.UTF8
+                            '读取流并转换为字符串
+                            Using reader As New StreamReader(responseStream, Encoding)
+                                Dim content As String = reader.ReadToEnd()
+                                If String.IsNullOrEmpty(content) Then Throw New WebException("获取结果失败，内容为空（" & Url & "）")
+                                Return content
+                            End Using
+                        End Using
                     End Using
                 End Using
             End Using
@@ -247,11 +255,17 @@ RequestFinished:
                 Using request As New HttpRequestMessage(HttpMethod.Get, Url)
                     request.Headers.Accept.ParseAdd(Accept)
                     SecretHeadersSign(Url, request, UseBrowserUserAgent)
-                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
+                    Using response = GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).Result
                         response.EnsureSuccessStatusCode()
                         If Encode Is Nothing Then Encode = Encoding.UTF8
-                        Dim ret = Encode.GetString(response.Content.ReadAsByteArrayAsync().Result)
-                        Return If(IsJson, GetJson(ret), ret)
+                        Using responseStream As Stream = response.Content.ReadAsStreamAsync().Result
+                            '读取流并转换为字符串
+                            Using reader As New StreamReader(responseStream, Encode)
+                                Dim content As String = reader.ReadToEnd()
+                                If String.IsNullOrEmpty(content) Then Throw New WebException("获取结果失败，内容为空（" & Url & "）")
+                                Return If(IsJson, GetJson(content), content)
+                            End Using
+                        End Using
                     End Using
                 End Using
             End Using
@@ -309,7 +323,6 @@ RequestFinished:
                 SecretHeadersSign(Url, request, UseBrowserUserAgent)
                 Using response As HttpResponseMessage = Await GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
                     response.EnsureSuccessStatusCode()
-
                     Using httpStream As Stream = Await response.Content.ReadAsStreamAsync()
                         Using fileStream As New FileStream(LocalFile, FileMode.Create)
                             Await httpStream.CopyToAsync(fileStream)
@@ -488,9 +501,13 @@ RequestFinished:
                             request.Headers.Add(Pair.Key, Pair.Value)
                         Next
                     End If
-                    Using response = GetHttpClient().SendAsync(request, cts.Token).Result
+                    Using response = GetHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).Result
                         response.EnsureSuccessStatusCode()
-                        Return Encoding.UTF8.GetString(response.Content.ReadAsByteArrayAsync().Result)
+                        Using responseStream = response.Content.ReadAsStreamAsync().Result
+                            Using reader As New StreamReader(responseStream, Encoding.UTF8)
+                                Return reader.ReadToEnd()
+                            End Using
+                        End Using
                     End Using
                 End Using
             End Using
