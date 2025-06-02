@@ -19,8 +19,7 @@ Public Module ModNet
                                      Optional UseBrowserUA As Boolean = False,
                                      Optional RequireHeaderSign As Boolean = False,
                                      Optional RequireCdnSign As Boolean = False) As HttpRequestMessage
-            Dim Watcher As New Stopwatch()
-            Watcher.Start()
+
             Dim RequestMethod As HttpMethod = GetHttpMethod(Method)
             If RequireCdnSign Then RequestUrl = SecretCdnSign(RequestUrl)
 
@@ -55,8 +54,7 @@ FixContentHeader:
             If RequireHeaderSign Then
                 SecretHeadersSign(RequestUrl, requestMessage, UseBrowserUA)
             End If
-            Watcher.Stop()
-            Log($"[Test] GetRequestMessage 执行用时:{Watcher.ElapsedMilliseconds} 毫秒")
+
             Return RequestMessage
 
         End Function
@@ -67,8 +65,6 @@ FixContentHeader:
                                Optional Encode As Encoding = Nothing,
                                Optional Timeout As Integer = 25000,
                                Optional RequireReturnRespObj As Boolean = False)
-            Dim Watcher As New Stopwatch()
-            Watcher.Start()
             Using CTS As New CancellationTokenSource(Timeout)
                 Dim Client = ClientFactory.GetHttpClient()
                 Dim Resp As HttpResponseMessage = Client.SendAsync(Req, HttpCompletionOption.ResponseHeadersRead, CTS.Token).GetAwaiter().GetResult()
@@ -83,8 +79,7 @@ FixContentHeader:
                     Dim Bytes = DataStream.ToArray()
                     Resp.Dispose()
                     Req.Dispose()
-                    Watcher.Stop()
-                    Log($"[Test] SendRequest 执行用时:{Watcher.ElapsedMilliseconds} 毫秒")
+
                     If RequireDecode Then
                         If Encode Is Nothing Then Encode = Encoding.UTF8
                         Return Encode.GetString(Bytes)
