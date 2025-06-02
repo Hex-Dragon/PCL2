@@ -37,6 +37,7 @@ Module ModStyle
         Private Shared Function ProcessElement(element As JObject, currentFormat As List(Of String)) As String
             Dim text As String = ""
             Dim formats As New List(Of String)(currentFormat)
+
             ' 处理格式
             If element.ContainsKey("bold") AndAlso element("bold").ToObject(Of Boolean) Then
                 formats.Add("l")
@@ -49,14 +50,17 @@ Module ModStyle
                 End If
                 formats.Insert(0, colorCode) ' 颜色代码在前
             End If
+
             ' 应用格式
             If formats.Count > 0 Then
                 text &= "§" & String.Join("§", formats)
             End If
+
             ' 添加文本内容
             If element.ContainsKey("text") Then
                 text &= element("text").ToString()
             End If
+
             ' 处理子元素
             If element.ContainsKey("extra") Then
                 For Each child In element("extra")
@@ -131,9 +135,11 @@ Module ModStyle
                             color = "#FFFF55"
                         Case "f", "F"
                             color = "#FFFFFF"
-                    '格式化代码
+
+                        '格式化代码
                         Case "k", "K" '随机字符
                             IsRandomText = True
+
                             ' 开始新的Run用于随机文本
                             If Not String.IsNullOrEmpty(curRun.Text) Then
                                 curRun = New Run()
