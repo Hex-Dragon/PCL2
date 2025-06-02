@@ -92,12 +92,17 @@
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
                     <local:MyButton x:Name="BtnServerQuery" Text="查询" Width="60" Grid.Column="1"/>
-                    <Border x:Name="ServerInfo" Margin="0,15,0,0" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ColorBrush7}">
-                        <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image x:Name="ImgServerLogo" Width="42" Height="42"/>
-                            <TextBlock x:Name="LabServerDesc" TextWrapping="Wrap" FontSize="13.5"/>
-                            <TextBlock x:Name="LabServerPlayer" TextWrapping="Wrap" FontSize="13.5"/>
-                        </StackPanel>
+                    <Border x:Name="ServerInfo" Margin="0,15,0,0" Visibility="Collapsed" Grid.Row="1" Grid.ColumnSpan="2" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ColorBrush5}" Background="#1E1500">
+                        <Grid Margin="6" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Margin="6" x:Name="ImgServerLogo" Width="54" Height="54"/>
+                            <TextBlock Grid.Column="1" Margin="6" x:Name="LabServerDesc" TextWrapping="Wrap" FontSize="15" Foreground="White"/>
+                            <TextBlock Grid.Column="2" Margin="6" x:Name="LabServerPlayer" TextWrapping="Wrap" TextAlignment="Right" FontSize="12" Foreground="White"/>
+                        </Grid>
                     </Border>
                 </Grid>
             </local:MyCard>

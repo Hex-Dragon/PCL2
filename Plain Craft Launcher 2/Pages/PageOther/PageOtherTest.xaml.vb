@@ -451,10 +451,18 @@ Public Class PageOtherTest
                                    base64String = base64String.Split(","c)(1)
                                End If
                                Dim imageBytes As Byte() = Convert.FromBase64String(base64String)
+                               Dim latencyColor As String
+                               If ret.Latency < 150 Then
+                                   latencyColor = "a"
+                               ElseIf ret.Latency < 400 Then
+                                   latencyColor = "6"
+                               Else
+                                   latencyColor = "c"
+                               End If
                                '设置 UI
                                RunInUi(Sub()
-                                           MinecraftFormatter.SetColorfulTextLab(ret.Description, LabServerDesc)
-                                           LabServerPlayer.Text = $"{ret.PlayerOnline}/{ret.PlayerMax}"
+                                           MinecraftFormatter.SetColorfulTextLab($"Minecraft 服务器{vbCrLf}{ret.Description}", LabServerDesc)
+                                           MinecraftFormatter.SetColorfulTextLab($"{ret.PlayerOnline}/{ret.PlayerMax}{vbCrLf}§{latencyColor}{ret.Latency}ms", LabServerPlayer)
                                            ServerInfo.Visibility = Visibility.Visible
                                            If Not String.IsNullOrEmpty(base64String) Then
                                                Dim bitmapImage As New BitmapImage()
