@@ -492,7 +492,6 @@ Install:
             Case CompType.ResourcePack : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadResourcePack)
             Case CompType.Shader : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadShader)
         End Select
-        PageComp.TargetVersion = Nothing
     End Sub
 
 #End Region
