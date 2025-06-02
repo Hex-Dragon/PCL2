@@ -1,4 +1,8 @@
-﻿Module ModStyle
+Imports System.Threading.Tasks
+Imports System.Windows.Threading
+Imports Windows.UI.Xaml
+
+Module ModStyle
 
     Public Class MinecraftFormatter
         Private Shared colorMap As New Dictionary(Of String, String) From {
@@ -20,6 +24,9 @@
             {"white", "f"}
         }
 
+        Private Shared random As New Random()
+        Private Shared randomChars As String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?/~"
+
         Public Shared Function ConvertToMinecraftFormat(data As JObject) As String
             Dim result As String = ""
             For Each item In data("extra")
@@ -27,16 +34,13 @@
             Next
             Return result.Replace("§§", "§")
         End Function
-
         Private Shared Function ProcessElement(element As JObject, currentFormat As List(Of String)) As String
             Dim text As String = ""
             Dim formats As New List(Of String)(currentFormat)
-
             ' 处理格式
             If element.ContainsKey("bold") AndAlso element("bold").ToObject(Of Boolean) Then
                 formats.Add("l")
             End If
-
             If element.ContainsKey("color") Then
                 Dim color = element("color").ToString()
                 Dim colorCode As String = "f"
@@ -45,27 +49,22 @@
                 End If
                 formats.Insert(0, colorCode) ' 颜色代码在前
             End If
-
             ' 应用格式
             If formats.Count > 0 Then
                 text &= "§" & String.Join("§", formats)
             End If
-
             ' 添加文本内容
             If element.ContainsKey("text") Then
                 text &= element("text").ToString()
             End If
-
             ' 处理子元素
             If element.ContainsKey("extra") Then
                 For Each child In element("extra")
                     text &= ProcessElement(child, New List(Of String)(formats))
                 Next
             End If
-
             Return text
         End Function
-
         ''' <summary>
         ''' Minecraft 文本格式化代码，用于显示不同颜色的文本
         ''' </summary>
@@ -77,16 +76,21 @@
                 Exit Sub
             End If
             lab.Inlines.Clear()
-            '随机太难实现，先咕咕咕了
+
             Dim HasItalicProperty As Boolean = False '斜体
             Dim HasDeleteLineProperty As Boolean = False '删除线
             Dim HasStrickThroughProperty As Boolean = False '下划线
             Dim HasBlodProperty As Boolean = False '粗体
+            Dim IsRandomText As Boolean = False '随机文本模式
 
             Dim color As String = "#FFFFFF"
             Dim isColorCode As Boolean = False
             Dim curRun As Run = New Run()
             lab.Inlines.Add(curRun)
+
+            ' 用于存储需要随机化的文本段
+            Dim randomTextRuns As New List(Of Run)()
+
             For Each c As Char In text
                 If c = "§" Then '下一字符是格式化代码
                     isColorCode = True
@@ -128,6 +132,14 @@
                         Case "f", "F"
                             color = "#FFFFFF"
                     '格式化代码
+                        Case "k", "K" '随机字符
+                            IsRandomText = True
+                            ' 开始新的Run用于随机文本
+                            If Not String.IsNullOrEmpty(curRun.Text) Then
+                                curRun = New Run()
+                                lab.Inlines.Add(curRun)
+                            End If
+                            randomTextRuns.Add(curRun)
                         Case "l" '粗体
                             HasBlodProperty = True
                         Case "o" '斜体
@@ -142,21 +154,57 @@
                             HasItalicProperty = False
                             HasStrickThroughProperty = False
                             HasDeleteLineProperty = False
+                            IsRandomText = False
                     End Select
-                    If Not String.IsNullOrEmpty(curRun.Text) Then '遇到格式代码但是有文本，重开一个Run
+
+                    If Not String.IsNullOrEmpty(curRun.Text) AndAlso c <> "k" AndAlso c <> "K" Then '遇到格式代码但是有文本，重开一个Run
                         curRun = New Run()
                         lab.Inlines.Add(curRun)
                     End If
+
                     curRun.Foreground = New SolidColorBrush(New MyColor(color))
                     curRun.FontWeight = If(HasBlodProperty, FontWeights.Bold, FontWeights.Normal)
                     curRun.FontStyle = If(HasItalicProperty, FontStyles.Italic, FontStyles.Normal)
                     curRun.TextDecorations = If(HasStrickThroughProperty, TextDecorations.Strikethrough, Nothing)
                     curRun.TextDecorations = If(HasDeleteLineProperty, TextDecorations.Underline, Nothing)
+                Else
+                    If IsRandomText Then
+                        ' 随机模式下，添加随机字符
+                        curRun.Text += randomChars(random.Next(randomChars.Length))
+                    Else
+                        curRun.Text += c
+                    End If
                 End If
-                If Not isColorCode Then curRun.Text += c
+
                 If isColorCode Then isColorCode = False
             Next
+
+            ' 设置定时器来更新随机文本
+            If randomTextRuns.Count > 0 Then
+                Dim timer As New System.Windows.Threading.DispatcherTimer(DispatcherPriority.Normal, Application.Current.Dispatcher)
+                timer.Interval = TimeSpan.FromMilliseconds(10)
+                AddHandler timer.Tick, Sub(sender, e)
+                                           For Each run In randomTextRuns
+                                               If Not String.IsNullOrEmpty(run.Text) Then
+                                                   Dim sb As New StringBuilder()
+                                                   For i As Integer = 0 To run.Text.Length - 1
+                                                       sb.Append(randomChars(random.Next(randomChars.Length)))
+                                                   Next
+                                                   run.Text = sb.ToString()
+                                               End If
+                                           Next
+                                       End Sub
+                timer.Start()
+            End If
         End Sub
+
+        Private Shared Function GenerateRandomString(length As Integer) As String
+            Dim sb As New StringBuilder()
+            For i As Integer = 1 To length
+                sb.Append(randomChars(random.Next(randomChars.Length)))
+            Next
+            Return sb.ToString()
+        End Function
     End Class
 
 End Module
