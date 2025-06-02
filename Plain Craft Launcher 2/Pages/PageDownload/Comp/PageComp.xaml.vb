@@ -117,10 +117,6 @@ Public Class PageComp
         Dim Request As New CompProjectRequest(PageType, Storage, (Page + 1) * PageSize)
         Dim GameVersion As String = If(TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
                 If(TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w"), TextSearchVersion.Text, Nothing))
-        If TargetName IsNot Nothing Then
-            FrmDownloadMod.TextSearchName.Text = TargetName
-            TargetName = Nothing
-        End If
         With Request
             .SearchText = TextSearchName.Text
             .GameVersion = GameVersion
