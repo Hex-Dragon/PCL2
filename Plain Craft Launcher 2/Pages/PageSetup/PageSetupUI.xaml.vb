@@ -1,4 +1,6 @@
-﻿Public Class PageSetupUI
+﻿Imports NAudio.Wave
+
+Public Class PageSetupUI
 
     Public Shadows IsLoaded As Boolean = False
 
@@ -357,7 +359,15 @@ Refresh:
             PanMusicVolume.Visibility = Visibility.Visible
             PanMusicDetail.Visibility = Visibility.Visible
             BtnMusicClear.Visibility = Visibility.Visible
-            CardMusic.Title = "背景音乐（" & EnumerateFiles(Path & "PCL\Musics\").Count & " 首）"
+            Dim validMusicCount As Integer = 0
+            For Each File In EnumerateFiles(Path & "PCL\Musics\")
+                Try
+                    If {".ini", ".jpg", ".txt", ".cfg", ".lrc", ".db", ".png"}.Contains(File.Extension.ToLower) Then Continue For
+                    validMusicCount += 1
+                Catch ex As Exception
+                End Try
+            Next
+            CardMusic.Title = "背景音乐（" & validMusicCount & " 首）"
         Else
             PanMusicVolume.Visibility = Visibility.Collapsed
             PanMusicDetail.Visibility = Visibility.Collapsed
