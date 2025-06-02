@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
@@ -8,31 +8,19 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Beta|Any CPU = Beta|Any CPU
-		Beta|x64 = Beta|x64
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
 		ReleaseUpdate|Any CPU = ReleaseUpdate|Any CPU
-		ReleaseUpdate|x64 = ReleaseUpdate|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|Any CPU.ActiveCfg = BETA|Any CPU
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|Any CPU.Build.0 = BETA|Any CPU
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|x64.ActiveCfg = BETA|x64
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|x64.Build.0 = BETA|x64
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|x64.ActiveCfg = Debug|x64
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|x64.Build.0 = Debug|x64
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|x64.ActiveCfg = Release|x64
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|x64.Build.0 = Release|x64
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|Any CPU.ActiveCfg = ReleaseUpdate|Any CPU
 		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|Any CPU.Build.0 = ReleaseUpdate|Any CPU
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|x64.ActiveCfg = ReleaseUpdate|x64
-		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|x64.Build.0 = ReleaseUpdate|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
