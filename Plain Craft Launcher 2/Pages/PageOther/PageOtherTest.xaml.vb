@@ -415,34 +415,49 @@ Public Class PageOtherTest
         End If
         Dim url = LabServerIp.Text
         Log($"查询服务器：{url}")
-        Dim IsIp As Boolean = RegexCheck(url, "^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(:(0|[1-9]\d{0,3}|[1-4]\d{4}|5[0-9]{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$")
         _IsQueryServer = True
         RunInNewThread(Sub()
                            Try
-                               '处理 SRV 解析
-                               If Not IsIp AndAlso Not url.ContainsF(":") Then
-                                   Dim needSRV = False
-                                   Try
-                                       Dns.GetHostAddresses(url)
-                                   Catch ex As Exception
-                                       needSRV = True
-                                   End Try
-                                   If needSRV Then
-                                       Log($"需要获取 {url} 的 SRV 记录")
-                                       url = nDnsQuery.GetSRVRecords($"_minecraft._tcp.{url}").FirstOrDefault()
-                                       If url.Count() = 0 Then Throw New Exception("查询不到 SRV 记录")
-                                       Log($"获取到的 SRV 记录为 {url}")
+                               '数据处理
+                               Dim ip As String
+                               Dim port As UInt16 = 25565
+
+                               Dim tempIp As IPAddress
+                               If IPAddress.TryParse(url, tempIp) Then '纯 IP
+                                   ip = url
+                               ElseIf url.Contains(":") Then '域名/IP:端口 不需要 SRV
+                                   Dim PossiblePort As UInt16
+                                   Dim temp = url.Split(":")
+                                   If temp.Count() = 2 AndAlso UInt16.TryParse(temp.ElementAt(1), PossiblePort) Then
+                                       ip = temp.ElementAt(0)
+                                       port = PossiblePort
+                                   Else
+                                       Throw New Exception("错误的地址结构")
                                    End If
+                               Else
+                                   Log($"尝试获取 {url} 的 SRV 记录")
+                                   Try
+                                       Dim SrvRet = nDnsQuery.GetSRVRecords($"_minecraft._tcp.{url}")
+                                       Dim WantedSRV = SrvRet.FirstOrDefault()
+                                       If String.IsNullOrEmpty(WantedSRV) Then Throw New Exception("没有 SRV 记录")
+                                       Log($"获取到的 SRV 记录为 {WantedSRV}")
+                                       Dim temp = WantedSRV.Split(":")
+                                       If temp.Count() = 2 Then
+                                           ip = temp.ElementAt(0)
+                                           port = UInt16.Parse(temp.ElementAt(1))
+                                       ElseIf temp.Count() = 1 Then
+                                           ip = temp.ElementAt(0)
+                                           port = 25565
+                                       Else
+                                           Throw New Exception("对方服务器的 SRV 数据错误")
+                                       End If
+                                   Catch ex As Exception
+                                       ip = url
+                                       port = 25565
+                                   End Try
                                End If
                                '查询信息
-                               Dim ip As String = url
-                               Dim port As Integer = 25565
-                               If url.Contains(":") Then
-                                   Dim res = url.Split({":"}, StringSplitOptions.None)
-                                   ip = res(0)
-                                   port = res(1)
-                               End If
-                               Dim query As New ModLink.MCPing(ip, port)
+                               Dim query As New ModLink.MCPing(ip.ToString(), port)
                                Dim ret = query.GetInfo().Result
                                If ret Is Nothing Then Throw New Exception("没有查询到信息")
                                'Base64 图像转换
@@ -451,6 +466,7 @@ Public Class PageOtherTest
                                    base64String = base64String.Split(","c)(1)
                                End If
                                Dim imageBytes As Byte() = Convert.FromBase64String(base64String)
+                               '延迟颜色
                                Dim latencyColor As String
                                If ret.Latency < 150 Then
                                    latencyColor = "a"

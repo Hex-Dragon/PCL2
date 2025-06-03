@@ -100,7 +100,7 @@
             Next
             Return result.Replace("§§", "§")
         End Function
-        
+
         Private Shared Function ProcessElement(element As JObject, currentFormat As List(Of String)) As String
             Dim text As String = ""
             Dim formats As New List(Of String)(currentFormat)
@@ -109,7 +109,7 @@
             If element.ContainsKey("bold") AndAlso element("bold").ToObject(Of Boolean) Then
                 formats.Add("l")
             End If
-            
+
             If element.ContainsKey("color") Then
                 Dim color = element("color").ToString()
                 Dim colorCode As String = "f"
@@ -135,10 +135,10 @@
                     text &= ProcessElement(child, New List(Of String)(formats))
                 Next
             End If
-            
+
             Return text
         End Function
-        
+
         ''' <summary>
         ''' Minecraft 文本格式化代码，用于显示不同颜色的文本
         ''' </summary>

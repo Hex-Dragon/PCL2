@@ -28,13 +28,13 @@ Public Class ModLink
     Public Class MCPing
 
 
-        Sub New(IP As String, Optional Port As Integer = 25565)
+        Sub New(IP As String, Optional Port As UInt16 = 25565)
             _IP = IP
             _Port = Port
         End Sub
 
         Private _IP As String
-        Private _Port As Integer
+        Private _Port As UInt16
 
         ''' <summary>
         ''' 对疑似 MC 端口进行 MCPing，并返回相关信息
