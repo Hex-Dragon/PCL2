@@ -3312,11 +3312,7 @@ Public Class AsyncImageSource
             If value Is Nothing Then
                 _LoadingSourceReal = Nothing
             ElseIf TypeOf value Is String Then
-                If CType(value, String).Length = 0 Then
-                    _LoadingSourceReal = Nothing
-                Else
-                    _LoadingSourceReal = New MyBitmap(CType(value, String))
-                End If
+                _LoadingSourceReal = LoadFileViaMyBitmap(value)
             Else
                 _LoadingSourceReal = CType(value, ImageSource)
             End If
@@ -3369,15 +3365,14 @@ Public Class AsyncImageSource
             Await LoadSemaphore.WaitAsync() '保证使用同样文件缓存路径的实例串行加载
             Try
                 '尝试使用缓存
-                Dim ResultFromCache As ImageSource
-                ResultFromCache = Await Task.Run(AddressOf TryLoadCache)
+                Dim ResultFromCache = Await Task.Run(AddressOf TryLoadCache)
                 If ResultFromCache IsNot Nothing Then
                     Result = ResultFromCache
                     Exit Function
                 End If
                 '缓存无效
                 Await Task.Run(AddressOf DownloadImage) '从网络下载图片
-                Result = Await Task.Run(Function() New MyBitmap(_TempDownloadingPath)) '加载图片
+                Result = Await Task.Run(Function() LoadFileViaMyBitmap(_TempDownloadingPath)) '加载图片
             Finally
                 LoadSemaphore.Release()
             End Try
@@ -3390,7 +3385,7 @@ Public Class AsyncImageSource
     ''' <summary>
     ''' 从缓存获取 ImageSource，缓存未启用/不存在/过期/损坏或运行失败返回 Nothing，不会抛出异常。
     ''' </summary>
-    Private Function TryLoadCache() As MyBitmap
+    Private Function TryLoadCache() As ImageSource
         Try
             If Not EnableCache Then Return Nothing '未启用缓存
             '判断缓存是否有效
@@ -3401,7 +3396,7 @@ Public Class AsyncImageSource
             If CacheAvailable Then
                 '缓存有效
                 Try
-                    Return New MyBitmap(_TempDownloadingPath)
+                    Return LoadFileViaMyBitmap(_TempDownloadingPath)
                 Catch
                     'MyBitmap 从文件解析失败
                     File.Delete(_TempDownloadingPath)
@@ -3433,6 +3428,14 @@ DownloadRetry:
             Throw New Exception("下载图片失败。", ex)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' 使用 MyBitmap 从文件路径创建 ImageSource 并 Freeze 住。
+    ''' </summary>
+    Private Shared Function LoadFileViaMyBitmap(FilePath As String) As ImageSource
+        LoadFileViaMyBitmap = New MyBitmap(FilePath)
+        LoadFileViaMyBitmap.Freeze()
+    End Function
 
 End Class
 
