@@ -18,6 +18,7 @@ Public Class ModLink
         Public Property PlayerOnline As Integer
         Public Property Description As String
         Public Property Favicon As String
+        Public Property Latency As Integer = -1
 
         Public Overrides Function ToString() As String
             Return $"[MCPing] Version: {VersionName}, Players: {PlayerOnline}/{PlayerMax}, Description: {Description}"
@@ -46,6 +47,7 @@ Public Class ModLink
                     ' 向服务器发送握手数据包
                     Using stream = client.GetStream()
                         If Not stream.CanWrite OrElse Not stream.CanRead Then Return Nothing
+                        Dim startTime = DateTime.Now '开始计时
 
                         Dim handshake As Byte() = BuildHandshake(_IP, _Port)
                         Log($"[MCPing] Sending {String.Join(" ", handshake)}", LogLevel.Debug)
@@ -77,6 +79,7 @@ Public Class ModLink
                                 Exit Do
                             End If
                         Loop While bytesNeeded > 0
+                        Dim endTime = DateTime.Now '停止计时
                         packetLength -= 3
                         Log($"[MCPing] Got packet length ({packetLength})", LogLevel.Debug)
 
@@ -105,7 +108,8 @@ Public Class ModLink
                         .PlayerMax = j("players")("max"),
                         .PlayerOnline = j("players")("online"),
                         .Favicon = If(j("favicon"), ""),
-                        .Port = _Port
+                        .Port = _Port,
+                        .Latency = Math.Round((endTime - startTime).TotalMilliseconds)
                         }
                         Dim descObj = j("description")
                         world.Description = ""
