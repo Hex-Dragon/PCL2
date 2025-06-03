@@ -3217,9 +3217,10 @@ End Class
 ''' LoadingSource - 加载时显示的图片，合法值为 空 / 可被 MyBitmap 解析的字符串 / ImageSource。<br/>
 ''' EnableCache - 是否启用缓存（默认启用），不启用的话每次都会联网获取图片。<br/>
 ''' FileCacheExpiredTime - 缓存到期时间，默认为七天，遵循 TimeSpan 的格式解析。<br/>
-''' Result - 不在 xaml 中使用，用于存储输出的 ImageSource。<br/><br/>
+''' Result - 可绑定，用于存储输出的 ImageSource。<br/>
+''' XamlReferenceType - 设置为 Instance 即可拿到 AsyncImageSourceImpl 而非 Binding 对象。<br/><br/>
 ''' 在 xaml 中引用的语法为：Source="{local:AsyncImageSource https://example.com/example.png}"，<br/>
-''' 最终效果相当于将 Source 属性绑定到了一个动态改变的值上。
+''' 此时效果相当于将 Source 属性绑定到了一个动态改变的值上。
 ''' </summary>
 Public Class AsyncImageSourceExtension
     Inherits Markup.MarkupExtension
@@ -3253,6 +3254,12 @@ Public Class AsyncImageSourceExtension
         End Set
     End Property
 
+    Public Property XamlReferenceType As XamlReferenceTypeEnum = XamlReferenceTypeEnum.Binding
+    Public Enum XamlReferenceTypeEnum
+        Binding
+        Instance
+    End Enum
+
     Shared Sub New()
         _LoadingSourceDefault = Windows.Application.Current.Dispatcher.Invoke(
             Function()
@@ -3277,8 +3284,15 @@ Public Class AsyncImageSourceExtension
             .EnableCache = EnableCache,
             .FileCacheExpiredTime = _FileCacheExpiredTime
         }
+        Select Case XamlReferenceType
+            Case XamlReferenceTypeEnum.Binding
+                ProvideValue = New Binding("Result") With {.Source = Result}.ProvideValue(serviceProvider)
+            Case XamlReferenceTypeEnum.Instance
+                ProvideValue = Result
+            Case Else
+                Throw New InvalidOperationException("不具意义的 AsyncImageSource.XamlReferenceType。")
+        End Select
         Result.StartLoad()
-        Return New Binding("Result") With {.Source = Result}.ProvideValue(serviceProvider)
     End Function
 End Class
 
