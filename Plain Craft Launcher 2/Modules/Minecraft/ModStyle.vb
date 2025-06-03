@@ -5,7 +5,7 @@
         Inherits Run
         Implements IDisposable
         
-        Private _timer As Threading.DispatcherTimer
+        Private _timer As Threading.DispatcherTimer = Nothing
     
         '定义依赖属性
         Public Shared ReadOnly UpdateIntervalProperty As DependencyProperty = DependencyProperty.Register(NameOf(UpdateInterval), GetType(TimeSpan), GetType(TimerRun), New PropertyMetadata(TimeSpan.FromSeconds(1)))
@@ -19,16 +19,22 @@
                 SetValue(UpdateIntervalProperty, value)
             End Set
         End Property
+        
+        Public Property AutoStart As Boolean
+        
+        Public Sub New(Optional autoStart As Boolean = False)
+            Me.AutoStart = autoStart
+        End Sub
     
         '定时器事件
         Public Event TimerTick As Action(Of TimerRun)
         
-        Private Sub _TimerTick(sender As Object, e As RoutedEventArgs)
+        Private Sub _TimerTick(sender As Object, e As EventArgs)
             RaiseEvent TimerTick(Me)
         End Sub
     
         Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            StartTimer()
+            if AutoStart Then StartTimer()
         End Sub
     
         Private Sub OnUnloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
@@ -159,7 +165,7 @@
 
             Dim color As String = "#FFFFFF"
             Dim isColorCode As Boolean = False
-            Dim curRun As Run = New Run()
+            Dim curRun As New TimerRun()
             lab.Inlines.Add(curRun)
 
             ' 用于存储需要随机化的文本段
@@ -214,6 +220,7 @@
                                 curRun = New TimerRun()
                                 lab.Inlines.Add(curRun)
                             End If
+                            curRun.AutoStart = True
                             randomTextRuns.Add(curRun)
                         Case "l" '粗体
                             HasBlodProperty = True
@@ -233,7 +240,7 @@
                     End Select
 
                     If Not String.IsNullOrEmpty(curRun.Text) AndAlso c <> "k" AndAlso c <> "K" Then '遇到格式代码但是有文本，重开一个Run
-                        curRun = New Run()
+                        curRun = New TimerRun()
                         lab.Inlines.Add(curRun)
                     End If
 

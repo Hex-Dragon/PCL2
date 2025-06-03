@@ -96,11 +96,37 @@ Public Class ModLink
                         Log($"[MCPing] Received ({res.Count})", LogLevel.Debug)
 
                         Dim response As String = Encoding.UTF8.GetString(res.ToArray(), 0, res.Count)
-                        Dim startIndex = response.IndexOf("{""")
+                        Dim startIndex = response.IndexOf("{""", StringComparison.Ordinal)
                         If startIndex > 10 Then Return Nothing
                         response = response.Substring(startIndex)
                         Log("[MCPing] Server Response: " & response, LogLevel.Debug)
+                        
+                        '查找并截取第一段 JSON
+                        '有些 mod 或是整合包定制服务端会在返回的 JSON 后面添加新的内容，比如 Better MC
+                        '这时候需要把第一段合法的 JSON 截出来，否则下面解析 JSON 会炸掉
+                        '但是它们完全可以在返回的 JSON 内部添加自定义内容，添加在后面估计就是为了图 mixin 省事
+                        '不守规范一时爽，第三方解析火葬场
+                        Dim stack = 0, index = 0, stackStr = False, length = response.Length
+                        While index < length 
+                            Select Case response(index)
+                                Case "\"c
+                                    If stackStr Then index += 1
+                                Case """"c
+                                    stackStr = Not stackStr
+                                Case "{"c
+                                    If Not stackStr Then stack += 1
+                                Case "}"c
+                                    stack -= 1
+                                    If stack = 0 Then
+                                        response = response.Substring(0, index + 1)
+                                        Log("[MCPing] Correct Response: " & response, LogLevel.Debug)
+                                        Exit While
+                                    End If
+                            End Select
+                            index += 1
+                        End While
 
+                        '解析返回的 JSON 文本
                         Dim j = JObject.Parse(response)
 
                         Dim world As New WorldInfo With {
