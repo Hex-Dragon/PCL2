@@ -3225,7 +3225,7 @@ End Class
 Public Class AsyncImageSourceExtension
     Inherits Markup.MarkupExtension
     Private Shared ReadOnly _TimeSpanConverter As New TimeSpanConverter
-    Private Shared ReadOnly _LoadingSourceDefault As ImageSource
+    Private Shared ReadOnly _LoadingSourceDefault As ImageSource = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
 
     Private _LoadingSource As ImageSource = _LoadingSourceDefault
     Private _FileCacheExpiredTime As TimeSpan = TimeSpan.FromDays(7)
@@ -3261,12 +3261,7 @@ Public Class AsyncImageSourceExtension
     End Enum
 
     Shared Sub New()
-        _LoadingSourceDefault = Windows.Application.Current.Dispatcher.Invoke(
-            Function()
-                Dim Result As ImageSource = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
-                Result.Freeze()
-                Return Result
-            End Function)
+        _LoadingSourceDefault.Freeze()
     End Sub
 
     Public Sub New()
