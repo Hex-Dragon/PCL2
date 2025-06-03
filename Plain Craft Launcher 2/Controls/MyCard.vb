@@ -86,9 +86,9 @@ Public Class MyCard
     End Sub
     Private IsLoad As Boolean = False
     Private Sub Init() Handles Me.Loaded
-        AddHandler ThemeChanged, AddressOf _ThemeChanged
         If IsLoad Then Return
         IsLoad = True
+        AddHandler ThemeChanged, AddressOf _ThemeChanged
         '初次加载限定
         If MainTextBlock Is Nothing Then
             MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(15, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
@@ -117,7 +117,7 @@ Public Class MyCard
         End If
     End Sub
     Private Sub Dispose() Handles Me.Unloaded
-        RemoveHandler ModSecret.ThemeChanged, AddressOf _ThemeChanged
+        If Parent Is Nothing Then RemoveHandler ThemeChanged, AddressOf _ThemeChanged
     End Sub
     Public Sub StackInstall()
         StackInstall(SwapControl, InstallMethod)
