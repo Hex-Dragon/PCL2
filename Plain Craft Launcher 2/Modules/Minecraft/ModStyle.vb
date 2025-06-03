@@ -4,58 +4,21 @@
     Public Class TimerRun
         Inherits Run
         Implements IDisposable
-        
+
         Private _timer As Threading.DispatcherTimer = Nothing
-    
-        '定义依赖属性
-        Public Shared ReadOnly UpdateIntervalProperty As DependencyProperty = DependencyProperty.Register(NameOf(UpdateInterval), GetType(TimeSpan), GetType(TimerRun), New PropertyMetadata(TimeSpan.FromSeconds(1)))
-    
-        'UpdateInterval 属性
-        Public Property UpdateInterval As TimeSpan
+        Private ReadOnly Property _isTimerRunning
             Get
-                Return CType(GetValue(UpdateIntervalProperty), TimeSpan)
+                Return _timer IsNot Nothing AndAlso _timer.IsEnabled
             End Get
-            Set
-                SetValue(UpdateIntervalProperty, value)
-            End Set
         End Property
-        
-        Public Property AutoStart As Boolean
-        
-        Public Sub New(Optional autoStart As Boolean = False)
-            Me.AutoStart = autoStart
-        End Sub
-    
-        '定时器事件
-        Public Event TimerTick As Action(Of TimerRun)
-        
-        Private Sub _TimerTick(sender As Object, e As EventArgs)
-            RaiseEvent TimerTick(Me)
-        End Sub
-    
-        Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-            if AutoStart Then StartTimer()
-        End Sub
-    
-        Private Sub OnUnloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
-            StopTimer()
-        End Sub
-    
-        Public Sub StartTimer()
-            StopTimer() '确保没有重复的定时器
-            _timer = New Threading.DispatcherTimer With { .Interval = UpdateInterval }
-            AddHandler _timer.Tick, AddressOf _TimerTick
-            _timer.Start()
-        End Sub
-    
-        Public Sub StopTimer()
-            If _timer IsNot Nothing Then
-                _timer.Stop()
-                RemoveHandler _timer.Tick, AddressOf _TimerTick
-                _timer = Nothing
-            End If
-        End Sub
-    
+
+        '定义依赖属性
+        Public Shared ReadOnly UpdateIntervalProperty As DependencyProperty =
+            DependencyProperty.Register(
+            NameOf(UpdateInterval),
+            GetType(TimeSpan),
+            GetType(TimerRun),
+            New PropertyMetadata(TimeSpan.FromSeconds(1)))
         '属性变化处理
         Protected Overrides Sub OnPropertyChanged(e As DependencyPropertyChangedEventArgs)
             MyBase.OnPropertyChanged(e)
@@ -63,15 +26,64 @@
                 _timer.Interval = UpdateInterval
             End If
         End Sub
-        
-        '实现 IDisposable
-        Private _disposed As Boolean = False
-        Public Sub Dispose() Implements IDisposable.Dispose
-            If Not _disposed Then
-                StopTimer()
-                _disposed = True
+
+        'UpdateInterval 属性
+        Public Property UpdateInterval As TimeSpan
+            Get
+                Return CType(GetValue(UpdateIntervalProperty), TimeSpan)
+            End Get
+            Set
+                If Value > TimeSpan.Zero Then
+                    SetValue(UpdateIntervalProperty, Value)
+                End If
+            End Set
+        End Property
+
+        Public Property AutoStart As Boolean
+
+        Public Sub New(Optional interval As TimeSpan = Nothing, Optional autoStart As Boolean = False)
+            _timer = New Threading.DispatcherTimer
+            AddHandler _timer.Tick, AddressOf _timerTick
+            Me.UpdateInterval = If(interval = Nothing, TimeSpan.FromSeconds(1), interval)
+            Me.AutoStart = autoStart
+        End Sub
+
+        '定时器事件
+        Public Delegate Sub TimerTickDelegate(sender As TimerRun)
+        Public Event TimerTick As TimerTickDelegate
+
+        Private Sub _timerTick(sender As Object, e As EventArgs)
+            RaiseEvent TimerTick(Me)
+        End Sub
+
+        Private Sub OnLoaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+            If AutoStart Then StartTimer()
+        End Sub
+
+        Private Sub OnUnloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
+            StopTimer()
+        End Sub
+
+        Public Sub StartTimer()
+            If Me.Dispatcher Is Nothing Then
+                Log("[TimerRun] Dispatcher is null, unable to run", LogLevel.Critical)
+                Return
             End If
-            GC.SuppressFinalize(Me)
+            If Not _isTimerRunning Then _timer?.Start()
+        End Sub
+
+        Public Sub StopTimer()
+            If _isTimerRunning Then _timer?.Stop()
+        End Sub
+
+        Private _isDisposed = False
+        Public Sub Dispose() Implements IDisposable.Dispose
+            If _isDisposed Then Return
+            _isDisposed = True
+            '资源释放
+            RemoveHandler _timer.Tick, AddressOf _timerTick
+            _timer?.Stop()
+            _timer = Nothing
         End Sub
 
     End Class
@@ -169,7 +181,7 @@
             lab.Inlines.Add(curRun)
 
             ' 用于存储需要随机化的文本段
-            Dim randomTextRuns As New List(Of TimerRun)()
+            Dim randomTextRuns As New List(Of TimerRun)
 
             For Each c As Char In text
                 If c = "§" Then '下一字符是格式化代码
