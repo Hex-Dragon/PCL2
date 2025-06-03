@@ -3221,10 +3221,69 @@ End Class
 ''' 在 xaml 中引用的语法为：Source="{local:AsyncImageSource https://example.com/example.png}"，<br/>
 ''' 最终效果相当于将 Source 属性绑定到了一个动态改变的值上。
 ''' </summary>
-Public Class AsyncImageSource
+Public Class AsyncImageSourceExtension
     Inherits Markup.MarkupExtension
-    Implements INotifyPropertyChanged
+    Private Shared ReadOnly _TimeSpanConverter As New TimeSpanConverter
+    Private Shared ReadOnly _LoadingSourceDefault As ImageSource
 
+    Private _LoadingSource As ImageSource = _LoadingSourceDefault
+    Private _FileCacheExpiredTime As TimeSpan = TimeSpan.FromDays(7)
+
+    Public Property Source As String
+
+    Public Property FallbackSource As String
+
+    Public WriteOnly Property LoadingSource As Object
+        Set(value As Object)
+            If value Is Nothing Then
+                _LoadingSource = Nothing
+            ElseIf TypeOf value Is String Then
+                _LoadingSource = New MyBitmap(DirectCast(value, String))
+            Else
+                _LoadingSource = CType(value, ImageSource)
+            End If
+        End Set
+    End Property
+
+    Public Property EnableCache As Boolean = True
+
+    Public WriteOnly Property FileCacheExpiredTime As Object
+        Set(value As Object)
+            _FileCacheExpiredTime = _TimeSpanConverter.ConvertFrom(value)
+        End Set
+    End Property
+
+    Shared Sub New()
+        _LoadingSourceDefault = Windows.Application.Current.Dispatcher.Invoke(
+            Function()
+                Dim Result As ImageSource = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+                Result.Freeze()
+                Return Result
+            End Function)
+    End Sub
+
+    Public Sub New()
+    End Sub
+
+    Public Sub New(Source As String)
+        Me.Source = Source
+    End Sub
+
+    Public Overrides Function ProvideValue(serviceProvider As IServiceProvider) As Object
+        If Source Is Nothing Then Throw New InvalidOperationException("AsyncImageSource.Source 未被设置。")
+        Dim Result As New AsyncImageSourceImpl(Source) With {
+            .FallbackSource = FallbackSource,
+            .LoadingSource = _LoadingSource,
+            .EnableCache = EnableCache,
+            .FileCacheExpiredTime = _FileCacheExpiredTime
+        }
+        Result.StartLoad()
+        Return New Binding("Result") With {.Source = Result}.ProvideValue(serviceProvider)
+    End Function
+End Class
+
+Public Class AsyncImageSourceImpl
+    Implements INotifyPropertyChanged
     ''' <summary>
     ''' 工具类，接受同样的标识符时始终返回同一个对象，除非该对象已被回收。
     ''' </summary>
@@ -3283,56 +3342,22 @@ Public Class AsyncImageSource
         End Function
     End Class
 
-    Private Shared ReadOnly _FileCacheDirectory As String = $"{PathTemp}MyImage\"
-    Private Shared ReadOnly _SemaphoreProvider As New InstanceProvider(Of SemaphoreSlim)(Function() New SemaphoreSlim(1, 1))
-    Private Shared ReadOnly _LoadingSourceRealDefault As ImageSource = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+    Private Shared ReadOnly FileCacheDirectory As String = $"{PathTemp}MyImage\"
+    Private Shared ReadOnly SemaphoreProvider As New InstanceProvider(Of SemaphoreSlim)(Function() New SemaphoreSlim(1, 1))
 
-    Private _Source As String
-    Private _TempDownloadingPath As String
-    Private _FileCacheExpiredTimeReal As TimeSpan = TimeSpan.FromDays(7)
-    Private _LoadingSourceReal As ImageSource = _LoadingSourceRealDefault
+    Public ReadOnly Source As String
+    Public ReadOnly TempDownloadingPath As String
+    Public FallbackSource As String
+    Public LoadingSource As ImageSource
+    Public EnableCache As Boolean
+    Public FileCacheExpiredTime As TimeSpan
+
     Private _Result As ImageSource
-
-    Public Property Source As String
-        Get
-            Return _Source
-        End Get
-        Set(value As String)
-            If value Is Nothing Then Throw New InvalidOperationException("AsyncImageSource.Source 不可设置为 null。")
-            If _Source IsNot Nothing Then Throw New InvalidOperationException("AsyncImageSource.Source 不可重复设置。")
-            _TempDownloadingPath = $"{_FileCacheDirectory}_{GetHash(value)}.png"
-            _Source = value
-        End Set
-    End Property
-
-    Public Property FallbackSource As String
-
-    Public WriteOnly Property LoadingSource As Object
-        Set(value As Object)
-            If value Is Nothing Then
-                _LoadingSourceReal = Nothing
-            ElseIf TypeOf value Is String Then
-                _LoadingSourceReal = LoadFileViaMyBitmap(value)
-            Else
-                _LoadingSourceReal = CType(value, ImageSource)
-            End If
-        End Set
-    End Property
-
-    Public Property EnableCache As Boolean = True
-
-    Public WriteOnly Property FileCacheExpiredTime As Object
-        Set(value As Object)
-            Static Converter As New TimeSpanConverter
-            _FileCacheExpiredTimeReal = Converter.ConvertFrom(value)
-        End Set
-    End Property
-
     Public Property Result As ImageSource
         Get
             Return _Result
         End Get
-        Private Set(value As ImageSource)
+        Set(value As ImageSource)
             _Result = value
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Result"))
         End Set
@@ -3340,28 +3365,19 @@ Public Class AsyncImageSource
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
-    Public Sub New()
-    End Sub
-
     Public Sub New(Source As String)
         Me.Source = Source
+        TempDownloadingPath = $"{FileCacheDirectory}_{GetHash(Source)}.png"
     End Sub
-
-    Public Overrides Function ProvideValue(serviceProvider As IServiceProvider) As Object
-        If Source Is Nothing Then Throw New InvalidOperationException("AsyncImageSource.Source 未被设置。")
-        StartLoad()
-        Return New Binding("Result") With {.Source = Me}.ProvideValue(serviceProvider)
-    End Function
 
     Public Sub StartLoad()
         Windows.Application.Current.Dispatcher.InvokeAsync(AddressOf LoadAsync)
     End Sub
 
     Private Async Function LoadAsync() As Task
-        '需运行在 UI 线程上
         Try
-            Result = _LoadingSourceReal '加载中占位符
-            Dim LoadSemaphore = Await Task.Run(Function() _SemaphoreProvider.GetFrom(_TempDownloadingPath))
+            Result = LoadingSource '加载中占位符
+            Dim LoadSemaphore = Await Task.Run(Function() SemaphoreProvider.GetFrom(TempDownloadingPath))
             Await LoadSemaphore.WaitAsync() '保证使用同样文件缓存路径的实例串行加载
             Try
                 '尝试使用缓存
@@ -3372,7 +3388,7 @@ Public Class AsyncImageSource
                 End If
                 '缓存无效
                 Await Task.Run(AddressOf DownloadImage) '从网络下载图片
-                Result = Await Task.Run(Function() LoadFileViaMyBitmap(_TempDownloadingPath)) '加载图片
+                Result = Await Task.Run(Function() LoadFileViaMyBitmap(TempDownloadingPath)) '加载图片
             Finally
                 LoadSemaphore.Release()
             End Try
@@ -3390,20 +3406,20 @@ Public Class AsyncImageSource
             If Not EnableCache Then Return Nothing '未启用缓存
             '判断缓存是否有效
             Dim CacheAvailable As Boolean
-            With New FileInfo(_TempDownloadingPath)
-                CacheAvailable = .Exists AndAlso (Date.Now - .LastWriteTime < _FileCacheExpiredTimeReal)
+            With New FileInfo(TempDownloadingPath)
+                CacheAvailable = .Exists AndAlso (Date.Now - .LastWriteTime < FileCacheExpiredTime)
             End With
             If CacheAvailable Then
                 '缓存有效
                 Try
-                    Return LoadFileViaMyBitmap(_TempDownloadingPath)
+                    Return LoadFileViaMyBitmap(TempDownloadingPath)
                 Catch
                     'MyBitmap 从文件解析失败
-                    File.Delete(_TempDownloadingPath)
+                    File.Delete(TempDownloadingPath)
                 End Try
             End If
         Catch ex As Exception
-            Log(ex, $"读取网络图片缓存（缓存位置 {_TempDownloadingPath}，源 {Source}）时预期之外的异常")
+            Log(ex, $"读取网络图片缓存（缓存位置 {TempDownloadingPath}，源 {Source}）时预期之外的异常")
         End Try
         Return Nothing
     End Function
@@ -3415,9 +3431,9 @@ Public Class AsyncImageSource
         Dim TargetUrl As String = Source, Retried As Boolean = False
         Try
 DownloadRetry:
-            Directory.CreateDirectory(IO.Path.GetDirectoryName(_TempDownloadingPath))
+            Directory.CreateDirectory(IO.Path.GetDirectoryName(TempDownloadingPath))
             Using Client As New WebClient()
-                Client.DownloadFile(TargetUrl, _TempDownloadingPath)
+                Client.DownloadFile(TargetUrl, TempDownloadingPath)
             End Using
         Catch ex As Exception When (Not Retried) AndAlso (FallbackSource IsNot Nothing)
             Log(ex, $"下载图片可重试地失败（{Source}）", LogLevel.Developer)
