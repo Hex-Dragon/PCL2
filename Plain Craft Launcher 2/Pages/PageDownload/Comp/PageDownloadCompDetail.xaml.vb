@@ -75,7 +75,7 @@
         Dim Results As List(Of CompFile) = CompFileLoader.Output
         If PageType = CompType.Any Then
             Results = Results.Where(Function(r) r.Type <> CompType.Plugin).ToList
-        ElseIf PageType = CompType.Shader Then
+        ElseIf PageType = CompType.Shader OrElse PageType = CompType.ResourcePack Then
             Results = Results.ToList
         Else
             Results = Results.Where(Function(r) r.Type = PageType).ToList
