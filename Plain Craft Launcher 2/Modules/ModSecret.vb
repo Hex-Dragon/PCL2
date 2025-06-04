@@ -834,7 +834,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
     Public Sub UpdateStart(Version As VersionDataModel, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
         Dim DlTargetPath As String = Path + "PCL\Plain Craft Launcher Community Edition.exe"
-        Dim DlTempPath As String = PathTemp & "Cache\CEUpdates.zip"
+        Dim DlTempPath As String = $"{PathTemp}Cache\CEUpdates.zip"
         RunInNewThread(Sub()
                            Try
                                WriteFile($"{PathTemp}CEUpdateLog.md", Version.Desc)

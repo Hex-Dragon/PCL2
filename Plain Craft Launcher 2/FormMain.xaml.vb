@@ -11,10 +11,12 @@ Public Class FormMain
         RunInNewThread(
         Sub()
             Dim ChangelogFile = $"{PathTemp}CEUpdateLog.md"
-            If Not File.Exists(ChangelogFile) Then
-                Return
+            Dim Changelog As String
+            If File.Exists(ChangelogFile) Then
+                Changelog = ReadFile(ChangelogFile)
+            Else
+                Changelog = "欢迎使用呀~"
             End If
-            Dim Changelog = ReadFile(ChangelogFile)
             If MyMsgBox(Changelog, "PCL CE 已更新至 " & VersionBranchName & " " & VersionBaseName, "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If

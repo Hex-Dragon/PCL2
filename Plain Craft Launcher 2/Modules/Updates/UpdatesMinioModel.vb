@@ -16,8 +16,8 @@
     Public Function EnsureLatestData() As Boolean Implements IUpdateSource.EnsureLatestData
         '先检查缓存
         Dim RemoteCache As JObject = NetGetCodeByRequestRetry($"{_baseUrl}api/cache.json", IsJson:=True)
-        Dim UpdatesCacheFile = PathTemp & "Cache/updates.json"
-        Dim AnnouncementCacheFile = PathTemp & "Cache/announcement.json"
+        Dim UpdatesCacheFile = $"{PathTemp}Cache/upd_{SourceName}_updates.json"
+        Dim AnnouncementCacheFile = $"{PathTemp}Cache/upd_{SourceName}_announcement.json"
         Dim HasChange = False
         If GetFileMD5(UpdatesCacheFile) <> RemoteCache("updates") Then
             WriteFile(UpdatesCacheFile, NetGetCodeByRequestRetry($"{_baseUrl}api/updates.json"))
