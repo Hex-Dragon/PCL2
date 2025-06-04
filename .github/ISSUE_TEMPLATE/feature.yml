@@ -13,6 +13,8 @@ body:
       required: true
     - label: "我仍想要提交，是因为我确认这个 Issue 是官方版转交过来，或是希望由社区版处理的。"
       required: true
+    - label: "我已知悉社区不对这类 Issue 的完成时间作出任何保证，并有足够的耐心等待社区开发者的处理，同时已知悉如果我作出催促、质问或类似的举动，这个 Issue 可能会被直接关闭"
+      required: true
 - type: input
   id: "yml-2"
   attributes:
