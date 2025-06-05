@@ -161,7 +161,7 @@ WaitRetry:
                 WriteFile(PathPure & "CE\" & "msalruntime.zip", GetResources("msalruntime"))
                 Using fs = New FileStream(PathPure & "CE\" & "msalruntime.zip", FileMode.Open)
                     Using fszip = New ZipArchive(fs)
-                        fszip.ExtractToDirectory(PathPure)
+                        fszip.ExtractToDirectory(PathPure & "CE\")
                     End Using
                 End Using
             End If
