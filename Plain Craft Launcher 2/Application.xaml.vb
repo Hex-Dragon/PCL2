@@ -157,7 +157,7 @@ WaitRetry:
             If Not File.Exists(WebpPath) Then WriteFile(WebpPath, GetResources("libwebp64"))
             Dim SqlPath = $"{PathPure}CE\SQLite.Interop.dll"
             If Not File.Exists(SqlPath) Then WriteFile(SqlPath, GetResources("SQLite"))
-            If Not Directory.Exists(PathPure & "runtimes") Then
+            If Not Directory.Exists(PathPure & "CE\" & "runtimes") Then
                 WriteFile(PathPure & "CE\" & "msalruntime.zip", GetResources("msalruntime"))
                 Using fs = New FileStream(PathPure & "CE\" & "msalruntime.zip", FileMode.Open)
                     Using fszip = New ZipArchive(fs)
