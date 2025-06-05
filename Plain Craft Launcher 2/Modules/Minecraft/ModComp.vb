@@ -1,4 +1,5 @@
 ﻿Imports System.Threading.Tasks
+Imports System.Data.SQLite
 
 Public Module ModComp
 
@@ -92,46 +93,36 @@ Public Module ModComp
 
 #Region "CompDatabase | Mod 数据库"
 
-    Private _CompDatabase As List(Of CompDatabaseEntry) = Nothing
-    Private ReadOnly Property CompDatabase As List(Of CompDatabaseEntry)
+    Private _CompDatabase As SqliteConnection = Nothing
+    Private ReadOnly Property CompDatabase As SqliteConnection
         Get
             If _CompDatabase IsNot Nothing Then Return _CompDatabase
             '初始化数据库
-            _CompDatabase = New List(Of CompDatabaseEntry)
-            Dim i As Integer = 0
-            For Each Line In DecodeBytes(GetResources("ModData")).Replace(vbCrLf, vbLf).Replace(vbCr, "").Split(vbLf)
-                i += 1
-                If Line = "" Then Continue For
-                For Each EntryData As String In Line.Split("¨")
-                    Dim Entry = New CompDatabaseEntry
-                    Dim SplitedLine = EntryData.Split("|")
-                    If SplitedLine(0).StartsWithF("@") Then
-                        Entry.CurseForgeSlug = Nothing
-                        Entry.ModrinthSlug = SplitedLine(0).Replace("@", "")
-                    ElseIf SplitedLine(0).EndsWithF("@") Then
-                        Entry.CurseForgeSlug = SplitedLine(0).TrimEnd("@")
-                        Entry.ModrinthSlug = Entry.CurseForgeSlug
-                    ElseIf SplitedLine(0).Contains("@") Then
-                        Entry.CurseForgeSlug = SplitedLine(0).Split("@")(0)
-                        Entry.ModrinthSlug = SplitedLine(0).Split("@")(1)
-                    Else
-                        Entry.CurseForgeSlug = SplitedLine(0)
-                        Entry.ModrinthSlug = Nothing
-                    End If
-                    Entry.WikiId = i
-                    If SplitedLine.Count >= 2 Then
-                        Entry.ChineseName = SplitedLine(1)
-                        If Entry.ChineseName.Contains("*") Then '处理 *
-                            Entry.ChineseName = Entry.ChineseName.Replace("*", " (" &
-                                String.Join(" ", If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
-                        End If
-                    End If
-                    _CompDatabase.Add(Entry)
-                Next
-            Next
+            Dim DBPath = $"{PathTemp}Cache\ModData.db"
+            WriteFile(DBPath, GetResources("ModData"))
+            Log($"[CompWikiData] 数据库文件已释放到 {DBPath}")
+            _CompDatabase = New SQLiteConnection($"Data Source={DBPath};Mode=ReadOnly")
+            _CompDatabase.Open()
             Return _CompDatabase
         End Get
     End Property
+
+    Private Function GetCompWikiEntryBySlug(slug As String)
+        Dim command = CompDatabase.CreateCommand()
+        command.CommandText = "SELECT * FROM ModWiki WHERE curseforge_id = @slug OR modrinth_id = @slug"
+        command.Parameters.AddWithValue("@slug", slug)
+        Dim reader = command.ExecuteReader()
+        If reader.Read() Then
+            Return New CompDatabaseEntry With {
+                .WikiId = reader("wiki_id"),
+                .ChineseName = reader("chinese_name"),
+                .CurseForgeSlug = reader("curseforge_id"),
+                .ModrinthSlug = reader("modrinth_id")
+            }
+        End If
+        reader.Close()
+        Return Nothing
+    End Function
 
     Private Class CompDatabaseEntry
         ''' <summary>
@@ -241,7 +232,7 @@ Public Module ModComp
                 If Not LoadedDatabase Then
                     LoadedDatabase = True
                     If Type = CompType.Mod OrElse Type = CompType.DataPack Then
-                        _DatabaseEntry = CompDatabase.FirstOrDefault(Function(c) If(FromCurseForge, c.CurseForgeSlug, c.ModrinthSlug) = Slug)
+                        _DatabaseEntry = GetCompWikiEntryBySlug(Slug)
                     End If
                 End If
                 Return _DatabaseEntry
@@ -806,14 +797,14 @@ Public Module ModComp
                         Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")
                     '是否显示 ModLoader 信息
                     If Not HasModLoaderDescription AndAlso IsModLoaderDescription Then Continue For
-                    '去除 “Forge/Fabric” 这一无意义提示
+                    '去除 "Forge/Fabric" 这一无意义提示
                     If Ex.Length < 16 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
-                    '将 “Forge” 等提示改为 “Forge 版”
+                    '将 "Forge" 等提示改为 "Forge 版"
                     If IsModLoaderDescription AndAlso Not Ex.Contains("版") AndAlso
                         Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
                         Ex = Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize & " 版"
                     End If
-                    '将 “forge” 等词语的首字母大写
+                    '将 "forge" 等词语的首字母大写
                     Ex = Ex.Replace("forge", "Forge").Replace("neo", "Neo").Replace("fabric", "Fabric").Replace("quilt", "Quilt")
                     Subtitle &= "  |  " & Ex.Trim
                 Next
@@ -1075,15 +1066,26 @@ NoSubtitle:
         If IsChineseSearch AndAlso (Request.Type = CompType.Mod OrElse Request.Type = CompType.DataPack) Then
             '构造搜索请求
             Dim SearchEntries As New List(Of SearchEntry(Of CompDatabaseEntry))
-            For Each Entry In CompDatabase
-                If Entry.ChineseName.Contains("动态的树") Then Continue For '这玩意儿附属太多了
+            Dim command = CompDatabase.CreateCommand()
+            command.CommandText = "SELECT * FROM ModWiki WHERE chinese_name LIKE @kw OR curseforge_id LIKE @kw OR modrinth_id LIKE @kw"
+            command.Parameters.AddWithValue("@kw", "%" & RawFilter & "%")
+            Dim reader = command.ExecuteReader()
+            While reader.Read()
+                If reader("chinese_name").ToString().Contains("动态的树") Then Continue While
+                Dim entry As New CompDatabaseEntry With {
+                    .WikiId = reader("wiki_id"),
+                    .ChineseName = reader("chinese_name"),
+                    .CurseForgeSlug = reader("curseforge_id"),
+                    .ModrinthSlug = reader("modrinth_id")
+                }
                 SearchEntries.Add(New SearchEntry(Of CompDatabaseEntry) With {
-                    .Item = Entry,
+                    .Item = entry,
                     .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
-                        New KeyValuePair(Of String, Double)(Entry.ChineseName & If(Entry.CurseForgeSlug, "") & If(Entry.ModrinthSlug, ""), 1)
+                        New KeyValuePair(Of String, Double)(entry.ChineseName & If(entry.CurseForgeSlug, "") & If(entry.ModrinthSlug, ""), 1)
                     }
                 })
-            Next
+            End While
+            reader.Close()
             '获取搜索结果
             Dim SearchResults = Search(SearchEntries, Request.SearchText, 3)
             If Not SearchResults.Any() Then Throw New Exception("无搜索结果，请尝试搜索英文名称")
@@ -1502,7 +1504,7 @@ Retry:
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " 预览版")).ToList
                     If GameVersions.Count > 1 Then
                         GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
-                        If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)} '整合包理应只 “支持” 一个版本
+                        If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)} '整合包理应只 "支持" 一个版本
                     ElseIf GameVersions.Count = 1 Then
                         GameVersions = GameVersions.ToList
                     Else
@@ -1562,7 +1564,7 @@ Retry:
                                                Select(Function(v) If(v.Contains("-"), v.BeforeFirst("-") & " 预览版", If(v.StartsWithF("b1."), "远古版本", v))).ToList
                     If GameVersions.Count > 1 Then
                         GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
-                        If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)} '整合包理应只 “支持” 一个版本
+                        If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)} '整合包理应只 "支持" 一个版本
                     ElseIf GameVersions.Count = 1 Then
                         '无需处理
                     ElseIf RawVersions.Any(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}")) Then
