@@ -45,8 +45,8 @@ Public Module ModNativeInterop
                         connected = True
                         Log($"[Pipe] {identifier}: 客户端已连接", LogLevel.Debug)
                         '初始化读取/写入流
-                        reader = New StreamReader(pipe, PipeEncoding)
-                        writer = New StreamWriter(pipe, PipeEncoding)
+                        reader = New StreamReader(pipe, PipeEncoding, False, 1024, True)
+                        writer = New StreamWriter(pipe, PipeEncoding, 1024, True)
                         '获取客户端进程对象
                         Dim clientProcessId As UInteger = Nothing
                         GetNamedPipeClientProcessId(pipe.SafePipeHandle.DangerousGetHandle(), clientProcessId)
@@ -56,6 +56,7 @@ Public Module ModNativeInterop
                         '写入终止符
                         writer.Write(PipeEndingChar)
                         writer.Flush() '刷新写入缓冲
+                        reader.Read() '等待客户端
                     Catch ex As Exception
                         If Not pipe.IsConnected AndAlso connected AndAlso TypeOf ex Is IOException Then
                             Log($"[Pipe] {identifier}: 客户端连接已丢失", LogLevel.Debug)
@@ -65,7 +66,7 @@ Public Module ModNativeInterop
                             If stopWhenException Then hasNextLoop = False
                         End If
                     Finally
-                        If pipe.IsConnected Then pipe.Disconnect() '确保已断开连接
+                        pipe.Disconnect() '确保已断开连接
                         connected = False
                         Log($"[Pipe] {identifier}: 已断开连接", LogLevel.Debug)
                     End Try
