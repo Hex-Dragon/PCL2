@@ -1,10 +1,15 @@
 ﻿Imports System.IO.Pipes
+Imports System.Runtime.InteropServices
 
 Public Module ModNativeInterop
 
 #Region "本地进程管理"
 
     Public CurrentProcess As Process = Process.GetCurrentProcess()
+
+    <DllImport("kernel32.dll", SetLastError:=True, CharSet:=CharSet.Unicode)>
+    Public Function GetNamedPipeClientProcessId(ByVal pipeHandle As IntPtr, ByRef clientProcessId As UInteger) As Boolean
+    End Function
 
 #End Region
 
@@ -18,10 +23,10 @@ Public Module ModNativeInterop
     ''' </summary>
     ''' <param name="identifier">服务端标识，用于日志标识及工作线程的命名</param>
     ''' <param name="pipeName">命名管道名称</param>
-    ''' <param name="loopCallback">客户端连接后的回调函数，将会提供用于读取和写入数据的流，返回 <c>true</c> 表示继续等待下一个客户端连接，返回 <c>false</c> 则停止服务端运行</param>
+    ''' <param name="loopCallback">客户端连接后的回调函数，将会提供用于读取和写入数据的流，以及客户端进程 ID，返回 <c>true</c> 表示继续等待下一个客户端连接，返回 <c>false</c> 则停止服务端运行</param>
     ''' <param name="stopWhenException">指定当回调函数抛出异常时是否停止服务端运行，使用 <c>true</c> 表示停止</param>
     ''' <param name="security">命名管道安全策略</param>
-    Public Sub StartPipeServer(identifier As String, pipeName As String, loopCallback As Func(Of StreamReader, StreamWriter, Boolean), Optional stopWhenException As Boolean = False, Optional security As PipeSecurity = Nothing)
+    Public Sub StartPipeServer(identifier As String, pipeName As String, loopCallback As Func(Of StreamReader, StreamWriter, Process, Boolean), Optional stopWhenException As Boolean = False, Optional security As PipeSecurity = Nothing)
         Dim pipe As NamedPipeServerStream = If(security Is Nothing,
             New NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None, 1024, 1024),
             New NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None, 1024, 1024, security))
@@ -39,11 +44,18 @@ Public Module ModNativeInterop
                         pipe.WaitForConnection() '等待客户端连接
                         connected = True
                         Log($"[Pipe] {identifier}: 客户端已连接", LogLevel.Debug)
+                        '初始化读取/写入流
                         reader = New StreamReader(pipe, PipeEncoding)
                         writer = New StreamWriter(pipe, PipeEncoding)
-                        hasNextLoop = loopCallback(reader, writer) '执行回调函数
-                        writer.Write(PipeEndingChar) '写入终止符
-                        writer.Flush()
+                        '获取客户端进程对象
+                        Dim clientProcessId As UInteger = Nothing
+                        GetNamedPipeClientProcessId(pipe.SafePipeHandle.DangerousGetHandle(), clientProcessId)
+                        Dim clientProcess = Process.GetProcessById(clientProcessId)
+                        '执行回调函数
+                        hasNextLoop = loopCallback(reader, writer, clientProcess)
+                        '写入终止符
+                        writer.Write(PipeEndingChar)
+                        writer.Flush() '刷新写入缓冲
                     Catch ex As Exception
                         If Not pipe.IsConnected AndAlso connected AndAlso TypeOf ex Is IOException Then
                             Log($"[Pipe] {identifier}: 客户端连接已丢失", LogLevel.Debug)
@@ -126,7 +138,7 @@ Public Module ModNativeInterop
 
     End Class
 
-    Public Class RPCPropertySetValueFailedException
+    Public Class RPCPropertyOperationFailedException
         Inherits Exception
     End Class
 
@@ -154,7 +166,7 @@ Public Module ModNativeInterop
             Set(_value As String)
                 Dim success = True
                 RaiseEvent SetValue(_value, success)
-                If Not success Then Throw New RPCPropertySetValueFailedException()
+                If Not success Then Throw New RPCPropertyOperationFailedException()
             End Set
         End Property
 
@@ -185,18 +197,18 @@ Public Module ModNativeInterop
 
     ''' <summary>
     ''' RPC 函数<br/>
-    ''' 接收参数并通过传入的 <paramref name="writer"/> 响应内容
+    ''' 接收参数并返回响应内容
     ''' </summary>
     ''' <param name="argument">参数</param>
-    ''' <param name="writer">用于响应内容的输出流</param>
-    Public Delegate Sub RPCFunction(argument As String, writer As StreamWriter)
+    ''' <returns>响应内容</returns>
+    Public Delegate Function RPCFunction(argument As String) As RPCResponse
 
     ''' <summary>
     ''' Pipe RPC 相关功能的静态方法类
     ''' </summary>
     Public Class PipeRPC
 
-        Private Shared ReadOnly EchoPipeName = $"PCLCE_RPC@{CurrentProcess.Id}"
+        Private Shared ReadOnly EchoPipeName As String = $"PCLCE_RPC@{CurrentProcess.Id}"
 
         Private Shared ReadOnly RequestTypeArray As String() = {"GET", "SET", "REQ"}
         Private Shared ReadOnly RequestType As New HashSet(Of String)(RequestTypeArray)
@@ -271,7 +283,7 @@ Public Module ModNativeInterop
             Return FunctionMap.Remove(name)
         End Function
 
-        Private Shared Function EchoPipeCallback(reader As StreamReader, writer As StreamWriter) As Boolean
+        Private Shared Function EchoPipeCallback(reader As StreamReader, writer As StreamWriter, client As Process) As Boolean
             Try
                 'GET/SET/REQ [target]
                 '[content]
@@ -301,16 +313,21 @@ Public Module ModNativeInterop
                         If Not result Then Throw New PipeRPCException($"不存在属性 {target}")
                         Dim response As RPCResponse
                         If (type = "GET") Then
-                            Dim value = prop.Value
-                            response = New RPCResponse(RPCResponseStatus.SUCCESS, RPCResponseType.TEXT, value)
-                            Log($"[PipeRPC] 返回值: {value}")
+                            Try
+                                Dim value = prop.Value
+                                response = New RPCResponse(RPCResponseStatus.SUCCESS, RPCResponseType.TEXT, value, target)
+                                Log($"[PipeRPC] 返回值: {value}")
+                            Catch ex As RPCPropertyOperationFailedException
+                                response = RPCResponse.EmptyFailure
+                                Log("[PipeRPC] 设置失败: 只写属性或请求被拒绝")
+                            End Try
                         Else
                             If prop.Settable Then
                                 Try
                                     prop.Value = content
                                     response = RPCResponse.EmptySuccess
                                     Log($"[PipeRPC] 设置成功: {content}")
-                                Catch ex As RPCPropertySetValueFailedException
+                                Catch ex As RPCPropertyOperationFailedException
                                     response = RPCResponse.EmptyFailure
                                     Log("[PipeRPC] 设置失败: 请求被拒绝")
                                 End Try
@@ -330,7 +347,9 @@ Public Module ModNativeInterop
                         Dim argument As String = Nothing
                         If (targetArgs.Length > 1) Then argument = targetArgs(1)
                         Log($"[PipeRPC] 正在调用函数 {name} {argument}")
-                        func(argument, writer)
+                        Dim response = func(argument)
+                        response.Response(writer)
+                        Log($"[PipeRPC] 返回状态 {response.Status}")
                 End Select
 
             Catch ex As Exception
@@ -346,15 +365,15 @@ Public Module ModNativeInterop
             Return True
         End Function
 
-        Private Shared Sub _PingCallback(argument As String, writer As StreamWriter)
-            RPCResponse.EmptySuccess.Response(writer)
-        End Sub
+        Private Shared Function _PingCallback(argument As String) As RPCResponse
+            Return RPCResponse.EmptySuccess
+        End Function
 
-        Private Shared Sub _InfoCallback(argument As String, writer As StreamWriter)
-        End Sub
+        Private Shared Function _InfoCallback(argument As String) As RPCResponse
+        End Function
 
-        Private Shared Sub _LogPipeCallback(argument As String, writer As StreamWriter)
-        End Sub
+        Private Shared Function _LogPipeCallback(argument As String) As RPCResponse
+        End Function
 
         Private Shared Sub AddPredefinedFunctions()
             AddFunction("ping", AddressOf _PingCallback)
