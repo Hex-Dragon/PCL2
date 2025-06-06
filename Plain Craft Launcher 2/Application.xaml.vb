@@ -169,6 +169,8 @@ WaitRetry:
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls13
             ServicePointManager.DefaultConnectionLimit = 1024
+            'Pipe RPC 初始化
+            StartEchoPipe()
             '设置字体
             Dim TargetFont As String = Setup.Get("UiFont")
             If Not String.IsNullOrEmpty(TargetFont) Then
