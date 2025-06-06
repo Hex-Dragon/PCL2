@@ -1375,8 +1375,6 @@
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
         Dim McimUrl As String = DlSourceModGet(Url)
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
