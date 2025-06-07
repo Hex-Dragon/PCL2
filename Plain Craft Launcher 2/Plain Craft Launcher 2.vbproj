@@ -323,7 +323,7 @@
     <Compile Include="Pages\PageVersion\PageVersionSetup.xaml.vb">
       <DependentUpon>PageVersionSetup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Reference\SystemDropShadowChrome.vb" />
+    <Compile Include="Controls\MyDropShadow.vb" />
     <Compile Include="Modules\Base\ModLoader.vb" />
     <Compile Include="Modules\Base\ModNet.vb" />
     <Compile Include="Modules\Base\ModValidate.vb" />
@@ -600,14 +600,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageVersion\PageVersionExport.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Language\en_US.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Language\zh_CN.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

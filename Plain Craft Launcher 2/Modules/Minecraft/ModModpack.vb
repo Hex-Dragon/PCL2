@@ -8,7 +8,7 @@ Public Module ModModpack
     ''' </summary>
     Public Sub ModpackInstall()
         Dim File As String = SelectFile("整合包文件(*.rar;*.zip;*.mrpack)|*.rar;*.zip;*.mrpack", "选择整合包压缩文件") '选择整合包文件
-        If String.IsNullOrEmpty(File) Then Exit Sub
+        If String.IsNullOrEmpty(File) Then Return
         RunInThread(
         Sub()
             Try
@@ -128,7 +128,7 @@ Retry:
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之加个重试
             If RetryCount < 5 Then
                 Thread.Sleep(RetryCount * 2000)
-                If Loader IsNot Nothing AndAlso Loader.LoadingState <> MyLoading.MyLoadingState.Run Then Exit Sub
+                If Loader IsNot Nothing AndAlso Loader.LoadingState <> MyLoading.MyLoadingState.Run Then Return
                 RetryCount += 1
                 GoTo Retry
             Else
@@ -693,6 +693,7 @@ Retry:
         End If
         '解压
         Dim InstallTemp As String = RequestTaskTempFolder()
+        Dim SetupFile As String = $"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini"
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
         Sub(Task As LoaderTask(Of String, Integer))
@@ -701,6 +702,12 @@ Retry:
                 InstallTemp & ArchiveBaseFolder & "overrides",
                 PathMcFolder & "versions\" & VersionName,
                 Task, 0.4)
+            'JVM 参数
+            If Json("launchInfo") IsNot Nothing Then
+                Dim LaunchInfo As JObject = Json("launchInfo")
+                If LaunchInfo.ContainsKey("javaArgument") Then WriteIni(SetupFile, "VersionAdvanceJvm", String.Join(" ", LaunchInfo("javaArgument")))
+                If LaunchInfo.ContainsKey("launchArgument") Then WriteIni(SetupFile, "VersionAdvanceGame", String.Join(" ", LaunchInfo("launchArgument")))
+            End If
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("addons") Is Nothing Then Throw New Exception("该 MCBBS 整合包未提供游戏版本附加信息，无法安装！")

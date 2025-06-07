@@ -19,7 +19,7 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="战斗" Tag="/combat" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="实用" Tag="/utility" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="改良" Tag="/tweaks" />
-        <local:MyComboBoxItem Margin="15,0,0,0" Content="神经病" Tag="/cursed" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="鬼畜" Tag="/cursed" />
 
         <local:MyComboBoxItem Content="特性" IsEnabled="False" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="含实体" Tag="/entities" />

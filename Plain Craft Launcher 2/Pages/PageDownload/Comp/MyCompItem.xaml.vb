@@ -19,7 +19,7 @@
             Return LabTitle.Text
         End Get
         Set(value As String)
-            If LabTitle.Text = value Then Exit Property
+            If LabTitle.Text = value Then Return
             LabTitle.Text = value
         End Set
     End Property
@@ -30,7 +30,7 @@
             Return If(LabTitleRaw?.Text, "")
         End Get
         Set(value As String)
-            If LabTitleRaw.Text = value Then Exit Property
+            If LabTitleRaw.Text = value Then Return
             LabTitleRaw.Text = value
             LabTitleRaw.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
         End Set
@@ -42,7 +42,7 @@
             Return LabInfo.Text
         End Get
         Set(value As String)
-            If LabInfo.Text = value Then Exit Property
+            If LabInfo.Text = value Then Return
             LabInfo.Text = value
         End Set
     End Property
@@ -88,7 +88,7 @@
     Private Sub Button_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonUp
         If IsMouseDown Then
             RaiseEvent Click(sender, e)
-            If e.Handled Then Exit Sub
+            If e.Handled Then Return
             Log("[Control] 按下资源工程列表项：" & LabTitle.Text)
         End If
     End Sub
@@ -185,7 +185,7 @@
     ''' </summary>
     Public Property CanInteraction As Boolean = True
     Public Sub RefreshColor(sender As Object, e As EventArgs) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonDown, Me.MouseLeftButtonUp
-        If Not CanInteraction Then Exit Sub
+        If Not CanInteraction Then Return
         '判断当前颜色
         Dim StateNew As String, Time As Integer
         If IsMouseOver Then
@@ -200,7 +200,7 @@
             StateNew = "Idle"
             Time = 180
         End If
-        If StateLast = StateNew Then Exit Sub
+        If StateLast = StateNew Then Return
         StateLast = StateNew
         '触发颜色动画
         If IsLoaded AndAlso AniControlEnabled = 0 Then '防止默认属性变更触发动画
