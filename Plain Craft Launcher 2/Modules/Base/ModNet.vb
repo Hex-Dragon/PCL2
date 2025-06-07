@@ -144,12 +144,10 @@ Retry:
                     End Using
                 End Using
             End Using
+        Catch ex As TaskCanceledException
+            Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
         Catch ex As Exception
-            If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
-            Else
-                Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
-            End If
+            Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
         End Try
     End Function
 
@@ -269,12 +267,10 @@ RequestFinished:
                     End Using
                 End Using
             End Using
+        Catch ex As TaskCanceledException
+            Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
         Catch ex As Exception
-            If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
-            Else
-                Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
-            End If
+            Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
         End Try
     End Function
 
@@ -1313,9 +1309,9 @@ SourceBreak:
                 'End SyncLock
                 Info.Source.Ex = ex
                 '根据情况判断，是否在多线程下禁用下载源（连续错误过多，或不支持断点续传）
-                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse
-                   ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse ex.Message.Contains("获取到的分段大小不一致") OrElse
-                   (ex.Message.Contains("(403)") AndAlso Not Info.Source.Url.ContainsF("bmclapi")) OrElse 'BMCLAPI 的部分源在高频率请求下会返回 403，所以不应因此禁用下载源
+                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("404 (") OrElse
+                   ex.Message.Contains("502 (") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse ex.Message.Contains("获取到的分段大小不一致") OrElse
+                   (ex.Message.Contains("403 (") AndAlso Not Info.Source.Url.ContainsF("bmclapi")) OrElse 'BMCLAPI 的部分源在高频率请求下会返回 403，所以不应因此禁用下载源
                    (Info.Source.FailCount >= MathClamp(NetTaskThreadLimit, 5, 30) AndAlso DownloadDone < 1) OrElse
                     Info.Source.FailCount > NetTaskThreadLimit + 2 Then
                     Dim IsThisFail As Boolean = False
