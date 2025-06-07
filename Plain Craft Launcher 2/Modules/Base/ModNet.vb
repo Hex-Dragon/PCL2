@@ -275,6 +275,8 @@ Retry:
                 {"Accept", Accept}
             }
             Using Req As HttpRequestMessage = Request.GetRequestMessage(Url, Headers:=Headers, RequireHeaderSign:=True, RequireCdnSign:=True, UseBrowserUA:=UseBrowserUserAgent)
+                Req.Headers.AcceptLanguage.Add(New StringWithQualityHeaderValue("en-US,en;q=0.5"))
+                Req.Headers.TryAddWithoutValidation("X-Request-With","XMLHttpRequest")
                 Dim Resp As String = Request.SendRequest(Req, Encode:=Encoding, Timeout:=Timeout)
 
                 Return Resp
@@ -1250,7 +1252,7 @@ StartThread:
                                 Throw New Exception($"文件大小不足，获取结果为 {ContentLength}，要求至少为 {Check.MinSize}。")
                             End If
                             If ContentLength <> Check.ActualSize AndAlso Check.ActualSize > 0 Then
-                                'Throw New Exception($"文件大小不一致，获取结果为 {ContentLength}，要求必须为 {Check.ActualSize}。")
+                                Throw New Exception($"文件大小不一致，获取结果为 {ContentLength}，要求必须为 {Check.ActualSize}。")
                             End If
                         End If
                         FileSize = ContentLength : IsUnknownSize = False
@@ -1281,9 +1283,9 @@ NotSupportRange:
 
                         Throw New WebException($"该下载源不支持分段下载：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
                     ElseIf Not FileSize - Info.DownloadStart = ContentLength Then
-                        'Throw New WebException($"获取到的分段大小不一致：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
+                        Throw New WebException($"获取到的分段大小不一致：Range 起始于 {Info.DownloadStart}，预期 ContentLength 为 {FileSize - Info.DownloadStart}，返回 ContentLength 为 {ContentLength}，总文件大小 {FileSize}")
                     End If
-                    'Log($"[Download] {LocalName} {Info.Uuid}#：通过大小检查，文件大小 {FileSize}，起始点 {Info.DownloadStart}，ContentLength {ContentLength}")
+                    Log($"[Download] {LocalName} {Info.Uuid}#：通过大小检查，文件大小 {FileSize}，起始点 {Info.DownloadStart}，ContentLength {ContentLength}")
                     Info.State = NetState.Get
                     SyncLock LockState
                         If State < NetState.Get Then State = NetState.Get
