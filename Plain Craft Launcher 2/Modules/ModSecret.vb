@@ -178,46 +178,7 @@ Friend Module ModSecret
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Try
-            If ThemeNow = NewTheme AndAlso NewTheme >= 0 Then Return
-            If NewTheme >= 0 Then ThemeNow = NewTheme
-
-            Color1 = New MyColor().FromHSL2(ColorHue, ColorSat * 0.2, 25 + ColorLightAdjust * 0.3)
-            Color2 = New MyColor().FromHSL2(ColorHue, ColorSat, 45 + ColorLightAdjust)
-            Color3 = New MyColor().FromHSL2(ColorHue, ColorSat, 55 + ColorLightAdjust)
-            Color4 = New MyColor().FromHSL2(ColorHue, ColorSat, 65 + ColorLightAdjust)
-            Color5 = New MyColor().FromHSL2(ColorHue, ColorSat, 80 + ColorLightAdjust * 0.4)
-            Color6 = New MyColor().FromHSL2(ColorHue, ColorSat, 91 + ColorLightAdjust * 0.1)
-            Color7 = New MyColor().FromHSL2(ColorHue, ColorSat, 95)
-            Color8 = New MyColor().FromHSL2(ColorHue, ColorSat, 97)
-            ColorBg0 = Color4 * 0.4 + Color5 * 0.4 + ColorGray4 * 0.2
-            ColorBg1 = New MyColor(190, Color7)
-
-            ColorSemiTransparent = New MyColor(1, Color8)
-            Application.Current.Resources("ColorBrush1") = New SolidColorBrush(Color1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(Color2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(Color3)
-            Application.Current.Resources("ColorBrush4") = New SolidColorBrush(Color4)
-            Application.Current.Resources("ColorBrush5") = New SolidColorBrush(Color5)
-            Application.Current.Resources("ColorBrush6") = New SolidColorBrush(Color6)
-            Application.Current.Resources("ColorBrush7") = New SolidColorBrush(Color7)
-            Application.Current.Resources("ColorBrush8") = New SolidColorBrush(Color8)
-            Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorBg0)
-            Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(ColorBg1)
-            Application.Current.Resources("ColorObject1") = CType(Color1, Color)
-            Application.Current.Resources("ColorObject2") = CType(Color2, Color)
-            Application.Current.Resources("ColorObject3") = CType(Color3, Color)
-            Application.Current.Resources("ColorObject4") = CType(Color4, Color)
-            Application.Current.Resources("ColorObject5") = CType(Color5, Color)
-            Application.Current.Resources("ColorObject6") = CType(Color6, Color)
-            Application.Current.Resources("ColorObject7") = CType(Color7, Color)
-            Application.Current.Resources("ColorObject8") = CType(Color8, Color)
-            Application.Current.Resources("ColorObjectBg0") = CType(ColorBg0, Color)
-            Application.Current.Resources("ColorObjectBg1") = CType(ColorBg1, Color)
-            ThemeRefreshMain()
-        Catch ex As Exception
-            Log(ex, "刷新主题颜色失败", LogLevel.Hint)
-        End Try
+        Hint("该版本中不包含主题功能……")
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
