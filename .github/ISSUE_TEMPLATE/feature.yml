@@ -12,6 +12,8 @@ body:
       required: true
     - label: "我已查看 [功能投票页面](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/)，确认了这一提案未在投票列表中。"
       required: true
+    - label: "我仔细阅读了所有这些选项，并且了解不需要勾选这个选项，而且了解到如果勾选了，开发者可能根本不会理会这个提案。"
+      required: false
     - label: "我知晓还没做的新功能真的太多了，忙不过来，所以新功能提案几乎不会被处理，也不建议再提交新功能提案 qwq……"
       required: true
 - type: textarea
