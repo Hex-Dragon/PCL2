@@ -548,6 +548,11 @@
     Private Sub TextSelectName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextSelectName.TextChanged
         If IsSelectNameChanging Then Return
         IsSelectNameEdited = True
+        If IsASCII(TextSelectName.Text) Then
+            HintNonASCII.Visibility = Visibility.Collapsed
+        Else
+            HintNonASCII.Visibility = Visibility.Visible
+        End If
         SelectReload()
     End Sub
     Private Sub TextSelectName_ValidateChanged(sender As Object, e As EventArgs) Handles TextSelectName.ValidateChanged
