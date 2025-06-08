@@ -25,6 +25,7 @@
         ComboDownloadSource.SelectedIndex = Setup.Get("ToolDownloadSource")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
         CheckDownloadAutoSelectVersion.Checked = Setup.Get("ToolDownloadAutoSelectVersion")
+        CheckFixAuthlib.Checked = Setup.Get("ToolFixAuthlib")
 
         'Mod 与整合包
         ComboDownloadTranslateV2.SelectedIndex = Setup.Get("ToolDownloadTranslateV2")
@@ -82,6 +83,7 @@
             Setup.Reset("ToolDownloadClipboard")
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolDownloadAutoSelectVersion")
+            Setup.Reset("ToolFixAuthlib")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
@@ -109,7 +111,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change, CheckDownloadAutoSelectVersion.Change, CheckSystemTelemetry.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change, CheckDownloadAutoSelectVersion.Change, CheckSystemTelemetry.Change, CheckFixAuthlib.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
