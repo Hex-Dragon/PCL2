@@ -46,6 +46,7 @@
                         <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="请在 启动 → 版本选择 → 文件夹列表 中更改下载目标文件夹。&#xa;在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
                         <TextBlock Margin="0,5" Grid.Row="7" Text="安装行为" />
                         <local:MyCheckBox Grid.Row="7" Grid.Column="1" Text="安装新版本后自动选定该版本" x:Name="CheckDownloadAutoSelectVersion" Tag="ToolDownloadAutoSelectVersion" />
+                        <local:MyCheckBox Grid.Row="7" Grid.Column="1" Margin="230,0,0,0" Text="升级部分版本的 Authlib" x:Name="CheckFixAuthlib" Tag="ToolFixAuthlib" ToolTip="部分版本（如 1.16.5）存在 Bug，可能导致使用离线验证时多人游戏被禁用。&#xa;PCL 可尝试升级这些版本的 Authlib 支持库以解决问题。&#xa;此设置仅对新安装的版本有效。"/>
                     </Grid>
                 </StackPanel>
             </local:MyCard>

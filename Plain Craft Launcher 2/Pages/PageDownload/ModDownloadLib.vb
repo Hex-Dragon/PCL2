@@ -130,6 +130,15 @@ Public Module ModDownloadLib
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
             Thread.Sleep(50) '等待 JSON 文件实际写入硬盘（#3710）
             Log("[Download] 开始分析原版支持库文件：" & VersionFolder)
+            If Id = "1.16.5" AndAlso Setup.Get("ToolFixAuthlib") Then '1.16.5 Authlib 修复
+                Try
+                    Dim Json As String = ReadFile(VersionFolder & VersionName & ".json")
+                    Json = Json.Replace("2.1.28/authlib-2.1.28.jar", "2.3.31/authlib-2.3.31.jar").Replace("com.mojang:authlib:2.1.28", "com.mojang:authlib:2.3.31").Replace("ad54da276bf59983d02d5ed16fc14541354c71fd", "bbd00ca33b052f73a6312254780fc580d2da3535").Replace("76328", "87662")
+                    WriteFile(VersionFolder & VersionName & ".json", Json)
+                Catch ex As Exception
+                    Log("[Download] 替换 Authlib 版本失败: " & ex.Message)
+                End Try
+            End If
             Task.Output = McLibFix(New McVersion(VersionFolder))
         End Sub) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载原版支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 13, .Show = False})
@@ -1446,6 +1455,10 @@ Retry:
                     Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
                     Dim Json2 As JObject = GetJson(ReadFile(Installer.GetEntry("version.json").Open))
                     Json.Merge(Json2)
+                    '如果是 1.16.5 就升级一下 Authlib
+                    If Inherit = "1.16.5" AndAlso Setup.Get("ToolFixAuthlib") Then
+                        Json = JObject.Parse(Json.ToString().Replace("2.1.28/authlib-2.1.28.jar", "2.3.31/authlib-2.3.31.jar").Replace("com.mojang:authlib:2.1.28", "com.mojang:authlib:2.3.31").Replace("ad54da276bf59983d02d5ed16fc14541354c71fd", "bbd00ca33b052f73a6312254780fc580d2da3535").Replace("76328", "87662"))
+                    End If
                     '获取 Lib 下载信息
                     Libs = McLibListGetWithJson(Json, True)
                     '添加 Mappings 下载信息
