@@ -928,7 +928,7 @@ NextStack:
             If IsHandAnalyze Then
                 Return "很抱歉，PCL 无法确定错误原因。"
             Else
-                Return $"很抱歉，你的游戏出现了一些问题……{vbCrLf}如果要寻求帮助，请导出错误报告后把整个错误报告压缩包文件发给对方，而不是发送这个窗口的照片或者截图。"
+                Return $"很抱歉，你的游戏出现了一些问题……{vbCrLf}如果要寻求帮助，请把错误报告文件发给对方，而不是发送这个窗口的照片或者截图。"
             End If
         End If
 
@@ -1099,7 +1099,7 @@ NextStack:
                     Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf).
                     Trim(vbCrLf.ToCharArray) &
                 If(Not Results.Any(Function(r) r.EndsWithF("\h")) OrElse IsHandAnalyze, "",
-                    vbCrLf & "如果要寻求帮助，请导出错误报告后将整个错误报告压缩包文件发给对方，而不是发送这个窗口的照片或者截图。" &
+                    vbCrLf & "如果要寻求帮助，请把错误报告文件发给对方，而不是发送这个窗口的照片或者截图。" &
                     If(If(PageSetupSystem.IsLauncherNewest(), True), "",
                     vbCrLf & vbCrLf & "此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。" & vbCrLf & "你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。"))
     End Function
