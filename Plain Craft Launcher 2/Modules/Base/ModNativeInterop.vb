@@ -1,5 +1,6 @@
 ﻿Imports System.IO.Pipes
 Imports System.Runtime.InteropServices
+Imports Newtonsoft.Json
 
 Public Module ModNativeInterop
 
@@ -80,6 +81,10 @@ Public Module ModNativeInterop
             threadName)
     End Sub
 
+    ''' <summary>
+    ''' 用于终止 Pipe RPC 执行过程并返回错误信息的异常<br/>
+    ''' 当抛出该异常时 RPC 服务端将会返回内容为 <c>Reason</c> 的 <c>ERR</c> 响应
+    ''' </summary>
     Public Class PipeRPCException
         Inherits Exception
 
@@ -104,6 +109,9 @@ Public Module ModNativeInterop
         BASE64
     End Enum
 
+    ''' <summary>
+    ''' Pipe RPC 响应
+    ''' </summary>
     Public Class RPCResponse
 
         Public Property Status As RPCResponseStatus
@@ -135,6 +143,14 @@ Public Module ModNativeInterop
 
         Public Shared Function Err(content As String, Optional name As String = Nothing) As RPCResponse
             Return New RPCResponse(RPCResponseStatus.ERR, RPCResponseType.TEXT, content, name)
+        End Function
+
+        Public Shared Function Success(type As RPCResponseType, content As String, Optional name As String = Nothing) As RPCResponse
+            Return New RPCResponse(RPCResponseStatus.SUCCESS, type, content, name)
+        End Function
+
+        Public Shared Function Failure(type As RPCResponseType, content As String, Optional name As String = Nothing) As RPCResponse
+            Return New RPCResponse(RPCResponseStatus.FAILURE, type, content, name)
         End Function
 
     End Class
@@ -202,7 +218,7 @@ Public Module ModNativeInterop
     ''' </summary>
     ''' <param name="argument">参数</param>
     ''' <returns>响应内容</returns>
-    Public Delegate Function RPCFunction(argument As String) As RPCResponse
+    Public Delegate Function RPCFunction(argument As String, content As String, indent As Boolean) As RPCResponse
 
     ''' <summary>
     ''' Pipe RPC 相关功能的静态方法类
@@ -292,7 +308,7 @@ Public Module ModNativeInterop
                 Log($"[PipeRPC] 客户端请求: {header}")
 
                 Dim args = header.Split({" "c}, 2) '分离请求类型和参数
-                If args.Length < 2 Then Throw New PipeRPCException("请求参数过少")
+                If args.Length < 2 OrElse args(1).Length = 0 Then Throw New PipeRPCException("请求参数过少")
                 Dim type = args(0).ToUpperInvariant()
                 If Not RequestType.Contains(type) Then Throw New PipeRPCException($"请求类型必须为 {RequestTypeArray.Join("/")} 其中之一")
                 Dim target = args(1)
@@ -342,13 +358,18 @@ Public Module ModNativeInterop
                     Case "REQ"
                         Dim targetArgs = target.Split({" "c}, 2) '分离函数名和参数
                         Dim name = targetArgs(0).ToLowerInvariant()
+                        Dim indent = False '检测缩进指示
+                        If (name.EndsWith("$")) Then
+                            indent = True
+                            name = name.Substring(0, name.Length - 1)
+                        End If
                         Dim func As RPCFunction = Nothing
                         Dim result = FunctionMap.TryGetValue(name, func)
                         If Not result Then Throw New PipeRPCException($"不存在函数 {name}")
                         Dim argument As String = Nothing
                         If (targetArgs.Length > 1) Then argument = targetArgs(1)
                         Log($"[PipeRPC] 正在调用函数 {name} {argument}")
-                        Dim response = func(argument)
+                        Dim response = func(argument, content, indent)
                         response.Response(writer)
                         Log($"[PipeRPC] 返回状态 {response.Status}")
                 End Select
@@ -366,20 +387,104 @@ Public Module ModNativeInterop
             Return True
         End Function
 
-        Private Shared Function _PingCallback(argument As String) As RPCResponse
+        Private Shared Function JsonIndent(indent As Boolean) As Formatting
+            Return If(indent, Formatting.Indented, Formatting.None)
+        End Function
+
+        Private Shared Function _PingCallback(argument As String, content As String, indent As Boolean) As RPCResponse
             Return RPCResponse.EmptySuccess
         End Function
 
-        Private Shared Function _InfoCallback(argument As String) As RPCResponse
+        ' 用于序列化 JSON 并响应客户端 info 请求的类型
+        Private Class RPCLauncherInfo
+            Public path As String = PathWithName
+            Public config_path As String = PathAppdataConfig
+            Public window As Long = Handle.ToInt64()
+            Public version As New LauncherVersion()
+            Class LauncherVersion
+                Public name As String = VersionBaseName
+                Public commit As String = CommitHash
+                Public branch As String = VersionBranchName
+                Public branch_code As String = VersionBranchCode
+                Public upstream As String = UpstreamVersion
+            End Class
+        End Class
+
+        Private Shared Function _InfoCallback(argument As String, content As String, indent As Boolean) As RPCResponse
+            Dim json = JsonConvert.SerializeObject(New RPCLauncherInfo(), JsonIndent(indent))
+            Return RPCResponse.Success(RPCResponseType.JSON, json)
         End Function
 
-        Private Shared Function _LogPipeCallback(argument As String) As RPCResponse
+        Private Shared _pendingLauncherLogs As New List(Of String)
+        Private Shared _pendingLauncherLogsStart As DateTime
+        Private Shared _lastUpdatedWatchers As New Dictionary(Of String, Watcher)()
+
+        Public Shared Sub PrintLog(line As String)
+            _pendingLauncherLogs.Add(line)
+        End Sub
+
+        Private Shared Function LogPipeCallback(reader As StreamReader, writer As StreamWriter, client As Process) As Boolean
+        End Function
+
+        '用于反序列化客户端 log 读取请求 JSON 的类型
+        Private Class RPCLogOpenRequest
+            Public id As String '请求读取的 log id
+            Public client As Long '前来连接的客户端的 process id，用于鉴权
+            Public timeout As Integer = 5 '期望等待时间 (s)，最大 30
+        End Class
+
+        '用于序列化服务端 log 信息响应的 JSON 的类型
+        Private Class RPCLogInfoResponse
+            Public launcher As New LauncherLog()
+            Class LauncherLog
+                Public id As String = "launcher"
+                Public pending As Integer = _pendingLauncherLogs.Count
+                Public start As DateTime = _pendingLauncherLogsStart
+            End Class
+            Public minecraft As MinecraftLog() = MinecraftLog.GenerateLogInfo()
+            Class MinecraftLog
+                Public id As String
+                Public pending As Integer
+                Public name As String
+                Public version As String
+                Public state As Watcher.MinecraftState
+                Public realtime As Boolean
+                Shared Function GenerateLogInfo() As MinecraftLog()
+                    _lastUpdatedWatchers.Clear()
+                    If Not HasRunningMinecraft Then Return {}
+                    Dim infoList As New List(Of MinecraftLog)
+                    For Each watcher In McWatcherList
+                        Dim id = $"mc@{watcher.GameProcess.Id}"
+                        _lastUpdatedWatchers(id) = watcher
+                        Dim state = watcher.State
+                        Dim pending = watcher.FullLog.Count
+                        Dim realtime = watcher.RealTimeLog
+                        Dim game = watcher.Version
+                        Dim name = game.Name
+                        Dim version = game.Version.McVersion.ToString()
+                        infoList.Add(New MinecraftLog With {
+                            .id = id, .name = name, .pending = pending, .realtime = realtime,
+                            .state = state, .version = version})
+                    Next
+                    Return infoList.ToArray()
+                End Function
+            End Class
+        End Class
+
+        Private Shared Function _LogCallback(argument As String, content As String, indent As Boolean) As RPCResponse
+            If argument Is Nothing Then Return RPCResponse.Err("日志请求参数过少")
+            argument = argument.ToLowerInvariant()
+            If argument = "info" Then
+                Dim json = JsonConvert.SerializeObject(New RPCLogInfoResponse(), JsonIndent(indent))
+                Return RPCResponse.Success(RPCResponseType.JSON, json)
+            End If
+            Return RPCResponse.Err("日志请求参数有误")
         End Function
 
         Private Shared Sub AddPredefinedFunctions()
             AddFunction("ping", AddressOf _PingCallback)
-            'AddFunction("info", AddressOf _InfoCallback)
-            'AddFunction("log", AddressOf _LogPipeCallback)
+            AddFunction("info", AddressOf _InfoCallback)
+            AddFunction("log", AddressOf _LogCallback)
         End Sub
 
         ''' <summary>
