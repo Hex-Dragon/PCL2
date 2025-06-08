@@ -6,7 +6,7 @@
     x:Name="WindMain" x:Class="FormMain" Style="{StaticResource MyWindow}"
     AllowDrop="True" Topmost="True" Title="Plain Craft Launcher Community Edition " AllowsTransparency="True" MinHeight="470" MinWidth="810" 
     ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="/Plain Craft Launcher 2;component/Images/icon.ico" WindowStyle="None" 
-    ResizeMode="CanMinimize" Background="{x:Null}" d:DesignWidth="870" d:DesignHeight="520" Width="850" Height="500" 
+    ResizeMode="CanResize" Background="{x:Null}" d:DesignWidth="870" d:DesignHeight="520" Width="850" Height="500" 
     RenderTransformOrigin="0.5,0.5">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ThumbnailClipMargin="{Binding Margin, ElementName=PanForm}" />

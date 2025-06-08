@@ -1,0 +1,3 @@
+[submodule "PCL.Core"]
+	path = PCL.Core
+	url = git@github.com:PCL-Community/PCL.Core.git

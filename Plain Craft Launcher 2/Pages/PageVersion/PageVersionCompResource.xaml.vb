@@ -59,10 +59,6 @@
             Btn.LabText.Margin = New Thickness(-2, 0, 8, 0)
         Next
 
-#If DEBUG Then
-        BtnManageCheck.Visibility = Visibility.Visible
-#End If
-
     End Sub
     ''' <summary>
     ''' 刷新 Mod 列表。
@@ -359,24 +355,6 @@
             Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
         End Try
     End Sub
-
-#If DEBUGRESERVED Then
-    ''' <summary>
-    ''' 检查 Mod。
-    ''' </summary>
-    Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
-        Try
-            Dim Result = McModCheck(PageVersionLeft.Version, CompModLoader.Output)
-            If Result.Any Then
-                MyMsgBox(Join(Result, vbCrLf & vbCrLf), "Mod 检查结果")
-            Else
-                Hint("Mod 检查完成，未发现任何问题！", HintType.Finish)
-            End If
-        Catch ex As Exception
-            Log(ex, "进行 Mod 检查时出错", LogLevel.Feedback)
-        End Try
-    End Sub
-#End If
 
     ''' <summary>
     ''' 全选。

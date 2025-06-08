@@ -1,4 +1,6 @@
-﻿Public Class PageVersionSetup
+﻿Imports PCL.Core.Model
+
+Public Class PageVersionSetup
 
     Private Shadows IsLoaded As Boolean = False
 
@@ -104,7 +106,6 @@
             Setup.Reset("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
 
             Setup.Reset("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
-            JavaSearchLoader.Start(IsForceRestart:=True)
 
             Log("[Setup] 已初始化版本独立设置")
             Hint("已初始化版本独立设置！", HintType.Finish, False)
@@ -174,7 +175,7 @@
                           If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
-        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)
+        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not IsGameSet64BitJava(PageVersionLeft.Version) AndAlso Not Is32BitSystem AndAlso Javas.JavaList.Any, Visibility.Visible, Visibility.Collapsed)
         If ShowAnim Then
             '宽度动画
             AniStart({
@@ -358,7 +359,7 @@ PreFin:
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
-        If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
+        If If(Is32BitJava, Not IsGameSet64BitJava(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
 
@@ -496,20 +497,20 @@ PreFin:
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
         Try
-            For Each Java In JavaList.Clone().OrderByDescending(Function(v) v.VersionCode)
-                Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
+            For Each CurJava In Javas.JavaList
+                Dim ListItem = New MyComboBoxItem With {.Content = CurJava.ToString, .ToolTip = CurJava.JavaFolder, .Tag = CurJava}
                 ToolTipService.SetHorizontalOffset(ListItem, 400)
                 ComboArgumentJava.Items.Add(ListItem)
                 '判断人为选中
                 If SelectedBySetup = "" OrElse SelectedBySetup = "使用全局设置" Then Continue For
-                If JavaEntry.FromJson(GetJson(SelectedBySetup)).PathFolder = Java.PathFolder Then SelectedItem = ListItem
+                If SelectedBySetup = CurJava.JavaExePath Then SelectedItem = ListItem
             Next
         Catch ex As Exception
             Setup.Set("VersionArgumentJavaSelect", "使用全局设置", Version:=PageVersionLeft.Version)
             Log(ex, "更新版本设置 Java 下拉框失败", LogLevel.Feedback)
         End Try
         '更新选择项
-        If SelectedItem Is Nothing AndAlso JavaList.Any Then
+        If SelectedItem Is Nothing AndAlso Javas.JavaList.Any Then
             If SelectedBySetup = "" Then
                 SelectedItem = ComboArgumentJava.Items(1) '选中 “自动选择”
             Else
@@ -548,7 +549,7 @@ PreFin:
             Log("[Java] 修改版本 Java 选择设置：自动选择")
         Else
             '选择指定项
-            Setup.Set("VersionArgumentJavaSelect", CType(SelectedJava.ToJson(), JObject).ToString(Newtonsoft.Json.Formatting.None), Version:=PageVersionLeft.Version)
+            Setup.Set("VersionArgumentJavaSelect", CType(SelectedJava, Java).JavaExePath, Version:=PageVersionLeft.Version)
             Log("[Java] 修改版本 Java 选择设置：" & SelectedJava.ToString)
         End If
         RefreshRam(True)

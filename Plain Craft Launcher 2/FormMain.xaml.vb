@@ -202,7 +202,7 @@ Public Class FormMain
             End If
             '启动加载器池
             Try
-                JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
+                InitJava()
                 Thread.Sleep(100)
                 DlClientListMojangLoader.Start(1) 'PCL 会同时根据这里的加载结果决定是否使用官方源进行下载
                 RunCountSub()
@@ -871,6 +871,10 @@ Public Class FormMain
         ''' 游戏实时日志。这是一个副页面。
         ''' </summary>
         GameLog = 10
+        ''' <summary>
+        ''' Java 管理，这是一个副页面。
+        ''' </summary>
+        SetupJava = 11
     End Enum
     ''' <summary>
     ''' 次要页面种类。其数值必须与 StackPanel 中的下标一致。
@@ -936,6 +940,8 @@ Public Class FormMain
                 Return "资源下载 - " & CType(Stack.Additional(0), CompProject).TranslatedName
             Case PageType.HelpDetail
                 Return CType(Stack.Additional(0), HelpEntry).Title
+            Case PageType.SetupJava
+                Return "Java 管理"
             Case Else
                 Return ""
         End Select
@@ -1154,6 +1160,9 @@ Public Class FormMain
                 Case PageType.Setup '设置
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     PageChangeAnim(FrmSetupLeft, FrmSetupLeft.PageGet(SubType))
+                Case PageType.SetupJava 'Java 设置
+                    FrmSetupJava = If(FrmSetupJava, New PageSetupJava)
+                    PageChangeAnim(New MyPageLeft, FrmSetupJava)
                 Case PageType.Other '更多
                     If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
                     PageChangeAnim(FrmOtherLeft, FrmOtherLeft.PageGet(SubType))

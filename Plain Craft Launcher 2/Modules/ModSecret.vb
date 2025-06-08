@@ -5,6 +5,7 @@ Imports System.Net.Http
 Imports System.Security.Cryptography
 Imports System.Management
 Imports System.IO.Compression
+Imports PCL.Core.Helper
 
 Friend Module ModSecret
 

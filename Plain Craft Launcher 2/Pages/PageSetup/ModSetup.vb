@@ -66,7 +66,7 @@ Public Class ModSetup
         {"LaunchArgumentTitle", New SetupEntry("")},
         {"LaunchArgumentInfo", New SetupEntry("PCL")},
         {"LaunchArgumentJavaSelect", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LaunchArgumentJavaAll", New SetupEntry("[]", Source:=SetupSource.Registry)},
+        {"LaunchArgumentJavaUser", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LaunchArgumentIndie", New SetupEntry(0)},
         {"LaunchArgumentIndieV2", New SetupEntry(4)},
         {"LaunchArgumentVisible", New SetupEntry(5, Source:=SetupSource.Registry)},

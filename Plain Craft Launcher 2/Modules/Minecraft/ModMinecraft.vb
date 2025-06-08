@@ -262,10 +262,7 @@ Public Module ModMinecraft
         Public ReadOnly Property Modable As Boolean
             Get
                 If Not IsLoaded Then Load()
-                '判断该 LabyMod 是否支持安装 Fabric Mod
-                Dim ModdedLabyMod = False
-                If Version.HasLabyMod AndAlso Directory.Exists(PathIndie & "labymod-neo\fabric\" & Version.McName) Then ModdedLabyMod = True
-                Return Version.HasFabric OrElse Version.HasQuilt OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse Version.HasCleanroom OrElse ModdedLabyMod OrElse
+                Return Version.HasFabric OrElse Version.HasQuilt OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse Version.HasCleanroom OrElse
                     DisplayType = McVersionCardType.API '#223
             End Get
         End Property

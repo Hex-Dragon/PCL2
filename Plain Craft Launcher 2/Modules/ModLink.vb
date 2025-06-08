@@ -362,9 +362,9 @@ Public Class ModLink
         JavaNames.Add("java")
         JavaNames.Add("javaw")
 
-        For Each java In JavaNames
-            Dim JavaProcesses As Process() = Process.GetProcessesByName(java)
-            Log($"[MCDetect] 找到 {java} 进程 {JavaProcesses.Length} 个")
+        For Each TargetJava In JavaNames
+            Dim JavaProcesses As Process() = Process.GetProcessesByName(TargetJava)
+            Log($"[MCDetect] 找到 {TargetJava} 进程 {JavaProcesses.Length} 个")
 
             If JavaProcesses Is Nothing OrElse JavaProcesses.Length = 0 Then
                 Continue For
