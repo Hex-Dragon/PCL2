@@ -1367,7 +1367,11 @@ OnLoaded:
             If File.Exists(VersionFolder & ".pclignore") Then
                 If IsFirstMcVersionListLoad Then
                     Log("[Minecraft] 清理残留的忽略项目：" & VersionFolder) '#2781
-                    File.Delete(VersionFolder & ".pclignore")
+                    Try
+                        File.Delete(VersionFolder & ".pclignore")
+                    Catch ex As Exception
+                        Log(ex, "清理残留的忽略项目失败（" & VersionFolder & "）", LogLevel.Hint)
+                    End Try
                 Else
                     Log("[Minecraft] 跳过要求忽略的项目：" & VersionFolder)
                     Continue For
