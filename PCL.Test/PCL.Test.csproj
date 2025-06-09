@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="JavaTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemVerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
