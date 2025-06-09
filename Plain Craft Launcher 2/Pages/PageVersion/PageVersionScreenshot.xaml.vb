@@ -136,6 +136,14 @@ Public Class PageVersionScreenshot
                                                         Return bitmapImage
                                                     End Function)
                 image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
+                image.Cursor = Cursors.Hand
+                AddHandler image.MouseLeftButtonDown, Sub(sender, e)
+                                                          Try
+                                                              Process.Start(i) ' 使用系统默认程序打开
+                                                          Catch ex As Exception
+                                                              Log(ex, "打开截图失败！", LogLevel.Hint)
+                                                          End Try
+                                                      End Sub
                 Grid.SetRow(image, 1)
                 grid.Children.Add(image)
 
@@ -206,6 +214,7 @@ Public Class PageVersionScreenshot
     Private Sub btnOpen_Click(sender As MyIconTextButton, e As EventArgs)
         OpenExplorer(GetPathFromSender(sender))
     End Sub
+
     Private Sub btnDelete_Click(sender As MyIconTextButton, e As EventArgs)
         Path = GetPathFromSender(sender)
         RemoveItem(Path)
