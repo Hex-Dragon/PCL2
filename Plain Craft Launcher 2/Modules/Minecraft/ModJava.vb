@@ -89,6 +89,9 @@ Public Module ModJava
             Return UserTarget
         End If
         Dim ret = Javas.SelectSuitableJava(MinVersion, MaxVersion).Result.FirstOrDefault()
+        If ret Is Nothing AndAlso MinVersion.Major = 1 AndAlso MinVersion.Minor = 8 Then
+            ret = Javas.SelectSuitableJava(New Version(8, 0, 0, 0), If(MaxVersion.Major = 1, New Version(MaxVersion.Minor, 999, 999, 999), MaxVersion)).Result.FirstOrDefault()
+        End If
         Return ret
     End Function
 
