@@ -105,7 +105,7 @@ Public Module ModJava
         If UserSetupVersion = "使用全局设置" Then
             Return Nothing
         Else
-            Return Java.Prase(UserSetupVersion)
+            Return Java.Parse(UserSetupVersion)
         End If
     End Function
 
@@ -120,7 +120,7 @@ Public Module ModJava
                 Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
                 If UserSetupVersion <> "使用全局设置" Then
                     If File.Exists(UserSetupVersion) Then
-                        Dim k = Java.Prase(UserSetup)
+                        Dim k = Java.Parse(UserSetup)
                         Return If(k IsNot Nothing, k.Is64Bit, False)
                     Else
                         Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)
@@ -134,7 +134,7 @@ Public Module ModJava
             If String.IsNullOrEmpty(UserSetup) Then
                 Return Javas.JavaList.Any(Function(x) x.Is64Bit)
             End If
-            Dim j = Java.Prase(UserSetup)
+            Dim j = Java.Parse(UserSetup)
             Return j IsNot Nothing AndAlso j.Is64Bit
         Catch ex As Exception
             Log(ex, "检查 Java 类别时出错", LogLevel.Feedback)
