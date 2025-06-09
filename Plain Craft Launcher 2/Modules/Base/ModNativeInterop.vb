@@ -26,11 +26,15 @@ Public Module ModNativeInterop
     ''' <param name="pipeName">命名管道名称</param>
     ''' <param name="loopCallback">客户端连接后的回调函数，将会提供用于读取和写入数据的流，以及客户端进程 ID，返回 <c>true</c> 表示继续等待下一个客户端连接，返回 <c>false</c> 则停止服务端运行</param>
     ''' <param name="stopWhenException">指定当回调函数抛出异常时是否停止服务端运行，使用 <c>true</c> 表示停止</param>
-    ''' <param name="security">命名管道安全策略</param>
-    Public Sub StartPipeServer(identifier As String, pipeName As String, loopCallback As Func(Of StreamReader, StreamWriter, Process, Boolean), Optional stopWhenException As Boolean = False, Optional security As PipeSecurity = Nothing)
-        Dim pipe As NamedPipeServerStream = If(security Is Nothing,
-            New NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None, 1024, 1024),
-            New NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None, 1024, 1024, security))
+    ''' <param name="allowdProcessId">允许连接的客户端进程 ID，如为 Nothing 则允许所有</param>
+    Public Sub StartPipeServer(
+            identifier As String,
+            pipeName As String,
+            loopCallback As Func(Of StreamReader, StreamWriter, Process, Boolean),
+            Optional stopCallback As Action = Nothing,
+            Optional stopWhenException As Boolean = False,
+            Optional allowdProcessId As Integer() = Nothing)
+        Dim pipe As New NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.None, 1024, 1024)
         Dim threadName = $"PipeServer/{identifier}"
 
         RunInNewThread(
@@ -43,15 +47,38 @@ Public Module ModNativeInterop
                     Try
                         hasNextLoop = False
                         pipe.WaitForConnection() '等待客户端连接
+                        '获取客户端进程实例并校验
+                        Dim clientProcessId As UInteger = Nothing
+                        Dim clientProcess As Process = Nothing
+                        Try
+                            GetNamedPipeClientProcessId(pipe.SafePipeHandle.DangerousGetHandle(), clientProcessId)
+                            If allowdProcessId IsNot Nothing Then
+                                Dim denied = True
+                                For Each id In allowdProcessId
+                                    If id = clientProcessId Then
+                                        denied = False
+                                        Exit For
+                                    End If
+                                Next
+                                If denied Then
+                                    hasNextLoop = True
+                                    pipe.Disconnect()
+                                    Log($"[Pipe] {identifier}: 已拒绝 {clientProcessId}")
+                                    Continue While
+                                End If
+                            End If
+                            clientProcess = Process.GetProcessById(clientProcessId)
+                        Catch ex As Exception
+                            If allowdProcessId IsNot Nothing Then
+                                hasNextLoop = True
+                                Throw ex
+                            End If
+                        End Try
                         connected = True
-                        Log($"[Pipe] {identifier}: 客户端已连接", LogLevel.Debug)
+                        Log($"[Pipe] {identifier}: {clientProcessId} 已连接", LogLevel.Debug)
                         '初始化读取/写入流
                         reader = New StreamReader(pipe, PipeEncoding, False, 1024, True)
                         writer = New StreamWriter(pipe, PipeEncoding, 1024, True)
-                        '获取客户端进程对象
-                        Dim clientProcessId As UInteger = Nothing
-                        GetNamedPipeClientProcessId(pipe.SafePipeHandle.DangerousGetHandle(), clientProcessId)
-                        Dim clientProcess = Process.GetProcessById(clientProcessId)
                         '执行回调函数
                         hasNextLoop = loopCallback(reader, writer, clientProcess)
                         '写入终止符
@@ -66,16 +93,20 @@ Public Module ModNativeInterop
                             Log(ex, $"[Pipe] {identifier}: 服务端出错", LogLevel.Hint)
                             If stopWhenException Then hasNextLoop = False
                         End If
-                    Finally
-                        pipe.Disconnect() '确保已断开连接
-                        connected = False
-                        Log($"[Pipe] {identifier}: 已断开连接", LogLevel.Debug)
                     End Try
+                    Try
+                        pipe.Disconnect()
+                    Catch ex As InvalidOperationException
+                        '没妈的巨硬给的 pipe.IsConnected 值不一定是对的，只能直接调用 Disconnect() 确保连接一定被断开了
+                        '如果确实是断开状态会抛出 InvalidOperationException 这里直接不做任何处理忽略掉
+                    End Try
+                    connected = False
+                    Log($"[Pipe] {identifier}: 已断开连接", LogLevel.Debug)
                 End While
 
-                reader?.Close()
-                writer?.Close()
-                pipe.Close()
+                '释放资源并执行停止回调
+                pipe.Dispose()
+                stopCallback()
                 Log($"[Pipe] {identifier}: 服务端已停止", LogLevel.Debug)
             End Sub,
             threadName)
@@ -226,6 +257,7 @@ Public Module ModNativeInterop
     Public Class PipeRPC
 
         Private Shared ReadOnly EchoPipeName As String = $"PCLCE_RPC@{CurrentProcess.Id}"
+        Private Shared ReadOnly LogPipePrefix As String = "PCLCE_LOG@"
 
         Private Shared ReadOnly RequestTypeArray As String() = {"GET", "SET", "REQ"}
         Private Shared ReadOnly RequestType As New HashSet(Of String)(RequestTypeArray)
@@ -371,7 +403,7 @@ Public Module ModNativeInterop
                         Log($"[PipeRPC] 正在调用函数 {name} {argument}")
                         Dim response = func(argument, content, indent)
                         response.Response(writer)
-                        Log($"[PipeRPC] 返回状态 {response.Status}")
+                        Log($"[PipeRPC] 函数已退出，返回状态 {response.Status}")
                 End Select
 
             Catch ex As Exception
@@ -418,22 +450,20 @@ Public Module ModNativeInterop
         Private Shared _pendingLauncherLogs As New List(Of String)
         Private Shared _pendingLauncherLogsStart As DateTime
         Private Shared _lastUpdatedWatchers As New Dictionary(Of String, Watcher)()
+        Private Shared _openLogPipes As New HashSet(Of String)()
 
         Public Shared Sub PrintLog(line As String)
             _pendingLauncherLogs.Add(line)
         End Sub
 
-        Private Shared Function LogPipeCallback(reader As StreamReader, writer As StreamWriter, client As Process) As Boolean
-        End Function
-
         '用于反序列化客户端 log 读取请求 JSON 的类型
         Private Class RPCLogOpenRequest
             Public id As String '请求读取的 log id
-            Public client As Long '前来连接的客户端的 process id，用于鉴权
+            Public client As Integer '前来连接的客户端的 process id，用于鉴权
             Public timeout As Integer = 5 '期望等待时间 (s)，最大 30
         End Class
 
-        '用于序列化服务端 log 信息响应的 JSON 的类型
+        '用于序列化服务端 log 信息响应 JSON 的类型
         Private Class RPCLogInfoResponse
             Public launcher As New LauncherLog()
             Class LauncherLog
@@ -471,14 +501,44 @@ Public Module ModNativeInterop
             End Class
         End Class
 
+        Private Shared Function LogPipeCallback(reader As StreamReader, writer As StreamWriter, request As RPCLogOpenRequest) As Boolean
+            Return False
+        End Function
+
         Private Shared Function _LogCallback(argument As String, content As String, indent As Boolean) As RPCResponse
-            If argument Is Nothing Then Return RPCResponse.Err("日志请求参数过少")
+            If argument Is Nothing Then Return RPCResponse.Err("请求参数过少")
             argument = argument.ToLowerInvariant()
+
             If argument = "info" Then
                 Dim json = JsonConvert.SerializeObject(New RPCLogInfoResponse(), JsonIndent(indent))
                 Return RPCResponse.Success(RPCResponseType.JSON, json)
             End If
-            Return RPCResponse.Err("日志请求参数有误")
+
+            If argument = "open" Then
+                Dim request As RPCLogOpenRequest
+                Dim clientProcess As Process
+                Try
+                    '解析请求 JSON
+                    request = JsonConvert.DeserializeObject(Of RPCLogOpenRequest)(content)
+                    clientProcess = Process.GetProcessById(request.client)
+                Catch ex As Exception
+                    Dim r = If(TypeOf ex Is ArgumentException AndAlso TypeOf ex IsNot ArgumentNullException, "进程 ID 不存在", "JSON 解析出错")
+                    Log(ex, $"[PipeRPC] log: 日志管道请求错误")
+                    Return RPCResponse.Err(r)
+                End Try
+                Dim id = request.id
+                If Not id = "launcher" AndAlso Not _lastUpdatedWatchers.ContainsKey(id) Then Return RPCResponse.Err("日志 ID 不存在")
+                If _openLogPipes.Contains(id) Then Return RPCResponse.Err("日志 ID 正在使用")
+                Dim pipeName = LogPipePrefix & RandomInteger(10000, 99999)
+                _openLogPipes.Add(id)
+                StartPipeServer($"Log({id})", pipeName,
+                    Function(r, w, c) LogPipeCallback(r, w, request),
+                    Sub() _openLogPipes.Remove(id),
+                    True, {request.client})
+                Return RPCResponse.Success(RPCResponseType.TEXT, pipeName, "pipe_name")
+            End If
+
+            Return RPCResponse.Err("请求参数只能是 info 或 open")
         End Function
 
         Private Shared Sub AddPredefinedFunctions()
@@ -498,7 +558,7 @@ Public Module ModNativeInterop
             Log("[PipeRPC] 正在加载预设 RPC 函数")
             AddPredefinedFunctions()
             Log("[PipeRPC] 正在初始化 Echo 服务端")
-            StartPipeServer("RPC-Echo", EchoPipeName, AddressOf EchoPipeCallback)
+            StartPipeServer("Echo", EchoPipeName, AddressOf EchoPipeCallback)
         End Sub
 
     End Class
