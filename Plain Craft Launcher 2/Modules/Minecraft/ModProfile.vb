@@ -1,4 +1,5 @@
 ﻿Imports System.Security.Cryptography
+Imports System.Net.Http
 
 Public Module ModProfile
 
@@ -250,20 +251,33 @@ Public Module ModProfile
             If NewUsername = Nothing Then Exit Sub
             RunInNewThread(Sub()
                                Try
-                                   Dim Result As String = NetRequestRetry($"https://api.minecraftservices.com/minecraft/profile/name/", "PUT", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & SelectedProfile.AccessToken}})
-                                   Dim ResultJson As JObject = GetJson(Result)
-                                   Hint($"玩家 ID 修改成功，当前 ID 为：{ResultJson("name")}", HintType.Finish)
-                               Catch ex As WebException
-                                   Dim Message As String = GetExceptionSummary(ex)
-                                   If Message.Contains("(400)") Then
-                                       MyMsgBox("玩家 ID 修改失败，因为不符合规范！", "ID 修改失败", "确认", IsWarn:=True)
-                                   ElseIf Message.Contains("(403)") Then
-                                       If Message.Contains("DUPLICATE") Then
-                                           MyMsgBox("玩家 ID 修改失败，因为该 ID 已被使用！", "ID 修改失败", "确认", IsWarn:=True)
-                                       End If
-                                   Else
-                                       Throw
-                                   End If
+                                    Dim CheckResult As JObject = GetJson(NetRequestRetry($"https://api.minecraftservices.com/minecraft/profile/name/{NewUserName}/available","GET",Nothing,Nothing, Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & SelectedProfile.AccessToken}}))
+                                    If CheckResult("status") = "DUPLICATE" Then
+                                        MyMsgBox("此 ID 已被使用，请换一个 ID。","ID 修改失败", "确认", IsWarn:=True)
+                                        Exit Sub
+                                    Else If CheckResult("status") = "NOT_ALLOWED" Then
+                                        MyMsgBox("此 ID 包含了除大小写字母、数字、下划线以外的不合法字符。","ID 修改失败", "确认", IsWarn:=True)
+                                        Exit Sub
+                                    End If
+                                    Dim Result As String = NetRequestRetry($"https://api.minecraftservices.com/minecraft/profile/name/{NewUsername}", "PUT", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & SelectedProfile.AccessToken}})
+                                    Dim ResultJson As JObject = GetJson(Result)
+                                    Hint($"玩家 ID 修改成功，当前 ID 为：{ResultJson("name")}", HintType.Finish)
+                                    '更新档案信息
+                                    ProfileList.Remove(SelectedProfile)
+                                    SelectedProfile.Username = ResultJson("name")
+                                    ProfileList.Add(SelectedProfile)
+                                    LastUsedProfile = ProfileList.Count - 1
+                                    '刷新页面信息
+                                    FrmLaunchLeft.RefreshPage(True)
+                                    SaveProfile()
+                               Catch ex As HttpRequestException
+                                    Dim ExSummary As String = GetExceptionSummary(ex)
+                                    If ExSummary.Contains("403") Then
+                                        MyMsgBox("首次更改 ID 后，必须等待 30 天后才能再次修改 ID，你可以前往官网查询具体时间。","ID 修改失败", "我知道了")
+                                    Else
+                                        Log(ex,"修改档案 ID 失败",LogLevel.Msgbox)
+                                    End If
+                                    Exit Sub
                                End Try
                            End Sub
                     )
