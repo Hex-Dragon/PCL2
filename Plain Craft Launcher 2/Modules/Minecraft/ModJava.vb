@@ -135,7 +135,7 @@ Public Module ModJava
                 Return Javas.JavaList.Any(Function(x) x.Is64Bit)
             End If
             Dim j = Java.Prase(UserSetup)
-            Return If(j IsNot Nothing, j.Is64Bit, False)
+            Return j IsNot Nothing AndAlso j.Is64Bit
         Catch ex As Exception
             Log(ex, "检查 Java 类别时出错", LogLevel.Feedback)
             If RelatedVersion IsNot Nothing Then Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)

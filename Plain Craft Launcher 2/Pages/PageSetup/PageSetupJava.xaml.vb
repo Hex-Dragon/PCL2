@@ -93,11 +93,12 @@ Public Class PageSetupJava
                               Return Item
                           End Function
         PanContent.Children.Clear()
-        Dim ItemAuto As New MyListItem
-        ItemAuto.Type = MyListItem.CheckType.RadioBox
-        ItemAuto.Title = "自动选择"
-        ItemAuto.Info = "Java 选择自动挡，依据游戏需要自动选择合适的 Java"
-        ItemAuto.Checked = String.IsNullOrEmpty(Setup.Get("LaunchArgumentJavaSelect"))
+        Dim ItemAuto As New MyListItem With {
+            .Type = MyListItem.CheckType.RadioBox,
+            .Title = "自动选择",
+            .Info = "Java 选择自动挡，依据游戏需要自动选择合适的 Java",
+            .Checked = String.IsNullOrEmpty(Setup.Get("LaunchArgumentJavaSelect"))
+        }
         AddHandler ItemAuto.Check, Sub()
                                        Setup.Set("LaunchArgumentJavaSelect", "")
                                    End Sub
