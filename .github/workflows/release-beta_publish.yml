@@ -46,7 +46,7 @@ jobs:
           mv "./artifact/Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe"
 
       - name: Upload binary to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.2.2
         with:
           files: |
             PCL2_CE_${{ matrix.configuration }}_${{ matrix.architecture }}.exe
