@@ -101,6 +101,7 @@ Public Module ModJava
     ''' <param name="Mc">实例</param>
     ''' <returns>如果有设置为 Java 实例，否则为 null</returns>
     Public Function GetVersionUserSetJava(Mc As McVersion) As Java
+        If Mc Is Nothing Then Return Nothing
         Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=Mc)
         If UserSetupVersion = "使用全局设置" Then
             Return Nothing
