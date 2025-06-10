@@ -310,8 +310,9 @@
             If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & UserName)
             Data.Output = Result
         Catch ex As Exception
-            If ex.GetType.Name = "ThreadInterruptedException" Then
+            If ex.GetType().Name = "ThreadInterruptedException" Then
                 Data.Output = ""
+                Log("[Minecraft] 已取消皮肤获取：" & UserName)
                 Return
             ElseIf GetExceptionSummary(ex).Contains("429") Then
                 Data.Output = PathImage & "Skins/" & McSkinSex(GetOfflineUuid(UserName)) & ".png"
