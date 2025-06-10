@@ -22,7 +22,7 @@ Public Module ModBase
     Public Const UpstreamVersion As String = "2.10.1" '上游版本
     Public Const VersionCode As Integer = 375 '内部版本号
     '自动生成的版本信息
-#If RELEASE Then
+#If DEBUG Then
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
 #Else
