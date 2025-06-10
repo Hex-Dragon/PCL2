@@ -84,7 +84,7 @@ Public Module ModJava
         Dim IsVersionSuit = Function(ver As Version)
                                 Return ver >= MinVersion AndAlso ver <= MaxVersion
                             End Function
-        Dim UserTarget = GetUserSetJava(RelatedVersion)
+        Dim UserTarget = GetVersionUserSetJava(RelatedVersion)
         If UserTarget IsNot Nothing AndAlso IsVersionSuit(UserTarget.Version) Then
             Return UserTarget
         End If
@@ -100,7 +100,7 @@ Public Module ModJava
     ''' </summary>
     ''' <param name="Mc">实例</param>
     ''' <returns>如果有设置为 Java 实例，否则为 null</returns>
-    Public Function GetUserSetJava(Mc As McVersion) As Java
+    Public Function GetVersionUserSetJava(Mc As McVersion) As Java
         Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=Mc)
         If UserSetupVersion = "使用全局设置" Then
             Return Nothing
@@ -116,6 +116,11 @@ Public Module ModJava
         Try
             '检查强制指定
             Dim UserSetup As String = Setup.Get("LaunchArgumentJavaSelect")
+            If UserSetup.StartsWith("{") Then '旧版本 Json 格式
+                Dim js = JToken.Parse(UserSetup)
+                UserSetup = $"{js("Path")}java.exe"
+                Setup.Set("LaunchArgumentJavaSelect", UserSetup)
+            End If
             If RelatedVersion IsNot Nothing Then
                 Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
                 If UserSetupVersion <> "使用全局设置" Then
