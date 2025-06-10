@@ -17,13 +17,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - configuration: Beta
+          - configuration: Debug
             architecture: x64
-          - configuration: Beta
-            architecture: ARM64
-          - configuration: Release
-            architecture: x64
-          - configuration: Release
+          - configuration: Debug
             architecture: ARM64
       fail-fast: false
 
