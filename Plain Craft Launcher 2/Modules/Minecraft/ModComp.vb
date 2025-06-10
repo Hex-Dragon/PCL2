@@ -281,7 +281,7 @@ Public Module ModComp
             End If
 
             Try
-                Dim jsonObject = Await Task.Run(Function() NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True))
+                Dim jsonObject = Await Task.Run(Function() NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}/{Id}", Encode:=Encoding.UTF8, IsJson:=True))
                 If jsonObject.ContainsKey("translated") Then
                     result = jsonObject("translated").ToString()
                     WriteIni(CacheFilePath, DescHash, Base64Encode(result))
