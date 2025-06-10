@@ -1262,6 +1262,12 @@ LoginFinish:
             End If
         End If
 
+        'LabyMod 检测
+        If McVersionCurrent.Version.HasLabyMod Then
+            MinVer = If(New Version(21, 0, 0, 0) > MinVer, New Version(21, 0, 0, 0), MinVer)
+            MaxVer = New Version(999, 999, 999, 999)
+        End If
+
         SyncLock JavaLock
 
             '选择 Java
