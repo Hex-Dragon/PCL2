@@ -392,6 +392,7 @@
         End If
         '获取并检查目标版本
         Dim TargetVersion As McVersion = McVersionCurrent
+        Dim ModFolder = TargetVersion.PathIndie & If(TargetVersion.Version.HasLabyMod, "labymod-neo\fabric\" & TargetVersion.Version.McName & "\", "") & "mods\"
         If FrmMain.PageCurrent = FormMain.PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
         If FrmMain.PageCurrent = FormMain.PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
             '正在选择版本，或当前版本不能安装 Mod
@@ -406,7 +407,7 @@ Install:
                 For Each ModFile In FilePathList
                     Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "").Replace(".old", "")
                     If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
-                    CopyFile(ModFile, TargetVersion.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & "mods\" & NewFileName)
+                    CopyFile(ModFile, ModFolder & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
                     Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "").Replace(".old", "")}！", HintType.Finish)
@@ -415,7 +416,7 @@ Install:
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
-                    LoaderFolderRun(CompResourceListLoader, TargetVersion.PathIndie & If(PageVersionLeft.Version.Version.HasLabyMod, "labymod-neo\fabric\" & PageVersionLeft.Version.Version.McName & "\", "") & "mods\", LoaderFolderRunType.ForceRun, LoaderInput:=FrmVersionMod?.GetRequireLoaderData())
+                    LoaderFolderRun(CompResourceListLoader, ModFolder, LoaderFolderRunType.ForceRun, LoaderInput:=FrmVersionMod?.GetRequireLoaderData())
                 End If
             Catch ex As Exception
                 Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
