@@ -915,7 +915,7 @@ NextStack:
                     Dim McLauncherLog As String = Nothing
                     McLauncherLog = ReadFile(TempFolder & "Report\PCL 启动器日志.txt").AfterLast("[Launch] ~ 基础参数 ~").BeforeFirst("开始 Minecraft 日志监控")
                     Dim LaunchScript As String = ReadFile(TempFolder & "Report\启动脚本.bat")
-                    EnvInfo += $"PCL CE 版本：{VersionBranchName} {VersionBaseName}{vbCrLf}"
+                    EnvInfo += $"PCL CE 版本：{VersionBaseName} {vbCrLf}"
                     EnvInfo += $"识别码：{UniqueAddress}{vbCrLf}"
                     EnvInfo += $"{vbCrLf}- 档案信息 -{vbCrLf}"
                     EnvInfo += $"启动档案：{McLauncherLog.Between("玩家用户名：", "[").TrimEnd("[").Trim()}（验证方式：{McLauncherLog.Between("登录方式：", "[").TrimEnd("[").Trim()}）{vbCrLf}"

@@ -125,8 +125,8 @@ Public Module ModJava
                 Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
                 If UserSetupVersion <> "使用全局设置" Then
                     If File.Exists(UserSetupVersion) Then
-                        Dim k = Java.Parse(UserSetup)
-                        Return If(k IsNot Nothing, k.Is64Bit, False)
+                        Dim k = Java.Parse(UserSetupVersion)
+                        Return k IsNot Nothing AndAlso k.Is64Bit
                     Else
                         Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)
                     End If
