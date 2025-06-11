@@ -40,7 +40,6 @@
             TextArgumentWindowHeight.Text = Setup.Get("LaunchArgumentWindowHeight")
             CheckArgumentRam.Checked = Setup.Get("LaunchArgumentRam")
             ComboMsAuthType.SelectedIndex = Setup.Get("LoginMsAuthType")
-            'CheckArgumentJavaTraversal.Checked = Setup.Get("LaunchArgumentJavaTraversal")
 
             '游戏内存
             CType(FindName("RadioRamType" & Setup.Load("LaunchRamType")), MyRadioBox).Checked = True
@@ -81,7 +80,6 @@
             Setup.Reset("LaunchArgumentWindowHeight")
             Setup.Reset("LaunchArgumentPriority")
             Setup.Reset("LaunchArgumentRam")
-            Setup.Reset("LaunchArgumentJavaTraversal")
             Setup.Reset("LaunchRamType")
             Setup.Reset("LaunchRamCustom")
             Setup.Reset("LaunchAdvanceJvm")

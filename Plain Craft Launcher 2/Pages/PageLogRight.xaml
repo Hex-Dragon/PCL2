@@ -6,7 +6,7 @@
     <Grid>
         <Grid x:Name="PanAllBack">
 			<!-- TODO(i18n): 文本 @ PageLog 右侧 - 上方卡片标题 -->
-            <local:MyCard Margin="16,16,16,120" x:Name="PanLogCard">
+            <local:MyCard Margin="16,16,16,100" x:Name="PanLogCard">
                 <local:MyScrollViewer Margin="12,40,12,20"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
@@ -38,30 +38,30 @@
 
         <local:MyCard x:Name="CardOperation" Visibility="Visible" Opacity="0"
                        HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15,0,10" UseAnimation="False" HasMouseAnimation="True">
-            <StackPanel Margin="10,8,10,8">
-                <StackPanel x:Name="OperationsContainer" Orientation="Horizontal" Margin="10,8,10,8" VerticalAlignment="Center">
+            <StackPanel Margin="0,6,0,6">
+                <StackPanel x:Name="OperationsContainer" Orientation="Horizontal" Margin="10,8,10,8" HorizontalAlignment="Center">
                     <!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方勾选框 # 自动滚屏 -->
-                    <local:MyCheckBox x:Name="CheckAutoScroll" Margin="5,0,5,0" Text="自动滚屏" Checked="True" />
+                    <local:MyCheckBox x:Name="CheckAutoScroll" Margin="5,0,5,0" Text="滚动" Checked="True" />
 				    <!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方按钮1 # 导出 -->
 				    <local:MyIconTextButton x:Name="BtnOperationExport" Margin="5,0,0,0" Text="导出"
                                             LogoScale="1" Logo="M819.392 0L1024 202.752v652.16a168.96 168.96 0 0 1-168.832 168.768h-104.192a47.296 47.296 0 0 1-10.752 0H283.776a47.232 47.232 0 0 1-10.752 0H168.832A168.96 168.96 0 0 1 0 854.912V168.768A168.96 168.96 0 0 1 168.832 0h650.56z m110.208 854.912V242.112l-149.12-147.776H168.896c-41.088 0-74.432 33.408-74.432 74.432v686.144c0 41.024 33.344 74.432 74.432 74.432h62.4v-190.528c0-33.408 27.136-60.544 60.544-60.544h440.448c33.408 0 60.544 27.136 60.544 60.544v190.528h62.4c41.088 0 74.432-33.408 74.432-74.432z m-604.032 74.432h372.864v-156.736H325.568v156.736z m403.52-596.48a47.168 47.168 0 1 1 0 94.336H287.872a47.168 47.168 0 1 1 0-94.336h441.216z m0-153.728a47.168 47.168 0 1 1 0 94.4H287.872a47.168 47.168 0 1 1 0-94.4h441.216z" />
 				    <!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方按钮2 # 清空记录 -->
-				    <local:MyIconTextButton x:Name="BtnOperationClear" Margin="5,0,0,0" Text="清空记录"
+				    <local:MyIconTextButton x:Name="BtnOperationClear" Margin="5,0,0,0" Text="清空"
                                             LogoScale="1.1" Logo="M520.192 0C408.43 0 317.44 82.87 313.563 186.734H52.736c-29.038 0-52.663 21.943-52.663 49.079s23.625 49.152 52.663 49.152h58.075v550.473c0 103.35 75.118 187.757 167.717 187.757h472.43c92.599 0 167.716-83.894 167.716-187.757V285.477h52.59c29.038 0 52.59-21.943 52.663-49.08-0.073-27.135-23.625-49.151-52.663-49.151H726.235C723.237 83.017 631.955 0 520.192 0zM404.846 177.957c3.803-50.03 50.176-89.015 107.447-89.015 57.197 0 103.57 38.985 106.788 89.015H404.92zM284.379 933.669c-33.353 0-69.997-39.351-69.997-95.525v-549.01H833.39v549.522c0 56.247-36.645 95.525-69.998 95.525H284.379v-0.512z M357.23 800.695a48.274 48.274 0 0 0 47.616-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.69 49.006V751.69c0 27.282 20.846 49.006 47.617 49.006z m166.62 0a48.274 48.274 0 0 0 47.688-49.006V471.7a48.274 48.274 0 0 0-47.689-49.08 48.274 48.274 0 0 0-47.543 49.006V751.69c0 27.282 21.431 49.006 47.543 49.006z m142.92 0a48.274 48.274 0 0 0 47.543-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.616 49.006V751.69c0 27.282 20.773 49.006 47.543 49.006z" />
 				    <!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方按钮3 # 结束游戏进程 -->
-				    <local:MyIconTextButton x:Name="BtnOperationKill" Margin="5,0,0,0" Text="结束游戏进程"
+				    <local:MyIconTextButton x:Name="BtnOperationKill" Margin="5,0,0,0" Text="结束进程"
                                             LogoScale="0.85" Logo="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" />
                     <!-- TODO(i18n): 文本 @ PageLog 右侧 - 下方按钮4 # 导出运行栈 --> 
                     <local:MyIconTextButton x:Name="BtnOperationExportStackDump" Margin="5,0,0,0" Text="导出运行栈"
                             LogoScale="0.85" Logo="M913.066667 264.533333l-371.2-209.066666c-25.6-12.8-59.733333-12.8-85.333334 0L89.6 264.533333C34.133333 298.666667 34.133333 379.733333 89.6 413.866667l371.2 209.066666c25.6 12.8 59.733333 12.8 85.333333 0l371.2-209.066666c55.466667-34.133333 55.466667-119.466667-4.266666-149.333334z m-413.866667 281.6L132.266667 337.066667 499.2 128l371.2 209.066667-371.2 209.066666z M46.933333 516.266667c12.8-21.333333 38.4-25.6 59.733334-17.066667l384 221.866667c12.8 8.533333 29.866667 8.533333 42.666666 0l388.266667-217.6c21.333333-12.8 46.933333-4.266667 59.733333 17.066666 12.8 21.333333 4.266667 46.933333-17.066666 59.733334l-388.266667 217.6c-38.4 21.333333-89.6 21.333333-128 0l-384-221.866667c-21.333333-12.8-25.6-38.4-17.066667-59.733333z M106.666667 669.866667c-21.333333-12.8-46.933333-4.266667-59.733334 17.066666-12.8 21.333333-4.266667 46.933333 17.066667 59.733334l388.266667 217.6c38.4 21.333333 85.333333 21.333333 128 0l379.733333-217.6c21.333333-12.8 25.6-38.4 17.066667-59.733334-12.8-21.333333-38.4-25.6-59.733334-17.066666l-379.733333 217.6c-12.8 8.533333-29.866667 8.533333-42.666667 0l-388.266666-217.6z"/>
                 </StackPanel>
-                <Grid Margin="10,8,10,8" VerticalAlignment="Center" MinWidth="200">
+                <Grid VerticalAlignment="Center" Margin="12,0,12,4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!-- TODO(i18n): 文本 @ PageLog 右侧 - 滑动条1 # 实时日志行数 -->
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="实时日志行数" Margin="0,0,25,0" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="最大行数" Margin="0,0,25,0" />
                     <local:MySlider x:Name="SliderMaxLog" Grid.Column="1" HorizontalAlignment="Stretch" 
                             Tag="SystemMaxLog" MaxValue="29" Value="13"
                             ToolTip="实时日志功能中最大显示行数，超过该值会自动删除旧的日志。" />
