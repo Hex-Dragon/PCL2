@@ -449,7 +449,7 @@ Public Class PageVersionExport
 
 #Region "准备 PCL 文件"
 
-#If Not BETA Then
+#If Not RELEASE Then
         If IncludePCL Then
             Loaders.Add(New LoaderTask(Of Integer, Integer)("下载 PCL 正式版",
             Sub(Loader As LoaderTask(Of Integer, Integer))
@@ -530,7 +530,7 @@ Public Class PageVersionExport
             Loader.Progress = 0.97
             '复制 PCL 版本设置
             CopyDirectory(McVersion.Path & "PCL\", OverridesFolder & "PCL\")
-#If BETA Then
+#If RELEASE Then
             '复制 PCL 本体
             If IncludePCL Then CopyFile(PathWithName, CacheFolder & "Plain Craft Launcher.exe")
 #End If

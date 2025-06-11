@@ -98,18 +98,20 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugCI|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
-    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <WarningLevel>1</WarningLevel>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>SNAPSHOT</DefineConstants>
+    <DefineConstants>DEBUGCI</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BETA|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Beta|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -159,17 +161,19 @@
     <PlatformTarget>ARM64</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|ARM64'">
-    <OutputPath>bin\ARM64\Snapshot\</OutputPath>
-    <DefineConstants>SNAPSHOT</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugCI|ARM64' ">
+    <OutputPath>bin\ARM64\DebugCI\</OutputPath>
+    <DefineConstants>DEBUGCI</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
-    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <WarningLevel>1</WarningLevel>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
     <PlatformTarget>ARM64</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|ARM64'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Beta|ARM64' ">
     <OutputPath>bin\ARM64\BETA\</OutputPath>
     <DefineConstants>BETA</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
@@ -210,17 +214,19 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|x64'">
-    <OutputPath>bin\x64\Snapshot\</OutputPath>
-    <DefineConstants>SNAPSHOT</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugCI|x64' ">
+    <OutputPath>bin\x64\DebugCI\</OutputPath>
+    <DefineConstants>DEBUGCI</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
-    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <WarningLevel>1</WarningLevel>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|x64'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Beta|x64' ">
     <OutputPath>bin\x64\BETA\</OutputPath>
     <DefineConstants>BETA</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>

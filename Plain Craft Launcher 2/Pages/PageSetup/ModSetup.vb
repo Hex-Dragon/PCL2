@@ -500,7 +500,7 @@ Public Class ModSetup
 
     '对部分设置强制赋值
     Private Function ForceValue(Key As String) As String
-#If BETA Then
+#If RELEASE Or BETA Then
         If Key = "UiLauncherTheme" Then Return "0"
 #End If
         If Key = "UiHiddenPageLink" Then Return False

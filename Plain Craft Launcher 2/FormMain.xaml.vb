@@ -77,15 +77,7 @@ Public Class FormMain
         PanMainRight.Child = FrmLaunchRight
         PageRight = FrmLaunchRight
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
-        '模式提醒
-#If DEBUG Then
-        'Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
-        If Environment.GetEnvironmentVariable("PCL_DISABLE_DEBUG_HINT") Is Nothing Then
-            MyMsgBox("当前运行的 PCL2 社区版为开发者版本, " & vbCrLf &
-                     "如果不是社区开发者要求您这么做或您自己想要这么做，请向开发者反馈这个问题" & vbCrLf &
-                     "可以添加 PCL_DISABLE_DEBUG_HINT 环境变量来隐藏这个提示", "开发者版本提示", IsWarn:=True)
-        End If
-#End If
+        '调试模式提醒
         If ModeDebug Then Hint("[调试模式] PCL 正以调试模式运行，这可能会导致性能下降，若无必要请不要开启！")
         '尽早执行的加载池
         McFolderListLoader.Start(0) '为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
@@ -94,7 +86,7 @@ Public Class FormMain
     End Sub
     Private Sub FormMain_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         ApplicationStartTick = GetTimeTick()
-        Handle = New Interop.WindowInteropHelper(Me).Handle
+        Handle = New WindowInteropHelper(Me).Handle
         '读取设置
         Setup.Load("UiBackgroundOpacity")
         Setup.Load("UiBackgroundBlur")
@@ -143,10 +135,10 @@ Public Class FormMain
             Height = MinHeight + 100
             Width = MinWidth + 100
         End Try
-        '#If DEBUG Then
-        '        MinHeight = 50
-        '        MinWidth = 50
-        '#End If
+#If DEBUG Then
+        MinHeight = 50
+        MinWidth = 50
+#End If
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -174,6 +166,29 @@ Public Class FormMain
         '加载池
         RunInNewThread(
         Sub()
+            '特殊版本提示
+#If DEBUG Or DEBUGCI Then
+            If Environment.GetEnvironmentVariable("PCL_DISABLE_DEBUG_HINT") Is Nothing Then
+#If DEBUG Then
+                Const hint = "当前运行的 PCL2 社区版为 Debug 版本。" & vbCrLf &
+                             "该版本仅适合开发者调试运行，可能会有严重的性能下降以及各种奇怪的网络问题。" & vbCrLf &
+                             vbCrLf &
+                             "非开发者用户使用该版本造成的一切问题均不被社区支持，相关 issue 可能会被直接关闭。" & vbCrLf &
+                             "除非您是开发者，否则请立即删除该版本，并下载最新稳定版使用。"
+#Else
+                Const hint = "当前运行的 PCL2 社区版为 CI 自动构建版本。" & vbCrLf &
+                             "该版本包含最新的漏洞修复、优化和新特性，但性能和稳定性较差，不适合日常使用和制作整合包。" & vbCrLf &
+                             vbCrLf &
+                             "除非社区开发者要求或您自己想要这么做，否则请下载最新稳定版使用。"
+#End If
+                MyMsgBox($"{hint}{vbCrLf}{vbCrLf}可以添加 PCL_DISABLE_DEBUG_HINT 环境变量 (任意值) 来隐藏这个提示。",
+                         "特殊版本提示", "我清楚我在做什么", "打开最新版下载页并退出", IsWarn:=True,
+                         Button2Action := Sub()
+                             OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases/latest")
+                             EndProgram(False)
+                         End Sub)
+            End If
+#End If
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
                 Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
@@ -228,14 +243,12 @@ Public Class FormMain
     '根据打开次数触发的事件
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)
-#If Not BETA Then
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
-                MyMsgBox("你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！" & vbCrLf &
-                         "隐藏主题 铁杆粉 已解锁！", "提示")
+                MyMsgBox("你已经打开了 99 次 PCL2 社区版啦，感谢你长期以来的支持！" & vbCrLf &
+                         "隐藏主题 铁杆粉 未解锁！社区版不包含隐藏主题！", "提示")
             End If
         End If
-#End If
     End Sub
     '升级与降级事件
     Private Sub UpgradeSub(LastVersionCode As Integer)

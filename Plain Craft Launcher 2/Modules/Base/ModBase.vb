@@ -25,6 +25,9 @@ Public Module ModBase
 #If DEBUG Then
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
+#ElseIf DEBUGCI Then
+    Public Const VersionBranchName As String = "CI"
+    Public Const VersionBranchCode As String = "50"
 #Else
     Public Const VersionBranchName As String = "Publish"
     Public Const VersionBranchCode As String = "0"
@@ -3185,7 +3188,7 @@ Retry:
         Else
             LogList.Append(AppendText)
         End If
-#If DEBUG Then
+#If DEBUG Or DEBUGCI Then
         Console.Write(AppendText)
 #End If
         If IsProgramEnded OrElse Level = LogLevel.Normal Then Return
@@ -3249,7 +3252,7 @@ Retry:
         Else
             LogList.Append(AppendText)
         End If
-#If DEBUG Then
+#If DEBUG Or DEBUGCI Then
         Console.Write(AppendText)
 #End If
         If IsProgramEnded Then Return
