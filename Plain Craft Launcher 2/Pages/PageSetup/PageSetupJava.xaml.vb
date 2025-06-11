@@ -80,7 +80,7 @@ Public Class PageSetupJava
                                                                         Dim target = Javas.JavaList.Where(Function(x) x.JavaExePath = J.JavaExePath).First()
                                                                         target.IsEnabled = Not target.IsEnabled
                                                                         UpdateEnableStyle(target.IsEnabled)
-                                                                        JavaSetCahce(Javas.GetCache())
+                                                                        JavaSetCache(Javas.GetCache())
                                                                     Catch ex As Exception
                                                                         Log(ex, "调整 Java 启用状态失败", LogLevel.Hint)
                                                                     End Try

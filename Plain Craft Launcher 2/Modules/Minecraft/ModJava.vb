@@ -26,13 +26,13 @@ Public Module ModJava
                 End If
                 Log("[Java] 开始搜索 Java")
                 _javas.ScanJava().GetAwaiter().GetResult()
-                JavaSetCahce(_javas.GetCache())
+                JavaSetCache(_javas.GetCache())
                 Log("[Java] 搜索到如下 Java:" & vbCrLf & _javas.JavaList.Select(Function(x) x.ToString()).Join(vbCrLf))
             End If
         End SyncLock
     End Sub
 
-    Public Sub JavaSetCahce(caches As List(Of JavaLocalCache))
+    Public Sub JavaSetCache(caches As List(Of JavaLocalCache))
         Dim newCache = JToken.FromObject(caches).ToString(Newtonsoft.Json.Formatting.None)
         Setup.Set("LaunchArgumentJavaUser", newCache)
     End Sub
@@ -59,7 +59,7 @@ Public Module ModJava
                 Return False
             Else
                 Javas.Add(jPath)
-                JavaSetCahce(Javas.GetCache())
+                JavaSetCache(Javas.GetCache())
                 Return True
             End If
         Catch ex As Exception
@@ -101,7 +101,7 @@ Public Module ModJava
         End If
         '寻找合适 Java
         Javas.ScanJava()
-        JavaSetCahce(Javas.GetCache())
+        JavaSetCache(Javas.GetCache())
         Dim reqMin = If(MinVersion, New Version(1, 0, 0))
         Dim reqMax = If(MaxVersion, New Version(999, 999, 999))
         Dim ret = Javas.SelectSuitableJava(reqMin, reqMax).Result.FirstOrDefault()
