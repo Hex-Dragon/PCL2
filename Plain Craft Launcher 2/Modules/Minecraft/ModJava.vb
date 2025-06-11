@@ -10,27 +10,34 @@ Public Module ModJava
     ''' </summary>
     Public ReadOnly Property Javas As JavaManage
         Get
-            InitJava()
+            InitJava().GetAwaiter().GetResult()
             Return _javas
         End Get
     End Property
 
-    Private ReadOnly _javasLock As New Object
-    Public Sub InitJava()
-        SyncLock _javasLock
-            If _javas Is Nothing Then
-                Dim storeCache = JavaGetCache()
-                _javas = New JavaManage()
-                If storeCache IsNot Nothing Then
-                    _javas.SetCache(storeCache)
-                End If
-                Log("[Java] 开始搜索 Java")
-                _javas.ScanJava().GetAwaiter().GetResult()
-                JavaSetCache(_javas.GetCache())
-                Log("[Java] 搜索到如下 Java:" & vbCrLf & _javas.JavaList.Select(Function(x) x.ToString()).Join(vbCrLf))
+    Private _javaInitTask As Tasks.Task = Nothing
+    Private ReadOnly _javasInitLock As New Object
+    Public Function InitJava() As Tasks.Task
+        SyncLock _javasInitLock
+            If _javas IsNot Nothing Then
+                Return Tasks.Task.CompletedTask
             End If
+            If _javaInitTask Is Nothing Then
+                _javaInitTask = Tasks.Task.Run(Sub()
+                                                   Dim storeCache = JavaGetCache()
+                                                   _javas = New JavaManage()
+                                                   If storeCache IsNot Nothing Then
+                                                       _javas.SetCache(storeCache)
+                                                   End If
+                                                   Log("[Java] 开始搜索 Java")
+                                                   _javas.ScanJava().GetAwaiter().GetResult()
+                                                   JavaSetCache(_javas.GetCache())
+                                                   Log("[Java] 搜索到如下 Java:" & vbCrLf & _javas.JavaList.Select(Function(x) x.ToString()).Join(vbCrLf))
+                                               End Sub)
+            End If
+            Return _javaInitTask
         End SyncLock
-    End Sub
+    End Function
 
     Public Sub JavaSetCache(caches As List(Of JavaLocalCache))
         Dim newCache = JToken.FromObject(caches).ToString(Newtonsoft.Json.Formatting.None)
