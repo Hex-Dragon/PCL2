@@ -56,6 +56,7 @@
         TextSystemCache.Text = Setup.Get("SystemSystemCache")
         CheckSystemDisableHardwareAcceleration.Checked = Setup.Get("SystemDisableHardwareAcceleration")
         SliderAniFPS.Value = Setup.Get("UiAniFPS")
+        SliderMaxLog.Value = Setup.Get("SystemMaxLog")
         CheckSystemTelemetry.Checked = Setup.Get("SystemTelemetry")
 
         '网络
@@ -114,7 +115,7 @@
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change, CheckUseDefaultProxy.Change, CheckDownloadAutoSelectVersion.Change, CheckSystemTelemetry.Change, CheckFixAuthlib.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
-    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
+    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change, SliderMaxLog.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslateV2.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadSource.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboDownloadMod.SelectionChanged
@@ -150,6 +151,22 @@
         SliderAniFPS.GetHintText =
             Function(v)
                 Return $"{v + 1} FPS"
+            End Function
+        SliderMaxLog.GetHintText =
+            Function(v)
+                'y = 10x + 50 (0 <= x <= 5, 50 <= y <= 100)
+                'y = 50x - 150 (5 < x <= 13, 100 < y <= 500)
+                'y = 100x - 800 (13 < x <= 28, 500 < y <= 2000)
+                Select Case v
+                    Case Is <= 5
+                        Return v * 10 + 50
+                    Case Is <= 13
+                        Return v * 50 - 150
+                    Case Is <= 28
+                        Return v * 100 - 800
+                    Case Else
+                        Return "无限制"
+                End Select
             End Function
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
