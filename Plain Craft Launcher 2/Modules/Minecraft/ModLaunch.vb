@@ -2285,7 +2285,11 @@ NextVersion:
         '显示实时日志
         If CurrentLaunchOptions.Test Then
             If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
-            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
+            If FrmLogRight Is Nothing Then RunInUiWait(Sub()
+                                                           AniControlEnabled += 1
+                                                           FrmLogRight = New PageLogRight
+                                                           AniControlEnabled -= 1
+                                                       End Sub)
             FrmLogLeft.Add(Watcher)
             McLaunchLog("已显示游戏实时日志")
         End If
