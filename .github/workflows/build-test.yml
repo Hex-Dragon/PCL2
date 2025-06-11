@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - configuration: Debug
+          - configuration: DebugCI
             architecture: x64
-          - configuration: Debug
+          - configuration: DebugCI
             architecture: ARM64
       fail-fast: false
 

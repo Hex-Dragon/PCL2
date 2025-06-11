@@ -202,6 +202,14 @@
         ''' <summary>
         ''' 是否处理实时日志。
         ''' </summary>
+        Public ReadOnly Property RealTimeLog As Boolean
+            Get
+                Return RealTime
+            End Get
+        End Property
+        ''' <summary>
+        ''' 是否处理实时日志。
+        ''' </summary>
         Private RealTime As Boolean
         ''' <summary>
         ''' 游戏的所有日志输出，只有处理实时日志的情况下才会记录。
