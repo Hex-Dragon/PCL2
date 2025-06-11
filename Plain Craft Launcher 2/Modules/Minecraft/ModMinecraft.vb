@@ -2031,7 +2031,7 @@ OnLoaded:
         End Try
 
         'Library 文件
-        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), Version.Path))
+        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False)))
 
         'Authlib-Injector 文件
         Dim AuthlibTargetFile = PathPure & "\authlib-injector.jar"
