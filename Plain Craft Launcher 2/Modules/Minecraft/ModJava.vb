@@ -113,10 +113,7 @@ Public Module ModJava
         Dim reqMin = If(MinVersion, New Version(1, 0, 0))
         Dim reqMax = If(MaxVersion, New Version(999, 999, 999))
         Dim ret = Javas.SelectSuitableJava(reqMin, reqMax).Result.FirstOrDefault()
-        If ret Is Nothing AndAlso reqMin.Major = 1 AndAlso reqMin.Minor = 8 Then
-            ret = Javas.SelectSuitableJava(New Version(8, 0, 0, 0), If(reqMax.Major = 1, New Version(reqMax.Minor, 999, 999, 999), reqMax)).Result.FirstOrDefault()
-        End If
-        Log($"[Java] 返回自动选择的 Java {ret.ToString()}")
+        Log($"[Java] 返回自动选择的 Java {If(ret IsNot Nothing, ret.ToString(), "无结果")}")
         Return ret
     End Function
 
