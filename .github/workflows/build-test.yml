@@ -5,10 +5,12 @@ on:
     branches: [dev]
     paths:
       - 'Plain Craft Launcher 2/**'
+      - 'Plain Craft Launcher 2.sln'
       - '.github/workflows/**'
   pull_request:
     paths:
       - 'Plain Craft Launcher 2/**'
+      - 'Plain Craft Launcher 2.sln'
       - '.github/workflows/**'
   workflow_dispatch:
 

@@ -214,7 +214,7 @@
         Hint("设置 Mirror 酱 CDK 成功！", HintType.Finish)
     End Sub
     Private Sub BtnSystemMirrorChyanGetKey_Click(sender As Object, e As EventArgs) Handles BtnSystemMirrorChyanGetKey.Click
-        OpenWebsite("https://mirrorchyan.com/zh/projects?rid=PCL2-CE&source=app")
+        OpenWebsite("https://mirrorchyan.com/zh/projects?rid=PCL2-CE&source=pcl2ce-app")
     End Sub
     ''' <summary>
     ''' 启动器是否已经是最新版？

@@ -63,7 +63,7 @@ jobs:
           chcp 65001
           $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
           [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-          msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ inputs.configuration }} -p:Platform=${{ inputs.architecture }}
+          msbuild "Plain Craft Launcher 2.sln" -p:Configuration=${{ inputs.configuration }} -p:Platform=${{ inputs.architecture }}
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
