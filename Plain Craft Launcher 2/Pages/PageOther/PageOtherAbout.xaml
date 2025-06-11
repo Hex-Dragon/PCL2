@@ -416,7 +416,8 @@
                     <TextBlock Margin="0,0,0,2" LineHeight="17" Text="Copyright © 龙腾猫跃 2016. All Rights Reserved.&#13;计算机软件著作权登记号：2020SR0875133&#13;违法违规行为举报投诉邮箱：hexdragon@vip.qq.com&#13;非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。" TextWrapping="Wrap" />
                     <StackPanel Orientation="Horizontal" Height="35" HorizontalAlignment="Left" Margin="0,12,0,0">
                         <local:MyButton Text="用户协议与免责声明" Width="170" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" EventType="打开网页" EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW" />
-                        <local:MyButton Text="开源代码" Width="140" Padding="13,0" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2" />
+                        <local:MyButton Text="开源代码（原版）" Width="140" Padding="13,0" Margin="0,0,20,0" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2" />
+                        <local:MyButton Text="开源代码（社区版）" Width="140" Padding="13,0" EventType="打开网页" EventData="https://github.com/PCL-Community/PCL2-CE" />
                     </StackPanel>
                 </StackPanel>
             </local:MyCard>
