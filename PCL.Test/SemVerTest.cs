@@ -36,6 +36,13 @@ namespace PCL.Test
                 && t3.Prerelease == "beta.1"
                 && t3.BuildMetadata == "11451aq"
                 );
+            var t4 = SemVer.Parse("456.759.159-alpha.2");
+            Assert.IsTrue(
+                t4.Major == 456
+                && t4.Minor == 759
+                && t4.Patch == 159
+                && t4.Prerelease == "alpha.2"
+                );
         }
     }
 }
