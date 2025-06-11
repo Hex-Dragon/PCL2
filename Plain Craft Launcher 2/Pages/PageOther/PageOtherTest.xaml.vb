@@ -422,7 +422,7 @@ Public Class PageOtherTest
                                Dim ip As String
                                Dim port As UInt16 = 25565
 
-                               Dim tempIp As IPAddress
+                               Dim tempIp As IPAddress = Nothing
                                If IPAddress.TryParse(url, tempIp) Then '纯 IP
                                    ip = url
                                ElseIf url.Contains(":") Then '域名/IP:端口 不需要 SRV
