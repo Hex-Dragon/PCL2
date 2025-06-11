@@ -1,5 +1,6 @@
 ﻿Imports PCL.Core.Helper
 Imports PCL.Core.Model
+Imports System.Threading.Tasks
 
 Public Module ModJava
     Public JavaListCacheVersion As Integer = 7
@@ -15,25 +16,25 @@ Public Module ModJava
         End Get
     End Property
 
-    Private _javaInitTask As Tasks.Task = Nothing
+    Private _javaInitTask As Task = Nothing
     Private ReadOnly _javasInitLock As New Object
-    Public Function InitJava() As Tasks.Task
+    Public Function InitJava() As Task
         SyncLock _javasInitLock
             If _javas IsNot Nothing Then
-                Return Tasks.Task.CompletedTask
+                Return Task.CompletedTask
             End If
             If _javaInitTask Is Nothing Then
-                _javaInitTask = Tasks.Task.Run(Sub()
-                                                   Dim storeCache = JavaGetCache()
-                                                   _javas = New JavaManage()
-                                                   If storeCache IsNot Nothing Then
-                                                       _javas.SetCache(storeCache)
-                                                   End If
-                                                   Log("[Java] 开始搜索 Java")
-                                                   _javas.ScanJava().GetAwaiter().GetResult()
-                                                   JavaSetCache(_javas.GetCache())
-                                                   Log("[Java] 搜索到如下 Java:" & vbCrLf & _javas.JavaList.Select(Function(x) x.ToString()).Join(vbCrLf))
-                                               End Sub)
+                _javaInitTask = Task.Run(Sub()
+                                             Dim storeCache = JavaGetCache()
+                                             _javas = New JavaManage()
+                                             If storeCache IsNot Nothing Then
+                                                 _javas.SetCache(storeCache)
+                                             End If
+                                             Log("[Java] 开始搜索 Java")
+                                             _javas.ScanJava().GetAwaiter().GetResult()
+                                             JavaSetCache(_javas.GetCache())
+                                             Log("[Java] 搜索到如下 Java:" & vbCrLf & _javas.JavaList.Select(Function(x) x.ToString()).Join(vbCrLf))
+                                         End Sub)
             End If
             Return _javaInitTask
         End SyncLock
