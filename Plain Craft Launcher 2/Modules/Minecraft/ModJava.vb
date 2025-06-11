@@ -81,17 +81,34 @@ Public Module ModJava
                                Optional MinVersion As Version = Nothing,
                                Optional MaxVersion As Version = Nothing,
                                Optional RelatedVersion As McVersion = Nothing) As Java
+        Log($"[Java] 要求选择合适 Java，要求最低版本 {If(MinVersion IsNot Nothing, MinVersion.ToString(), "未指定")}，要求选择的最高版本 {If(MaxVersion IsNot Nothing, MaxVersion.ToString(), "未指定")}，关联实例 {If(RelatedVersion IsNot Nothing, RelatedVersion.Name, "未指定")}")
         Dim IsVersionSuit = Function(ver As Version)
                                 Return ver >= MinVersion AndAlso ver <= MaxVersion
                             End Function
-        Dim UserTarget = GetVersionUserSetJava(RelatedVersion)
-        If UserTarget IsNot Nothing AndAlso IsVersionSuit(UserTarget.Version) Then
-            Return UserTarget
+        If RelatedVersion IsNot Nothing Then '考虑选择的实例指定的 Java
+            Dim userVersionJava = GetVersionUserSetJava(RelatedVersion)
+            If userVersionJava IsNot Nothing AndAlso IsVersionSuit(userVersionJava.Version) Then
+                Log($"[Java] 返回实例 {RelatedVersion.Name} 指定的 Java {userVersionJava.ToString()}")
+                Return userVersionJava
+            End If
         End If
-        Dim ret = Javas.SelectSuitableJava(MinVersion, MaxVersion).Result.FirstOrDefault()
-        If ret Is Nothing AndAlso MinVersion.Major = 1 AndAlso MinVersion.Minor = 8 Then
-            ret = Javas.SelectSuitableJava(New Version(8, 0, 0, 0), If(MaxVersion.Major = 1, New Version(MaxVersion.Minor, 999, 999, 999), MaxVersion)).Result.FirstOrDefault()
+        '考虑用户全局指定的 Java
+        Dim userGlobalJava As String = Setup.Get("LaunchArgumentJavaSelect")
+        Dim userGlobalJavaSet = Java.Parse(userGlobalJava)
+        If userGlobalJavaSet IsNot Nothing Then
+            Log($"[Java] 返回全局指定的 Java {userGlobalJavaSet.ToString()}")
+            Return userGlobalJavaSet
         End If
+        '寻找合适 Java
+        Javas.ScanJava()
+        JavaSetCahce(Javas.GetCache())
+        Dim reqMin = If(MinVersion, New Version(1, 0, 0))
+        Dim reqMax = If(MaxVersion, New Version(999, 999, 999))
+        Dim ret = Javas.SelectSuitableJava(reqMin, reqMax).Result.FirstOrDefault()
+        If ret Is Nothing AndAlso reqMin.Major = 1 AndAlso reqMin.Minor = 8 Then
+            ret = Javas.SelectSuitableJava(New Version(8, 0, 0, 0), If(reqMax.Major = 1, New Version(reqMax.Minor, 999, 999, 999), reqMax)).Result.FirstOrDefault()
+        End If
+        Log($"[Java] 返回自动选择的 Java {ret.ToString()}")
         Return ret
     End Function
 
