@@ -274,6 +274,7 @@
     Private Sub MusicLoop(Optional IsFirstLoad As Boolean = False)
         Dim CurrentWave As NAudio.Wave.WaveOutEvent = Nothing
         Dim Reader As NAudio.Wave.WaveStream = Nothing
+        Dim PreviousVolume = Setup.Get("UiMusicVolume")
         Try
             '开始播放
             CurrentWave = New NAudio.Wave.WaveOutEvent()
@@ -286,7 +287,6 @@
             If IsFirstLoad AndAlso Not Setup.Get("UiMusicAuto") Then CurrentWave.Pause()
             MusicRefreshUI()
             '停止条件：播放完毕或变化
-            Dim PreviousVolume = 0
             While CurrentWave.Equals(MusicNAudio) AndAlso Not CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped
                 If Setup.Get("UiMusicVolume") <> PreviousVolume Then
                     '更新音量
