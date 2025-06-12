@@ -108,7 +108,7 @@ Public Module ModJava
             Return userGlobalJavaSet
         End If
         '寻找合适 Java
-        Javas.ScanJava()
+        Javas.ScanJava().GetAwaiter().GetResult()
         JavaSetCache(Javas.GetCache())
         Dim reqMin = If(MinVersion, New Version(1, 0, 0))
         Dim reqMax = If(MaxVersion, New Version(999, 999, 999))
@@ -151,7 +151,7 @@ Public Module ModJava
                         Dim k = Java.Parse(UserSetupVersion)
                         Return k IsNot Nothing AndAlso k.Is64Bit
                     Else
-                        Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)
+                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
                     End If
                 End If
             End If
@@ -166,7 +166,7 @@ Public Module ModJava
             Return j IsNot Nothing AndAlso j.Is64Bit
         Catch ex As Exception
             Log(ex, "检查 Java 类别时出错", LogLevel.Feedback)
-            If RelatedVersion IsNot Nothing Then Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)
+            If RelatedVersion IsNot Nothing Then Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
             Setup.Set("LaunchArgumentJavaSelect", "")
         End Try
         Return True
