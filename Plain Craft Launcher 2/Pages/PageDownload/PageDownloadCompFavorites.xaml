@@ -16,13 +16,13 @@
                             <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Grid.Column="0"/>
                             <local:MyCard Margin="15,0,0,0" Height="40" CanSwap="False" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <local:MyButton Text=" 管理 " Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" Click="Manage_Click"/>
-                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav" MaxWidth="180" MinWidth="60">
+                                    <local:MyComboBox Margin="8,0,-1,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav" MaxWidth="160" MinWidth="80" DropDownWidthSync="False">
                                     </local:MyComboBox>
+                                    <local:MyIconButton LogoScale="1.1" Margin="4,8,5,8" VerticalAlignment="Center" x:Name="Btn_ManageTargetFav" ToolTip="管理"/>
                                 </StackPanel>
                             </local:MyCard>
                         </Grid>
-                        <local:MyHint Text="部分资源在线信息获取失败，点此查看详情" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
+                        <local:MyHint Text="部分资源在线信息获取失败，点此查看详情" Theme="Yellow" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
                         <StackPanel  x:Name="PanContentList">
                             
                         </StackPanel>

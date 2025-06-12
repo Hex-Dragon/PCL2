@@ -99,14 +99,17 @@
         End If
     End Sub
 
+    Public Property DropDownWidthSync As Boolean = True
     Private RealWidth As Double '由于下拉框 Popup 宽度与 Width 一致，故不能为 NaN（Auto）
     Private Sub MyComboBox_DropDownOpened(sender As Object, e As EventArgs) Handles Me.DropDownOpened
         RealWidth = Width
-        Width = ActualWidth
+        If DropDownWidthSync Then Width = ActualWidth
         Try
-            CType(Template.FindName("PanPopup", Me), Grid).Opacity = FrmMain.Opacity
+            Dim popup = CType(Template.FindName("PanPopup", Me), Grid)
+            popup.Opacity = FrmMain.Opacity
+            If Not DropDownWidthSync Then popup.MinWidth = ActualWidth
         Catch ex As Exception
-            Log(ex, "设置下拉框透明度失败", LogLevel.Feedback)
+            Log(ex, "设置下拉框属性失败", LogLevel.Feedback)
         End Try
     End Sub
     Private Sub MyComboBox_DropDownClosed(sender As Object, e As EventArgs) Handles Me.DropDownClosed
