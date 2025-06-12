@@ -68,7 +68,17 @@ Download:
                     Return
                 End If
             Case 3
-                Select Case Setup.Get("UiCustomPreset")
+                Static RandomFlag As Boolean = False '此 Flag 仅在生成随机数后赋值为 True
+                Static PresetIndex As Integer
+                Dim Preset = Setup.Get("UiCustomPreset")
+                If Preset <> 12 Then '非随机预设
+                    PresetIndex = Preset
+                ElseIf RandomFlag = False Then '确保每次启动只生成一次随机数
+                    Log("[Page] 主页预设：随机预设")
+                    PresetIndex = New Random().Next(0, 12) '生成 0-11 的随机数
+                    RandomFlag = True
+                End If
+                Select Case PresetIndex
                     Case 0
                         Log("[Page] 主页预设：你知道吗")
                         Content = "
