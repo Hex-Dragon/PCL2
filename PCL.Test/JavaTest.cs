@@ -21,6 +21,7 @@ namespace PCL.Test
             var firstScanedCount = jas.JavaList.Count;
             foreach (var ja in jas.JavaList)
             {
+                Console.WriteLine(ja.ToString());
                 Assert.IsTrue(ja.Version.Major > 0, "Java version is not valid: " + ja.JavaFolder);
                 Assert.IsTrue(!string.IsNullOrWhiteSpace(ja.JavaFolder));
             }
@@ -30,7 +31,7 @@ namespace PCL.Test
             // Java 搜索是否能够正确选择
             Assert.IsTrue(jas.JavaList.Count == 0 || (jas.JavaList.Count > 0 && (await jas.SelectSuitableJava(new Version(1, 8, 0), new Version(30, 0, 0))).Count > 0));
             // Java 是否有重复
-            Assert.IsTrue(jas.JavaList.GroupBy(x => x.JavawExePath).Any(x => x.Count() != 1));
+            Assert.IsFalse(jas.JavaList.GroupBy(x => x.JavawExePath).Any(x => x.Count() > 1));
         }
     }
 }
