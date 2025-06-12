@@ -4,8 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PCL"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid.RowDefinitions>
         <RowDefinition Height="30" />
         <RowDefinition Height="10" />
@@ -14,23 +16,25 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-    </Grid.ColumnDefinitions>
-    <local:MyScrollViewer MaxHeight="296" Margin="10,0,10,0" Grid.Row="2">
-        <StackPanel x:Name="StackProfile">
-            <local:MyListItem Title="LTCat" Info="离线验证 / 当前选择"
-                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-                Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="PigeonA0v0" Info="正版验证"
-                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-                Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-                Logo="pack://application:,,,/images/Blocks/Grass.png" />
-        </StackPanel>
+    
+    <local:MyHint x:Name="HintSelect" Theme="Blue" Text="选择一个档案以启动游戏" Grid.Row="0" CanClose="True" RelativeSetup="HintProfileSelect"/>
+    <local:MyHint x:Name="HintCreate" Theme="Blue" Text="新建并选择一个档案以启动游戏" Grid.Row="0" Visibility="Collapsed"/>
+    
+    <local:MyScrollViewer Grid.Row="2" MaxHeight="240" Margin="10,0,10,0">
+        <!-- 世界需要 MVVM -->
+        <ItemsControl ItemsSource="{Binding ProfileCollection}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:MyListItem Margin="8,2,10,2"
+                            Title="{Binding Username}" Info="{Binding Info}"
+                            Type="Clickable" Logo="{Binding Logo}" Tag="{Binding Profile}"
+                            Click="SelectProfile" ContentHandler="ProfileContMenuBuild"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </local:MyScrollViewer>
-    <Border Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="10"
+
+    <Border Grid.Row="4" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="10"
         CornerRadius="5" Background="{DynamicResource ColorBrush8}" Padding="10,3,0,3" Margin="0,0,4,0">
         <StackPanel Orientation="Horizontal">
             <local:MyIconButton Height="24" Margin="0,0.5,9,0"  x:Name="BtnNew"
@@ -43,6 +47,5 @@
             </local:MyIconButton>
         </StackPanel>
     </Border>
-    <local:MyHint x:Name="HintSelect" IsWarn="False" Text="选择一个档案以启动游戏" Grid.Row="0" CanClose="True" RelativeSetup="HintProfileSelect"/>
-    <local:MyHint x:Name="HintCreate" IsWarn="False" Text="新建并选择一个档案以启动游戏" Grid.Row="0" Visibility="Collapsed"/>
+    
 </Grid>

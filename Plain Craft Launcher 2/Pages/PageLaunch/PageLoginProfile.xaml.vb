@@ -1,4 +1,6 @@
-﻿Class PageLoginProfile
+﻿Imports System.Collections.ObjectModel
+
+Class PageLoginProfile
     ''' <summary>
     ''' 刷新页面显示的所有信息。
     ''' </summary>
@@ -10,16 +12,36 @@
                            RunInUi(Sub() FrmLaunchLeft.RefreshPage(True))
                        End Sub)
     End Sub
+    Public Property ProfileCollection As New ObservableCollection(Of ProfileItem)
+    Public Class ProfileItem
+        Public ReadOnly Property Info As String
+        Public ReadOnly Property Logo As String
+        Public ReadOnly Property Profile As McProfile
+        Public ReadOnly Property Username As String
+            Get
+                Return Profile.Username
+            End Get
+        End Property
+        Public Sub New(profile As McProfile)
+            Me.Profile = profile
+            Info = GetProfileInfo(profile)
+            Dim LogoPath As String = PathTemp & $"Cache\Skin\Head\{Profile.SkinHeadId}.png"
+            If Not (File.Exists(LogoPath) AndAlso Not New FileInfo(LogoPath).Length = 0) Then
+                LogoPath = ModBase.Logo.IconButtonUser
+            End If
+            Logo = LogoPath
+        End Sub
+    End Class
     ''' <summary>
     ''' 刷新档案列表
     ''' </summary>
     Public Sub RefreshProfileList()
         Log("[Profile] 刷新档案列表")
-        StackProfile.Children.Clear()
+        ProfileCollection.Clear()
         GetProfile()
         Try
             For Each Profile In ProfileList
-                StackProfile.Children.Add(ProfileListItem(Profile, AddressOf SelectProfile))
+            ProfileCollection.Add(New ProfileItem(Profile))
             Next
             Log($"[Profile] 档案列表刷新完成")
         Catch ex As Exception
@@ -34,8 +56,8 @@
     End Sub
 
 #Region "控件"
-    Private Sub SelectProfile(sender As MyListItem, e As EventArgs)
-        SelectedProfile = sender.Tag
+    Private Sub SelectProfile(sender As Object, e As MouseButtonEventArgs)
+        SelectedProfile = CType(sender, MyListItem).Tag
         Log($"[Profile] 选定档案: {sender.Tag.Username}, 以 {sender.Tag.Type} 方式验证")
         LastUsedProfile = ProfileList.IndexOf(sender.Tag) '获取当前档案的序号
         RunInUi(Sub()
@@ -43,22 +65,6 @@
                     FrmLaunchLeft.BtnLaunch.IsEnabled = True
                 End Sub)
     End Sub
-    Public Function ProfileListItem(Profile As McProfile, OnClick As MyListItem.ClickEventHandler)
-        Dim LogoPath As String = PathTemp & $"Cache\Skin\Head\{Profile.SkinHeadId}.png"
-        If Not (File.Exists(LogoPath) AndAlso Not New FileInfo(LogoPath).Length = 0) Then
-            LogoPath = Logo.IconButtonUser
-        End If
-        Dim NewItem As New MyListItem With {
-                .Title = Profile.Username,
-                .Info = GetProfileInfo(Profile),
-                .Type = MyListItem.CheckType.Clickable,
-                .Logo = LogoPath,
-                .Tag = Profile
-        }
-        AddHandler NewItem.Click, OnClick
-        NewItem.ContentHandler = AddressOf ProfileContMenuBuild
-        Return NewItem
-    End Function
     Private Sub ProfileContMenuBuild(sender As MyListItem, e As EventArgs)
         Dim BtnUUID As New MyIconButton With {.Logo = Logo.IconButtonInfo, .ToolTip = "更改 UUID", .Tag = sender.Tag}
         ToolTipService.SetPlacement(BtnUUID, Primitives.PlacementMode.Center)
