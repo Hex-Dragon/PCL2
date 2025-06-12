@@ -47,7 +47,7 @@ jobs:
           cd ${{ GITHUB.WORKSPACE }}
 
       - name: Restore NuGet Packages
-        run: nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "packages"
+        run: nuget restore "Plain Craft Launcher 2.sln" -PackagesDirectory "packages"
 
       - name: Replace Secrets and Commit Hash
         run: |
