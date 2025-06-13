@@ -1317,7 +1317,7 @@ Re:
         ''' </summary>
         Public Function Check(LocalPath As String) As String
             Try
-                Log($"[Checker] 开始校验文件 {LocalPath}", LogLevel.Debug)
+                Log($"[Checker] 开始校验文件 {LocalPath}", LogLevel.Developer)
                 Dim Info As New FileInfo(LocalPath)
                 If Not Info.Exists Then Return "文件不存在：" & LocalPath
                 Dim FileSize As Long = Info.Length
