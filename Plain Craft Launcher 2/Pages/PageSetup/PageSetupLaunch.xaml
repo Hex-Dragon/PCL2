@@ -119,6 +119,7 @@
             <local:MyCard Margin="0,0,0,15" Title="游戏内存">
                 <StackPanel Margin="25,40,25,15">
                     <local:MyHint x:Name="LabRamWarn" Visibility="Visible" Text="32 位 Java 只能分配最多 1 GB 的内存。强烈建议换用 64 位的 Java！" Theme="Yellow" Margin="0,0,0,12" />
+                    <local:MyHint x:Name="HintRamTooHigh" Visibility="Collapsed" Height="30" Theme="Yellow" Text="你给游戏分配的内存过多，这可能引发游戏崩溃。建议优先考虑「自动分配」选项！" Margin="0,0,0,12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     <Grid Margin="0,0,0,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
