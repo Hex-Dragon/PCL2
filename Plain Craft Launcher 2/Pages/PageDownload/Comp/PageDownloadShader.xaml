@@ -27,7 +27,7 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="高" local:PageComp.FilterTag="/high" />
 
         <local:MyComboBoxItem Content="加载器" IsEnabled="False" />
-        <local:MyComboBoxItem Margin="15,0,0,0" Content="原版可用s" local:PageComp.FilterTag="/vanilla" ToolTip="作为资源包加载，可以直接在原版游戏里使用。" ToolTipService.HorizontalOffset="70" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="原版可用" local:PageComp.FilterTag="/vanilla" ToolTip="作为资源包加载，可以直接在原版游戏里使用。" ToolTipService.HorizontalOffset="70" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="Iris" local:PageComp.FilterTag="/iris" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="OptiFine" local:PageComp.FilterTag="/optifine" />
     </local:PageComp>
