@@ -1493,6 +1493,9 @@ Retry:
                 Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
                 Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
                 Url.Replace("://edge", "://media"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://mediafilez"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
+                Url.Replace("://edge", "://mediafilez"),
                 Url
             }.Distinct.ToList
         End Function
