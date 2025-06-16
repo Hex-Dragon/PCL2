@@ -127,6 +127,10 @@ Download:
                         Log("[Page] 主页预设：杂志主页")
                         Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                         GoTo Download
+                    Case 12
+                        Log("[Page] 主页预设：PCL GitHub 仪表盘")
+                        Url = "https://raw.gitcode.com/Deep-Dark-Forest/PCL2-GitHub-Dashboard-Homepage/raw/main/custom.xaml"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))

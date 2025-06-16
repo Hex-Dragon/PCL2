@@ -79,7 +79,7 @@
                         Entry.ChineseName = SplitedLine(1)
                         If Entry.ChineseName.Contains("*") Then '处理 *
                             Entry.ChineseName = Entry.ChineseName.Replace("*",
-                            $"({If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Replace("-"," ").Capitalize})")
+                                $" ({If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Replace("-", " ").Capitalize})")
                         End If
                     End If
                     _CompDatabase.Add(Entry)
@@ -1490,13 +1490,12 @@ Retry:
         ''' </summary>
         Public Shared Function HandleCurseForgeDownloadUrls(Url As String) As List(Of String)
             Return {
-                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge.", "://mediafilez.").Replace("://media.", "://mediafilez."),
+                Url.Replace("://edge.", "://mediafilez.").Replace("://media.", "://mediafilez."),
+                Url,
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge.", "://media."),
                 Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
-                Url.Replace("://edge", "://media"),
-                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://mediafilez"),
-                Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
-                Url.Replace("://edge", "://mediafilez"),
-                Url
+                Url.Replace("://edge.", "://media.")
             }.Distinct.ToList
         End Function
 

@@ -292,11 +292,8 @@
                         End Sub, "MinecraftWindowMaximize")
                     End If
                 ElseIf Not IsWindowAppeared Then
-                    If (MinecraftWindowName.StartsWithF("FML")) Then '已找到 FML 窗口
-                        WatcherLog("FML 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
-                    Else '已找到 Quilt Loader 窗口
-                        WatcherLog("Quilt Loader 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
-                    End If
+                    '已找到 FML 窗口
+                    WatcherLog("FML 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
                 End If
                 IsWindowAppeared = True
             Catch ex As Exception

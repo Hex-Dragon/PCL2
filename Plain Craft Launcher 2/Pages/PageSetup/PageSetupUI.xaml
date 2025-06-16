@@ -251,6 +251,7 @@
                             <local:MyComboBoxItem Content="PCL 新功能说明书（作者：WForst-Breeze）" />
                             <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" Visibility="Collapsed" />
                             <local:MyComboBoxItem Content="杂志主页（作者：CreeperIsASpy）" />
+                            <local:MyComboBoxItem Content="PCL GitHub 仪表盘（作者：Deep-Dark-Forest）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
