@@ -19,7 +19,7 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="战斗" local:PageComp.FilterTag="/combat" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="实用" local:PageComp.FilterTag="/utility" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="改良" local:PageComp.FilterTag="/tweaks" />
-        <local:MyComboBoxItem Margin="15,0,0,0" Content="神经病" local:PageComp.FilterTag="/cursed" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="鬼畜" local:PageComp.FilterTag="/cursed" />
 
         <local:MyComboBoxItem Content="特性" IsEnabled="False" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="含实体" local:PageComp.FilterTag="/entities" />

@@ -217,14 +217,14 @@ Public Module ModDownloadLib
             Dim Id = Version.Title
             Dim JsonUrl = Version.Tag("url").ToString
             Dim VersionFolder As String = SelectFolder()
-            If Not VersionFolder.Contains("\") Then Exit Sub
+            If Not VersionFolder.Contains("\") Then Return
             VersionFolder = VersionFolder & Id & "\"
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Minecraft {Id} 服务端下载" Then Continue For
                 Hint("该服务端正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             Dim Loaders As New List(Of LoaderBase)
@@ -244,7 +244,7 @@ Public Module ModDownloadLib
                         Hint($"Mojang 没有给 Minecraft {Id} 提供官方服务端下载，没法下，撤退！", HintType.Critical)
                         Thread.Sleep(2000) '等玩家把上一个提示看完
                         Task.Abort()
-                        Exit Sub
+                        Return
                     End If
                     Dim JarUrl As String = McVersion.JsonObject("downloads")("server")("url")
                     Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(McVersion.JsonObject("downloads")("server")("size"), -1), Hash:=McVersion.JsonObject("downloads")("server")("sha1"))
@@ -294,14 +294,14 @@ pause"
             Dim Id = Version.Title
             Dim JsonUrl = Version.Tag("url").ToString
             Dim VersionFolder As String = SelectFolder()
-            If Not VersionFolder.Contains("\") Then Exit Sub
+            If Not VersionFolder.Contains("\") Then Return
             VersionFolder = VersionFolder & Id & "\"
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Minecraft {Id} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             Dim Loaders As New List(Of LoaderBase)
@@ -383,7 +383,7 @@ pause"
             WikiName = "Java版Pre-classic_" & Id
         Else
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
-            Exit Sub
+            Return
         End If
         OpenWebsite("https://zh.minecraft.wiki/w/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
@@ -396,13 +396,13 @@ pause"
         Try
             Dim Id As String = DownloadInfo.NameVersion
             Dim Target As String = SelectSaveFile("选择保存位置", DownloadInfo.NameFile, "OptiFine Jar (*.jar)|*.jar")
-            If Not Target.Contains("\") Then Exit Sub
+            If Not Target.Contains("\") Then Return
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"OptiFine {DownloadInfo.NameDisplay} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             Dim Loader As New LoaderCombo(Of DlOptiFineListEntry)("OptiFine " & DownloadInfo.NameDisplay & " 下载", McDownloadOptiFineSaveLoader(DownloadInfo, Target)) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
@@ -434,7 +434,7 @@ pause"
                 End Try
                 '检查下载结果
                 Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
-                If Task.IsAborted Then Exit Sub
+                If Task.IsAborted Then Return
                 If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
             End If
         End SyncLock
@@ -584,7 +584,7 @@ pause"
         Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("等待原版下载",
         Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
             '等待原版文件下载完成
-            If ClientDownloadLoader Is Nothing Then Exit Sub
+            If ClientDownloadLoader Is Nothing Then Return
             Dim TargetLoaders As List(Of LoaderBase) =
                ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                Where(Function(l) l.State <> LoadState.Finished).ToList
@@ -593,9 +593,9 @@ pause"
                 TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                 Thread.Sleep(50)
             Loop
-            If Task.IsAborted Then Exit Sub
+            If Task.IsAborted Then Return
             '拷贝原版文件
-            If Not IsCustomFolder Then Exit Sub
+            If Not IsCustomFolder Then Return
             SyncLock VanillaSyncLock
                 Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
                 Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
@@ -707,7 +707,7 @@ Retry:
         '下载支持库
         If FixLibrary Then
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 OptiFine 支持库文件",
-                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+                Sub(Task) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
             Loaders.Add(New LoaderDownload("下载 OptiFine 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 4})
         End If
 
@@ -831,7 +831,7 @@ Retry:
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"LiteLoader {Id} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             '已有版本检查
@@ -840,7 +840,7 @@ Retry:
                     File.Delete(VersionFolder & VersionName & ".jar")
                     File.Delete(VersionFolder & VersionName & ".json")
                 Else
-                    Exit Sub
+                    Return
                 End If
             End If
 
@@ -859,13 +859,13 @@ Retry:
         Try
             Dim Id As String = DownloadInfo.Inherit
             Dim Target As String = SelectSaveFile("选择保存位置", DownloadInfo.FileName.Replace("-SNAPSHOT", ""), "LiteLoader 安装器 (*.jar)|*.jar")
-            If Not Target.Contains("\") Then Exit Sub
+            If Not Target.Contains("\") Then Return
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"LiteLoader {Id} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             '构造步骤加载器
@@ -1041,13 +1041,13 @@ Retry:
             Dim Target As String = SelectSaveFile("选择保存位置", $"{Info.LoaderName}-{Info.Inherit}-{Info.VersionName}.{Info.FileExtension}",
                                             $"{Info.LoaderName} 安装器 (*.{Info.FileExtension})|*.{Info.FileExtension}")
             Dim DisplayName As String = $"{Info.LoaderName} {Info.Inherit} - {Info.VersionName}"
-            If Not Target.Contains("\") Then Exit Sub
+            If Not Target.Contains("\") Then Return
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"{DisplayName} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             '获取下载地址
@@ -1103,7 +1103,7 @@ Retry:
                 End Try
                 '检查下载结果
                 Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
-                If Task.IsAborted Then Exit Sub
+                If Task.IsAborted Then Return
                 If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
             End If
         End SyncLock
@@ -1189,7 +1189,7 @@ Retry:
                     errorWaitHandle.WaitOne(10000)
                     process.Dispose()
                     '检查是否安装成功：最后 5 行中是否有 true（true 可能在倒数数行，见 #832）
-                    If LastResults.Reverse().Take(5).Any(Function(l) l = "true") Then Exit Sub
+                    If LastResults.Reverse().Take(5).Any(Function(l) l = "true") Then Return
                     Log(Join(LastResults, vbCrLf))
                     Dim LastLines As String = ""
                     For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
@@ -1237,7 +1237,7 @@ Retry:
                 Task.Progress = 0.91
             Case Else
                 If ModeDebug Then Log("[Installer] " & Content)
-                Exit Sub
+                Return
         End Select
         Log("[Installer] " & Content)
     End Sub
@@ -1282,7 +1282,7 @@ Retry:
                 For Each ForgeVersion In ForgeLoader.Output
                     If VersionSortInteger(ForgeVersion.Version.ToString, LoaderVersion) = 0 Then
                         Info = ForgeVersion
-                        Exit Sub
+                        Return
                     End If
                 Next
                 Throw New Exception($"未能找到 {LoaderName} " & Inherit & "-" & LoaderVersion & " 的详细信息！")
@@ -1385,7 +1385,7 @@ Retry:
 #End Region
 #Region "原版文件"
                 '等待原版文件下载完成
-                If ClientDownloadLoader Is Nothing Then Exit Sub
+                If ClientDownloadLoader Is Nothing Then Return
                 Dim TargetLoaders As List(Of LoaderBase) =
                     ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                     Where(Function(l) l.State <> LoadState.Finished).ToList()
@@ -1394,9 +1394,9 @@ Retry:
                     TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                     Thread.Sleep(50)
                 Loop
-                If Task.IsAborted Then Exit Sub
+                If Task.IsAborted Then Return
                 '拷贝原版文件
-                If Not IsCustomFolder Then Exit Sub
+                If Not IsCustomFolder Then Return
                 SyncLock VanillaSyncLock
                     Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
                     Directory.CreateDirectory(McFolder & "versions\" & Inherit)
@@ -1639,7 +1639,7 @@ Retry:
     ''' 尝试刷新 Forge 推荐版本缓存。
     ''' </summary>
     Public Sub McDownloadForgeRecommendedRefresh()
-        If IsForgeRecommendedRefreshed Then Exit Sub
+        If IsForgeRecommendedRefreshed Then Return
         IsForgeRecommendedRefreshed = True
         RunInNewThread(Sub()
                            Try
@@ -1795,13 +1795,13 @@ Retry:
             Dim FileName As String = GetFileNameFromPath(Url)
             Dim Version As String = GetFileNameFromPath(DownloadInfo("version").ToString)
             Dim Target As String = SelectSaveFile("选择保存位置", FileName, "Fabric 安装器 (*.jar)|*.jar")
-            If Not Target.Contains("\") Then Exit Sub
+            If Not Target.Contains("\") Then Return
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Fabric {Version} 安装器下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
-                Exit Sub
+                Return
             Next
 
             '构造步骤加载器
@@ -2006,7 +2006,7 @@ Retry:
             Case LoadState.Aborted
                 Hint(Loader.Name & "已取消！", HintType.Info)
             Case LoadState.Loading
-                Exit Sub '不重新加载版本列表
+                Return '不重新加载版本列表
         End Select
         McInstallFailedClearFolder(Loader)
         LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
