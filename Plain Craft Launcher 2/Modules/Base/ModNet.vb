@@ -314,7 +314,7 @@ RequestFinished:
     ''' <param name="Data">请求的内容。</param>
     ''' <param name="ContentType">请求的套接字类型。</param>
     ''' <param name="DontRetryOnRefused">当返回 40x 时不重试。</param>
-    Public Function NetRequestRetry(Url As String, Method As String, Data As Object, ContentType As String, Optional DontRetryOnRefused As Boolean = True, Optional Headers As Dictionary(Of String, String) = Nothing) As String
+    Public Function NetRequestRetry(Url As String, Method As String, Data As Object, ContentType As String, Optional DontRetryOnRefused As Boolean = True, Optional Headers As Dictionary(Of String, String) = Nothing,Optional RequiredReturnRespObj As Boolean = False) As String
         Dim RetryCount As Integer = 0
         Dim RetryException As Exception = Nothing
         Dim StartTime As Long = GetTimeTick()
