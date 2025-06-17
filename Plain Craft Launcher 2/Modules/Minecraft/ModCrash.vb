@@ -1018,9 +1018,9 @@ NextStack:
                     End If
                 Case CrashReason.特定实体导致崩溃
                     If Additional.Count = 1 Then
-                        Results.Add("游戏似乎因为实体 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：\n - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                        Results.Add("游戏似乎因为实体 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：\n - 若仍然出错，则是该实体导致出错，你或许需要使用一些方式删除此实体。\n - 若正常运行，问题就可能来自其他原因……\h")
                     Else
-                        Results.Add("游戏似乎因为世界中的某些实体出现了问题。\n\n你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：\n - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                        Results.Add("游戏似乎因为世界中的某些实体出现了问题。\n\n你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：\n - 若仍然出错，则是某些实体导致出错，你或许需要删除该世界。\n - 若正常运行，问题就可能来自其他原因……\h")
                     End If
                 Case CrashReason.OptiFine与Forge不兼容
                     Results.Add("由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。")
