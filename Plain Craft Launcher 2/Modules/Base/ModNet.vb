@@ -21,6 +21,10 @@
         End If
     End Function
 
+    Public Function NetPrefetch(Url As String)
+                    
+    End Function
+
     ''' <summary>
     ''' 以 WebClient 获取网页源代码。会进行至多 45 秒 3 次的尝试，允许最长 30s 的超时。
     ''' </summary>
