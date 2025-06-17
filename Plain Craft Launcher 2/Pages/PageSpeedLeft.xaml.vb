@@ -10,7 +10,7 @@ Public Class PageSpeedLeft
         '进入时就刷新一次显示
         Watcher()
 
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
 
         '监控定时器
@@ -47,7 +47,8 @@ Public Class PageSpeedLeft
                 LabThread.Text = "0 / " & NetTaskThreadLimit
             Else
                 '有任务，输出基本信息
-                Dim RawPercent As Double = LoaderTaskbarProgress
+                Dim Tasks = LoaderTaskbar.Where(Function(l) l.Show).ToList() '筛选掉启动 MC 的任务（#6270）
+                Dim RawPercent As Double = If(Tasks.Any, MathClamp(Tasks.Select(Function(l) l.Progress).Average(), 0, 1), 1)
                 Dim PredictText As String = Math.Floor(RawPercent * 100) & "." & StrFill(Math.Floor((RawPercent * 100 - Math.Floor(RawPercent * 100)) * 100), "0", 2) & " %"
                 LabProgress.Text = If(RawPercent > 0.999999, "100 %", PredictText)
                 LabSpeed.Text = GetString(NetManager.Speed) & "/s"

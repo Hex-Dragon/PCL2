@@ -7,7 +7,9 @@
         "Comp File",
         Sub(Task)
             LoadTargetFromAdditional()
-            Task.Output = CompFilesGet(Project.Id, Project.FromCurseForge)
+            Dim Result = CompFilesGet(Project.Id, Project.FromCurseForge)
+            If Task.IsAborted Then Return
+            Task.Output = Result
         End Sub)
 
     '初始化加载器信息
@@ -204,7 +206,7 @@
                 End If
                 '增加提示
                 If Pair.Key = "其他版本" Then
-                    NewStack.Children.Add(New MyHint With {.Text = "由于版本信息更新缓慢，可能无法识别刚更新的 MC 版本，只需等待几天即可自动恢复正常。", .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
+                    NewStack.Children.Add(New MyHint With {.Text = "由于版本信息更新缓慢，可能无法识别刚更新的 MC 版本。几天后即可正常识别。", .Theme = MyHint.Themes.Yellow, .Margin = New Thickness(5, 0, 0, 8)})
                 End If
             Next
             '如果只有一张卡片，展开第一张卡片
@@ -270,7 +272,7 @@
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
             Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
-            If String.IsNullOrEmpty(VersionName) Then Exit Sub
+            If String.IsNullOrEmpty(VersionName) Then Return
 
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
@@ -289,7 +291,7 @@
                     Case LoadState.Aborted
                         Hint(MyLoader.Name & "已取消！", HintType.Info)
                     Case LoadState.Loading
-                        Exit Sub '不重新加载版本列表
+                        Return '不重新加载版本列表
                 End Select
                 McInstallFailedClearFolder(MyLoader)
             End Sub}
@@ -319,67 +321,72 @@
                 End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
-                If File.Type = CompType.Mod Then
-                    '获取 Mod 所需的加载器种类
-                    Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
-                    If File.ModLoaders.Any Then '从文件中获取
-                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
-                        AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
-                    ElseIf Project.ModLoaders.Any Then '从工程中获取
-                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
-                        AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
+                If File.Type <> CompType.ModPack Then
+                    Dim SubFolder As String = Nothing
+                    Select Case Project.Type
+                        Case CompType.Mod : SubFolder = "mods\"
+                        Case CompType.ResourcePack : SubFolder = "resourcepacks\"
+                        Case CompType.Shader : SubFolder = "shaderpacks\"
+                        Case CompType.DataPack : SubFolder = "" '导航到版本根目录
+                    End Select
+                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) = Nothing
+                    '获取资源所需的加载器
+                    Dim AllowedLoaders As New List(Of CompModLoaderType)
+                    If File.ModLoaders.Any Then
+                        AllowedLoaders = File.ModLoaders
+                    ElseIf Project.ModLoaders.Any Then
+                        AllowedLoaders = Project.ModLoaders
                     End If
-                    If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
-                       AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
-                        AllowForge = Nothing : AllowFabric = Nothing
-                    End If
-                    Log("[Comp] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
-                    '判断某个版本是否符合要求
-                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
+                    Log($"[Comp] {Desc}要求的加载器种类：" & If(AllowedLoaders.Any(), AllowedLoaders.Join(" / "), "无要求"))
+                    '判断某个版本是否符合资源要求
+                    IsVersionSuitable =
                     Function(Version)
                         If Not Version.IsLoaded Then Version.Load()
-                        If Not Version.Modable Then Return False
-                        If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
-                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return False
-                        If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
-                        If AllowForge AndAlso (Version.Version.HasForge OrElse Version.Version.HasNeoForge) Then Return True
-                        If AllowFabric AndAlso Version.Version.HasFabric Then Return True
+                        '只对 Mod 和数据包进行版本检测
+                        If Project.Type = CompType.Mod OrElse Project.Type = CompType.DataPack Then
+                            If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
+                               Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return False
+                        End If
+                        '加载器
+                        If Not AllowedLoaders.Any() Then Return True '无要求
+                        If AllowedLoaders.Contains(CompModLoaderType.Forge) AndAlso Version.Version.HasForge Then Return True
+                        If AllowedLoaders.Contains(CompModLoaderType.Fabric) AndAlso Version.Version.HasFabric Then Return True
+                        If AllowedLoaders.Contains(CompModLoaderType.NeoForge) AndAlso Version.Version.HasNeoForge Then Return True
+                        If AllowedLoaders.Contains(CompModLoaderType.LiteLoader) AndAlso Version.Version.HasLiteLoader Then Return True
                         Return False
                     End Function
-                    '获取 Mod 默认下载位置
+                    '获取常规资源默认下载位置
                     If CachedFolder IsNot Nothing Then
                         DefaultFolder = CachedFolder
-                        Log("[Comp] 使用上次下载时的文件夹作为默认下载位置")
+                        Log($"[Comp] 使用上次下载时的文件夹作为默认下载位置：{DefaultFolder}")
                     ElseIf McVersionCurrent IsNot Nothing AndAlso IsVersionSuitable(McVersionCurrent) Then
-                        DefaultFolder = McVersionCurrent.PathIndie & "mods\"
+                        DefaultFolder = $"{McVersionCurrent.PathIndie}{SubFolder}"
                         Directory.CreateDirectory(DefaultFolder)
-                        Log("[Comp] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                        Log($"[Comp] 使用当前版本作为默认下载位置：{DefaultFolder}")
                     Else
+                        '查找所有可能的版本
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
                             Hint("正在查找适合的游戏版本……")
                             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                         End If
-                        Dim SuitableVersions As New List(Of McVersion)
-                        For Each Version As McVersion In McVersionList.Values.SelectMany(Function(l) l)
-                            If IsVersionSuitable(Version) Then SuitableVersions.Add(Version)
-                        Next
-                        If Not SuitableVersions.Any() Then
+                        Dim SuitableVersions = McVersionList.Values.SelectMany(Function(l) l).Where(Function(v) IsVersionSuitable(v)).
+                            Select(Function(v) New DirectoryInfo($"{v.PathIndie}{SubFolder}"))
+                        If SuitableVersions.Any Then
+                            Dim SelectedVersion = SuitableVersions.
+                                OrderByDescending(Function(Dir) If(Dir.Exists, Dir.LastWriteTimeUtc, Date.MinValue)). '先按文件夹更改时间降序
+                                ThenByDescending(Function(Dir) If(Dir.Exists, Dir.GetFiles().Length, -1)). '再按文件夹中的文件数量降序
+                                First()
+                            DefaultFolder = SelectedVersion.FullName
+                            Directory.CreateDirectory(DefaultFolder)
+                            Log($"[Comp] 使用适合的游戏版本作为默认下载位置：{DefaultFolder}")
+                        Else
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
+                                Hint("当前 MC 文件夹中没有找到适合此资源的版本！")
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
-                        Else '选择 Mod 数量最多的版本
-                            Dim SelectedVersion = SuitableVersions.OrderBy(
-                            Function(v)
-                                Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
-                                Return If(Info.Exists, Info.GetFiles().Length, -1)
-                            End Function).LastOrDefault()
-                            DefaultFolder = SelectedVersion.PathIndie & "mods\"
-                            Directory.CreateDirectory(DefaultFolder)
-                            Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
                         End If
                     End If
                 End If
@@ -412,7 +419,7 @@
                         If(File.Type = CompType.Mod,
                             If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
                             If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
-                    If Not Target.Contains("\") Then Exit Sub
+                    If Not Target.Contains("\") Then Return
                     '构造步骤加载器
                     Dim LoaderName As String = Desc & "下载：" & GetFileNameWithoutExtentionFromPath(Target) & " "
                     If Target <> DefaultFolder AndAlso File.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
