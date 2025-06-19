@@ -1,4 +1,4 @@
-﻿Public Module ModNet
+Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
@@ -21,8 +21,30 @@
         End If
     End Function
 
-    Public Function NetPrefetch(Url As String)
-                    
+    Public Function NetPrefetch(Url As String, Optional Retry As Integer = 3, Optional timeout As Integer = 250000, Optional MakeLog As Boolean = True, Optional UseBroswerUserAgent As Boolean = False) As WebResponse
+RetryRequest:
+        Try
+            If MakeLog Then Log("[Net] 发起网络请求（HEAD，" & Url & "），最大超时 " & timeout)
+            Url = SecretCdnSign(Url)
+            Dim HttpRequest As HttpWebRequest = WebRequest.Create(Url)
+            HttpRequest.Method = "HEAD"
+            HttpRequest.Timeout = timeout
+            SecretHeadersSign(Url, HttpRequest, UseBroswerUserAgent)
+            Return HttpRequest.GetResponse()
+        Catch ex As ThreadInterruptedException
+            Throw
+        Catch ex As WebException
+            If MakeLog Then Log(ex, "[Net] 预加载资源信息失败")
+            If ex.Status = WebExceptionStatus.Timeout Then
+                If Retry > 0 Then
+                    Retry -= 1
+                    GoTo RetryRequest
+                End If
+                Return Nothing
+            Else
+                Return ex.Response
+            End If
+        End Try
     End Function
 
     ''' <summary>
@@ -522,6 +544,7 @@ RequestFinished:
         Public Ex As Exception
         Public Thread As NetThread
         Public IsFailed As Boolean
+        Public IsPreFetch As Boolean
         Public Overrides Function ToString() As String
             Return Url
         End Function
@@ -1066,8 +1089,23 @@ StartThread:
             Dim Timeout As Integer = Math.Min(Math.Max(ConnectAverage, 6000) * (1 + Info.Source.FailCount), 30000)
             Info.State = NetState.Connect
             Try
+                Dim ContentLength As Long = 0
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
+                If Not Info.Source.IsPreFetch Then
+                    Dim PrefetchResult As HttpWebResponse = NetPrefetch(Info.Source.Url)
+                    If PrefetchResult IsNot Nothing Then
+                        Info.Source.Url = PrefetchResult.ResponseUri.ToString
+                        Try
+                            ContentLength = PrefetchResult.ContentLength
+                        Catch ex As Exception
+                            ContentLength = 0
+                        Finally
+                            PrefetchResult.Dispose()
+                        End Try
+                    End If
+                    Info.Source.IsPreFetch = True
+                End If
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
@@ -1075,7 +1113,7 @@ StartThread:
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
-                Dim ContentLength As Long = 0
+
                 Using HttpResponse As HttpWebResponse = HttpRequest.GetResponse()
                     If State = NetState.Error Then GoTo SourceBreak '快速中断
                     If ModeDebug AndAlso HttpResponse.ResponseUri.OriginalString <> Info.Source.Url Then
