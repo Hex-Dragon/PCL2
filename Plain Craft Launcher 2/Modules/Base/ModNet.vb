@@ -1093,8 +1093,8 @@ StartThread:
                 Dim ContentLength As Long = 0
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
-                If Not Info.Source.IsPreFetch Then
-                    SyncLock Info.Source.PrefetchLock
+                SyncLock Info.Source.PrefetchLock
+                    If Not Info.Source.IsPreFetch Then
                         Dim PrefetchResult As HttpWebResponse = NetPrefetch(Info.Source.Url)
                         If PrefetchResult IsNot Nothing Then
                             Info.Source.Url = PrefetchResult.ResponseUri.ToString
@@ -1107,8 +1107,8 @@ StartThread:
                             End Try
                         End If
                         Info.Source.IsPreFetch = True
-                    End SyncLock
-                End If
+                    End If
+                End SyncLock
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
