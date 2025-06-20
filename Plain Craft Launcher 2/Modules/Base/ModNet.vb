@@ -79,9 +79,9 @@ Retry:
             Return Request.DownloadString(Url)
         Catch ex As Exception
             If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException("连接服务器超时（" & Url & "）", ex)
+                Throw New TimeoutException(GetLang("LangModExceptionTimeOut", Url), ex)
             Else
-                Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
+                Throw New WebException(GetLang("LangModExceptionFailedToGet", $"{ex.Message} , {Url}"), ex)
             End If
         Finally
             If Not IsNothing(HttpStream) Then HttpStream.Dispose()
@@ -182,7 +182,7 @@ RequestFinished:
         Throw New Exception("未知错误")
     End Function
     Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
-        If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
+        If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception(GetLang("LangModExceptionRunInUI"))
         Url = SecretCdnSign(Url)
         Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
@@ -206,9 +206,9 @@ RequestFinished:
             Throw
         Catch ex As Exception
             If TypeOf ex Is WebException AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException($"获取结果失败（{CType(ex, WebException).Status}，{ex.Message}，{Url}）", ex)
+                Throw New TimeoutException(GetLang("LangModExceptionTimeOut", $"{CType(ex, WebException).Status}，{ex.Message}，{Url}"), ex)
             Else
-                Throw New WebException($"获取结果失败（{If(TypeOf ex Is WebException, CType(ex, WebException).Status & "，", "")}{ex.Message}，{Url}）", ex)
+                Throw New WebException(GetLang("LangModExceptionFailedToGet", $"{If(TypeOf ex Is WebException, CType(ex, WebException).Status & GetLang("LangComma"), "")}{ex.Message}，{Url}"), ex)
             End If
         Finally
             Request.Abort()
@@ -221,9 +221,9 @@ RequestFinished:
     ''' <param name="Url">网页的 Url。</param>
     Public Function NetGetCodeByLoader(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = RequestTaskTempFolder() & "download.txt"
-        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
+        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownloadCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
-            NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（" & Url & "）")
+            NewTask.WaitForExitTime(Timeout, TimeoutMessage:=GetLang("LangModExceptionTimeOut", Url))
             NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
@@ -236,9 +236,9 @@ RequestFinished:
     ''' <param name="Urls">网页的 Url 列表。</param>
     Public Function NetGetCodeByLoader(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = RequestTaskTempFolder() & "download.txt"
-        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
+        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownloadCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
-            NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（第一下载源：" & Urls.First & "）")
+            NewTask.WaitForExitTime(Timeout, TimeoutMessage:=GetLang("LangModExceptionDownloadCodeSource", Urls.First))
             NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
@@ -260,7 +260,7 @@ RequestFinished:
             '尝试删除原文件
             File.Delete(LocalFile)
         Catch ex As Exception
-            Throw New WebException($"预处理下载文件路径失败（{LocalFile}）", ex)
+            Throw New WebException(GetLang("LangModExceptionCreateDirectoryFail", LocalFile), ex)
         End Try
         '下载
         Using Client As New WebClient
@@ -269,7 +269,7 @@ RequestFinished:
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 File.Delete(LocalFile)
-                Throw New WebException($"直接下载文件失败（{Url}）", ex)
+                Throw New WebException(GetLang("LangModExceptionDownloadFail", Url), ex)
             End Try
         End Using
     End Sub
@@ -392,13 +392,13 @@ RequestFinished:
             End If
             Thread.Sleep(20)
         Loop
-        Throw New Exception("未知错误")
+        Throw New Exception(GetLang("LangModExceptionUnknown"))
     End Function
     ''' <summary>
     ''' 发送一次网络请求并获取返回内容。
     ''' </summary>
     Public Function NetRequestOnce(Url As String, Method As String, Data As Object, ContentType As String, Optional Timeout As Integer = 25000, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True, Optional UseBrowserUserAgent As Boolean = False) As String
-        If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
+        If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception(GetLang("LangModExceptionRunInUI"))
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
         Dim DataStream As Stream = Nothing
@@ -441,7 +441,7 @@ RequestFinished:
             Throw
         Catch ex As WebException
             If ex.Status = WebExceptionStatus.Timeout Then
-                ex = New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
+                ex = New WebException(GetLang("LangModExceptionTimeOutAskCheck", $"{ex.Message}，{Url}"), ex)
             Else
                 '获取请求失败的返回
                 Dim Res As String = ""
@@ -456,9 +456,9 @@ RequestFinished:
                 Catch
                 End Try
                 If Res = "" Then
-                    ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                    ex = New WebException(GetLang("LangModExceptionRequestFailed", $"{ex.Status}，{ex.Message}，{Url}"), ex)
                 Else
-                    ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
+                    ex = New ResponsedWebException(GetLang("LangModExceptionReturnErrorCode", $"{ex.Status}，{ex.Message}，{Url}{vbCrLf}{Res}"), Res, ex)
                 End If
             End If
             If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
@@ -892,7 +892,7 @@ RequestFinished:
                     Case NetState.Finish, NetState.Error
                         Return 1
                     Case Else
-                        Throw New ArgumentOutOfRangeException("文件状态未知：" & State)
+                        Throw New ArgumentOutOfRangeException(GetLang("LangModExceptionUnknownFileStatus", State))
                 End Select
             End Get
         End Property
