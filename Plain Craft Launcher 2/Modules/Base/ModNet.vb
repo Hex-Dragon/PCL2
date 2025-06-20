@@ -545,6 +545,7 @@ RequestFinished:
         Public Thread As NetThread
         Public IsFailed As Boolean
         Public IsPreFetch As Boolean
+        Public PrefetchLock As New Object
         Public Overrides Function ToString() As String
             Return Url
         End Function
@@ -1093,18 +1094,20 @@ StartThread:
                 Dim HttpDataCount As Integer = 0
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
                 If Not Info.Source.IsPreFetch Then
-                    Dim PrefetchResult As HttpWebResponse = NetPrefetch(Info.Source.Url)
-                    If PrefetchResult IsNot Nothing Then
-                        Info.Source.Url = PrefetchResult.ResponseUri.ToString
-                        Try
-                            ContentLength = PrefetchResult.ContentLength
-                        Catch ex As Exception
-                            ContentLength = 0
-                        Finally
-                            PrefetchResult.Dispose()
-                        End Try
-                    End If
-                    Info.Source.IsPreFetch = True
+                    SyncLock Info.Source.PrefetchLock
+                        Dim PrefetchResult As HttpWebResponse = NetPrefetch(Info.Source.Url)
+                        If PrefetchResult IsNot Nothing Then
+                            Info.Source.Url = PrefetchResult.ResponseUri.ToString
+                            Try
+                                ContentLength = PrefetchResult.ContentLength
+                            Catch ex As Exception
+                                ContentLength = 0
+                            Finally
+                                PrefetchResult.Dispose()
+                            End Try
+                        End If
+                        Info.Source.IsPreFetch = True
+                    End SyncLock
                 End If
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
