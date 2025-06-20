@@ -259,6 +259,7 @@ Ak ste vytvorili stabilnú online domovskú stránku, môžete kliknutím na ten
     <s:String x:Key="LangSetHomePagePresetPageJ">Špecifikácia nových funkcií PCL (Autor: WForst-Breeze)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">Rozcestník OpenMCIM (Autor: SALTWOOD)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">Skrytie funkcií</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Môžete skryť nepotrebné stránky alebo zakázať konkrétne funkcie. Stlačením klávesy "F12" v akomkoľvek rozhraní môžete dočasne zobraziť skryté funkcie.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Hlavné rozhranie</s:String>

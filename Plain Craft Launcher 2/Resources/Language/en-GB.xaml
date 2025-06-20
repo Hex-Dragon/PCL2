@@ -259,6 +259,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL New Feature Manual (Author: WForst-Breeze)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM Dashboard (Author: SALTWOOD)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">Magazine Homepage (Author: CreeperIsASpy)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">You can hide unnecessary pages or disable specific features. Press 'F12' in any interface to show the hidden features temporarily.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Main Interface</s:String>

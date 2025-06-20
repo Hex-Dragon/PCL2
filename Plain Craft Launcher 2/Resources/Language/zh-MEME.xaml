@@ -260,6 +260,7 @@
     <s:String x:Key="LangSetHomePagePresetPageJ">平原合成发射台新特性说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">特性雪藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定特性被雪藏。在随意界面按 F12 可以暂时挖出被雪藏的特性。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>

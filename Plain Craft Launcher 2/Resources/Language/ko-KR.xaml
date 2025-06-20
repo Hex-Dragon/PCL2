@@ -258,6 +258,7 @@
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">기능 숨기기</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">필요 없는 페이지를 숨기거나 특정 기능을 끌 수 있습니다. 어떤 화면에서든 F12를 눌러 숨겨진 기능을 일시적으로 표시할 수 있습니다.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">메인 페이지</s:String>

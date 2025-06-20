@@ -259,6 +259,7 @@ Si vous avez créé une page d'accueil en ligne stable, vous pouvez cliquer sur 
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">Masquage de Fonctionnalités</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Vous pouvez masquer des pages inutiles ou désactiver des fonctionnalités spécifiques. Appuyez sur "F12" dans n'importe quelle interface pour afficher temporairement les fonctionnalités cachées.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interface Principale</s:String>

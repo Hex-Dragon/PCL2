@@ -259,6 +259,7 @@
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">Скрытие функций</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Вы можете скрыть ненужные страницы или отключить определенные функции. Нажмите "F12" в любой интерфейсе, чтобы временно показать скрытые функции.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Главный интерфейс</s:String>

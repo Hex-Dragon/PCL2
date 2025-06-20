@@ -260,6 +260,7 @@
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 噺糼能説眀書（莋鍺：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 儀錶盤（莋鍺：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">卆梽炷頁（莋鍺：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">糼能陻蔵</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">沵妸姒陻蔵芣濡婹哋頁媔戓関閉特萣糼能。茬姙嬑鎅媔洝 F12 妸姒暫溡显沶被陻蔵哋糼能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">炷頁媔</s:String>

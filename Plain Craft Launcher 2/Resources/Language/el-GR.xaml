@@ -259,6 +259,7 @@
     <s:String x:Key="LangSetHomePagePresetPageJ">Εγχειρίδιο Νέων Χαρακτηριστικών PCL (Συγγραφέας: WForst-Breeze)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">Πίνακας Ελέγχου OpenMCIM (Συγγραφέας: SALTWOOD)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageM">PCL GitHub 仪表盘（作者：Deep-Dark-Forest）</s:String>
     <s:String x:Key="LangSetFuncHidden">Απόκρυψη Λειτουργιών</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Μπορείτε να αποκρύψετε περιττές σελίδες ή να απενεργοποιήσετε συγκεκριμένες λειτουργίες. Πατήστε «F12» σε οποιαδήποτε διεπαφή για να εμφανιστούν προσωρινά οι κρυφές λειτουργίες.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Κύρια Διεπαφή</s:String>
