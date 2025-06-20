@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">¡Cancelado!</s:String>
     <s:String x:Key="LangDialogBtnOK">Aceptar</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancelar</s:String>
@@ -490,10 +490,15 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">Paquetes</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">Recursos</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -610,6 +615,7 @@ Esta página proporciona la descarga del instalador de NeoForge. Después de des
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -908,7 +914,6 @@ Abrir PCL con el parámetro "--memory" ejecutará la optimización de memoria en
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Memoria Usada</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Memoria Asignada al Juego</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Opciones Avanzadas de Lanzamiento</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Encabezado de Parámetro</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Parámetros adicionales de JVM para usar al lanzar Minecraft, no intentes modificar sin determinación.
 Puedes restaurar la configuración predeterminada haciendo clic en el botón "Inicializar" en la pestaña izquierda.</s:String>
@@ -993,10 +998,10 @@ Para otorgar automáticamente, haz clic derecho en PCL y abre "Propiedades → C
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">Confirmación de Inicialización</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">Descargar</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Fuente</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Espejo (Las versiones pueden retrasarse)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Equilibrado (Cambiar a espejo cuando la fuente oficial carga lentamente)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Oficial (Las versiones son las más recientes)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Nombre del Mod</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determina la ubicación y el estilo de la traducción al chino simplificado para el mod que se descargará.
 Esta opción solo es válida cuando el idioma está configurado en chino simplificado.</s:String>
@@ -1370,7 +1375,6 @@ Por favor verifica si el tipo de evento está correctamente completado, y si PCL
 - Notificaciones de Actualización y Redes: Para evitar preocupaciones de abuso potencial.
 - Tema: Esta es una característica conmemorativa que requiere patrocinio para desbloquear. No hagas que los patrocinadores se sientan demasiado tristes...
 - Utilidades: Algunas herramientas de desarrollo se colocaron aquí durante las primeras etapas de desarrollo, y fue difícil clasificarlas.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">La versión actual de PCL no incluye la función de Tema...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">La versión actual de PCL no incluye la función de Actualización...</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">Carpeta Actual</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">Carpeta del Lanzador de Minecraft</s:String>
@@ -1674,11 +1678,7 @@ Si estás usando una VPN, por favor desactívala o cambia a un servidor diferent
     <s:String x:Key="LangModLaunchDialogContentNoMc">No has comprado Minecraft aún, o tu Xbox Game Pass ha expirado.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">Por favor crea primero el perfil del jugador de Minecraft, luego intenta de nuevo.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">Crear perfil</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">El juego se lanzará sin piel personalizada debido a la falla en la obtención de la piel.
-¡Por favor verifica la conexión a internet!
-
-Información detallada del error: {0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">Error al obtener la piel</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">Perfil de jugador no encontrado. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">Error al obtener el UUID del sitio web oficial. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">La longitud del UUID obtenido es insuficiente. ({0})</s:String>

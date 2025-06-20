@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Отменено!</s:String>
     <s:String x:Key="LangDialogBtnOK">ОК</s:String>
     <s:String x:Key="LangDialogBtnCancel">Отмена</s:String>
@@ -494,10 +494,15 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">Пакеты</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">Ресурсы</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Моды</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Модпаки</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -615,6 +620,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -915,7 +921,6 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Используемая память</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Выделенная память для игры</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Дополнительные параметры запуска</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Заголовок параметра</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Дополнительные параметры JVM для использования при запуске Minecraft, не пытайтесь изменять без решимости.
 Вы можете восстановить настройки по умолчанию, нажав кнопку "Initialize" на вкладке слева.</s:String>
@@ -1000,10 +1005,10 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">Подтверждение инициализации</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">Скачать</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Источник</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Зеркало (версии могут задерживаться)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Баланс (переключение на зеркало при медленной загрузке официального источника)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Официальный (версии самые свежие)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Имя мода</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Определяет расположение и стиль написания для китайского перевода мода, который будет скачан.
 Эта опция действительна только при языке, установленном на упрощенный китайский.</s:String>
@@ -1377,7 +1382,6 @@ PCL не поддерживает другие странные протокол
 - Обновления и уведомления о сетевых соединениях: Чтобы избежать потенциальных проблем с возможным злоупотреблением.
 - Тема: Это памятная функция, которая требует спонсорства для разблокировки. Не расстраивайте спонсоров слишком сильно...
 - Утилиты: Некоторые инструменты разработки были размещены здесь на ранних этапах разработки, и было сложно их разобрать.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">Текущая версия PCL не включает в себя функцию Темы...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">Текущая версия PCL не включает в себя функцию Обновления...</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">Текущая папка</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">Папка запускателя Minecraft</s:String>
@@ -1681,11 +1685,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">Вы ещё не купили Minecraft, или ваш Xbox Game Pass истёк.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">Пожалуйста, создайте профиль игрока Minecraft в первую очередь, затем попробуйте снова.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">Создать профиль</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">Игра будет запущена без пользовательской кожи из-за неудачи в получении кожи.
-Пожалуйста, проверьте интернет!
-
-Подробная информация об ошибке: {0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">Не удалось получить кожу</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">Профиль игрока не найден. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">Не удалось получить UUID с официального сайта. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">Полученный UUID имеет недостаточную длину. ({0})</s:String>

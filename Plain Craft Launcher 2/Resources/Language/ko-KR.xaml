@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">작업이 취소되었습니다!</s:String>
     <s:String x:Key="LangDialogBtnOK">확인</s:String>
     <s:String x:Key="LangDialogBtnCancel">취소</s:String>
@@ -491,10 +491,15 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">수동 설치 패키지</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">리소스</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">모드팩</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -611,6 +616,7 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -911,7 +917,6 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">사용된 메모리</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">게임에 할당된 메모리</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">고급 시작 옵션</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 매개변수 헤드</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Minecraft를 시작할 때 사용하는 추가 JVM 매개변수이며, 확신이 없을 경우 수정하지 마십시오. 
 왼쪽 탭의 초기화 버튼을 클릭하여 기본 설정으로 복원할 수 있습니다.</s:String>
@@ -996,10 +1001,10 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">초기화 확인</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">다운로드</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">버전 목록 가져오기</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">가능한 한 미러 소스를 사용하세요 (빠르지만 버전이 최신이 아닐 수 있습니다)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">공식 소스가 느릴 때만 미러 소스로 변경</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">가능한 한 공식 소스를 사용하세요 (최신 버전 보장, 하지만 느림)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 파일 이름 스타일</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">다운로드할 Mod의 기본 파일 이름에서 중국어 번역 이름이 어디에 위치해야 하는지 결정합니다.
 이 옵션은 언어 설정이 간체 중국어일 때만 유효합니다.</s:String>
@@ -1365,7 +1370,6 @@ PCL은 다른 엉뚱한 다운로드 프로토콜을 지원하지 않습니다.<
 - 업데이트 및 네트워크 알림: 남용 방지를 위해
 - 테마 전환: 후원자가 잠금 해제해야 하는 기념적인 기능입니다. 후원자를 너무 슬프게 하지 마세요……
 - 보물 상자: 개발 초기에는 몇 가지 개발 도구를 넣었지만 정리하기가 너무 번거로웠습니다.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">이 버전에는 테마 기능이 포함되어 있지 않습니다……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">이 버전에는 업데이트 기능이 포함되어 있지 않습니다……</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">현재 폴더</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">공식 런처 폴더</s:String>
@@ -1670,11 +1674,7 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModLaunchDialogContentNoMc">정품 Minecraft를 구매하지 않았거나, Xbox Game Pass가 만료되었습니다.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">먼저 Minecraft 플레이어 프로필을 생성한 후 다시 로그인하세요.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">프로필 생성하기</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">설정된 오프라인 시작 시 사용하는 정품 스킨을 가져오는 데 실패하여, 게임이 스킨 없이 시작됩니다.
-네트워크가 원활한지 확인하거나 VPN을 사용해 보세요!
-
-자세한 오류 정보: {0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">스킨 가져오기 실패</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">정품 플레이어 프로필이 존재하지 않습니다({0}).</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">정품 UUID를 공식 웹사이트에서 가져오는 데 실패했습니다({0}).</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">가져온 정품 UUID의 길이가 부족합니다({0}).</s:String>

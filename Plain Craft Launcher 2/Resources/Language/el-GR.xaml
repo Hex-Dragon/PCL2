@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Ακυρώθηκε!</s:String>
     <s:String x:Key="LangDialogBtnOK">Εντάξει</s:String>
     <s:String x:Key="LangDialogBtnCancel">Ακύρωση</s:String>
@@ -494,10 +494,15 @@
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">Πακέτα</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">Πόροι</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -615,6 +620,7 @@
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -915,7 +921,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Μνήμη που Χρησιμοποιείται</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Το Παιχνίδι έχει Εκχωρηθεί</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Σύνθετες Επιλογές Εκκίνησης</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Κεφαλίδα Παραμέτρου</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Πρόσθετες παράμετροι JVM που θα χρησιμοποιηθούν κατά την εκκίνηση του Minecraft, μην επιχειρήσετε να τις τροποποιήσετε χωρίς τον καθορισμό.
 Μπορείτε να επαναφέρετε τις προεπιλεγμένες ρυθμίσεις κάνοντας κλικ στο κουμπί «Αρχικοποίηση» στην αριστερή καρτέλα.</s:String>
@@ -1000,10 +1005,10 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">Επιβεβαίωση Εκκίνησης</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">Λήψη</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Πηγή</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Κατοπτρισμός (οι εκδόσεις ενδέχεται να καθυστερήσουν)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Ισορροπημένο (Μετάβαση σε κατοπτρισμό όταν η επίσημη πηγή φορτώνεται αργά)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Επίσημο (οι εκδόσεις είναι νεότερες)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Ονομασία Mod</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Προσδιορίστε τη θέση και το στυλ της Απλοποιημένης Μετάφρασης στα Κινεζικά για το mod που θα ληφθεί.
 Αυτή η επιλογή είναι έγκυρη μόνο όταν η γλώσσα έχει οριστεί σε Απλοποιημένα Κινεζικά.</s:String>
@@ -1377,7 +1382,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
 - Ειδοποιήσεις ενημέρωσης και δικτύωσης: Για να αποφευχθούν πιθανές ανησυχίες κατάχρησης.
 - Θέμα: Αυτό είναι ένα αναμνηστικό χαρακτηριστικό που απαιτεί χορηγία για να ξεκλειδωθεί. Μην στεναχωριέστε πολύ τους χορηγούς...
 - Εργαλείο: Ορισμένα εργαλεία ανάπτυξης τοποθετήθηκαν εδώ κατά τα πρώτα στάδια ανάπτυξης και ήταν δύσκολο να τα ταξινομήσουμε.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">Η τρέχουσα έκδοση του PCL δεν περιλαμβάνει τη δυνατότητα Θέμα...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">Η τρέχουσα έκδοση του PCL δεν περιλαμβάνει τη δυνατότητα ενημέρωσης...</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">Τρέχοντας Φάκελο</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">Φάκελος Εκκίνησης Minecraft</s:String>
@@ -1681,11 +1685,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">Δεν έχετε αγοράσει ακόμη το Minecraft ή το Xbox Game Pass σας έχει λήξει.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">Δημιουργήστε πρώτα το προφίλ παίκτη του Minecraft και μετά δοκιμάστε ξανά.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">Δημιουργία Προφίλ</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">Το παιχνίδι θα ξεκινήσει χωρίς προσαρμοσμένο δέρμα από την αποτυχία στη λήψη του δέρματος.
-Ελέγξτε το διαδίκτυο!
-
-Λεπτομερείς πληροφορίες σφάλματος: {0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">Απέτυχε η Λήψη του Δέρματος</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">Το προφίλ του παίκτη δεν βρέθηκε. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">Απέτυχε η λήψη UUID από τον επίσημο ιστότοπο. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">Το μήκος του ληφθέντος UUID είναι ανεπαρκές. ({0})</s:String>

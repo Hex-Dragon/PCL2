@@ -26,7 +26,8 @@
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！
+若无法安装，可在卸载高版本的 .NET Framework 后再试。</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
     <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
@@ -209,7 +210,7 @@
     <s:String x:Key="LangSetBackgroundPicBlur">背景模糊</s:String>
     <s:String x:Key="LangSetBackgroundPicBlurToolTip">较强的模糊会导致启动器严重掉帧，请谨慎使用。
 不建议在制作整合包时开启模糊，以确保 PCL 在低性能电脑上可以流畅运行。</s:String>
-    <s:String x:Key="LangSetBackgroundPicColorfulBack">使用彩色背景</s:String>
+    <s:String x:Key="LangSetBackgroundPicColorfulBack">叠加彩色背景</s:String>
     <s:String x:Key="LangSetOpenFolder">打开文件夹</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">将背景图片放到该文件夹，PCL 将会在每次打开时随机加载其中的一张图片</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">刷新背景图片</s:String>
@@ -268,7 +269,7 @@
     <s:String x:Key="LangSetFuncHiddenSettings">设置</s:String>
     <s:String x:Key="LangSetFuncHiddenMore">更多</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsSubPage">设置 子页面</s:String>
-    <s:String x:Key="LangSetFuncHiddenSettingsGame">游戏</s:String>
+    <s:String x:Key="LangSetFuncHiddenSettingsGame">启动</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsPersonalize">个性化</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsLaunch">其它</s:String>
     <s:String x:Key="LangSetFuncHiddenSettingsLink">联机</s:String>
@@ -280,7 +281,7 @@
     <s:String x:Key="LangSetFuncHiddenMoreVote">新功能投票</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecial">特定功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱隐藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隐藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
+    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隐藏第三方登录的账号邮箱显示，以避免隐私泄露。
 此选项的更改将在重启启动器后生效。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
@@ -435,9 +436,9 @@
     <s:String x:Key="LangDownloadCompToMCMod">转到 MC 百科</s:String>
     <s:String x:Key="LangDownloadCompCopyName">复制名称</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">正在获取版本列表</s:String>
-    <s:String x:Key="LangDownloadCompApiSlow">由于版本信息更新缓慢，可能无法识别刚更新的 MC 版本，只需等待几天即可自动恢复正常。</s:String>
+    <s:String x:Key="LangDownloadCompApiSlow">由于版本信息更新缓慢，可能无法识别刚更新的 MC 版本。几天后即可正常识别。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找适合的游戏版本……</s:String>
-    <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹中没有找到适合这个 Mod 的版本！</s:String>
+    <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹中没有找到适合这个资源的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所选版本：</s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">整合包下载：</s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">输入版本名称</s:String>
@@ -599,7 +600,7 @@
     <s:String x:Key="LangDownloadResourcepackTypeCombat">战斗</s:String>
     <s:String x:Key="LangDownloadResourcepackTypeUtility">实用</s:String>
     <s:String x:Key="LangDownloadResourcepackTypeTweaks">改良</s:String>
-    <s:String x:Key="LangDownloadResourcepackTypeCursed">神经病</s:String>
+    <s:String x:Key="LangDownloadResourcepackTypeCursed">鬼畜</s:String>
     <s:String x:Key="LangDownloadResourcepackTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadResourcepackTypeEntities">含实体</s:String>
     <s:String x:Key="LangDownloadResourcepackTypeAudio">含声音</s:String>
@@ -621,6 +622,7 @@
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -646,9 +648,9 @@
     <s:String x:Key="LangDownloadDatapackTypeSocial">服务器</s:String>
     <s:String x:Key="LangDownloadDatapackTypeLibrary">支持库</s:String>
     <s:String x:Key="LangDownloadDatapackTypeMod">Mod 相关</s:String>
-    <s:String x:Key="LangDownloadModpackConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。
+    <s:String x:Key="LangDownloadModpackConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，搜索结果可能不全，或使用 VPN 以改善网络环境。。
 请尝试使用 VPN 或加速器以改善网络。</s:String>
-    <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，搜索结果可能不全，或使用 VPN 以改善网络环境。。
 请尝试使用 VPN 或加速器以改善网络。</s:String>
     <s:String x:Key="LangMySkinSave">另存为</s:String>
     <s:String x:Key="LangMySkinRefresh">刷新</s:String>
@@ -801,12 +803,12 @@
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，帮助库目前只支持简体中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">在提交新反馈前，建议先搜索反馈列表，以避免重复提交。
-如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
+如果无法打开该网页，请使用 VPN 以改善网络环境。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反馈提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要打开新功能投票网页？
-如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
+如果无法打开该网页，请使用 VPN 以改善网络环境。</s:String>
     <s:String x:Key="LangPageOtherDialogVoteTitle">新功能投票</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
@@ -830,7 +832,7 @@
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 3 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是上个月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -913,7 +915,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自动搜索</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手动导入</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem">游戏内存</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 Java 最多只能分配 1 GB 内存，建议安装 64 位 Java!</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 Java 只能分配最多 1 GB 的内存。强烈建议换用 64 位的 Java！</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自动配置</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根据安装的 Mod 量与电脑剩余内存，动态调整为游戏分配的内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定义</s:String>
@@ -924,7 +926,6 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高级启动选项</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 参数头部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">启动 Minecraft 时使用的额外 JVM 参数，除非有确定把握，否则请不要修改</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
@@ -1380,7 +1381,6 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
 - 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">该版本中不包含主题功能……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">该版本中不包含更新功能……</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">官方启动器文件夹</s:String>
@@ -1500,7 +1500,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。</s:String>
-    <s:String x:Key="LangModBaseExceptionBadNetwork">你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadNetwork">你的网络环境不佳，导致难以连接到服务器。请稍后重试，或使用 VPN 以改善网络环境。</s:String>
     <s:String x:Key="LangModLaunchStartStageGetJava">获取 Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">补全文件</s:String>
     <s:String x:Key="LangModLaunchStartStageGetParameters">获取启动参数</s:String>
@@ -1657,8 +1657,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">你的账户中只有一个角色， 无法更换！</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">选择使用的角色</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">登录失败：{0}</s:String>
-    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
-请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：你的网络环境不佳，导致难以连接到海外服务器。
+请稍后重试，或使用加速器或 VPN 以改善网络环境。</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">登录完成后，网页会变得完全空白，把那个空白网页的网址复制到下面的框中就行了！
 如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待网页登录</s:String>
@@ -1670,7 +1670,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchDialogContentBanned">该账号似乎已被微软封禁，无法登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">你尚未注册 Xbox 账户，请在注册后再登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">你的网络所在的国家或地区无法登录微软账号。
-请尝试使用加速器或 VPN。</s:String>
+请使用加速器或 VPN。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
 该账号目前填写的年龄是否在 13 岁及以上？</s:String>
@@ -1687,11 +1687,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">你尚未购买正版 Minecraft，或者 Xbox Game Pass 已到期。</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">请先创建 Minecraft 玩家档案，然后再重新登录。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">创建档案</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。
-请检查你的网络是否通畅，或尝试使用 VPN！
-
-详细的错误信息：{0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">皮肤获取失败</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">正版玩家档案不存在（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">从官网获取正版 UUID 失败（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 UUID 长度不足（{0}）</s:String>
@@ -1792,7 +1788,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMyLoadingLoading">加载中</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">加载失败</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">未知错误</s:String>
-    <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用 VPN</s:String>
+    <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请稍后重试，或使用 VPN 以改善网络环境</s:String>
     <s:String x:Key="LangModDownloadLibTaskMcDownload">Minecraft {0} 下载</s:String>
     <s:String x:Key="LangModDownloadLibHintInstanceDownloading">该版本正在下载中！</s:String>
     <s:String x:Key="LangModDownloadLibDialogContentRedownloadInstance">版本 {0} 已存在，是否重新下载？
@@ -1882,7 +1878,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
 如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。
 如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 Open J9 而崩溃了。
+    <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 OpenJ9 而崩溃了。
 请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAD">游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。
 请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。
@@ -2064,7 +2060,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangMyMsgLoginDialogContent">登录网页将自动开启，请在网页中输入 {0}（已自动复制）。
 
 
-如果网络环境不佳，网页可能一直加载不出来，届时请使用 VPN 并重试。
+如果网络环境不佳，网页可能一直加载不出来，届时请使用使用加速器或 VPN 以改善网络环境。
 你也可以用其他设备打开 {1} 并输入上述代码。</s:String>
     <s:String x:Key="LangMyMsgLoginHintLoginSuccess">网页登录成功！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">你拒绝了 PCL 申请的权限……</s:String>
@@ -2119,19 +2115,19 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangPageVersionExportPCLDesc">打包正式版 PCL，以便没有启动器的玩家安装整合包</s:String>
     <s:String x:Key="LangPageVersionExportPCLProfile">PCL 个性化内容</s:String>
     <s:String x:Key="LangPageVersionExportPCLProfileDesc">功能隐藏设置、主页、背景音乐和图片等</s:String>
-    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中暂不包含 OptiFine。</s:String>
+    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中不会包含 OptiFine。</s:String>
     <s:String x:Key="LangPageVersionExportAdvancedOptions">高级选项</s:String>
     <s:String x:Key="LangPageVersionExportArchiveMode">打包资源文件，以避免在导入时下载</s:String>
     <s:String x:Key="LangPageVersionExportArchiveModeDesc">将 Mod、资源包、光影包的文件直接放入整合包中，这样在导入时就无需联网下载它们。
 建议仅在无法稳定连接 CurseForge 或 Modrinth 时才考虑勾选。</s:String>
     <s:String x:Key="LangPageVersionExportArchiveModeHint">建议仅在无法稳定连接 CurseForge 或 Modrinth 时才打包资源文件。
-二次分发可能违反使用协议，请尽量不要公开发布包含资源文件的整合包！</s:String>
+请不要公开发布含资源文件的整合包，这会违反部分 Mod 的使用协议！</s:String>
     <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth 上传模式</s:String>
     <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整合包文件。
 由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整合包中。
 此外，勾选后也不能在整合包中包含 PCL 启动器文件。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">配置文件中含有未在此处列出的选项，例如精准控制导出的文件、设置整合包存放位置等。
-请先选择 “保存配置”，然后编辑保存的配置文件。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">配置文件中含有更多高级选项，例如精准控制导出的文件、设置整合包存放位置等。
+要修改这些选项，请先点击 “保存配置”，在编辑配置文件后再导入。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">读取配置</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
     <s:String x:Key="LangPageVersionExportModpackGuide">整合包制作指南</s:String>

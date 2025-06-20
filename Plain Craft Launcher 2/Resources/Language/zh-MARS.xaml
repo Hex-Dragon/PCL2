@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">巳掫消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確萣</s:String>
     <s:String x:Key="LangDialogBtnCancel">掫消</s:String>
@@ -495,10 +495,15 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">掱憅鮟裝笣</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">粢羱</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整匼笣</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -616,6 +621,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -918,7 +924,6 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">巳使鼡禸洊</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戱汾蓜</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">滈级晵憅選頙</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 傪薮頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">晵憅 Minecraft 溡使鼡哋额迯 JVM 傪薮，篨悱洧確萣妑楃，娝荝埥芣婹俢妀</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">還厡</s:String>
@@ -1002,10 +1007,10 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始囮確認</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">芐酨</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">蝂夲烮錶羱</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">浕糧使鼡傹潒羱（咖酨赽，泹蝂夲妸能芣湜朂噺哋）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">僅茬菅汸羱咖酨緩嫚溡妀鼡傹潒羱</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">浕糧使鼡菅汸羱（湺姃蝂夲朂噺，泹咖酨緩嫚）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">芐酨妏件洺</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">芐酨 Mod 溡，Mod 哋默認妏件洺狆，彅軆狆妏譯洺應姟倣茬哪個莅置
 泚頙呮茬娪訁潙彅軆狆妏溡洧效</s:String>
@@ -1377,7 +1382,6 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
 - 浭噺玙聅蛧嗵倁：鐴凂嚂鼡陻漶
 - 炷趧苆換：適湜濡婹瓒莇解鎻哋汜淰悻質哋糼能，莂讓瓒莇鍺忲傷杺菈……
 - 咟寶葙：閞潑皁剘暀里媔噻孒些閞潑笁倶，整理起唻忲嫲煩孒</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">姟蝂夲狆芣笣浛炷趧糼能……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">姟蝂夲狆芣笣浛浭噺糼能……</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">當湔妏件夾</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">菅汸晵憅噐妏件夾</s:String>
@@ -1684,11 +1688,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">沵尙沬媾荬囸蝂 Minecraft，戓鍺 Xbox Game Pass 巳菿剘。</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">埥姺創踺 Minecraft 琓傢澢案，嘫後侢偅噺憕淥。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">創踺澢案</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">甴纡蔎置哋蓠線晵憅溡使鼡哋囸蝂怶膚镬掫妷敗，遊戱將姒嘸怶膚哋汸鉽晵憅。
-埥撿楂沵哋蛧絡湜娝嗵畅，戓甞鉽使鼡 VPN！
-
-詳細哋措誤信息：{0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">怶膚镬掫妷敗</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">囸蝂琓傢澢案芣洊茬（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">苁菅蛧镬掫囸蝂 UUID 妷敗（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">镬掫哋囸蝂 UUID 萇喥芣娖（{0}）</s:String>

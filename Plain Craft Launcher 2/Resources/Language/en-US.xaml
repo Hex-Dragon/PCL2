@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
@@ -621,6 +621,7 @@ This page offers the NeoForge installer for download. After downloading, you nee
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -921,7 +922,6 @@ Opening PCL with the parameter "--memory" will execute memory optimization silen
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Memory used</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Game allocated</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Advanced launch options</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">You can find more advanced launch options in the instance settings.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM parameter header</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM parameters to use when launching Minecraft. Do not attempt to edit if you are not sure.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">Reset</s:String>
@@ -1376,7 +1376,6 @@ Please check whether the event type is filled in correctly and whether the PCL i
 - Update and networking notifications: Omitted to avoid potential abuse concerns.
 - Theme: This is a commemorative feature that requires sponsorship to unlock. Don't disappoint the sponsors...
 - Utilities: Some development tools were placed here during the early stages of development, making them difficult to sort out.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">The current version of PCL does not include themes...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">The current version of PCL does not include update...</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">Current folder</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">Minecraft launcher folder</s:String>
@@ -1683,11 +1682,7 @@ If you are using a VPN, please disable it or switch to a different server and tr
     <s:String x:Key="LangModLaunchDialogContentNoMc">You have not purchased Minecraft yet, or you Xbox Game Pass has expired.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">Please create the Minecraft player profile first, then try again.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">Create profile</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">The game will launch without the custom skin due to a failure in skin obtainance.
-Please check your internet!
-
-Detail: {0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">Failed to obtain the skin</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">Player profile not found. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">Failed to obtain UUID from the official website. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">The length of the obtained UUID is insufficient. ({0})</s:String>

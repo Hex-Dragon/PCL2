@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">キャンセルされました！</s:String>
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
     <s:String x:Key="LangDialogBtnCancel">キャンセル</s:String>
@@ -494,10 +494,15 @@
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">手動インストールパッケージ</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">コミュニティリソース</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModsL"> Mod </s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpack</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpackL">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftResourcepack">资源包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResourcepackL">资源包</s:String>
     <s:String x:Key="LangDownloadPageLeftShader">光影包</s:String>
+    <s:String x:Key="LangDownloadPageLeftShaderL">光影包</s:String>
     <s:String x:Key="LangDownloadPageLeftDatapack">数据包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDatapackL">数据包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
@@ -615,6 +620,7 @@
     <s:String x:Key="LangDownloadShaderTypeCartoon">卡通风</s:String>
     <s:String x:Key="LangDownloadShaderTypeTitleFeature">特性</s:String>
     <s:String x:Key="LangDownloadShaderTypeVanilla">原版可用</s:String>
+    <s:String x:Key="LangDownloadShaderTypeVanillaToolTip">作为资源包加载，可以直接在原版游戏里使用。</s:String>
     <s:String x:Key="LangDownloadShaderTypeColoredLighting">彩色光照</s:String>
     <s:String x:Key="LangDownloadShaderTypePathTracing">路径追踪</s:String>
     <s:String x:Key="LangDownloadShaderTypePBR">PBR</s:String>
@@ -917,7 +923,6 @@ PCLを--memoryパラメータ付きで起動すると、静かにメモリ最適
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">使用済みメモリ</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">ゲームに割り当て</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高度な起動オプション</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">バージョン個別設定で、さらに詳細な起動オプションを見つけることができます。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM パラメータヘッダー</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Minecraft起動時に使用する追加のJVMパラメータです。自信がない場合は変更しないでください。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
@@ -1000,10 +1005,10 @@ PCLを起動するたびに、管理者権限の申請が必要です。
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初期化を確認</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">ダウンロード</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">バージョンリストの取得</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">ミラーソースを優先使用（読み込みが速いが、最新ではない可能性がある）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">公式ソースの読み込みが遅い場合のみミラーソースを使用</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">公式ソースを優先使用（最新バージョンを保証するが、読み込みが遅い）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionDownloadSource">文件下载源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Modファイル名の命名規則</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">ダウンロードするModのデフォルトファイル名において、中国語訳の名前をどこに配置するかを決定します。
 このオプションは簡体中国語に設定されている場合にのみ有効です。</s:String>
@@ -1375,7 +1380,6 @@ PCL は他の様々なダウンロードプロトコルをサポートしてい�
 - 更新とネットワーク通知：濫用の懸念を避けるため
 - テーマ切り替え：これはスポンサー解除が必要な記念的な機能です、スポンサーをあまり悲しませないでください……
 - 百宝箱：開発初期に開発ツールを詰め込みましたが、整理が面倒すぎます</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">このバージョンにはテーマ機能が含まれていません……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">このバージョンには更新機能が含まれていません……</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">現在のフォルダ</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">公式ランチャーのフォルダ</s:String>
@@ -1681,11 +1685,7 @@ VPNや加速器を使用している場合は、それらをオフにするか�
     <s:String x:Key="LangModLaunchDialogContentNoMc">まだ正規版Minecraftを購入していないか、Xbox Game Passが期限切れです。</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">まずMinecraftプレイヤープロフィールを作成してから、もう一度ログインしてください。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">プロフィールを作成</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">オフライン起動時に設定した正規版スキンの取得に失敗したため、ゲームはスキンなしで起動します。
-ネットワークがつながっているか確認するか、VPNを使用してください。
-
-詳細なエラーメッセージ：{0}</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">スキンの取得に失敗しました</s:String>
+    <s:String x:Key="LangModLaunchDialogGetSkinFailHint">皮肤信息获取失败，游戏将以无皮肤的方式启动</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">正規版プレイヤープロフィールが存在しません（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">公式サイトから正規版UUIDの取得に失敗しました（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">取得した正規版UUIDの長さが足りません（{0}）</s:String>
