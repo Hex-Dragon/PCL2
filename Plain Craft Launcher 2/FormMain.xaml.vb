@@ -216,22 +216,12 @@ Public Class FormMain
         If LastVersion < VersionCode Then
             '触发升级
             UpgradeSub(LastVersion)
+            '版本隔离设置迁移
+            Log("[Start] 从老 PCL 迁移版本隔离")
+            Setup.Set("LaunchArgumentIndieV2", Setup.Get("LaunchArgumentIndie"))
         ElseIf LastVersion > VersionCode Then
             '触发降级
             DowngradeSub(LastVersion)
-        End If
-        '版本隔离设置迁移
-        If Setup.IsUnset("LaunchArgumentIndieV2") Then
-            If Not Setup.IsUnset("LaunchArgumentIndie") Then
-                Log("[Start] 从老 PCL 迁移版本隔离")
-                Setup.Set("LaunchArgumentIndieV2", Setup.Get("LaunchArgumentIndie"))
-            ElseIf Not Setup.IsUnset("WindowHeight") Then
-                Log("[Start] 从老 PCL 升级，但此前未调整版本隔离，使用老的版本隔离默认值")
-                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndie"))
-            Else
-                Log("[Start] 全新的 PCL，使用新的版本隔离默认值")
-                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndieV2"))
-            End If
         End If
         '刷新主题
         ThemeCheckAll(False)
