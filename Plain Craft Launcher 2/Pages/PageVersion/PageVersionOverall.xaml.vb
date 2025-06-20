@@ -11,7 +11,7 @@
         Reload()
 
         '非重复加载部分
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
         PanDisplay.TriggerForceResize()
 
@@ -54,7 +54,7 @@
 
     '版本分类
     Private Sub ComboDisplayType_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboDisplayType.SelectionChanged
-        If Not (IsLoad AndAlso AniControlEnabled = 0) Then Exit Sub
+        If Not (IsLoad AndAlso AniControlEnabled = 0) Then Return
         If ComboDisplayType.SelectedIndex <> 1 Then
             '改为不隐藏
             Try
@@ -75,7 +75,7 @@
                 If Not Setup.Get("HintHide") Then
                     If MyMsgBox(GetLang("LangPageVersionOverallDialogHideInstanceContent"), GetLang("LangPageVersionOverallDialogHideInstanceTitle"),, GetLang("LangDialogBtnCancel")) <> 1 Then
                         ComboDisplayType.SelectedIndex = 0
-                        Exit Sub
+                        Return
                     End If
                     Setup.Set("HintHide", True)
                 End If
@@ -110,7 +110,7 @@
             Dim OldPath As String = PageVersionLeft.Version.Path
             '修改此部分的同时修改快速安装的版本名检测*
             Dim NewName As String = MyMsgBoxInput(GetLang("LangPageVersionOverallDialogEditNameTitle"), "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
-            If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
+            If String.IsNullOrWhiteSpace(NewName) Then Return
             Dim NewPath As String = PathMcFolder & "versions\" & NewName & "\"
             '获取临时中间名，以防止仅修改大小写的重命名失败
             Dim TempName As String = NewName & "_temp"
@@ -128,6 +128,7 @@
             My.Computer.FileSystem.RenameDirectory(OldPath, TempName)
             My.Computer.FileSystem.RenameDirectory(TempPath, NewName)
             '清理 ini 缓存
+            IniClearCache(PageVersionLeft.Version.PathIndie & "options.txt")
             IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
             '遍历重命名所有文件与文件夹
             For Each Entry As DirectoryInfo In New DirectoryInfo(NewPath).EnumerateDirectories
@@ -180,17 +181,15 @@
 
     '版本图标
     Private Sub ComboDisplayLogo_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboDisplayLogo.SelectionChanged
-        If Not (IsLoad AndAlso AniControlEnabled = 0) Then Exit Sub
+        If Not (IsLoad AndAlso AniControlEnabled = 0) Then Return
         '选择 自定义 时修改图片
         Try
             If ComboDisplayLogo.SelectedItem Is ItemDisplayLogoCustom Then
                 Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
                 If FileName = "" Then
                     Reload() '还原选项
-                    Exit Sub
+                    Return
                 End If
-                File.Delete(PageVersionLeft.Version.Path & "PCL\Logo.png")
-                Directory.CreateDirectory(PageVersionLeft.Version.Path & "PCL") '虽然不知道为啥，有时候真没这文件夹
                 CopyFile(FileName, PageVersionLeft.Version.Path & "PCL\Logo.png")
             Else
                 File.Delete(PageVersionLeft.Version.Path & "PCL\Logo.png")
@@ -261,11 +260,11 @@
         Try
             '弹窗要求指定脚本的保存位置
             Dim SavePath As String = SelectSaveFile(GetLang("LangPageVersionOverallSelectSaveCommandFile"), "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
-            If SavePath = "" Then Exit Sub
+            If SavePath = "" Then Return
             '检查中断（等玩家选完弹窗指不定任务就结束了呢……）
             If McLaunchLoader.State = LoadState.Loading Then
                 Hint(GetLang("LangPageVersionOverallHintWaitForTaskOver"), HintType.Critical)
-                Exit Sub
+                Return
             End If
             '生成脚本
             If McLaunchStart(New McLaunchOptions With {.SaveBatch = SavePath, .Version = PageVersionLeft.Version}) Then
@@ -286,13 +285,13 @@
             '忽略文件检查提示
             If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
                 Hint(GetLang("LangPageVersionOverallHintEnableInstanceAssetsCheck"), HintType.Info)
-                Exit Sub
+                Return
             End If
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar
                 If OngoingLoader.Name <> PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile") Then Continue For
                 Hint(GetLang("LangPageVersionOverallCompleteFileInTask"), HintType.Critical)
-                Exit Sub
+                Return
             Next
             '启动
             Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile"), DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload))
@@ -331,6 +330,7 @@
             Select Case MyMsgBox(MsgContent,
                         GetLang("LangPageVersionOverallDialogDeleteTitle"), , GetLang("LangDialogBtnCancel"),, IsHintIndie OrElse IsShiftPressed)
                 Case 1
+                    IniClearCache(PageVersionLeft.Version.PathIndie & "options.txt")
                     IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
                         DeleteDirectory(PageVersionLeft.Version.Path)
@@ -340,7 +340,7 @@
                         Hint(GetLang("LangPageVersionOverallHintDeleteSuccess", PageVersionLeft.Version.Name), HintType.Finish)
                     End If
                 Case 2
-                    Exit Sub
+                    Return
             End Select
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
             FrmMain.PageBack()

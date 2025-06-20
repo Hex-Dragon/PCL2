@@ -118,7 +118,7 @@
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchMem}">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint x:Name="LabRamWarn" Text="{StaticResource LangPageSetupLaunchLaunchMem32BitWarn}" IsWarn="True" Margin="0,0,0,12" />
+                    <local:MyHint x:Name="LabRamWarn" Visibility="Visible" Text="{StaticResource LangPageSetupLaunchLaunchMem32BitWarn}" Theme="Yellow" Margin="0,0,0,12" />
                     <Grid Margin="0,0,0,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -173,7 +173,7 @@
             </local:MyCard>
             <local:MyCard x:Name="CardSkin" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchSkin}" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="{StaticResource LangPageSetupLaunchSkinTips}" IsWarn="True" Margin="0,0,0,10" />
+                    <local:MyHint Text="{StaticResource LangPageSetupLaunchSkinTips}" Theme="Yellow" Margin="0,0,0,10" />
                     <Grid Margin="-1,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -226,37 +226,37 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="9" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="9" />
+                        <RowDefinition Height="28" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="9" />
-                        <RowDefinition Height="28" />
-                        <RowDefinition Height="9" />
-                        <RowDefinition Height="28" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <local:MyHint Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsHintTip}" Margin="0,2,0,12" IsWarn="False" Grid.ColumnSpan="2"
-                                  CanClose="True" RelativeSetup="HintMoreAdvancedSetup" />
-                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,25,0">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,25,0">
                         <TextBlock Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHead}" VerticalAlignment="Center" />
                         <local:MyIconButton Height="23" Margin="0,1,0,0" x:Name="BtnAdvanceJvmReset" VerticalAlignment="Center" 
                                         ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset}" ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
                                         Logo="M530 0c287 0 521 229 521 511s-233 511-521 511c-233 0-436-151-500-368a63 63 0 0 1 44-79 65 65 0 0 1 80 43c48 162 200 276 375 276 215 0 390-171 390-383s-174-383-390-383c-103 0-199 39-270 106l21-5a63 63 0 0 1 33 123l-157 42a65 65 0 0 1-90-42l-49-183a65 65 0 1 1 126-33l6 26A524 524 0 0 1 530 0z" LogoScale="0.9" />
                     </StackPanel>
-                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="1" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops}" MaxLength="4000"
+                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops}" MaxLength="4000"
                                  Height="100" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" VerticalScrollBarVisibility="Auto" />
-                    <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="3" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip}" />
-                    <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="5" Grid.ColumnSpan="2" Tag="LaunchAdvanceRun" Grid.Column="1" HintText=""
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip}" />
+                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="4" Grid.ColumnSpan="2" Tag="LaunchAdvanceRun" Grid.Column="1" HintText=""
                                  ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip}" />
-                    <local:MyCheckBox Grid.Row="6" Grid.Column="1" x:Name="CheckAdvanceRunWait" Tag="LaunchAdvanceRunWait" Visibility="Collapsed"
+                    <local:MyCheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckAdvanceRunWait" Tag="LaunchAdvanceRunWait" Visibility="Collapsed"
                                   Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand}" Margin="0,8,0,7" />
-                    <StackPanel Margin="0,12,0,4" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+                    <StackPanel Margin="0,12,0,4" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Left">
                         <local:MyCheckBox Height="28" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW}" x:Name="CheckAdvanceDisableJLW" Tag="LaunchAdvanceDisableJLW"
                             ToolTipService.Placement="Right" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip}" />
                         <local:MyCheckBox Height="28" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence}" x:Name="CheckAdvanceGraphicCard" Tag="LaunchAdvanceGraphicCard"
                             ToolTipService.Placement="Right" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip}" />
                     </StackPanel>
+                    <local:MyHint Text="你还可以在版本独立设置中找到更多高级启动选项。" Margin="0,5,0,10" Theme="Blue" Grid.Row="7" Grid.ColumnSpan="2"
+                                  CanClose="True" RelativeSetup="HintMoreAdvancedSetup" />
                 </Grid>
             </local:MyCard>
             <local:MyExtraTextButton HorizontalAlignment="Center" Margin="0,-5,0,15"

@@ -13,7 +13,7 @@
         </Grid.Resources>
         <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
             <StackPanel Margin="25,10,25,65">
-                <local:MyHint Margin="0,15,0,0" Text="{StaticResource LangPageVersionExportNoOptifine}" IsWarn="False" x:Name="HintOptiFine" />
+                <local:MyHint Margin="0,15,0,0" Text="{StaticResource LangPageVersionExportNoOptifine}" Theme="Yellow" x:Name="HintOptiFine" />
                 <local:MyCard Margin="0,15">
                     <Grid Margin="22,15,25,15">
                         <Grid.ColumnDefinitions>
@@ -238,12 +238,12 @@
                 <local:MyCard Title="{StaticResource LangPageVersionExportAdvancedOptions}" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
                     <StackPanel Margin="25,37,23,20">
                         <local:MyHint Text="{StaticResource LangPageVersionExportArchiveModeHint}"
-                                      IsWarn="False" Margin="0,0,0,4" Visibility="{Binding Checked, ElementName=CheckAdvancedInclude, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                      Theme="Yellow" Margin="0,2,0,8" Visibility="{Binding Checked, ElementName=CheckAdvancedInclude, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <local:MyCheckBox Text="{StaticResource LangPageVersionExportArchiveMode}" x:Name="CheckAdvancedInclude"
                                           ToolTip="{StaticResource LangPageVersionExportArchiveModeDesc}" />
                         <local:MyCheckBox Text="{StaticResource LangPageVersionExportModrinthStandard}" x:Name="CheckAdvancedModrinth"
                                           ToolTip="{StaticResource LangPageVersionExportModrinthStandardDesc}" />
-                        <local:MyHint IsWarn="False" RelativeSetup="HintExportConfig" CanClose="True" Margin="0,20,0,0"
+                        <local:MyHint Theme="Blue" RelativeSetup="HintExportConfig" CanClose="True" Margin="0,20,0,2"
                                       Text="{StaticResource LangPageVersionExportExportConfigDesc}" />
                         <Grid Height="35" Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>

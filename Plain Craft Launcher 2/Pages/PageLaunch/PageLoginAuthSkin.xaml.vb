@@ -49,11 +49,10 @@
             Log("[Launch] 要求更换角色，但登录加载器繁忙", LogLevel.Debug)
             If CType(McLoginLoader.Input, McLoginServer).ForceReselectProfile Then
                 Hint(GetLang("LangPageLoginAuthSkinChanging"))
-                Exit Sub
             Else
                 Hint(GetLang("LangPageLoginAuthSkinLogining"), HintType.Critical)
-                Exit Sub
             End If
+            Return
         End If
         Hint(GetLang("LangPageLoginAuthSkinChanging"))
         Setup.Set("CacheAuthUuid", "") '清空选择缓存

@@ -15,7 +15,6 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeCartoon}" Tag="/cartoon" />
 
         <local:MyComboBoxItem Content="{StaticResource LangDownloadShaderTypeTitleFeature}" IsEnabled="False" />
-        <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeVanilla}" Tag="/vanilla" ToolTip="作为资源包加载，可以直接在原版游戏里使用。" ToolTipService.HorizontalOffset="70" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeColoredLighting}" Tag="/colored-lighting" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypePathTracing}" Tag="/path-tracing" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypePBR}" Tag="/pbr" />
@@ -26,6 +25,10 @@
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeLow}" Tag="/low" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeMedium}" Tag="/medium" />
         <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeHigh}" Tag="/high" />
-        
+
+        <local:MyComboBoxItem Content="加载器" IsEnabled="False" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="{StaticResource LangDownloadShaderTypeVanilla}" Tag="/vanilla" ToolTip="{StaticResource LangDownloadShaderTypeVanillaToolTip}" ToolTipService.HorizontalOffset="70" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="Iris" Tag="/iris" />
+        <local:MyComboBoxItem Margin="15,0,0,0" Content="OptiFine" Tag="/optifine" />
     </local:PageComp>
 </local:MyPageRight>

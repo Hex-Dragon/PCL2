@@ -13,13 +13,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.1." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
     Public Const VersionCode As Integer = 357 'Release
 #Else
-    Public Const VersionCode As Integer = 356 'Snapshot
+    Public Const VersionCode As Integer = 358 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -785,13 +785,16 @@ Public Module ModBase
     End Function
 
     '读取、写入、复制文件
+    ''' <summary>
+    ''' 复制文件。会自动创建文件夹、会覆盖已有的文件。
+    ''' </summary>
     Public Sub CopyFile(FromPath As String, ToPath As String)
         Try
             '还原文件路径
             If Not FromPath.Contains(":\") Then FromPath = Path & FromPath
             If Not ToPath.Contains(":\") Then ToPath = Path & ToPath
             '如果复制同一个文件则跳过
-            If FromPath = ToPath Then Exit Sub
+            If FromPath = ToPath Then Return
             '确保目录存在
             Directory.CreateDirectory(GetPathFromFullPath(ToPath))
             '复制文件
@@ -803,7 +806,6 @@ Public Module ModBase
     ''' <summary>
     ''' 读取文件，如果失败则返回空数组。
     ''' </summary>
-    ''' <param name="FilePath">文件完整或相对路径。</param>
     Public Function ReadFileBytes(FilePath As String, Optional Encoding As Encoding = Nothing) As Byte()
         Try
             '还原文件路径
@@ -1364,7 +1366,7 @@ RetryDir:
         Try
             Directory.Delete(Path, True)
         Catch ex As Exception
-            If Not RetriedDir Then
+            If Not RetriedDir AndAlso Not RunInUi() Then
                 RetriedDir = True
                 Log(ex, $"删除文件夹失败，将在 0.3s 后重试（{Path}）")
                 Thread.Sleep(300)
@@ -1982,8 +1984,8 @@ RetryDir:
 #Region "系统"
 
     ''' <summary>
-    ''' 线程安全的，可以直接使用 For Each 的 List。
-    ''' 在使用 For Each 循环时，列表的结果可能并非最新，但不会抛出异常。
+    ''' 线程安全的 List。
+    ''' 通过在 For Each 循环中使用一个浅表副本规避多线程操作或移除自身导致的异常。
     ''' </summary>
     Public Class SafeList(Of T)
         Inherits SynchronizedCollection(Of T)
@@ -2015,8 +2017,8 @@ RetryDir:
     End Class
 
     ''' <summary>
-    ''' 线程安全的，可以直接使用 For Each 的字典。
-    ''' 在使用 For Each 循环时，字典的结果可能并非最新，但不会抛出异常。
+    ''' 线程安全的字典。
+    ''' 通过在 For Each 循环中使用一个浅表副本规避多线程操作或移除自身导致的异常。
     ''' </summary>
     Public Class SafeDictionary(Of TKey, TValue)
         Implements IDictionary(Of TKey, TValue)
@@ -2677,7 +2679,7 @@ Retry:
             End Select
         End If
 
-        'If Double.IsNaN(newValue) OrElse Double.IsInfinity(newValue) Then Exit Sub '安全性检查
+        'If Double.IsNaN(newValue) OrElse Double.IsInfinity(newValue) Then Return '安全性检查
         'Select Case control.VerticalAlignment
         '  Case VerticalAlignment.Top, VerticalAlignment.Stretch, VerticalAlignment.Center
         '      control.Margin = New Thickness(control.Margin.Left, newValue, control.Margin.Right, control.Margin.Bottom)
@@ -2850,9 +2852,10 @@ Retry:
         ''' </summary>
         Feedback = 5
         ''' <summary>
-        ''' 弹窗，结束程序。
+        ''' 弹出 Windows 原生弹窗，要求反馈。在无法保证 WPF 窗口能正常运行时使用此级别。
+        ''' 在第二次触发后会直接结束程序。
         ''' </summary>
-        Assert = 6
+        Critical = 6
     End Enum
     Private LogList As New StringBuilder
     Private LogWritter As StreamWriter
@@ -2895,7 +2898,7 @@ Retry:
     Private ReadOnly LogFlushLock As New Object '防止外部调用 LogFlush 时同时输出多次日志
     Public Sub LogFlush()
         On Error Resume Next
-        If LogWritter Is Nothing Then Exit Sub
+        If LogWritter Is Nothing Then Return
         Dim Log As String = Nothing
         SyncLock LogFlushLock
             If LogList.Length > 0 Then
@@ -2911,6 +2914,7 @@ Retry:
     End Sub
 
     Private ReadOnly LogListLock As New Object '防止日志乱码，只在调试模式下启用
+    Private IsCriticalErrorTriggered As Boolean = False
     ''' <summary>
     ''' 输出 Log。
     ''' </summary>
@@ -2933,7 +2937,7 @@ Retry:
 #If DEBUG Then
         Console.Write(AppendText)
 #End If
-        If IsProgramEnded OrElse Level = LogLevel.Normal Then Exit Sub
+        If IsProgramEnded OrElse Level = LogLevel.Normal Then Return
 
         '去除前缀
         Text = Text.RegexReplace("\[[^\]]+?\] ", "")
@@ -2960,19 +2964,16 @@ Retry:
                 Else
                     MyMsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
                 End If
-            Case LogLevel.Assert
-                Dim Time As Long = GetTimeTick()
+            Case LogLevel.Critical
+                If IsCriticalErrorTriggered Then
+                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
+                    Return
+                End If
+                IsCriticalErrorTriggered = True
                 If CanFeedback(False) Then
                     If MsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
-                End If
-                If GetTimeTick() - Time < 1500 Then
-                    '弹窗无法保留
-                    Log("[System] PCL 已崩溃：" & vbCrLf & Text)
-                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
-                Else
-                    FormMain.EndProgramForce(ProcessReturnValues.Fail)
+                    MsgBox(Text & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
                 End If
         End Select
 
@@ -2983,7 +2984,7 @@ Retry:
     ''' <param name="Desc">错误描述。会在处理时在末尾加入冒号。</param>
     Public Sub Log(Ex As Exception, Desc As String, Optional Level As LogLevel = LogLevel.Debug, Optional Title As String = "出现错误")
         On Error Resume Next
-        If TypeOf Ex Is ThreadInterruptedException Then Exit Sub
+        If TypeOf Ex Is ThreadInterruptedException Then Return
 
         If Title = "出现错误" Then Title = GetLang("LangModBaseDialogFeedbackTitle")
 
@@ -3002,7 +3003,7 @@ Retry:
 #If DEBUG Then
         Console.Write(AppendText)
 #End If
-        If IsProgramEnded Then Exit Sub
+        If IsProgramEnded Then Return
 
         '输出提示
         Select Case Level
@@ -3031,19 +3032,16 @@ Retry:
                 Else
                     MyMsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
                 End If
-            Case LogLevel.Assert
-                Dim Time As Long = GetTimeTick()
+            Case LogLevel.Critical
+                If IsCriticalErrorTriggered Then
+                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
+                    Return
+                End If
+                IsCriticalErrorTriggered = True
                 If CanFeedback(False) Then
                     If MsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
-                End If
-                If GetTimeTick() - Time < 1500 Then
-                    '弹窗无法保留
-                    Log("[System] PCL 已崩溃：" & vbCrLf & ExFull)
-                    FormMain.EndProgramForce(ProcessReturnValues.Exception)
-                Else
-                    FormMain.EndProgramForce(ProcessReturnValues.Fail)
+                    MsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
                 End If
         End Select
 

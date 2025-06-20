@@ -14,7 +14,7 @@
         AniControlEnabled -= 1
 
         '非重复加载部分
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
 
         '调整按钮边距（这玩意儿没法从 XAML 改）
@@ -89,7 +89,7 @@
             Else
                 PanEmpty.Visibility = Visibility.Visible
                 PanBack.Visibility = Visibility.Collapsed
-                Exit Sub
+                Return
             End If
             '修改缓存
             ModItems.Clear()
@@ -154,7 +154,7 @@
     ''' 刷新整个 UI。
     ''' </summary>
     Public Sub RefreshUI()
-        If PanList Is Nothing Then Exit Sub
+        If PanList Is Nothing Then Return
         Dim ShowingMods = If(IsSearching, SearchResult, If(McModLoader.Output, New List(Of McMod))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
@@ -590,7 +590,7 @@ Install:
             If MyMsgBox(GetLang("LangPageVersionModDialogUpdateModContent"), GetLang("LangPageVersionModDialogUpdateModTitle"), GetLang("LangPageVersionModDialogUpdateModBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                 Setup.Set("HintUpdateMod", True)
             Else
-                Exit Sub
+                Return
             End If
         End If
         Try
@@ -682,7 +682,7 @@ Install:
                     Case LoadState.Aborted
                         Hint(GetLang("LangPageVersionModTaskModUpdateAbort"), HintType.Info)
                     Case Else
-                        Exit Sub
+                        Return
                 End Select
                 Log($"[Mod] 已从正在进行 Mod 更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
@@ -765,7 +765,7 @@ Install:
                 RefreshBars()
             End If
             '显示结果提示
-            If Not IsSuccessful Then Exit Sub
+            If Not IsSuccessful Then Return
             If IsShiftPressed Then
                 If ModList.Count = 1 Then
                     Hint(GetLang("LangPageVersionModHintFilePermanentDeleteSuccessA", ModList.Single.FileName), HintType.Finish)

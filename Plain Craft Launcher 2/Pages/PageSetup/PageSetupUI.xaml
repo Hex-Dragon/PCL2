@@ -206,9 +206,9 @@
                         <local:MyRadioBox Text="{StaticResource LangSetHomePageLocal}" x:Name="RadioCustomType1" Height="22" Tag="UiCustomType/1" Grid.Column="2" />
                         <local:MyRadioBox Text="{StaticResource LangSetHomePageOnline}" x:Name="RadioCustomType2" Height="22" Tag="UiCustomType/2" Grid.Column="3" />
                     </Grid>
-                    <local:MyHint Margin="0,15,0,-9" Text="{StaticResource LangSetHomePageCustomWarn}" IsWarn="True" x:Name="HintCustomWarn" 
+                    <local:MyHint Margin="0,15,0,-4" Text="See NodSetup.vb" Theme="Blue" x:Name="HintCustom" />
+                    <local:MyHint Margin="0,15,0,6" Text="{StaticResource LangSetHomePageCustomWarn}" Theme="Yellow" x:Name="HintCustomWarn" 
                                   CanClose="True" RelativeSetup="HintCustomWarn" />
-                    <local:MyHint Margin="0,15,0,1" Text="在 ModSetup 里改这段文字……" IsWarn="False" x:Name="HintCustom" />
                     <Grid Height="35" x:Name="PanCustomLocal" Visibility="Collapsed" Margin="0,10,0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

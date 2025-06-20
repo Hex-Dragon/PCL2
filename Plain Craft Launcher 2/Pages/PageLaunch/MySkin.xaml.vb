@@ -49,7 +49,7 @@
         If Not Loader.State = LoadState.Finished Then
             Hint(GetLang("LangMySkinHintLoading"), HintType.Critical)
             If Not Loader.State = LoadState.Loading Then Loader.Start()
-            Exit Sub
+            Return
         End If
         Try
             Dim FileAddress As String = SelectSaveFile(GetLang("LangMySkinDialogChoseSavePath"), GetFileNameFromPath(Address), "皮肤图片文件(*.png)|*.png")
@@ -87,7 +87,7 @@
             Catch ex As Exception '#2272
                 Log(ex, GetLang("LangMySkinHintSkinFileCorruption") & Address, LogLevel.Hint)
                 File.Delete(Address)
-                Exit Sub
+                Return
             End Try
             ImgBack.Tag = Address
             '大小检查
@@ -209,11 +209,11 @@
         '检查条件，获取新披风
         If IsChanging Then
             Hint(GetLang("LangMySkinHintChanging"))
-            Exit Sub
+            Return
         End If
         If McLoginMsLoader.State = LoadState.Failed Then
             Hint(GetLang("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
-            Exit Sub
+            Return
         End If
         Hint(GetLang("LangMySkinHintGettingCape"))
         IsChanging = True
@@ -226,7 +226,7 @@ Retry:
                 If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
                 If McLoginMsLoader.State <> LoadState.Finished Then
                     Hint(GetLang("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
-                    Exit Sub
+                    Return
                 End If
                 Dim AccessToken As String = McLoginMsLoader.Output.AccessToken
                 Dim Uuid As String = McLoginMsLoader.Output.Uuid
@@ -243,7 +243,8 @@ Retry:
                             {"Minecon2013", GetLang("LangMySkinCapeNameMinecon2013")}, {"Minecon2015", GetLang("LangMySkinCapeNameMinecon2015")}, {"Minecon2016", GetLang("LangMySkinCapeNameMinecon2016")},
                             {"Cherry Blossom", GetLang("LangMySkinCapeNameCherryBlossom")}, {"15th Anniversary", GetLang("LangMySkinCapeName15th-Anniversary")}, {"Purple Heart", GetLang("LangMySkinCapeNamePurpleHeart")},
                             {"Follower's", GetLang("LangMySkinCapeNameFollower's")}, {"MCC 15th Year", GetLang("LangMySkinCapeNameMCC15thYear")}, {"Minecraft Experience", GetLang("LangMySkinCapeNameMinecraftExperience")},
-                            {"Mojang Office", GetLang("LangMySkinCapeNameMojangOffice")}, {"Home", GetLang("LangMySkinCapeNameHome")}, {"Menace", GetLang("LangMySkinCapeNameMenace")}, {"Yearn", GetLang("LangMySkinCapeNameYearn")}
+                            {"Mojang Office", GetLang("LangMySkinCapeNameMojangOffice")}, {"Home", GetLang("LangMySkinCapeNameHome")}, {"Menace", GetLang("LangMySkinCapeNameMenace")}, {"Yearn", GetLang("LangMySkinCapeNameYearn")},
+                            {"Common", "普通披风"}, {"Pan", "薄煎饼披风"}, {"Founder's", "创始人披风"}
                         }
                         Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = GetLang("LangMySkinCapeNameNone")}}
                         For Each Cape In SkinData("capes")
@@ -256,7 +257,7 @@ Retry:
                         Log(ex, "获取玩家皮肤列表失败", LogLevel.Feedback)
                     End Try
                 End Sub)
-                If SelId Is Nothing Then Exit Sub
+                If SelId Is Nothing Then Return
                 '发送请求
                 Dim Result As String = NetRequestRetry("https://api.minecraftservices.com/minecraft/profile/capes/active",
                     If(SelId = 0, "DELETE", "PUT"),
@@ -264,7 +265,7 @@ Retry:
                     "application/json", Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
                 If Result.Contains("""errorMessage""") Then
                     Hint(GetLang("LangMySkinHintChangeCapeFail") & ":" & GetJson(Result)("errorMessage"), HintType.Critical)
-                    Exit Sub
+                    Return
                 Else
                     Hint(GetLang("LangMySkinHintChangeCapeSuccess"), HintType.Finish)
                 End If

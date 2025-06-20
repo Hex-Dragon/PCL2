@@ -10,12 +10,12 @@
         If ItemTest.Checked AndAlso Setup.Get("UiHiddenOtherTest") Then IsHiddenPage = True
         If PageSetupUI.HiddenForceShow Then IsHiddenPage = False
         '若页面错误，或尚未加载，则继续
-        If IsLoad AndAlso Not IsHiddenPage Then Exit Sub
+        If IsLoad AndAlso Not IsHiddenPage Then Return
         IsLoad = True
         '刷新子页面隐藏情况
         PageSetupUI.HiddenRefresh()
         '选择第一个未被禁用的子页面
-        If IsPageSwitched Then Exit Sub
+        If IsPageSwitched Then Return
         If Not Setup.Get("UiHiddenOtherHelp") Then
             ItemHelp.SetChecked(True, False, False)
         ElseIf Not Setup.Get("UiHiddenOtherAbout") Then
@@ -76,7 +76,7 @@
     ''' 切换现有页面。
     ''' </summary>
     Public Sub PageChange(ID As FormMain.PageSubType)
-        If PageID = ID Then Exit Sub
+        If PageID = ID Then Return
         AniControlEnabled += 1
         IsPageSwitched = True
         Try
@@ -126,12 +126,12 @@
 
     '打开网页
     Private Sub TryFeedback(sender As Object, e As RouteEventArgs) Handles ItemFeedback.Changed
-        If Not ItemFeedback.Checked Then Exit Sub
+        If Not ItemFeedback.Checked Then Return
         TryFeedback()
         e.Handled = True
     End Sub
     Public Shared Sub TryFeedback()
-        If Not CanFeedback(True) Then Exit Sub
+        If Not CanFeedback(True) Then Return
         Select Case MyMsgBox(GetLang("LangPageOtherDialogFeedbackContent"),
                     GetLang("LangPageOtherDialogFeedbackTitle"), GetLang("LangPageOtherDialogFeedbackBtn1"), GetLang("LangPageOtherDialogFeedbackBtn2"), GetLang("LangDialogBtnCancel"))
             Case 1
@@ -141,13 +141,13 @@
         End Select
     End Sub
     Private Sub TryVote(sender As Object, e As RouteEventArgs) Handles ItemVote.Changed
-        If Not ItemVote.Checked Then Exit Sub
+        If Not ItemVote.Checked Then Return
         TryVote()
         e.Handled = True
     End Sub
     Public Shared Sub TryVote()
         If MyMsgBox(GetLang("LangPageOtherDialogVoteContent"),
-                    GetLang("LangPageOtherDialogVoteTitle"), GetLang("LangPageOtherDialogVoteBtn1"), GetLang("LangDialogBtnCancel")) = 2 Then Exit Sub
+                    GetLang("LangPageOtherDialogVoteTitle"), GetLang("LangPageOtherDialogVoteBtn1"), GetLang("LangDialogBtnCancel")) = 2 Then Return
         OpenWebsite("https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8?discussions_q=category%3A%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8+sort%3Adate_created")
     End Sub
 

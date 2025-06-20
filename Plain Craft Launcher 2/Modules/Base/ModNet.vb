@@ -1345,7 +1345,7 @@ Wrong:
                 If State < NetState.Merge Then
                     State = NetState.Merge
                 Else
-                    Exit Sub
+                    Return
                 End If
             End SyncLock
             Dim RetryCount As Integer = 0
@@ -1355,8 +1355,7 @@ Retry:
                 SyncLock LockChain
                     '创建文件夹
                     If File.Exists(LocalPath) Then File.Delete(LocalPath)
-                    Dim Info As New FileInfo(LocalPath)
-                    Info.Directory.Create()
+                    Directory.CreateDirectory(GetPathFromFullPath(LocalPath))
                     '合并文件
                     If IsNoSplit Then
                         '仅有一个线程，从缓存中输出
@@ -1435,7 +1434,7 @@ Retry:
         ''' </summary>
         Private Sub Fail(Optional RaiseEx As Exception = Nothing)
             SyncLock LockState
-                If State >= NetState.Finish Then Exit Sub
+                If State >= NetState.Finish Then Return
                 If RaiseEx IsNot Nothing Then Ex.Add(RaiseEx)
                 '凉凉
                 State = NetState.Error
@@ -1451,10 +1450,10 @@ Retry:
         Public Sub Abort(CausedByTask As LoaderDownload)
             '从特定任务中移除，如果它还属于其他任务，则继续下载
             Tasks.Remove(CausedByTask)
-            If Tasks.Any Then Exit Sub
+            If Tasks.Any Then Return
             '确认中断
             SyncLock LockState
-                If State >= NetState.Finish Then Exit Sub
+                If State >= NetState.Finish Then Return
                 State = NetState.Error
             End SyncLock
             InterruptAndDelete()
@@ -1474,7 +1473,7 @@ Retry:
         ''' </summary>
         Public Sub Finish(Optional PrintLog As Boolean = True)
             SyncLock LockState
-                If State >= NetState.Finish Then Exit Sub
+                If State >= NetState.Finish Then Return
                 State = NetState.Finish
             End SyncLock
             SyncLock NetManager.LockRemain
@@ -1601,7 +1600,7 @@ NextElement:
                     '输入检测
                     If Not Files.Any() Then
                         OnFinish()
-                        Exit Sub
+                        Return
                     End If
                     For Each File As NetFile In Files
                         If File Is Nothing Then Throw New ArgumentException("存在空文件请求！")
@@ -1658,13 +1657,14 @@ NextElement:
         End Sub
         Private Sub StartCopy(Files As List(Of NetFile), FolderList As List(Of String))
             Try
-                If ModeDebug Then Log("[Download] 检查线程分配文件数：" & Files.Count & "，线程名：" & Thread.CurrentThread.Name)
+                If ModeDebug Then Log($"[Download] 检查线程分配文件数：{Files.Count}，线程名：{Thread.CurrentThread.Name}")
                 '试图从已存在的 Minecraft 文件夹中寻找目标文件
                 Dim ExistFiles As New List(Of KeyValuePair(Of NetFile, String)) '{NetFile, Target As String}
                 For Each File As NetFile In Files
                     Dim ExistFilePath As String = Nothing
                     '判断是否有已存在的文件
-                    If File.Check IsNot Nothing AndAlso McFolderList IsNot Nothing AndAlso PathMcFolder IsNot Nothing AndAlso File.Check.CanUseExistsFile AndAlso File.LocalPath.StartsWithF(PathMcFolder) Then
+                    If File.Check IsNot Nothing AndAlso McFolderList IsNot Nothing AndAlso PathMcFolder IsNot Nothing AndAlso
+                        File.Check.CanUseExistsFile AndAlso File.LocalPath.StartsWithF(PathMcFolder) Then
                         Dim Relative = File.LocalPath.Replace(PathMcFolder, "")
                         For Each Folder In FolderList
                             Dim Target = Folder & Relative
@@ -1690,7 +1690,7 @@ NextElement:
                 For Each FileToken In ExistFiles
                     Dim File As NetFile = FileToken.Key
                     SyncLock LockState
-                        If File.State > NetState.WaitForCopy Then Exit Sub
+                        If File.State > NetState.WaitForCopy Then Return
                     End SyncLock
                     Dim LocalPath As String = FileToken.Value
                     Dim RetryCount As Integer = 0
@@ -1701,7 +1701,7 @@ Retry:
                         File.Finish(False)
                     Catch ex As Exception
                         RetryCount += 1
-                        Log(ex, String.Format("复制已存在的文件失败，重试第 {2} 次（{0} -> {1}）", LocalPath, File.LocalPath, RetryCount))
+                        Log(ex, $"复制已存在的文件失败，重试第 {RetryCount} 次（{LocalPath} -> {File.LocalPath}）")
                         If RetryCount < 3 Then
                             Thread.Sleep(200)
                             GoTo Retry
@@ -1719,14 +1719,14 @@ Retry:
             '要求全部文件完成
             SyncLock FileRemainLock
                 FileRemain -= 1
-                If FileRemain > 0 Then Exit Sub
+                If FileRemain > 0 Then Return
             End SyncLock
             OnFinish()
         End Sub
         Public Sub OnFinish()
             RaisePreviewFinish()
             SyncLock LockState
-                If State > LoadState.Loading Then Exit Sub
+                If State > LoadState.Loading Then Return
                 State = LoadState.Finished
             End SyncLock
         End Sub
@@ -1739,7 +1739,7 @@ Retry:
         End Sub
         Public Sub OnFail(ExList As List(Of Exception))
             SyncLock LockState
-                If State > LoadState.Loading Then Exit Sub
+                If State > LoadState.Loading Then Return
                 If ExList Is Nothing OrElse Not ExList.Any() Then ExList = New List(Of Exception) From {New Exception("未知错误！")}
                 '寻找第一个不是 404 的下载源
                 Dim UsefulExs = ExList.Where(Function(e) Not e.Message.Contains("(404)")).ToList
@@ -1768,7 +1768,7 @@ Retry:
         End Sub
         Public Overrides Sub Abort()
             SyncLock LockState
-                If State >= LoadState.Finished Then Exit Sub
+                If State >= LoadState.Finished Then Return
                 State = LoadState.Aborted
             End SyncLock
             Log("[Download] " & Name & " 已取消！")
@@ -1885,7 +1885,7 @@ Retry:
         ''' 启动监控线程，用于新增下载线程。
         ''' </summary>
         Private Sub StartManager()
-            If IsManagerStarted Then Exit Sub
+            If IsManagerStarted Then Return
             IsManagerStarted = True
             Dim ThreadStarter =
             Sub(Id As Integer) '0 或 1
@@ -1936,7 +1936,7 @@ Retry:
                         Next
                     End While
                 Catch ex As Exception
-                    Log(ex, $"下载管理启动线程 {Id} 出错", LogLevel.Assert)
+                    Log(ex, $"下载管理启动线程 {Id} 出错", LogLevel.Critical)
                 End Try
             End Sub
             RunInNewThread(Sub() ThreadStarter(0), "NetManager ThreadStarter 0")
@@ -1960,7 +1960,7 @@ Retry:
                         Loop
                     End While
                 Catch ex As Exception
-                    Log(ex, "下载管理刷新线程出错", LogLevel.Assert)
+                    Log(ex, "下载管理刷新线程出错", LogLevel.Critical)
                 End Try
             End Sub, "NetManager StatRefresher")
         End Sub

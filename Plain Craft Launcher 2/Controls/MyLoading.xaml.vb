@@ -35,7 +35,7 @@ Public Class MyLoading
             Return _ShowProgress
         End Get
         Set(value As Boolean)
-            If _ShowProgress = value Then Exit Property
+            If _ShowProgress = value Then Return
             _ShowProgress = value
             RefreshText()
         End Set
@@ -143,7 +143,7 @@ Public Class MyLoading
             Return _OuterState
         End Get
         Set(value As MyLoadingState)
-            If _OuterState = value Then Exit Property
+            If _OuterState = value Then Return
             Dim OldValue = _OuterState
             _OuterState = value
             '引发事件
@@ -160,7 +160,7 @@ Public Class MyLoading
             Return _InnerState
         End Get
         Set(value As MyLoadingState)
-            If _InnerState = value Then Exit Property
+            If _InnerState = value Then Return
             Dim OldValue = _InnerState
             _InnerState = value
             '引发事件
@@ -184,7 +184,7 @@ Public Class MyLoading
     Private IsLooping As Boolean = False
     Private Sub AniLoop()
         '这坨循环代码也是老屎坑了，救救.jpg
-        If Not HasAnimation OrElse IsLooping OrElse Not InnerState = MyLoadingState.Run OrElse AniSpeed > 10 OrElse Not IsLoaded Then Exit Sub
+        If Not HasAnimation OrElse IsLooping OrElse Not InnerState = MyLoadingState.Run OrElse AniSpeed > 10 OrElse Not IsLoaded Then Return
         IsLooping = True
         ErrorAnimationWaiting = True
         AniStart({
@@ -272,7 +272,7 @@ Public Class MyLoadingStateSimulator
             Return _LoadingState
         End Get
         Set(value As MyLoadingState)
-            If _LoadingState = value Then Exit Property
+            If _LoadingState = value Then Return
             Dim OldState = _LoadingState
             _LoadingState = value
             RaiseEvent LoadingStateChanged(value, OldState)

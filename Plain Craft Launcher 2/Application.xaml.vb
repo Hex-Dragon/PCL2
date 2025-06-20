@@ -192,28 +192,18 @@ WaitRetry:
     End Sub
 
     '异常
-    Private IsCritErrored As Boolean = False
     Private Sub Application_DispatcherUnhandledException(sender As Object, e As DispatcherUnhandledExceptionEventArgs) Handles Me.DispatcherUnhandledException
         On Error Resume Next
         e.Handled = True
-        If IsProgramEnded Then Exit Sub
-        If IsCritErrored Then
-            '在汇报错误后继续引发错误，知道这次压不住了
-            FormMain.EndProgramForce(ProcessReturnValues.Exception)
-            Exit Sub
-        End If
-        IsCritErrored = True
-        Dim ExceptionString As String = GetExceptionDetail(e.Exception, True)
-        If ExceptionString.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse
-           ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
-           ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
-           ExceptionString.Contains("未能加载文件或程序集") Then
-            OpenWebsite("https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net462-offline-installer")
-            MsgBox(GetLang("LangApplicationDialogContentNETWarn"), MsgBoxStyle.Information, GetLang("LangApplicationDialogTitleNETWarn"))
-            FormMain.EndProgramForce(ProcessReturnValues.Cancel)
+        If IsProgramEnded Then Return
+        FeedbackInfo()
+        Dim Detail As String = GetExceptionDetail(e.Exception, True)
+        If Detail.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse Detail.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse Detail.Contains("未能加载文件或程序集") OrElse
+           Detail.Contains(".NET Framework") Then ' “自动错误判断” 的结果分析
+            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
+            Log(e.Exception, etLang("LangApplicationDialogContentNETWarn"), LogLevel.Critical, GetLang("LangApplicationDialogTitleNETWarn"))
         Else
-            FeedbackInfo()
-            Log(e.Exception, GetLang("LangApplicationDialogContentUnknownError"), LogLevel.Assert, GetLang("LangApplicationDialogTitleUnknownError"))
+            Log(e.Exception, GetLang("LangApplicationDialogContentUnknownError"), LogLevel.Critical, GetLang("LangApplicationDialogTitleUnknownError"))
         End If
     End Sub
 

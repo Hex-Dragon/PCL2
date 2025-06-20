@@ -7,7 +7,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,25,25,25">
-            <local:MyHint Text="{StaticResource LangPageVersionSetupTips}" IsWarn="False" Margin="0,0,0,15"
+            <local:MyHint Text="{StaticResource LangPageVersionSetupTips}" Theme="Blue" Margin="0,0,0,15"
                           CanClose="True" RelativeSetup="HintIndieSetup"  />
             <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
                 <StackPanel Margin="25,40,25,21">
@@ -58,7 +58,7 @@
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchMem}">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint x:Name="LabRamWarn" Text="{StaticResource LangPageSetupLaunchLaunchMem32BitWarn}" IsWarn="True" Margin="0,0,0,12" />
+                    <local:MyHint x:Name="LabRamWarn" Text="{StaticResource LangPageSetupLaunchLaunchMem32BitWarn}" Theme="Yellow" Margin="0,0,0,12" />
                     <Grid Margin="0,0,0,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />

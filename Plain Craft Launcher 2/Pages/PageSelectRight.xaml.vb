@@ -231,7 +231,7 @@
                         Hint(GetLang("LangSelectVersionDeletedB", Version.Name), HintType.Finish)
                     End If
                 Case 2
-                    Exit Sub
+                    Return
                 Case Else
                     Exit Sub
             End Select

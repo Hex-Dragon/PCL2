@@ -65,7 +65,7 @@
     ''' 切换现有页面。
     ''' </summary>
     Public Sub PageChange(ID As FormMain.PageSubType)
-        If PageID = ID Then Exit Sub
+        If PageID = ID Then Return
         AniControlEnabled += 1
         Try
             PageChangeRun(PageGet(ID))
@@ -187,13 +187,13 @@
 
     '点击返回
     Private Sub ItemInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles ItemInstall.Click
-        If Not ItemInstall.Checked Then Exit Sub
+        If Not ItemInstall.Checked Then Return
         FrmDownloadInstall.ExitSelectPage()
     End Sub
 
     '展开手动安装
     Private Sub ItemHand_Click(sender As Object, e As RouteEventArgs) Handles ItemHand.Changed
-        If ItemHand.Checked = False Then Exit Sub
+        If ItemHand.Checked = False Then Return
         e.Handled = True
         AniControlEnabled += 1
         If Not Setup.Get("HintHandInstall") Then
@@ -201,7 +201,7 @@
             If MyMsgBox(GetLang("LangDownloadPageLeftDialogManualInstallContent"), GetLang("LangDownloadPageLeftDialogManualInstallTitle"), GetLang("LangDownloadPageLeftDialogManualInstallBtn1"), GetLang("LangDownloadPageLeftDialogManualInstallBtn2")) = 1 Then
                 FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Download}, FormMain.PageSubType.DownloadInstall)
                 AniControlEnabled -= 1
-                Exit Sub
+                Return
             End If
         End If
         ItemHand.Visibility = Visibility.Collapsed

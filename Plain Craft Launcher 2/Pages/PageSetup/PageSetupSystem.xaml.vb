@@ -58,7 +58,7 @@
         SelectCurrentLanguage()
 
         '非重复加载部分
-        If IsLoaded Then Exit Sub
+        If IsLoaded Then Return
         IsLoaded = True
 
         AniControlEnabled += 1
@@ -167,7 +167,7 @@
         SliderDebugAnim.GetHintText = Function(v) If(v > 29, GetLang("LangPageSetupSystemDebugAnimSpeedDisable"), (v / 10 + 0.1) & "x")
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
-        If SliderDownloadThread.Value < 100 Then Exit Sub
+        If SliderDownloadThread.Value < 100 Then Return
         If Not Setup.Get("HintDownloadThread") Then
             Setup.Set("HintDownloadThread", True)
             MyMsgBox(GetLang("LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent"), GetLang("LangDialogTitleWarning"), GetLang("LangDialogBtnIC"), IsWarn:=True)
@@ -189,15 +189,15 @@
 
     '自动更新
     Private Sub ComboSystemActivity_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
-        If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemActivity.SelectedIndex <> 2 Then Exit Sub
+        If AniControlEnabled <> 0 Then Return
+        If ComboSystemActivity.SelectedIndex <> 2 Then Return
         If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
             ComboSystemActivity.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
     Private Sub ComboSystemUpdate_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
-        If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemUpdate.SelectedIndex <> 3 Then Exit Sub
+        If AniControlEnabled <> 0 Then Return
+        If ComboSystemUpdate.SelectedIndex <> 3 Then Return
         If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
             ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
         End If

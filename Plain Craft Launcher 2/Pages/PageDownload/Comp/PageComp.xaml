@@ -71,7 +71,7 @@
             </StackPanel>
         </local:MyCard>
         <StackPanel x:Name="PanContent">
-            <local:MyHint x:Name="HintError" Text="{StaticResource LangDownloadModpackConnectModrinthFail}" IsWarn="True" Margin="0,0,0,15" />
+            <local:MyHint x:Name="HintError" HasBorder="True" Text="{StaticResource LangDownloadModpackConnectModrinthFail}" Theme="Yellow" Margin="0,0,0,15" />
             <local:MyCard x:Name="CardProjects" UseAnimation="False">
                 <StackPanel x:Name="PanProjects" Margin="12" />
             </local:MyCard>
