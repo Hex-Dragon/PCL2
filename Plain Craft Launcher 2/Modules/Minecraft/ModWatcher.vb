@@ -271,7 +271,7 @@
                 If MinecraftWindow Is Nothing Then Return
                 Dim MinecraftWindowName = MinecraftWindow.Value.Value, MinecraftWindowHandle = MinecraftWindow.Value.Key
                 '已找到窗口
-                If Not MinecraftWindowName.StartsWithF("FML") Then
+                If Not MinecraftWindowName.StartsWithF("FML") AndAlso Not MinecraftWindowName.StartsWithF("Quilt Loader") Then
                     '已找到 Minecraft 窗口
                     WindowHandle = MinecraftWindowHandle
                     WatcherLog($"Minecraft 窗口已加载：{MinecraftWindowName}（{MinecraftWindowHandle.ToInt64}）")
@@ -292,8 +292,8 @@
                         End Sub, "MinecraftWindowMaximize")
                     End If
                 ElseIf Not IsWindowAppeared Then
-                    '已找到 FML 窗口
-                    WatcherLog("FML 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
+                    '已找到 Mod Loader 窗口
+                    WatcherLog("Mod Loader 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
                 End If
                 IsWindowAppeared = True
             Catch ex As Exception

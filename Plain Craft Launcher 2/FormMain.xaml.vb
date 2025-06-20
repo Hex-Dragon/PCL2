@@ -10,6 +10,16 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 361 Then 'Release 2.10.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复：无法安装部分使用老版本 PCL 导出的整合包"))
+        End If
+        If LastVersion < 359 Then 'Release 2.10.2
+            If LastVersion >= 357 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：下载资源包、光影包时能自动跳转到对应的文件夹"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：调整界面样式与动画，让整体视觉更干净，操作体验更顺滑"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复：无法从 CurseForge 下载 Mod 等资源，或是安装整合包"))
+            FeatureCount += 28
+            BugCount += 28
+        End If
         If LastVersion < 357 Then 'Release 2.10.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "新增：下载资源包、光影包、数据包"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新增：允许设置文件下载源"))
@@ -72,6 +82,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 362 Then 'Snapshot 2.10.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复：无法安装部分使用老版本 PCL 导出的整合包"))
+        End If
+        If LastVersion < 360 Then 'Snapshot 2.10.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复：无法从 CurseForge 下载 Mod 等资源，或是安装整合包"))
+            If LastVersion >= 358 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复：无法加载正版皮肤的头像"))
+            FeatureCount += 3
+            BugCount += 5
+        End If
         If LastVersion < 358 Then 'Snapshot 2.10.1
             If LastVersion >= 356 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：下载资源包、光影包时能自动跳转到对应的文件夹"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化：调整界面样式与动画，让整体视觉更干净，操作体验更顺滑"))
