@@ -677,7 +677,7 @@ Wait:
             '若该目录有 Java，则加入结果
             If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
-            '不应使用网易的 Java：https://github.com/Hex-Dragon/PCL2/issues/1279#issuecomment-2761489121
+            '不应使用网易的 Java：https://github.com/HMeloong-Git/PCL/issues/1279#issuecomment-2761489121
             Dim Keywords = {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc", "dragon",
                             "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
                             "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
