@@ -1212,7 +1212,7 @@ StartThread:
                 HttpRequest = Request.GetRequestMessage(Info.Source.Url,
                                                         RequireHeaderSign:=True)
                 '可能出现结束减去起始等于或者小于 0 的情况，导致下载抛出 ArgumentOutOfRangeException
-                If Not Info.DownloadEnd - Info.DownloadEnd <= 0 Then HttpRequest.Headers.Range = New RangeHeaderValue(Info.DownloadStart, Info.DownloadEnd)
+                If Not Info.IsFirstThread Then HttpRequest.Headers.Range = New RangeHeaderValue(Info.DownloadStart, Nothing)
                 HttpResponse = Request.SendRequest(HttpRequest, False, Timeout:=Timeout, RequireReturnRespObj:=True)
                 Dim ContentLength As Long = 0
                 Using HttpResponse
