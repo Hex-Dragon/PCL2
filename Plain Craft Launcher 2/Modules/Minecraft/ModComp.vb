@@ -560,7 +560,7 @@
                     ElseIf McVersionHighest > -1 AndAlso StartVersion >= McVersionHighest Then
                         If EndVersion < 10 Then
                             SpaVersions.Clear()
-                            SpaVersions.Add("全版本")
+                            SpaVersions.Add("所有常用版本")
                             Exit For
                         Else
                             SpaVersions.Add("1." & EndVersion & "+")
