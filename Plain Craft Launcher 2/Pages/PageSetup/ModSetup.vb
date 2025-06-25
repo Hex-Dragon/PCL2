@@ -1,4 +1,6 @@
-﻿Public Class ModSetup
+﻿Imports System.Security.AccessControl
+
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -42,6 +44,8 @@
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
+        {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemUseDefaultProxy", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
@@ -178,6 +182,7 @@
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceUseProxyV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceDisableJLW", New SetupEntry(False, Source:=SetupSource.Version)},

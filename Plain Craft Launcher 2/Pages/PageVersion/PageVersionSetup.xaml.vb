@@ -59,6 +59,7 @@
                 Setup.Set("VersionAdvanceAssetsV2", True, Version:=PageVersionLeft.Version)
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
+            CheckAdvanceUseProxyV2.Checked = Setup.Get("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
             CheckAdvanceDisableJLW.Checked = Setup.Get("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
 
@@ -90,6 +91,7 @@
             Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceDisableJLW", Version:=PageVersionLeft.Version)
 
             Setup.Reset("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
@@ -125,7 +127,7 @@
     Private Shared Sub CheckBoxLikeComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex = 0, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJLW.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJLW.Change, CheckAdvanceUseProxyV2.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 
