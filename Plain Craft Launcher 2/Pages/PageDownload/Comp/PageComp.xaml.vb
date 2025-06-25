@@ -108,19 +108,11 @@ Public Class PageComp
         Dim Request As New CompProjectRequest(PageType, Storage, (Page + 1) * PageSize)
         Dim GameVersion As String = If(TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
                 If(TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w"), TextSearchVersion.Text, Nothing))
-        Dim ModLoader As CompModLoaderType = CompModLoaderType.Any
-        If PageType = CompType.Mod Then '只有 Mod 考虑加载器
-            ModLoader = Val(ComboSearchLoader.SelectedItem.Tag)
-            If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
-                ModLoader = CompModLoaderType.Forge Then '选择了 Forge
-                ModLoader = CompModLoaderType.Any '此时，视作没有筛选 Mod Loader（因为部分老 Mod 没有设置自己支持的加载器）
-            End If
-        End If
         With Request
             .SearchText = TextSearchName.Text
             .GameVersion = GameVersion
             .Tag = ComboSearchTag.SelectedItem.Tag
-            .ModLoader = ModLoader
+            .ModLoader = If(PageType = CompType.Mod, Val(ComboSearchLoader.SelectedItem.Tag), CompModLoaderType.Any)
             .Source = CType(Val(ComboSearchSource.SelectedItem.Tag), CompSourceType)
         End With
         Return Request
@@ -188,7 +180,6 @@ Public Class PageComp
     End Sub
 
     '切换页码
-
     Private Sub BtnPageFirst_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageFirst.Click
         ChangePage(0)
     End Sub
