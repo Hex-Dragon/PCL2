@@ -70,6 +70,7 @@
 
     '修改皮肤
     Private IsChanging As Boolean = False
+    Private ResetSkin As Boolean = False
     Public Sub BtnSkinEdit_Click(sender As Object, e As RoutedEventArgs)
         '检查条件，获取新皮肤
         If IsChanging Then
@@ -80,7 +81,15 @@
             Hint("登录失败，无法更改皮肤！", HintType.Critical)
             Return
         End If
-        Dim SkinInfo As McSkinInfo = McSkinSelect()
+        Dim SkinInfo As McSkinInfo
+        If ResetSkin
+            Dim ImageSavePath As String = RequestTaskTempFolder() & "Steve.png"
+            Dim Image = New MyBitmap(PathImage & "Skins\Steve.png")
+            Image.Save(ImageSavePath)
+            SkinInfo = New McSkinInfo() With {.IsSlim = False, .LocalFile = ImageSavePath, .IsVaild = True}
+        Else
+            SkinInfo = McSkinSelect()
+        End If
         If Not SkinInfo.IsVaild Then Return
         Hint("正在更改皮肤……")
         IsChanging = True
@@ -133,6 +142,13 @@ Retry:
         End Sub, "Ms Skin Upload")
     End Sub
 
+    '恢复默认皮肤
+    Public Sub BtnSkinReset_Click(sender As Object, e As RoutedEventArgs)
+        ResetSkin = True
+        BtnSkinEdit_Click(sender, e)
+        ResetSkin = False
+    End Sub
+    
     '保存皮肤
     Public Sub BtnSkinSave_Click(sender As Object, e As RoutedEventArgs)
         Skin.BtnSkinSave_Click()
