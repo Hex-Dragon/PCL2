@@ -688,7 +688,7 @@ Finished:
         ''' </summary>
         Public ReadOnly Property CanUpdate As Boolean
             Get
-                Return Not Setup.Get("UiHiddenFunctionModUpdate") AndAlso ChangelogUrls.Any()
+                Return Not Setup.Get("UiHiddenFunctionModUpdate") AndAlso Setup.Get("VersionCanModUpdate", Version:=PageVersionLeft.Version) AndAlso ChangelogUrls.Any()
             End Get
         End Property
 

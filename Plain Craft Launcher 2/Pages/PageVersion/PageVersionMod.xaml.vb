@@ -22,6 +22,7 @@
         For Each Btn As MyRadioButton In PanFilter.Children
             Btn.LabText.Margin = New Thickness(-2, 0, 8, 0)
         Next
+        BtnManageModUpdate.Text = If(Setup.Get("VersionCanModUpdate", Version:=PageVersionLeft.Version), "禁用 Mod 更新", "启用 Mod 更新")
 
 #If DEBUG Then
         BtnManageCheck.Visibility = Visibility.Visible
@@ -383,6 +384,15 @@ Install:
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
         PageComp.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
         FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
+    End Sub
+    
+    ''' <summary>
+    ''' 禁用/启用 Mod 更新
+    ''' </summary>
+    Private Sub BtnManageModUpdate_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageModUpdate.Click
+        Setup.Set("VersionCanModUpdate", Not Setup.Get("VersionCanModUpdate", Version:=PageVersionLeft.Version), Version:=PageVersionLeft.Version)
+        BtnManageModUpdate.Text = If(Setup.Get("VersionCanModUpdate", Version:=PageVersionLeft.Version), "禁用 Mod 更新", "启用 Mod 更新")
+        RefreshBars()
     End Sub
 
 #End Region

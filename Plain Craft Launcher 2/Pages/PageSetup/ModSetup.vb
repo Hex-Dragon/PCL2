@@ -194,7 +194,8 @@
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
+        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)},
+        {"VersionCanModUpdate", New SetupEntry(True, Source:=SetupSource.Version)}
     }
 
 #Region "基础"
