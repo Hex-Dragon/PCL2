@@ -26,15 +26,19 @@
             If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
             If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
             If PackInstallPath IsNot Nothing Then
-                Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
-                Setup.Set("LaunchFolderSelect", "$.minecraft\")
-                If Not Directory.Exists(Path & ".minecraft\") Then
-                    Directory.CreateDirectory(Path & ".minecraft\")
-                    Directory.CreateDirectory(Path & ".minecraft\versions\")
-                    McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
+                If MyMsgBox("检测到 PCL 程序目录下有整合包文件，是否安装？" & vbCrLf & "如果不想看到这个提示，请不要将整合包文件放在程序目录下。", "安装整合包", "是", "否") = 1
+                    Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
+                    Setup.Set("LaunchFolderSelect", "$.minecraft\")
+                    If Not Directory.Exists(Path & ".minecraft\") Then
+                        Directory.CreateDirectory(Path & ".minecraft\")
+                        Directory.CreateDirectory(Path & ".minecraft\versions\")
+                        McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
+                    End If
+                    PageSelectLeft.AddFolder(Path & ".minecraft\", GetFolderNameFromPath(Path), False)
+                    McFolderListLoader.WaitForExit()
+                Else
+                    PackInstallPath = Nothing
                 End If
-                PageSelectLeft.AddFolder(Path & ".minecraft\", GetFolderNameFromPath(Path), False)
-                McFolderListLoader.WaitForExit()
             End If
             '确认 Minecraft 文件夹存在
             PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
