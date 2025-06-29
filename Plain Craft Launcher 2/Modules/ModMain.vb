@@ -885,7 +885,7 @@ NextFile:
         Dim ResultFolder As String
         Try
             ResultFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-            If RequireNonSpace AndAlso ResultFolder.Contains(" ") AndAlso ResultFolder.Contains("!") Then Exit Try '带空格
+            If RequireNonSpace AndAlso ResultFolder.Contains(" ") AndAlso ResultFolder.Contains("!") Then Exit Try '带空格或者感叹号（#6639）
             Directory.CreateDirectory(ResultFolder)
             CheckPermissionWithException(ResultFolder)
             Return ResultFolder
